@@ -1,4 +1,4 @@
-package http
+package bot.http
 
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.suspendCancellableCoroutine

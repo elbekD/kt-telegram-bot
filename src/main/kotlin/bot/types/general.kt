@@ -1,5 +1,7 @@
 package bot.types
 
+import java.io.File
+
 data class TelegramObject<out T>(val ok: Boolean,
                                  val result: T?,
                                  val error_code: Int?,
@@ -183,13 +185,26 @@ data class ChatMember(val user: User,
 data class ResponseParameters(val migrate_to_chat_id: Long, val retry_after: Int)
 
 
-interface InputMedia
+interface InputMedia {
+    fun media(): String
+    fun file(): File?
+}
 
-data class InputMediaPhoto(val type: String, val media: String, val caption: String?) : InputMedia
+internal data class InputMediaPhoto(val media: String,
+                                    @Transient private val attachment: File?,
+                                    val caption: String?,
+                                    val type: String = "photo") : InputMedia {
+    override fun media() = media
+    override fun file() = attachment
+}
 
-data class InputMediaVideo(val type: String,
-                           val media: String,
-                           val caption: String?,
-                           val width: Int,
-                           val height: Int,
-                           val duration: Int) : InputMedia
+internal data class InputMediaVideo(val media: String,
+                                    @Transient private val attachment: File?,
+                                    val caption: String?,
+                                    val width: Int,
+                                    val height: Int,
+                                    val duration: Int,
+                                    val type: String = "video") : InputMedia {
+    override fun media() = media
+    override fun file() = attachment
+}

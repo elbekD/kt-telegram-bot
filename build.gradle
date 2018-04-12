@@ -1,17 +1,21 @@
 buildscript {
     ext.kotlin_version = '1.2.31'
+    ext.dokka_version = '0.9.16'
 
     repositories {
+        jcenter()
         mavenCentral()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version"
     }
 }
 
-version '0.0.1'
-
 apply plugin: 'kotlin'
+apply plugin: 'build-dashboard'
+apply plugin: 'maven'
+apply plugin: 'org.jetbrains.dokka'
 
 repositories {
     mavenCentral()
@@ -29,11 +33,41 @@ dependencies {
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
+
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
+
 kotlin {
     experimental {
         coroutines "enable"
+    }
+}
+
+dokka {
+    includes = ['README.md']
+    linkMapping {
+        dir = 'src/main/kotlin'
+        url = 'https://github.com/elbekD/kt-telegram-bot/src/main/kotlin'
+        suffix = '#L'
+    }
+}
+
+task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    outputFormat = 'javadoc'
+    outputDirectory = "$buildDir/javadoc"
+}
+
+test {
+    useJUnit()
+
+    testLogging {
+        displayGranularity = 2
+        showStandardStreams = true
+        events "failed", "passed", "skipped"
+    }
+
+    beforeTest { descriptor ->
+        logger.lifecycle("Running test: " + descriptor)
     }
 }
