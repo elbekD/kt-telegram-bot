@@ -9,7 +9,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.elbekd:kt-telegram-bot:0.0.1-alpha'
+    compile 'com.github.elbekd:kt-telegram-bot:0.2.0-alpha'
 }
 ```
 
