@@ -41,8 +41,17 @@ class PollingOptions {
             if (value != null) field = value
         }
 
-    override fun toString() = "PollingOptions(limit=$limit, timeout=$timeout" +
-            ", allowedUpdates=${Arrays.toString(allowedUpdates)})"
+    /**
+     * period for [Timer]
+     */
+    var period: Long = 300L
+        set(value) {
+            if (value > 300L) field = value
+        }
+
+    override fun toString(): String {
+        return "PollingOptions(limit=$limit, timeout=$timeout, allowedUpdates=${Arrays.toString(allowedUpdates)}, period=$period)"
+    }
 }
 
 class WebhookOptions(val url: String) {

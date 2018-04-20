@@ -28,6 +28,7 @@ dependencies {
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22.5'
     compile 'com.squareup.okhttp3:okhttp:3.10.0'
     compile 'com.google.code.gson:gson:2.8.2'
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.4.1"
 }
 
 compileKotlin {

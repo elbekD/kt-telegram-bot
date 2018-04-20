@@ -2,8 +2,12 @@ package bot.http
 
 import bot.TelegramBot
 import bot.types.*
-import com.google.gson.Gson
-import com.google.gson.JsonObject
+import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import okhttp3.*
 import java.io.File
 import java.lang.reflect.ParameterizedType
@@ -12,7 +16,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 
 internal class TelegramClient(token: String) : TelegramApi {
-    private val gson = Gson()
+    private val gson = GsonBuilder().disableHtmlEscaping().create()
+    private val mapper = ObjectMapper().registerKotlinModule().also {
+        it.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+    }
     private val client = OkHttpClient.Builder().connectTimeout(60L, TimeUnit.SECONDS).build()
     private val url = "https://api.telegram.org/bot$token"
 
@@ -49,21 +56,27 @@ internal class TelegramClient(token: String) : TelegramApi {
         obj.result!!
     }
 
-    private fun <R> post(method: String, body: RequestBody, result: Class<R>) = future {
-        val request = Request.Builder()
-                .url(url(method))
-                .post(body)
-                .build()
+    private fun <R> post(method: String, body: RequestBody, result: Class<R>,
+                         deserialize: (Response, Class<R>) -> TelegramObject<R> = { res, cl -> fromJson(res, cl) }) =
+            future {
+                val request = Request.Builder()
+                        .url(url(method))
+                        .post(body)
+                        .build()
 
-        val response = client.newCall(request).execute()
-        val obj = fromJson(response, result)
-        if (!obj.ok)
-            throw TelegramApiError(obj.error_code!!, obj.description!!)
-        obj.result!!
-    }
+                val response = client.newCall(request).execute()
+                val obj = deserialize(response, result)
+                if (!obj.ok)
+                    throw TelegramApiError(obj.error_code!!, obj.description!!)
+                obj.result!!
+            }
 
     private fun <R> fromJson(response: Response, result: Class<R>): TelegramObject<R> =
             gson.fromJson(response.body()?.string(), getType(TelegramObject::class.java, result))
+
+    @SuppressWarnings("unused")
+    private fun <R> fromJsonPrimitive(response: Response, cl: Class<R>): TelegramObject<R> =
+            gson.fromJson(response.body()?.string(), object : TypeToken<TelegramObject<R>>() {}.type)
 
     private fun toJson(body: Any) = gson.toJson(body)
 
@@ -99,6 +112,24 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     private fun addOptsToForm(form: MultipartBody.Builder, opts: Map<String, Any?>) =
             sendFileOpts.filterKeys { opts[it] != null }.forEach { form.addFormDataPart(it.key, it.value(opts[it.key]!!)) }
+
+    internal fun getUpdates(options: Map<String, Any?>) = future {
+        val request = Request.Builder()
+                .url(url("getUpdates"))
+                .post(RequestBody.create(MEDIA_TYPE_JSON, toJson(options)))
+                .build()
+
+        val response = client.newCall(request).execute()
+
+        val obj = mapper.readValue<TelegramObject<ArrayList<Update>>>(response.body()?.string(),
+                object : TypeReference<TelegramObject<ArrayList<Update>>>() {})
+//        val obj = gson.fromJson<TelegramObject<ArrayList<Update>>>(response.body()?.string(),
+//                object : TypeToken<TelegramObject<ArrayList<Update>>>() {}.type)
+
+        if (!obj.ok)
+            throw TelegramApiError(obj.error_code!!, obj.description!!)
+        obj.result!!
+    }
 
     override fun getMe() = get("getMe", User::class.java)
 
@@ -225,10 +256,8 @@ internal class TelegramClient(token: String) : TelegramApi {
     }
 
     override fun sendChatAction(chatId: Any, action: TelegramBot.Actions): CompletableFuture<Boolean> {
-        val json = JsonObject()
-        json.addProperty("chat_id", id(chatId))
-        json.addProperty("action", action.value)
-        // TODO on primitive gson fails
-        return post("sendChatAction", RequestBody.create(MEDIA_TYPE_JSON, toJson(json)), Boolean::class.java)
+        val body = mapOf("chat_id" to id(chatId), "action" to action.value)
+        return post("sendChatAction", RequestBody.create(MEDIA_TYPE_JSON, toJson(body)), Boolean::class.java,
+                { response, clazz -> fromJsonPrimitive(response, clazz) })
     }
 }

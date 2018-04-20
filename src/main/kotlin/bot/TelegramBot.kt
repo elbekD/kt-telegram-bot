@@ -2,10 +2,12 @@ package bot
 
 import bot.http.TelegramClient
 import bot.types.*
+import kotlinx.coroutines.experimental.launch
 import java.io.File
 import java.util.concurrent.CompletableFuture
 
 abstract class TelegramBot protected constructor(tk: String) : Bot {
+    private val events = mutableMapOf<String, (Message) -> Unit>()
     private val commands = mutableMapOf<String, suspend (Message) -> Unit>()
     private val client = TelegramClient(tk)
 
@@ -49,8 +51,13 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
         ) throw IllegalArgumentException("Provide only inlineMessage or chatId and messageId")
     }
 
-    protected suspend fun onUpdate(msg: Message) {
-        if (msg.isCommand()) commands[msg.text]?.invoke(msg)
+    protected fun getUpdates(options: Map<String, Any?>) = client.getUpdates(options)
+
+    protected fun onUpdate(upd: List<Update>) {
+        upd.forEach {
+            if (it.message != null && it.message.isCommand())
+                launch { commands[it.message.text]?.invoke(it.message) }
+        }
     }
 
     override fun on(trigger: String, action: suspend (Message) -> Unit) {

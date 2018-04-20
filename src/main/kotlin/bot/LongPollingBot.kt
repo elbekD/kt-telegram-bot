@@ -1,21 +1,31 @@
 package bot
 
+import java.util.*
 import kotlin.concurrent.timer
 
 internal class LongPollingBot(token: String, private val options: PollingOptions) : TelegramBot(token) {
-    private val defaultPeriod = 60_000L
+    private lateinit var timer: Timer
+    private var lastUpdateId = -1
+    @Volatile
+    private var polling = true
 
     override fun start() {
-        var period = defaultPeriod
-
-        if (options.timeout != null)
-            period = options.timeout!!.toLong()
-
-        timer("Long polling bot", period = period) {
-
+        timer = timer("LongPollingBot", period = options.period) {
+            try {
+                val updates = getUpdates(mapOf("offset" to lastUpdateId + 1,
+                        "allowed_updates" to options.allowedUpdates,
+                        "timeout" to options.timeout,
+                        "limit" to options.limit)).get()
+                onUpdate(updates)
+                lastUpdateId = updates.last().update_id
+            } catch (e: Exception) {
+                System.err.println(e.message)
+            }
         }
     }
 
     override fun stop() {
+        polling = false
+        timer.cancel()
     }
 }
