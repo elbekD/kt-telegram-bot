@@ -21,10 +21,11 @@ fun main(argv: Array<Strign>) {
             limit = 75
             allowedUpdates = arrayOf(AllowedUpdates.Message, AllowedUpdates.ChannelPost)
             timeout = 60
+            period = 1000L
         }
         
     bot.on("/start") { msg ->
-            bot.sendMessage(msg.from!!.id, "<i><b>Hello</i></b>", parseMode = "html")
+            bot.sendMessage(msg.from!!.id, "<b>Hello</b>", parseMode = "html")
             val m = bot.sendMessage(msg.from.id, "*World*", parseMode = "markdown").await()
             println(m)
         }
