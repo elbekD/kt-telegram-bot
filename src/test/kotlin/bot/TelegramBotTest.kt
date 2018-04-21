@@ -1,6 +1,7 @@
 package bot
 
-import com.google.gson.Gson
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -15,9 +16,9 @@ internal class TelegramBotTest {
         @JvmStatic
         @BeforeClass
         fun initConfig() {
-            val gson = Gson()
+            val mapper = ObjectMapper().registerKotlinModule()
             val reader = Files.newBufferedReader(Paths.get("D:\\Dev\\kt-telegram-bot\\src\\test\\resources", "test-config.json"))
-            config = gson.fromJson(reader, TestConfig::class.java)
+            config = mapper.readValue(reader, TestConfig::class.java)
         }
     }
 

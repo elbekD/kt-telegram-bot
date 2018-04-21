@@ -2,23 +2,21 @@ package bot.http
 
 import bot.TelegramBot
 import bot.types.*
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.JavaType
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
 import okhttp3.*
 import java.io.File
-import java.lang.reflect.ParameterizedType
-import java.lang.reflect.Type
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 
 internal class TelegramClient(token: String) : TelegramApi {
-    private val gson = GsonBuilder().disableHtmlEscaping().create()
     private val mapper = ObjectMapper().registerKotlinModule().also {
         it.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        it.setSerializationInclusion(JsonInclude.Include.NON_NULL)
     }
     private val client = OkHttpClient.Builder().connectTimeout(60L, TimeUnit.SECONDS).build()
     private val url = "https://api.telegram.org/bot$token"
@@ -46,9 +44,15 @@ internal class TelegramClient(token: String) : TelegramApi {
     )
 
     private fun <R> get(method: String, result: Class<R>) = future {
-        val request = Request.Builder()
-                .url(url(method))
-                .build()
+        val request = Request.Builder().url(url(method)).build()
+        val response = client.newCall(request).execute()
+        val obj = fromJson(response, result)
+        if (!obj.ok) throw TelegramApiError(obj.error_code!!, obj.description!!)
+        obj.result!!
+    }
+
+    private fun <R> post(method: String, body: RequestBody, result: Class<R>) = future {
+        val request = Request.Builder().url(url(method)).post(body).build()
         val response = client.newCall(request).execute()
         val obj = fromJson(response, result)
         if (!obj.ok)
@@ -56,41 +60,19 @@ internal class TelegramClient(token: String) : TelegramApi {
         obj.result!!
     }
 
-    private fun <R> post(method: String, body: RequestBody, result: Class<R>,
-                         deserialize: (Response, Class<R>) -> TelegramObject<R> = { res, cl -> fromJson(res, cl) }) =
-            future {
-                val request = Request.Builder()
-                        .url(url(method))
-                        .post(body)
-                        .build()
-
-                val response = client.newCall(request).execute()
-                val obj = deserialize(response, result)
-                if (!obj.ok)
-                    throw TelegramApiError(obj.error_code!!, obj.description!!)
-                obj.result!!
-            }
-
     private fun <R> fromJson(response: Response, result: Class<R>): TelegramObject<R> =
-            gson.fromJson(response.body()?.string(), getType(TelegramObject::class.java, result))
+            mapper.readValue(response.body()?.string(), getType(TelegramObject::class.java, result))
 
-    @SuppressWarnings("unused")
-    private fun <R> fromJsonPrimitive(response: Response, cl: Class<R>): TelegramObject<R> =
-            gson.fromJson(response.body()?.string(), object : TypeToken<TelegramObject<R>>() {}.type)
-
-    private fun toJson(body: Any) = gson.toJson(body)
+    private fun toJson(body: Any) = mapper.writeValueAsString(body)
 
     private fun toBody(body: Any): RequestBody {
         val json = toJson(body)
         return RequestBody.create(MEDIA_TYPE_JSON, json)
     }
 
-    private fun getType(rawClass: Class<*>, parameterClass: Class<*>): Type {
-        return object : ParameterizedType {
-            override fun getActualTypeArguments() = arrayOf(parameterClass)
-            override fun getRawType() = rawClass
-            override fun getOwnerType() = null
-        }
+    private fun getType(rawType: Class<*>, paramType: Class<*>): JavaType {
+        val javaType = mapper.typeFactory.constructType(paramType)
+        return mapper.typeFactory.constructParametricType(rawType, javaType)
     }
 
     private fun url(method: String): String = "$url/$method"
@@ -123,8 +105,6 @@ internal class TelegramClient(token: String) : TelegramApi {
 
         val obj = mapper.readValue<TelegramObject<ArrayList<Update>>>(response.body()?.string(),
                 object : TypeReference<TelegramObject<ArrayList<Update>>>() {})
-//        val obj = gson.fromJson<TelegramObject<ArrayList<Update>>>(response.body()?.string(),
-//                object : TypeToken<TelegramObject<ArrayList<Update>>>() {}.type)
 
         if (!obj.ok)
             throw TelegramApiError(obj.error_code!!, obj.description!!)
@@ -257,7 +237,6 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     override fun sendChatAction(chatId: Any, action: TelegramBot.Actions): CompletableFuture<Boolean> {
         val body = mapOf("chat_id" to id(chatId), "action" to action.value)
-        return post("sendChatAction", RequestBody.create(MEDIA_TYPE_JSON, toJson(body)), Boolean::class.java,
-                { response, clazz -> fromJsonPrimitive(response, clazz) })
+        return post("sendChatAction", RequestBody.create(MEDIA_TYPE_JSON, toJson(body)), Boolean::class.java)
     }
 }
