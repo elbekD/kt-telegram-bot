@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.2.31'
+    ext.kotlin_version = '1.2.61'
     ext.dokka_version = '0.9.16'
 
     repositories {
@@ -25,9 +25,9 @@ repositories {
 dependencies {
     testCompile "junit:junit:4.12"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22.5'
-    compile 'com.squareup.okhttp3:okhttp:3.10.0'
-    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.4.1"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22.5"
+    compile "com.squareup.okhttp3:okhttp:3.10.0"
+    compile "com.google.code.gson:gson:2.8.5"
 }
 
 compileKotlin {
