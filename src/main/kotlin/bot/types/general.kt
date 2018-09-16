@@ -5,8 +5,7 @@ import java.io.File
 data class TelegramObject<out T>(val ok: Boolean,
                                  val result: T?,
                                  val error_code: Int?,
-                                 val description: String?
-)
+                                 val description: String?)
 
 data class Update(val update_id: Int,
                   val message: Message?,
@@ -17,18 +16,16 @@ data class Update(val update_id: Int,
                   val chosen_inline_result: ChosenInlineResult?,
                   val callback_query: CallbackQuery?,
                   val shipping_query: ShippingQuery?,
-                  val pre_checkout_query: PreCheckoutQuery?
-)
+                  val pre_checkout_query: PreCheckoutQuery?)
 
 data class User(val id: Int,
                 val is_bot: Boolean,
                 val first_name: String,
                 val last_name: String?,
                 val username: String?,
-                val language_code: String?
-)
+                val language_code: String?)
 
-data class Chat(val id: Int,
+data class Chat(val id: Long,
                 val type: String,
                 val title: String?,
                 val username: String?,
@@ -38,8 +35,7 @@ data class Chat(val id: Int,
                 val photo: ChatPhoto?,
                 val description: String?,
                 val invite_link: String?,
-                val pinned_message: Message?
-)
+                val pinned_message: Message?)
 
 data class Message(val message_id: Int,
                    val from: User?,
@@ -77,12 +73,12 @@ data class Message(val message_id: Int,
                    val group_chat_created: Boolean?,
                    val supergroup_chat_created: Boolean?,
                    val channel_chat_created: Boolean?,
-                   val migrate_to_chat_id: Int?,
-                   val migrate_from_chat_id: Int?,
+                   val migrate_to_chat_id: Long?,
+                   val migrate_from_chat_id: Long?,
                    val pinned_message: Message?,
                    val invoice: Invoice?,
-                   val successful_payment: SuccessfulPayment?
-)
+                   val successful_payment: SuccessfulPayment?,
+                   val connected_website: String?)
 
 data class CallbackQuery(val id: String,
                          val from: User,
@@ -90,36 +86,31 @@ data class CallbackQuery(val id: String,
                          val inline_message_id: String?,
                          val chat_instance: String,
                          val data: String?,
-                         val game_short_name: String?
-)
+                         val game_short_name: String?)
 
 data class MessageEntity(val type: String,
                          val offset: Int,
                          val length: Int,
                          val url: String?,
-                         val user: User?
-)
+                         val user: User?)
 
 data class PhotoSize(val file_id: String,
                      val width: Int,
                      val height: Int,
-                     val file_size: Int
-)
+                     val file_size: Int)
 
 data class Audio(val file_id: String,
                  val duration: Int,
                  val performer: String?,
                  val title: String?,
                  val mime_type: String?,
-                 val file_size: Int
-)
+                 val file_size: Int)
 
 data class Document(val file_id: String,
                     val thumb: PhotoSize?,
                     val file_name: String?,
                     val mime_type: String?,
-                    val file_size: Int
-)
+                    val file_size: Int)
 
 data class Video(val file_id: String,
                  val width: Int,
@@ -127,37 +118,32 @@ data class Video(val file_id: String,
                  val duration: Int,
                  val thumb: PhotoSize?,
                  val mime_type: String?,
-                 val file_size: Int
-)
+                 val file_size: Int)
 
 data class Voice(val file_id: String,
                  val duration: Int,
                  val mime_type: String,
-                 val file_size: Int
-)
+                 val file_size: Int)
 
 data class VideoNote(val file_id: String,
                      val length: Int,
                      val duration: Int,
                      val thumb: PhotoSize?,
-                     val file_size: Int
-)
+                     val file_size: Int)
 
 data class Contact(val phone_number: String,
                    val first_name: String,
                    val last_name: String,
-                   val user_id: Int
-)
+                   val user_id: Int)
 
 data class Location(val longitude: Float, val latitude: Float)
 
 data class Venue(val location: Location?,
                  val title: String,
                  val address: String,
-                 val foursquare_id: String
-)
+                 val foursquare_id: String)
 
-data class UserProfilePhotos(val total_count: Int, val photos: Array<PhotoSize>?)
+data class UserProfilePhotos(val total_count: Int, val photos: Array<Array<PhotoSize>>?)
 
 data class File(val file_id: String, val file_size: Int, val file_path: String)
 
@@ -178,8 +164,7 @@ data class ChatMember(val user: User,
                       val can_send_messages: Boolean,
                       val can_send_media_messages: Boolean,
                       val can_send_other_messages: Boolean,
-                      val can_add_web_page_previews: Boolean
-)
+                      val can_add_web_page_previews: Boolean)
 
 data class ResponseParameters(val migrate_to_chat_id: Long, val retry_after: Int)
 
