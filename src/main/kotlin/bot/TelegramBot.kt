@@ -8,7 +8,7 @@ import java.util.concurrent.CompletableFuture
 
 abstract class TelegramBot protected constructor(tk: String) : Bot {
     private val events = mutableMapOf<String, (Message) -> Unit>()
-    private val commands = mutableMapOf<String, suspend (Message) -> Unit>()
+    private val commands = mutableMapOf<String, (Message) -> Unit>()
     private val client = TelegramClient(tk)
 
     companion object {
@@ -41,8 +41,9 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
         UploadVideoNote("upload_video_note ");
     }
 
-    private fun Message.isCommand() = text != null && text.isCommand()
+    private fun Message.isCommand() = text != null && text.split(' ')[0].isCommand()
     private fun String.isCommand() = isNotBlank() && split(' ').size == 1 && startsWith("/")
+//    private fun String.isEvent() =
 
     private fun validateIds(chatId: Any?, messageId: Int?, inlineMessageId: String?) {
         if (
@@ -53,34 +54,42 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
 
     protected fun getUpdates(options: Map<String, Any?>) = client.getUpdates(options)
 
-    protected fun onUpdate(upd: List<Update>) {
-        upd.forEach {
-            if (it.message != null && it.message.isCommand())
-                launch { commands[it.message.text]?.invoke(it.message) }
+    protected fun onUpdate(upds: List<Update>) {
+        upds.forEach { upd ->
+            if (upd.message != null && upd.message.isCommand())
+                launch { commands[upd.message.text]?.invoke(upd.message) }
         }
     }
 
-    override fun on(trigger: String, action: suspend (Message) -> Unit) {
+    override fun on(trigger: String, action: (Message) -> Unit) {
         when {
             trigger.isCommand() -> commands[trigger] = action
             else -> throw IllegalArgumentException("$trigger is not a command")
         }
     }
 
-    override fun keyboard(buttons: Array<Array<KeyboardButton>>, resize: Boolean?, once: Boolean?, selective: Boolean?): ReplyKeyboardMarkup {
-        return ReplyKeyboardMarkup(buttons, resize, once, selective)
-    }
-
-    override fun button(text: String, contact: Boolean?, location: Boolean?): KeyboardButton {
-        if (contact != null && contact && location != null && location)
-            throw IllegalArgumentException("both contact and location cannot be set")
-
-        return KeyboardButton(text, contact, location)
-    }
-
-    override fun removeKeyboard(remove: Boolean, selective: Boolean?): ReplyKeyboard {
-        return ReplyKeyboardRemove(remove, selective)
-    }
+//    override fun keyboard(buttons: Array<Array<ReplyButton>>, resize: Boolean?, once: Boolean?, selective: Boolean?): ReplyKeyboard {
+//        return ReplyKeyboardMarkup(buttons, resize, once, selective)
+//    }
+//
+//    override fun inlineKeyboard(buttons: Array<Array<ReplyButton>>): ReplyKeyboard {
+//        return InlineKeyboardMarkup(buttons)
+//    }
+//
+//    override fun inlineButton(text: String, url: String?, callback: String?, switchQuery: String?, switchChat: String?, game: Any?, pay: Boolean?): ReplyButton {
+//        return InlineKeyboardButton(text, url, callback, switchQuery, switchChat, game, pay)
+//    }
+//
+//    override fun button(text: String, contact: Boolean?, location: Boolean?): ReplyButton {
+//        if (contact != null && contact && location != null && location)
+//            throw IllegalArgumentException("both contact and location cannot be set")
+//
+//        return KeyboardButton(text, contact, location)
+//    }
+//
+//    override fun removeKeyboard(remove: Boolean, selective: Boolean?): ReplyKeyboard {
+//        return ReplyKeyboardRemove(remove, selective)
+//    }
 
     override fun mediaPhoto(media: String, attachment: File?, caption: String?): InputMedia {
         return InputMediaPhoto(media, attachment, caption)
@@ -147,14 +156,14 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
             client.sendLocation(chatId, latitude, longitude, period, notification, replyTo, markup)
 
     override fun editMessageLiveLocation(latitude: Double, longitude: Double, chatId: Any?, messageId: Int?,
-                                         inlineMessageId: String?, markup: InlineKeyboardMarkup?):
+                                         inlineMessageId: String?, markup: ReplyKeyboard?):
             CompletableFuture<Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.editMessageLiveLocation(latitude, longitude, chatId, messageId, inlineMessageId, markup)
     }
 
     override fun stopMessageLiveLocation(chatId: Any?, messageId: Int?, inlineMessageId: String?,
-                                         markup: InlineKeyboardMarkup?):
+                                         markup: ReplyKeyboard?):
             CompletableFuture<Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.stopMessageLiveLocation(chatId, messageId, inlineMessageId, markup)
@@ -169,6 +178,56 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
             client.sendContact(chatId, phone, firstName, lastName, notification, replyTo, markup)
 
     override fun sendChatAction(chatId: Any, action: Actions) = client.sendChatAction(chatId, action)
+
+    override fun getUserProfilePhotos(userId: Int, offset: Int?, limit: Int?) = client.getUserProfilePhotos(userId, offset, limit)
+
+    override fun getFile(fileId: String) = client.getFile(fileId)
+
+    override fun kickChatMember(chatId: Any, userId: Int, untilDate: Int?) =
+            client.kickChatMember(chatId, userId, untilDate)
+
+    override fun unbanChatMember(chatId: Any, userId: Int) = client.unbanChatMember(chatId, userId)
+
+    override fun restrictChatMember(chatId: Any, userId: Int, untilDate: Int?,
+                                    canSendMessage: Boolean?, canSendMediaMessages: Boolean?,
+                                    canSendOtherMessages: Boolean?, canAddWebPagePreview: Boolean?) = client.restrictChatMember(chatId, userId, untilDate,
+            canSendMessage, canSendMediaMessages, canSendOtherMessages, canAddWebPagePreview)
+
+    override fun promoteChatMember(chatId: Any, userId: Int, canChangeInfo: Boolean?, canPostMessages: Boolean?,
+                                   canEditMessages: Boolean?, canDeleteMessages: Boolean?, canInviteUsers: Boolean?,
+                                   canRestrictMembers: Boolean?, canPinMessages: Boolean?, canPromoteMembers: Boolean?) = client.promoteChatMember(chatId, userId, canChangeInfo, canPostMessages, canEditMessages, canDeleteMessages, canInviteUsers, canRestrictMembers, canPinMessages, canPromoteMembers)
+
+    override fun exportChatInviteLink(chatId: Any) = client.exportChatInviteLink(chatId)
+
+    override fun setChatPhoto(chatId: Any, photo: Any) = client.setChatPhoto(chatId, photo)
+
+    override fun deleteChatPhoto(chatId: Any) = client.deleteChatPhoto(chatId)
+
+    override fun setChatTitle(chatId: Any, title: String) = client.setChatTitle(chatId, title)
+
+    override fun setChatDescription(chatId: Any, description: String) = client.setChatDescription(chatId, description)
+
+    override fun pinChatMessage(chatId: Any, messageId: Int, notification: Boolean?) = client.pinChatMessage(chatId, messageId, notification)
+
+    override fun unpinChatMessage(chatId: Any) = client.unpinChatMessage(chatId)
+
+    override fun leaveChat(chatId: Any) = client.leaveChat(chatId)
+
+    override fun getChat(chatId: Any) = client.getChat(chatId)
+
+    override fun getChatAdministrators(chatId: Any) = client.getChatAdministrators(chatId)
+
+    override fun getChatMembersCount(chatId: Any) = client.getChatMembersCount(chatId)
+
+    override fun getChatMember(chatId: Any, userId: Int) = client.getChatMember(chatId, userId)
+
+    override fun setChatStickerSet(chatId: Any, stickerSet: String) = client.setChatStickerSet(chatId, stickerSet)
+
+    override fun deleteChatStickerSet(chatId: Any) = client.deleteChatStickerSet(chatId)
+
+    override fun answerCallbackQuery(id: String, text: String?, alert: Boolean?, url: String?, cacheTime: Int?) = client.answerCallbackQuery(id, text, alert, url, cacheTime)
+
+    override fun answerInlineQuery(queryId: String, results: Array<InlineQueryResult>, cacheTime: Int?, personal: Boolean?, offset: String?, pmText: String?, pmParameter: String?) = client.answerInlineQuery(queryId, results, cacheTime, personal, offset, pmText, pmParameter)
     /*
                 /\
                /  \

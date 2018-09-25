@@ -1,39 +1,39 @@
 package bot
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import bot.types.InlineKeyboardButton
+import bot.types.InlineKeyboardMarkup
+import com.google.gson.Gson
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.util.*
 
 internal class TelegramBotTest {
     companion object {
         private lateinit var config: TestConfig
+        private lateinit var bot: Bot
+
         @JvmStatic
         @BeforeClass
         fun initConfig() {
-            val mapper = ObjectMapper().registerKotlinModule()
-            val reader = Files.newBufferedReader(Paths.get("D:\\Dev\\kt-telegram-bot\\src\\test\\resources", "test-config.json"))
-            config = mapper.readValue(reader, TestConfig::class.java)
+            val gson = Gson()
+            val reader = Files.newBufferedReader(Paths.get("D:\\Dev\\kt-telegram-bot\\src\\test\\resources\\test-config.json"))
+            config = gson.fromJson(reader, TestConfig::class.java)
+            bot = TelegramBot.createPolling(config.token)
         }
     }
 
-    private lateinit var bot: Bot
-
     private fun file(name: String) = Paths.get(config.resourcePath, name).toFile()
-
-    @Before
-    fun init() {
-        bot = TelegramBot.createPolling(config.token)
-    }
 
     @Test
     fun getMe() {
-        bot.getMe().handle { msg, _ -> assertNotNull(msg) }.join()
+        bot.getMe().handle { msg, err ->
+            println(err)
+            assertNotNull(msg)
+        }.join()
     }
 
     @Test
@@ -219,5 +219,166 @@ internal class TelegramBotTest {
                     assertNotNull(msg)
                     assertTrue(msg)
                 }.join()
+    }
+
+    @Test
+    fun getUserProfilePhotos() {
+        bot.getUserProfilePhotos(config.userId).handle { msg, _ ->
+            assertNotNull(msg)
+            assertNotNull(msg.photos)
+        }.join()
+    }
+
+    @Test
+    fun getFile() {
+        bot.getFile(config.fileId).handle { file, _ ->
+            assertNotNull(file)
+        }.join()
+    }
+
+    @Test
+    fun kickChatMember() {
+        val date = (Date().time + 60 * 1000).toInt()
+        bot.kickChatMember(config.groupChatId, config.kikMemberId, date)
+                .handle { msg, err ->
+                    println(err)
+                    assertTrue(msg)
+                }.join()
+    }
+
+    @Test
+    fun unbanChatMember() {
+        bot.unbanChatMember(config.groupChatId, config.kikMemberId)
+                .handle { msg, err ->
+                    println(err)
+                    assertTrue(msg)
+                }.join()
+    }
+
+    @Test
+    fun restrictChatMember() {
+        bot.restrictChatMember(config.groupChatId, config.kikMemberId, canSendMessage = false)
+                .handle { msg, _ ->
+                    assertTrue(msg)
+                }.join()
+    }
+
+    @Test
+    fun promoteChatMember() {
+        bot.promoteChatMember(config.groupChatId, config.kikMemberId, canPinMessages = true)
+                .handle { msg, _ ->
+                    assertTrue(msg)
+                }.join()
+    }
+
+    @Test
+    fun exportChatInviteLink() {
+        bot.exportChatInviteLink(config.groupChatId).handle { msg, _ ->
+            assertNotNull(msg)
+        }.join()
+    }
+
+    @Test
+    fun setChatPhoto() {
+        bot.setChatPhoto(config.groupChatId, file(config.photos[1])).handle { msg, _ ->
+            {
+                assertTrue(msg)
+            }
+        }.join()
+    }
+
+    @Test
+    fun deleteChatPhoto() {
+        bot.deleteChatPhoto(config.groupChatId).handle { msg, _ ->
+            {
+                assertTrue(msg)
+            }
+        }.join()
+    }
+
+    @Test
+    fun setChatTitle() {
+        bot.setChatTitle(config.groupChatId, "This is chat title").handle { msg, _ ->
+            assertTrue(msg)
+        }.join()
+    }
+
+    @Test
+    fun setChatDescription() {
+        bot.setChatDescription(config.groupChatId, "This is chat description").handle { msg, _ ->
+            assertTrue(msg)
+        }.join()
+    }
+
+    @Test
+    fun pinChatMessage() {
+        bot.sendMessage(config.groupChatId, "This is universal message")
+                .thenAccept {
+                    bot.pinChatMessage(it.chat.id, it.message_id).handle { msg, _ -> assertTrue(msg) }.join()
+                }.join()
+    }
+
+    @Test
+    fun unpinChatMessage() {
+        bot.sendMessage(config.groupChatId, "This is universal message")
+                .thenAccept { msg ->
+                    bot.pinChatMessage(msg.chat.id, msg.message_id)
+                            .thenAccept { bot.unpinChatMessage(msg.chat.id) }
+                            .join()
+                }.join()
+    }
+
+    @Test
+    fun leaveChat() {
+        bot.leaveChat(config.groupChatId).handle { msg, _ -> assertTrue(msg) }.join()
+    }
+
+    @Test
+    fun getChat() {
+        bot.getChat(config.groupChatId).handle { chat, _ -> assertTrue(chat.id == config.groupChatId) }.join()
+    }
+
+    @Test
+    fun getChatAdministrators() {
+        bot.getChatAdministrators(config.groupChatId).handle { members, _ -> assertNotNull(members) }.join()
+    }
+
+    @Test
+    fun getChatMembersCount() {
+        bot.getChatMembersCount(config.groupChatId).handle { count, _ -> assertTrue(count != 0) }.join()
+    }
+
+    @Test
+    fun getChatMember() {
+        bot.getChatMember(config.groupChatId, config.userId).handle { member, _ -> assertNotNull(member) }.join()
+    }
+
+    @Test
+    fun setChatStickerSet() {
+        bot.setChatStickerSet(config.groupChatId, config.stickerSet).handle { msg, _ -> assertTrue(msg) }.join()
+    }
+
+    @Test
+    fun deleteChatStickerSet() {
+        bot.deleteChatStickerSet(config.groupChatId).handle { msg, _ -> assertTrue(msg) }.join()
+    }
+
+    @Test
+    fun answerCallbackQuery() {
+        val markup = InlineKeyboardMarkup(arrayOf(
+                arrayOf(
+                        InlineKeyboardButton("some text 1", callback_data = "btn1"),
+                        InlineKeyboardButton("some text 2", callback_data = "btn2")
+                )
+        ))
+        bot.sendMessage(config.userId, "answerCallbackQuery test", markup = markup)
+                .handle { msg, _ -> assertNotNull(msg) }.join()
+
+
+    }
+
+    @Test
+    fun answerInlineQuery() {
+
     }
 }

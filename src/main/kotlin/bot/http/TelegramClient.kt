@@ -34,13 +34,21 @@ internal class TelegramClient(token: String) : TelegramApi {
     private val markupToString = { a: Any -> toJson(a) }
 
     private val sendFileOpts = mapOf(
-            "caption" to anyToString, "parse_mode" to anyToString, "disable_notification" to anyToString,
-            "reply_to_message_id" to anyToString, "reply_markup" to markupToString,
-            "duration" to anyToString, "performer" to anyToString, "title" to anyToString,
-            "width" to anyToString, "height" to anyToString, "supports_streaming" to anyToString
-    )
+            "caption" to anyToString,
+            "parse_mode" to anyToString,
+            "disable_notification" to anyToString,
+            "reply_to_message_id" to anyToString,
+            "reply_markup" to markupToString,
+            "duration" to anyToString,
+            "performer" to anyToString,
+            "title" to anyToString,
+            "width" to anyToString,
+            "height" to anyToString,
+            "supports_streaming" to anyToString)
 
-    private fun <R> get(method: String) = future {
+    private inline fun <reified R> get(method: String) = future {
+        // FixMe: without this hack fails with ClassCastException in Gson
+        R::class.java.simpleName
         val request = Request.Builder().url(url(method)).build()
         val response = client.newCall(request).execute()
         val obj = fromJson<R>(response)
@@ -48,17 +56,19 @@ internal class TelegramClient(token: String) : TelegramApi {
         obj.result!!
     }
 
-    private fun <R> post(method: String, body: RequestBody) = future {
+    private inline fun <reified R> post(method: String, body: RequestBody) = future {
+        // FixMe: without this hack fails with ClassCastException in Gson
+        R::class.java.simpleName
         val request = Request.Builder().url(url(method)).post(body).build()
         val response = client.newCall(request).execute()
         val obj = fromJson<R>(response)
-        if (!obj.ok)
-            throw TelegramApiError(obj.error_code!!, obj.description!!)
+        if (!obj.ok) throw TelegramApiError(obj.error_code!!, obj.description!!)
         obj.result!!
     }
 
-    private fun <R> fromJson(response: Response): TelegramObject<R> =
-            gson.fromJson(response.body()?.string(), getType<TelegramObject<R>>())
+    private inline fun <reified R> fromJson(response: Response): TelegramObject<R> {
+        return gson.fromJson(response.body()?.string(), getType<TelegramObject<R>>())
+    }
 
     private fun toJson(body: Any) = gson.toJson(body)
 
@@ -67,7 +77,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         return RequestBody.create(MEDIA_TYPE_JSON, json)
     }
 
-    private fun <T> getType(): Type {
+    private inline fun <reified T> getType(): Type {
         return object : TypeToken<T>() {}.type
     }
 
@@ -99,7 +109,7 @@ internal class TelegramClient(token: String) : TelegramApi {
 
         val response = client.newCall(request).execute()
 
-        val obj = fromJson<ArrayList<Update>>(response)
+        val obj = fromJson<List<Update>>(response)
 
         if (!obj.ok)
             throw TelegramApiError(obj.error_code!!, obj.description!!)
@@ -199,7 +209,6 @@ internal class TelegramClient(token: String) : TelegramApi {
         if (replyTo != null)
             form.addFormDataPart("reply_to_message_id", replyTo.toString())
 
-        // TODO somehow avoid creating new instance of ArrayList
         return post("sendMediaGroup", form.build())
     }
 
@@ -231,12 +240,17 @@ internal class TelegramClient(token: String) : TelegramApi {
     }
 
     override fun sendChatAction(chatId: Any, action: TelegramBot.Actions): CompletableFuture<Boolean> {
-        val body = mapOf("chat_id" to id(chatId), "action" to action.value)
+        val body = mapOf(
+                "chat_id" to id(chatId),
+                "action" to action.value)
         return post("sendChatAction", RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
     }
 
     override fun getUserProfilePhotos(userId: Int, offset: Int?, limit: Int?): CompletableFuture<UserProfilePhotos> {
-        val body = mapOf("user_id" to userId, "offset" to offset, "limit" to limit)
+        val body = mapOf(
+                "user_id" to userId,
+                "offset" to offset,
+                "limit" to limit)
         return post("getUserProfilePhotos", RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
     }
 
@@ -246,28 +260,44 @@ internal class TelegramClient(token: String) : TelegramApi {
     }
 
     override fun kickChatMember(chatId: Any, userId: Int, untilDate: Int?): CompletableFuture<Boolean> {
-        val body = mapOf("chat_id" to id(chatId), "user_id" to userId, "until_date" to untilDate)
+        val body = mapOf(
+                "chat_id" to id(chatId),
+                "user_id" to userId,
+                "until_date" to untilDate)
         return post("kickChatMember", RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
     }
 
     override fun unbanChatMember(chatId: Any, userId: Int): CompletableFuture<Boolean> {
-        val body = mapOf("chat_id" to id(chatId), "user_id" to userId)
+        val body = mapOf(
+                "chat_id" to id(chatId),
+                "user_id" to userId)
         return post("unbanChatMember", RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
     }
 
     override fun restrictChatMember(chatId: Any, userId: Int, untilDate: Int?, canSendMessage: Boolean?,
                                     canSendMediaMessages: Boolean?, canSendOtherMessages: Boolean?, canAddWebPagePreview: Boolean?): CompletableFuture<Boolean> {
-        val body = mapOf("chat_id" to id(chatId), "user_id" to userId, "until_date" to untilDate,
-                "can_send_messages" to canSendMessage, "can_send_media_messages" to canSendMediaMessages,
-                "can_send_other_messages" to canSendOtherMessages, "can_add_web_page_previews" to canAddWebPagePreview)
+        val body = mapOf(
+                "chat_id" to id(chatId),
+                "user_id" to userId,
+                "until_date" to untilDate,
+                "can_send_messages" to canSendMessage,
+                "can_send_media_messages" to canSendMediaMessages,
+                "can_send_other_messages" to canSendOtherMessages,
+                "can_add_web_page_previews" to canAddWebPagePreview)
         return post("restrictChatMember", RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
     }
 
     override fun promoteChatMember(chatId: Any, userId: Int, canChangeInfo: Boolean?, canPostMessages: Boolean?, canEditMessages: Boolean?, canDeleteMessages: Boolean?, canInviteUsers: Boolean?, canRestrictMembers: Boolean?, canPinMessages: Boolean?, canPromoteMembers: Boolean?): CompletableFuture<Boolean> {
-        val body = mapOf("chat_id" to id(chatId), "user_id" to userId, "can_change_info" to canChangeInfo,
-                "can_post_messages" to canPostMessages, "can_edit_messages" to canEditMessages,
-                "can_delete_messages" to canDeleteMessages, "can_invite_users" to canInviteUsers,
-                "can_restrict_members" to canRestrictMembers, "can_pin_messages" to canPinMessages,
+        val body = mapOf(
+                "chat_id" to id(chatId),
+                "user_id" to userId,
+                "can_change_info" to canChangeInfo,
+                "can_post_messages" to canPostMessages,
+                "can_edit_messages" to canEditMessages,
+                "can_delete_messages" to canDeleteMessages,
+                "can_invite_users" to canInviteUsers,
+                "can_restrict_members" to canRestrictMembers,
+                "can_pin_messages" to canPinMessages,
                 "can_promote_members" to canPromoteMembers)
         return post("promoteChatMember", RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
     }
@@ -298,7 +328,9 @@ internal class TelegramClient(token: String) : TelegramApi {
         if (title.isEmpty() || title.length > 255)
             throw IllegalArgumentException("title length must be greater then 1 and less then 255")
 
-        val body = toBody(mapOf("chat_id" to id(chatId), "title" to title))
+        val body = toBody(mapOf(
+                "chat_id" to id(chatId),
+                "title" to title))
         return post("setChatTitle", body)
     }
 
@@ -306,12 +338,17 @@ internal class TelegramClient(token: String) : TelegramApi {
         if (description.length > 255)
             throw IllegalArgumentException("title length must be 0 or less then 255")
 
-        val body = toBody(mapOf("chat_id" to id(chatId), "description" to description))
+        val body = toBody(mapOf(
+                "chat_id" to id(chatId),
+                "description" to description))
         return post("setChatDescription", body)
     }
 
     override fun pinChatMessage(chatId: Any, messageId: Int, notification: Boolean?): CompletableFuture<Boolean> {
-        val body = toBody(mapOf("chat_id" to id(chatId), "message_id" to messageId, "disable_notification" to notification))
+        val body = toBody(mapOf(
+                "chat_id" to id(chatId),
+                "message_id" to messageId,
+                "disable_notification" to notification))
         return post("pinChatMessage", body)
     }
 
@@ -341,12 +378,16 @@ internal class TelegramClient(token: String) : TelegramApi {
     }
 
     override fun getChatMember(chatId: Any, userId: Int): CompletableFuture<ChatMember> {
-        val body = toBody(mapOf("chat_id" to id(chatId), "user_id" to userId))
+        val body = toBody(mapOf(
+                "chat_id" to id(chatId),
+                "user_id" to userId))
         return post("getChatMember", body)
     }
 
     override fun setChatStickerSet(chatId: Any, stickerSet: String): CompletableFuture<Boolean> {
-        val body = toBody(mapOf("chat_id" to id(chatId), "sticker_set_name" to stickerSet))
+        val body = toBody(mapOf(
+                "chat_id" to id(chatId),
+                "sticker_set_name" to stickerSet))
         return post("setChatStickerSet", body)
     }
 
@@ -356,13 +397,18 @@ internal class TelegramClient(token: String) : TelegramApi {
     }
 
     override fun answerCallbackQuery(id: String, text: String?, alert: Boolean?, url: String?, cacheTime: Int?): CompletableFuture<Boolean> {
-        val body = toBody(mapOf("callback_query_id" to id, "text" to text,
-                "show_alert" to alert, "url" to url, "cache_time" to cacheTime))
+        val body = toBody(mapOf(
+                "callback_query_id" to id,
+                "text" to text,
+                "show_alert" to alert,
+                "url" to url,
+                "cache_time" to cacheTime))
         return post("answerCallbackQuery", body)
     }
 
     override fun answerInlineQuery(queryId: String, results: Array<InlineQueryResult>, cacheTime: Int?, personal: Boolean?, offset: String?, pmText: String?, pmParameter: String?): CompletableFuture<Boolean> {
-        val body = toBody(mapOf("inline_query_id" to queryId,
+        val body = toBody(mapOf(
+                "inline_query_id" to queryId,
                 "results" to results,
                 "cache_time" to cacheTime,
                 "is_personal" to personal,

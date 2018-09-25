@@ -14,4 +14,8 @@ data class TestConfig(val token: String,
                       val document: String,
                       val videoNote: String,
                       val location: Location,
-                      val contact: Contact)
+                      val contact: Contact,
+                      val fileId: String,
+                      val groupChatId: Long,
+                      val kikMemberId: Int,
+                      val stickerSet: String)
