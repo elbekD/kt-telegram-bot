@@ -3,8 +3,7 @@ package bot
 import bot.types.InlineKeyboardButton
 import bot.types.InlineKeyboardMarkup
 import com.google.gson.Gson
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.BeforeClass
 import org.junit.Test
 import java.nio.file.Files
@@ -363,22 +362,62 @@ internal class TelegramBotTest {
         bot.deleteChatStickerSet(config.groupChatId).handle { msg, _ -> assertTrue(msg) }.join()
     }
 
-    @Test
+    @Test(expected = RuntimeException::class)
     fun answerCallbackQuery() {
-        val markup = InlineKeyboardMarkup(arrayOf(
-                arrayOf(
-                        InlineKeyboardButton("some text 1", callback_data = "btn1"),
-                        InlineKeyboardButton("some text 2", callback_data = "btn2")
-                )
-        ))
-        bot.sendMessage(config.userId, "answerCallbackQuery test", markup = markup)
-                .handle { msg, _ -> assertNotNull(msg) }.join()
+        throw RuntimeException("no unit test provided")
+    }
 
-
+    @Test(expected = RuntimeException::class)
+    fun answerInlineQuery() {
+        throw RuntimeException("no unit test provided")
     }
 
     @Test
-    fun answerInlineQuery() {
+    fun editMessageText() {
+        val prev = bot.sendMessage(config.userId, "helo").get()
+        val curr = bot.editMessageText(prev.chat.id, prev.message_id, text = "Hello").get()
+        assertNotNull(curr)
+        assertEquals("Hello", curr.text)
+    }
 
+    @Test
+    fun editMessageCaption() {
+        val file = file(config.photos[0])
+        val prev = bot.sendPhoto(config.userId, file, "cccaption").get()
+        val curr = bot.editMessageCaption(prev.chat.id, prev.message_id, caption = "Caption").get()
+        assertNotNull(curr)
+        assertEquals("Caption", curr.caption)
+    }
+
+    @Test
+    fun editMessageMedia() {
+        val file = file(config.photos[0])
+
+        val prev = bot.sendPhoto(config.userId, file).get()
+        val cur = bot.editMessageMedia(prev.chat.id, prev.message_id,
+                media = bot.mediaPhoto("attach://photo2", attachment = file(config.photos[1]))).get()
+
+        assertTrue(cur.edit_date != null)
+    }
+
+    @Test
+    fun editMessageReplyMarkup() {
+        val keyboard1 = InlineKeyboardMarkup(arrayOf(
+                arrayOf(
+                        InlineKeyboardButton("button 1", callback_data = "data1"),
+                        InlineKeyboardButton("button 2", callback_data = "data2")
+                )
+        ))
+
+        val keyboard2 = InlineKeyboardMarkup(arrayOf(
+                arrayOf(
+                        InlineKeyboardButton("button 2", callback_data = "data2")
+                )
+        ))
+
+        val prev = bot.sendMessage(config.userId, "hello", markup = keyboard1).get()
+        val curr = bot.editMessageReplyMarkup(prev.chat.id, prev.message_id, markup = keyboard2).get()
+        assertNotNull(curr)
+        assertTrue(curr.edit_date != null)
     }
 }

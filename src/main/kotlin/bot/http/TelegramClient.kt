@@ -12,7 +12,11 @@ import java.util.concurrent.TimeUnit
 
 internal class TelegramClient(token: String) : TelegramApi {
     private val gson = Gson()
-    private val client = OkHttpClient.Builder().connectTimeout(60L, TimeUnit.SECONDS).build()
+    private val httpClient = OkHttpClient.Builder()
+            .connectTimeout(60L, TimeUnit.SECONDS)
+            .readTimeout(60L, TimeUnit.SECONDS)
+            .writeTimeout(60L, TimeUnit.SECONDS)
+            .build()
     private val url = "https://api.telegram.org/bot$token"
 
     private companion object {
@@ -46,35 +50,34 @@ internal class TelegramClient(token: String) : TelegramApi {
             "height" to anyToString,
             "supports_streaming" to anyToString)
 
-    private inline fun <reified R> get(method: String) = future {
+    private inline fun <reified T> get(method: String) = future {
         // FixMe: without this hack fails with ClassCastException in Gson
-        R::class.java.simpleName
+        T::class.java.simpleName
         val request = Request.Builder().url(url(method)).build()
-        val response = client.newCall(request).execute()
-        val obj = fromJson<R>(response)
+        val response = httpClient.newCall(request).execute()
+        val obj = fromJson<T>(response)
         if (!obj.ok) throw TelegramApiError(obj.error_code!!, obj.description!!)
         obj.result!!
     }
 
-    private inline fun <reified R> post(method: String, body: RequestBody) = future {
+    private inline fun <reified T> post(method: String, body: RequestBody) = future {
         // FixMe: without this hack fails with ClassCastException in Gson
-        R::class.java.simpleName
+        T::class.java.simpleName
         val request = Request.Builder().url(url(method)).post(body).build()
-        val response = client.newCall(request).execute()
-        val obj = fromJson<R>(response)
+        val response = httpClient.newCall(request).execute()
+        val obj = fromJson<T>(response)
         if (!obj.ok) throw TelegramApiError(obj.error_code!!, obj.description!!)
         obj.result!!
     }
 
-    private inline fun <reified R> fromJson(response: Response): TelegramObject<R> {
-        return gson.fromJson(response.body()?.string(), getType<TelegramObject<R>>())
+    private inline fun <reified T> fromJson(response: Response): TelegramObject<T> {
+        return gson.fromJson(response.body()?.string(), getType<TelegramObject<T>>())
     }
 
     private fun toJson(body: Any) = gson.toJson(body)
 
     private fun toBody(body: Any): RequestBody {
-        val json = toJson(body)
-        return RequestBody.create(MEDIA_TYPE_JSON, json)
+        return RequestBody.create(MEDIA_TYPE_JSON, toJson(body))
     }
 
     private inline fun <reified T> getType(): Type {
@@ -101,31 +104,33 @@ internal class TelegramClient(token: String) : TelegramApi {
     private fun addOptsToForm(form: MultipartBody.Builder, opts: Map<String, Any?>) =
             sendFileOpts.filterKeys { opts[it] != null }.forEach { form.addFormDataPart(it.key, it.value(opts[it.key]!!)) }
 
-    internal fun getUpdates(options: Map<String, Any?>) = future {
-        val request = Request.Builder()
-                .url(url("getUpdates"))
-                .post(RequestBody.create(MEDIA_TYPE_JSON, toJson(options)))
-                .build()
+    internal fun getUpdates(options: Map<String, Any?>) =
+            post<ArrayList<Update>>("getUpdates", toBody(options))
 
-        val response = client.newCall(request).execute()
-
-        val obj = fromJson<List<Update>>(response)
-
-        if (!obj.ok)
-            throw TelegramApiError(obj.error_code!!, obj.description!!)
-        obj.result!!
-    }
 
     override fun getMe() = get<User>("getMe")
 
     override fun sendMessage(chatId: Any, text: String, parseMode: String?, preview: Boolean?, notification: Boolean?,
                              replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
-        val body = toBody(SendMessage(id(chatId), text, parseMode, preview, notification, replyTo, markup))
+        val body = toBody(mapOf(
+                "chat_id" to id(chatId),
+                "text" to text,
+                "parse_mode" to parseMode,
+                "disable_web_page_preview" to preview,
+                "disable_notification" to notification,
+                "reply_to_message_id" to replyTo,
+                "reply_markup" to markup
+        ))
         return post("sendMessage", body)
     }
 
     override fun forwardMessage(chatId: Any, fromId: Any, msgId: Int, notification: Boolean?): CompletableFuture<Message> {
-        val body = toBody(ForwardMessage(id(chatId), id(fromId), msgId, notification))
+        val body = toBody(mapOf(
+                "chat_id" to id(chatId),
+                "from_chat_id" to id(fromId),
+                "message_id" to msgId,
+                "disable_notification" to notification
+        ))
         return post("forwardMessage", body)
     }
 
@@ -213,29 +218,65 @@ internal class TelegramClient(token: String) : TelegramApi {
     }
 
     override fun sendLocation(chatId: Any, latitude: Double, longitude: Double, period: Int?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
-        val body = toBody(SendLocation(id(chatId), latitude, longitude, period, notification, replyTo, markup))
+        val body = toBody(mapOf(
+                "chat_id" to chatId,
+                "latitude" to latitude,
+                "longitude" to longitude,
+                "live_period" to period,
+                "disable_notification" to notification,
+                "reply_to_message_id" to replyTo,
+                "reply_markup" to markup
+        ))
         return post("sendLocation", body)
     }
 
-    override fun editMessageLiveLocation(latitude: Double, longitude: Double, chatId: Any?, messageId: Int?, inlineMessageId: String?, markup: ReplyKeyboard?): CompletableFuture<Message> {
-        val body = toBody(EditLocation(if (chatId != null) id(chatId) else null, messageId, inlineMessageId,
-                latitude, longitude, markup))
+    override fun editMessageLiveLocation(latitude: Double, longitude: Double, chatId: Any?, messageId: Int?, inlineMessageId: String?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+        val body = toBody(mapOf(
+                "chat_id" to if (chatId != null) id(chatId) else null,
+                "message_id" to messageId,
+                "inline_message_id" to inlineMessageId,
+                "latitude" to latitude,
+                "longitude" to longitude,
+                "reply_markup" to markup
+        ))
         return post("editMessageLiveLocation", body)
     }
 
-    override fun stopMessageLiveLocation(chatId: Any?, messageId: Int?, inlineMessageId: String?, markup: ReplyKeyboard?): CompletableFuture<Message> {
-        val body = toBody(StopLocation(if (chatId != null) id(chatId) else null, messageId, inlineMessageId, markup))
+    override fun stopMessageLiveLocation(chatId: Any?, messageId: Int?, inlineMessageId: String?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+        val body = toBody(mapOf(
+                "chat_id" to if (chatId != null) id(chatId) else null,
+                "message_id" to messageId,
+                "inline_message_id" to inlineMessageId,
+                "reply_markup" to markup
+        ))
         return post("stopMessageLiveLocation", body)
     }
 
     override fun sendVenue(chatId: Any, latitude: Double, longitude: Double, title: String, address: String, foursquareId: String?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
-        val body = toBody(SendVenue(id(chatId), latitude, longitude, title, address, foursquareId, notification,
-                replyTo, markup))
+        val body = toBody(mapOf(
+                "chat_id" to chatId,
+                "latitude" to latitude,
+                "longitude" to longitude,
+                "title" to title,
+                "address" to address,
+                "foursquare_id" to foursquareId,
+                "disable_notification" to notification,
+                "reply_to_message_id" to replyTo,
+                "reply_markup" to markup
+        ))
         return post("sendVenue", body)
     }
 
     override fun sendContact(chatId: Any, phone: String, firstName: String, lastName: String?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
-        val body = toBody(SendContact(id(chatId), phone, firstName, lastName, notification, replyTo, markup))
+        val body = toBody(mapOf(
+                "chat_id" to chatId,
+                "phone_number" to phone,
+                "first_name" to firstName,
+                "last_name" to lastName,
+                "disable_notification" to notification,
+                "reply_to_message_id" to replyTo,
+                "reply_markup" to markup
+        ))
         return post("sendContact", body)
     }
 
@@ -416,5 +457,60 @@ internal class TelegramClient(token: String) : TelegramApi {
                 "switch_pm_text" to pmText,
                 "switch_pm_parameter" to pmParameter))
         return post("answerInlineQuery", body)
+    }
+
+    override fun editMessageText(chatId: Any?, messageId: Int?, inlineMessageId: String?, text: String, parseMode: String?, preview: Boolean?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+        val body = toBody(mapOf(
+                "chat_id" to if (chatId != null) id(chatId) else null,
+                "message_id" to messageId,
+                "inline_message_id" to inlineMessageId,
+                "text" to text,
+                "parse_mode" to parseMode,
+                "disable_web_page_preview" to preview,
+                "reply_markup" to markup
+        ))
+        return post("editMessageText", body)
+    }
+
+    override fun editMessageCaption(chatId: Any?, messageId: Int?, inlineMessageId: String?, caption: String?, parseMode: String?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+        val body = toBody(mapOf(
+                "chat_id" to if (chatId != null) id(chatId) else null,
+                "message_id" to messageId,
+                "inline_message_id" to inlineMessageId,
+                "caption" to caption,
+                "parse_mode" to parseMode,
+                "reply_markup" to markup
+        ))
+        return post("editMessageCaption", body)
+    }
+
+    override fun editMessageMedia(chatId: Any?, messageId: Int?, inlineMessageId: String?, media: InputMedia, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+        val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
+
+        if (inlineMessageId != null) {
+            form.addFormDataPart("inline_message_id", inlineMessageId)
+        } else {
+            form.addFormDataPart("chat_id", id(chatId!!))
+            form.addFormDataPart("message_id", messageId.toString())
+        }
+
+        form.addFormDataPart(media.media().split("//")[1], media.media(), RequestBody.create(MEDIA_TYPE_OCTET_STREAM, media.file()!!))
+        form.addFormDataPart("media", toJson(media))
+
+        if (markup != null) {
+            form.addFormDataPart("reply_markup", toJson(markup))
+        }
+
+        return post("editMessageMedia", form.build())
+    }
+
+    override fun editMessageReplyMarkup(chatId: Any?, messageId: Int?, inlineMessageId: String?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+        val body = toBody(mapOf(
+                "chat_id" to if (chatId != null) id(chatId) else null,
+                "message_id" to messageId,
+                "inline_message_id" to inlineMessageId,
+                "reply_markup" to markup
+        ))
+        return post("editMessageReplyMarkup", body)
     }
 }

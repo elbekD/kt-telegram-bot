@@ -7,11 +7,12 @@ import java.io.File
 import java.util.concurrent.CompletableFuture
 
 abstract class TelegramBot protected constructor(tk: String) : Bot {
-    private val events = mutableMapOf<String, (Message) -> Unit>()
+    private val callbackQueries = mutableMapOf<String, (CallbackQuery) -> Unit>()
     private val commands = mutableMapOf<String, (Message) -> Unit>()
     private val client = TelegramClient(tk)
 
     companion object {
+        private const val ANY_CALLBACK_QUERY_TRIGGER = "*"
         fun createPolling(token: String, options: PollingOptions.() -> Unit = { PollingOptions() }): Bot {
             validateToken(token)
             return LongPollingBot(token, PollingOptions().apply(options))
@@ -58,6 +59,12 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
         upds.forEach { upd ->
             if (upd.message != null && upd.message.isCommand())
                 launch { commands[upd.message.text]?.invoke(upd.message) }
+            else if (upd.callback_query != null) {
+                upd.callback_query.data?.let {
+                    val trigger = if (callbackQueries[it] != null) it else ANY_CALLBACK_QUERY_TRIGGER
+                    launch { callbackQueries[trigger]?.invoke(upd.callback_query) }
+                }
+            }
         }
     }
 
@@ -68,28 +75,11 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
         }
     }
 
-//    override fun keyboard(buttons: Array<Array<ReplyButton>>, resize: Boolean?, once: Boolean?, selective: Boolean?): ReplyKeyboard {
-//        return ReplyKeyboardMarkup(buttons, resize, once, selective)
-//    }
-//
-//    override fun inlineKeyboard(buttons: Array<Array<ReplyButton>>): ReplyKeyboard {
-//        return InlineKeyboardMarkup(buttons)
-//    }
-//
-//    override fun inlineButton(text: String, url: String?, callback: String?, switchQuery: String?, switchChat: String?, game: Any?, pay: Boolean?): ReplyButton {
-//        return InlineKeyboardButton(text, url, callback, switchQuery, switchChat, game, pay)
-//    }
-//
-//    override fun button(text: String, contact: Boolean?, location: Boolean?): ReplyButton {
-//        if (contact != null && contact && location != null && location)
-//            throw IllegalArgumentException("both contact and location cannot be set")
-//
-//        return KeyboardButton(text, contact, location)
-//    }
-//
-//    override fun removeKeyboard(remove: Boolean, selective: Boolean?): ReplyKeyboard {
-//        return ReplyKeyboardRemove(remove, selective)
-//    }
+    override fun onCallbackQuery(trigger: String, action: (CallbackQuery) -> Unit) {
+        if (trigger.length !in 1..64)
+            throw IllegalArgumentException("$trigger length must be in [1, 64] range")
+        callbackQueries[trigger] = action
+    }
 
     override fun mediaPhoto(media: String, attachment: File?, caption: String?): InputMedia {
         return InputMediaPhoto(media, attachment, caption)
@@ -156,14 +146,14 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
             client.sendLocation(chatId, latitude, longitude, period, notification, replyTo, markup)
 
     override fun editMessageLiveLocation(latitude: Double, longitude: Double, chatId: Any?, messageId: Int?,
-                                         inlineMessageId: String?, markup: ReplyKeyboard?):
+                                         inlineMessageId: String?, markup: InlineKeyboardMarkup?):
             CompletableFuture<Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.editMessageLiveLocation(latitude, longitude, chatId, messageId, inlineMessageId, markup)
     }
 
     override fun stopMessageLiveLocation(chatId: Any?, messageId: Int?, inlineMessageId: String?,
-                                         markup: ReplyKeyboard?):
+                                         markup: InlineKeyboardMarkup?):
             CompletableFuture<Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.stopMessageLiveLocation(chatId, messageId, inlineMessageId, markup)
@@ -228,6 +218,26 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
     override fun answerCallbackQuery(id: String, text: String?, alert: Boolean?, url: String?, cacheTime: Int?) = client.answerCallbackQuery(id, text, alert, url, cacheTime)
 
     override fun answerInlineQuery(queryId: String, results: Array<InlineQueryResult>, cacheTime: Int?, personal: Boolean?, offset: String?, pmText: String?, pmParameter: String?) = client.answerInlineQuery(queryId, results, cacheTime, personal, offset, pmText, pmParameter)
+
+    override fun editMessageText(chatId: Any?, messageId: Int?, inlineMessageId: String?, text: String, parseMode: String?, preview: Boolean?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+        validateIds(chatId, messageId, inlineMessageId)
+        return client.editMessageText(chatId, messageId, inlineMessageId, text, parseMode, preview, markup)
+    }
+
+    override fun editMessageCaption(chatId: Any?, messageId: Int?, inlineMessageId: String?, caption: String?, parseMode: String?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+        validateIds(chatId, messageId, inlineMessageId)
+        return client.editMessageCaption(chatId, messageId, inlineMessageId, caption, parseMode, markup)
+    }
+
+    override fun editMessageMedia(chatId: Any?, messageId: Int?, inlineMessageId: String?, media: InputMedia, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+        validateIds(chatId, messageId, inlineMessageId)
+        return client.editMessageMedia(chatId, messageId, inlineMessageId, media, markup)
+    }
+
+    override fun editMessageReplyMarkup(chatId: Any?, messageId: Int?, inlineMessageId: String?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+        validateIds(chatId, messageId, inlineMessageId)
+        return client.editMessageReplyMarkup(chatId, messageId, inlineMessageId, markup)
+    }
     /*
                 /\
                /  \

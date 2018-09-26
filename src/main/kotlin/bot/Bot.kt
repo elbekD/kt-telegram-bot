@@ -1,38 +1,34 @@
 package bot
 
 import bot.http.TelegramApi
+import bot.types.CallbackQuery
 import bot.types.InputMedia
 import bot.types.Message
 import java.io.File
 
 interface Bot : TelegramApi {
     /**
-     * Starts the bot
+     * Start the bot
      */
     fun start()
 
     /**
-     * Stops the bot. Manual start needed
+     * Stop the bot. Manual start needed
      */
     fun stop()
 
     /**
      * @param trigger bot command which starts with `/`
-     * @param action suspendable callback for the given `trigger` with [Message] parameter
+     * @param action callback for the given `trigger` with [Message] parameter
      */
     fun on(trigger: String, action: (Message) -> Unit)
 
-//    fun keyboard(buttons: Array<Array<ReplyButton>>, resize: Boolean? = null, once: Boolean? = null,
-//                 selective: Boolean? = null): ReplyKeyboard
-//
-//    fun button(text: String, contact: Boolean? = null, location: Boolean? = null): ReplyButton
-//
-//    fun removeKeyboard(remove: Boolean = true, selective: Boolean? = null): ReplyKeyboard
-//
-//    fun inlineKeyboard(buttons: Array<Array<ReplyButton>>): ReplyKeyboard
-//
-//    fun inlineButton(text: String, url: String? = null, callback: String? = null, switchQuery: String? = null,
-//                     switchChat: String? = null, game: Any? = null, pay: Boolean? = null): ReplyButton
+    /**
+     * To invoke on any callback query set `trigger` to `*`
+     * @param trigger `callback_data` provided via [InlineKeyboardButton][bot.types.InlineKeyboardButton]
+     * @param action callback for the given `trigger` with [CallbackQuery] parameter
+     */
+    fun onCallbackQuery(trigger: String, action: (CallbackQuery) -> Unit)
 
     /**
      * Helper method to create photo media object
