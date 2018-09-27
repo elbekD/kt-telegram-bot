@@ -1,9 +1,7 @@
 package bot
 
 import bot.http.TelegramApi
-import bot.types.CallbackQuery
-import bot.types.InputMedia
-import bot.types.Message
+import bot.types.*
 import java.io.File
 
 interface Bot : TelegramApi {
@@ -18,17 +16,38 @@ interface Bot : TelegramApi {
     fun stop()
 
     /**
-     * @param trigger bot command which starts with `/`
-     * @param action callback for the given `trigger` with [Message] parameter
+     * By default this method is triggered on any command.
+     * @param command bot command which starts with `/`
+     * @param action callback for the given `command` with [Message] parameter
+     * and optional `argument` parameter
+     *
+     * @throws [IllegalArgumentException] if [command] exceeds constraints.
+     * Check [Telegram Bot Commands](https://core.telegram.org/bots#commands)
      */
-    fun on(trigger: String, action: (Message) -> Unit)
+    fun onCommand(command: String = "/*", action: (Message, String?) -> Unit)
 
     /**
-     * To invoke on any callback query set `trigger` to `*`
-     * @param trigger `callback_data` provided via [InlineKeyboardButton][bot.types.InlineKeyboardButton]
-     * @param action callback for the given `trigger` with [CallbackQuery] parameter
+     * By default this method is triggered on any data
+     * @param data trigger provided via `callback_data` field of [InlineKeyboardButton][bot.types.InlineKeyboardButton]
+     * @param action callback for the given `data` with [CallbackQuery] parameter
+     *
+     * @throws [IllegalArgumentException] if [data] length not in `[1, 64]` range
      */
-    fun onCallbackQuery(trigger: String, action: (CallbackQuery) -> Unit)
+    fun onCallbackQuery(data: String = "*", action: (CallbackQuery) -> Unit)
+
+    /**
+     * By default this method is triggered on any query
+     * @param query trigger provided via `query` field of [InlineQuery]
+     * @param action callback for the given `query` with [InlineQuery] parameter
+     *
+     * @throws [IllegalArgumentException] if [query] length not in `[0, 512]` range
+     */
+    fun onInlineQuery(query: String = "*", action: (InlineQuery) -> Unit)
+
+    /**
+     * Triggered if no matching update handler found. Pass `null` to remove action
+     */
+    fun onAnyUpdate(action: ((Update) -> Unit)?)
 
     /**
      * Helper method to create photo media object

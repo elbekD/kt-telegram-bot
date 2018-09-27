@@ -375,7 +375,7 @@ interface TelegramApi {
      * @throws TelegramApiError if error returned in response
      */
     fun answerInlineQuery(queryId: String,
-                          results: Array<InlineQueryResult>,
+                          results: Array<out InlineQueryResult>,
                           cacheTime: Int? = null,
                           personal: Boolean? = null,
                           offset: String? = null,

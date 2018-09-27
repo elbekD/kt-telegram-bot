@@ -10,6 +10,7 @@ import java.lang.reflect.Type
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 
+// Todo: create general multipart function
 internal class TelegramClient(token: String) : TelegramApi {
     private val gson = Gson()
     private val httpClient = OkHttpClient.Builder()
@@ -447,7 +448,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post("answerCallbackQuery", body)
     }
 
-    override fun answerInlineQuery(queryId: String, results: Array<InlineQueryResult>, cacheTime: Int?, personal: Boolean?, offset: String?, pmText: String?, pmParameter: String?): CompletableFuture<Boolean> {
+    override fun answerInlineQuery(queryId: String, results: Array<out InlineQueryResult>, cacheTime: Int?, personal: Boolean?, offset: String?, pmText: String?, pmParameter: String?): CompletableFuture<Boolean> {
         val body = toBody(mapOf(
                 "inline_query_id" to queryId,
                 "results" to results,

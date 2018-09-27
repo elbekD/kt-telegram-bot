@@ -7,12 +7,15 @@ import java.io.File
 import java.util.concurrent.CompletableFuture
 
 abstract class TelegramBot protected constructor(tk: String) : Bot {
-    private val callbackQueries = mutableMapOf<String, (CallbackQuery) -> Unit>()
-    private val commands = mutableMapOf<String, (Message) -> Unit>()
+    private val commands by lazy { mutableMapOf<String, (Message, String?) -> Unit>() }
+    private val callbackQueries by lazy { mutableMapOf<String, (CallbackQuery) -> Unit>() }
+    private val inlineQueries by lazy { mutableMapOf<String, (InlineQuery) -> Unit>() }
+    private var onAnyUpdateAction: ((Update) -> Unit)? = null
     private val client = TelegramClient(tk)
 
     companion object {
-        private const val ANY_CALLBACK_QUERY_TRIGGER = "*"
+        private const val ANY_CALLBACK_TRIGGER = "*"
+
         fun createPolling(token: String, options: PollingOptions.() -> Unit = { PollingOptions() }): Bot {
             validateToken(token)
             return LongPollingBot(token, PollingOptions().apply(options))
@@ -27,6 +30,16 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
             if (token.isBlank())
                 throw IllegalArgumentException("Token cannot be empty")
         }
+
+        private fun extractCommandAndArgument(text: String): Pair<String, String?> {
+            val cmd = text.substringBefore(' ')
+            val arg = cmd.substringAfter(' ', "")
+            return Pair(cmd, if (arg.isEmpty()) null else arg)
+        }
+
+        private fun Message.isCommand() = text != null && text.split(' ')[0].isCommand()
+
+        private fun String.isCommand() = matches("^/[\\w]{1,32}$".toRegex())
     }
 
     enum class Actions(val value: String) {
@@ -42,10 +55,6 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
         UploadVideoNote("upload_video_note ");
     }
 
-    private fun Message.isCommand() = text != null && text.split(' ')[0].isCommand()
-    private fun String.isCommand() = isNotBlank() && split(' ').size == 1 && startsWith("/")
-//    private fun String.isEvent() =
-
     private fun validateIds(chatId: Any?, messageId: Int?, inlineMessageId: String?) {
         if (
                 inlineMessageId != null && (chatId != null || messageId != null)
@@ -57,28 +66,49 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
 
     protected fun onUpdate(upds: List<Update>) {
         upds.forEach { upd ->
-            if (upd.message != null && upd.message.isCommand())
-                launch { commands[upd.message.text]?.invoke(upd.message) }
-            else if (upd.callback_query != null) {
+            if (upd.message != null && upd.message.isCommand()) {
+                val (cmd, arg) = extractCommandAndArgument(upd.message.text!!)
+                val trigger = if (commands[cmd] != null) cmd else ANY_CALLBACK_TRIGGER
+                launch { commands[trigger]?.invoke(upd.message, arg) }
+
+            } else if (upd.callback_query != null) {
                 upd.callback_query.data?.let {
-                    val trigger = if (callbackQueries[it] != null) it else ANY_CALLBACK_QUERY_TRIGGER
+                    val trigger = if (callbackQueries[it] != null) it else ANY_CALLBACK_TRIGGER
                     launch { callbackQueries[trigger]?.invoke(upd.callback_query) }
                 }
+
+            } else if (upd.inline_query != null) {
+                val trigger = if (inlineQueries[upd.inline_query.query] != null)
+                    upd.inline_query.query
+                else ANY_CALLBACK_TRIGGER
+                launch { inlineQueries[trigger]?.invoke(upd.inline_query) }
+
+            } else {
+                launch { onAnyUpdateAction?.invoke(upd) }
             }
         }
     }
 
-    override fun on(trigger: String, action: (Message) -> Unit) {
-        when {
-            trigger.isCommand() -> commands[trigger] = action
-            else -> throw IllegalArgumentException("$trigger is not a command")
-        }
+    override fun onCommand(command: String, action: (Message, String?) -> Unit) {
+        if (!command.isCommand())
+            throw IllegalArgumentException("$command is not a command")
+        commands[command] = action
     }
 
-    override fun onCallbackQuery(trigger: String, action: (CallbackQuery) -> Unit) {
-        if (trigger.length !in 1..64)
-            throw IllegalArgumentException("$trigger length must be in [1, 64] range")
-        callbackQueries[trigger] = action
+    override fun onCallbackQuery(data: String, action: (CallbackQuery) -> Unit) {
+        if (data.length !in 1..64)
+            throw IllegalArgumentException("'data' length must be in [1, 64] range")
+        callbackQueries[data] = action
+    }
+
+    override fun onInlineQuery(query: String, action: (InlineQuery) -> Unit) {
+        if (query.length !in 0..512)
+            throw IllegalArgumentException("'query' length must be in [1, 512] range")
+        inlineQueries[query] = action
+    }
+
+    override fun onAnyUpdate(action: ((Update) -> Unit)?) {
+        onAnyUpdateAction = action
     }
 
     override fun mediaPhoto(media: String, attachment: File?, caption: String?): InputMedia {
@@ -217,7 +247,7 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
 
     override fun answerCallbackQuery(id: String, text: String?, alert: Boolean?, url: String?, cacheTime: Int?) = client.answerCallbackQuery(id, text, alert, url, cacheTime)
 
-    override fun answerInlineQuery(queryId: String, results: Array<InlineQueryResult>, cacheTime: Int?, personal: Boolean?, offset: String?, pmText: String?, pmParameter: String?) = client.answerInlineQuery(queryId, results, cacheTime, personal, offset, pmText, pmParameter)
+    override fun answerInlineQuery(queryId: String, results: Array<out InlineQueryResult>, cacheTime: Int?, personal: Boolean?, offset: String?, pmText: String?, pmParameter: String?) = client.answerInlineQuery(queryId, results, cacheTime, personal, offset, pmText, pmParameter)
 
     override fun editMessageText(chatId: Any?, messageId: Int?, inlineMessageId: String?, text: String, parseMode: String?, preview: Boolean?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
         validateIds(chatId, messageId, inlineMessageId)
