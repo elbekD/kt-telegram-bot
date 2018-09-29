@@ -2,9 +2,16 @@ package bot
 
 data class Location(val latitude: Double, val longitude: Double)
 data class Contact(val phone: String, val firstName: String, val lastName: String)
+data class CreateStickerSet(val userId: Long,
+                            val name: String,
+                            val title: String,
+                            val createStickerFilename: String,
+                            val addStickerFilename: String,
+                            val emojisCreate: String,
+                            val emojisAdd: String)
 
 data class TestConfig(val token: String,
-                      val userId: Int,
+                      val userId: Long,
                       val resourcePath: String,
                       val photos: Array<String>,
                       val video: String,
@@ -17,5 +24,7 @@ data class TestConfig(val token: String,
                       val contact: Contact,
                       val fileId: String,
                       val groupChatId: Long,
-                      val kikMemberId: Int,
-                      val stickerSet: String)
+                      val kikMemberId: Long,
+                      val stickerSetName: String,
+                      val sendStickerUrl: String,
+                      val createStickerSet: CreateStickerSet)

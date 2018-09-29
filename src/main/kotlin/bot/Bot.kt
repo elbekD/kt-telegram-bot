@@ -4,6 +4,7 @@ import bot.http.TelegramApi
 import bot.types.*
 import java.io.File
 
+// Todo: regex command handler
 interface Bot : TelegramApi {
     /**
      * Start the bot

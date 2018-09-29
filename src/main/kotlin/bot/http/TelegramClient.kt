@@ -75,17 +75,17 @@ internal class TelegramClient(token: String) : TelegramApi {
         return gson.fromJson(response.body()?.string(), getType<TelegramObject<T>>())
     }
 
+    private inline fun <reified T> getType(): Type {
+        return object : TypeToken<T>() {}.type
+    }
+
     private fun toJson(body: Any) = gson.toJson(body)
 
     private fun toBody(body: Any): RequestBody {
         return RequestBody.create(MEDIA_TYPE_JSON, toJson(body))
     }
 
-    private inline fun <reified T> getType(): Type {
-        return object : TypeToken<T>() {}.type
-    }
-
-    private fun url(method: String): String = "$url/$method"
+    private fun url(method: String) = "$url/$method"
 
     private fun sendFile(type: String, id: String, file: Any, opts: Map<String, Any?>, method: String = type):
             CompletableFuture<Message> {
@@ -95,7 +95,7 @@ internal class TelegramClient(token: String) : TelegramApi {
 
         when (file) {
             is File -> form.addFormDataPart(type, file.name, RequestBody.create(null, file))
-            is String -> form.addFormDataPart(type, file)   // file_id
+            is String -> form.addFormDataPart(type, file)
             else -> throw IllegalArgumentException("Neither file nor string")
         }
 
@@ -210,10 +210,8 @@ internal class TelegramClient(token: String) : TelegramApi {
         }
 
         form.addFormDataPart("media", toJson(media))
-        if (notification != null)
-            form.addFormDataPart("disable_notification", notification.toString())
-        if (replyTo != null)
-            form.addFormDataPart("reply_to_message_id", replyTo.toString())
+        notification?.let { form.addFormDataPart("disable_notification", it.toString()) }
+        replyTo?.let { form.addFormDataPart("reply_to_message_id", it.toString()) }
 
         return post("sendMediaGroup", form.build())
     }
@@ -288,7 +286,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post("sendChatAction", RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
     }
 
-    override fun getUserProfilePhotos(userId: Int, offset: Int?, limit: Int?): CompletableFuture<UserProfilePhotos> {
+    override fun getUserProfilePhotos(userId: Long, offset: Int?, limit: Int?): CompletableFuture<UserProfilePhotos> {
         val body = mapOf(
                 "user_id" to userId,
                 "offset" to offset,
@@ -301,7 +299,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 toJson(mapOf("file_id" to fileId))))
     }
 
-    override fun kickChatMember(chatId: Any, userId: Int, untilDate: Int?): CompletableFuture<Boolean> {
+    override fun kickChatMember(chatId: Any, userId: Long, untilDate: Int?): CompletableFuture<Boolean> {
         val body = mapOf(
                 "chat_id" to id(chatId),
                 "user_id" to userId,
@@ -309,14 +307,14 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post("kickChatMember", RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
     }
 
-    override fun unbanChatMember(chatId: Any, userId: Int): CompletableFuture<Boolean> {
+    override fun unbanChatMember(chatId: Any, userId: Long): CompletableFuture<Boolean> {
         val body = mapOf(
                 "chat_id" to id(chatId),
                 "user_id" to userId)
         return post("unbanChatMember", RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
     }
 
-    override fun restrictChatMember(chatId: Any, userId: Int, untilDate: Int?, canSendMessage: Boolean?,
+    override fun restrictChatMember(chatId: Any, userId: Long, untilDate: Int?, canSendMessage: Boolean?,
                                     canSendMediaMessages: Boolean?, canSendOtherMessages: Boolean?, canAddWebPagePreview: Boolean?): CompletableFuture<Boolean> {
         val body = mapOf(
                 "chat_id" to id(chatId),
@@ -329,7 +327,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post("restrictChatMember", RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
     }
 
-    override fun promoteChatMember(chatId: Any, userId: Int, canChangeInfo: Boolean?, canPostMessages: Boolean?, canEditMessages: Boolean?, canDeleteMessages: Boolean?, canInviteUsers: Boolean?, canRestrictMembers: Boolean?, canPinMessages: Boolean?, canPromoteMembers: Boolean?): CompletableFuture<Boolean> {
+    override fun promoteChatMember(chatId: Any, userId: Long, canChangeInfo: Boolean?, canPostMessages: Boolean?, canEditMessages: Boolean?, canDeleteMessages: Boolean?, canInviteUsers: Boolean?, canRestrictMembers: Boolean?, canPinMessages: Boolean?, canPromoteMembers: Boolean?): CompletableFuture<Boolean> {
         val body = mapOf(
                 "chat_id" to id(chatId),
                 "user_id" to userId,
@@ -351,10 +349,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
         form.addFormDataPart("chat_id", id(chatId))
         when (photo) {
-            is File -> {
-                form.addFormDataPart("photo", photo.name, RequestBody.create(null, photo))
-                println("${photo.absolutePath}, ${photo.name}, ${id(chatId)}")
-            }
+            is File -> form.addFormDataPart("photo", photo.name, RequestBody.create(null, photo))
             is String -> form.addFormDataPart("photo", photo)
             else -> throw IllegalArgumentException("<photo> neither java.io.File nor string")
         }
@@ -419,17 +414,17 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post("getChatMembersCount", body)
     }
 
-    override fun getChatMember(chatId: Any, userId: Int): CompletableFuture<ChatMember> {
+    override fun getChatMember(chatId: Any, userId: Long): CompletableFuture<ChatMember> {
         val body = toBody(mapOf(
                 "chat_id" to id(chatId),
                 "user_id" to userId))
         return post("getChatMember", body)
     }
 
-    override fun setChatStickerSet(chatId: Any, stickerSet: String): CompletableFuture<Boolean> {
+    override fun setChatStickerSet(chatId: Any, stickerSetName: String): CompletableFuture<Boolean> {
         val body = toBody(mapOf(
                 "chat_id" to id(chatId),
-                "sticker_set_name" to stickerSet))
+                "sticker_set_name" to stickerSetName))
         return post("setChatStickerSet", body)
     }
 
@@ -497,10 +492,7 @@ internal class TelegramClient(token: String) : TelegramApi {
 
         form.addFormDataPart(media.media().split("//")[1], media.media(), RequestBody.create(MEDIA_TYPE_OCTET_STREAM, media.file()!!))
         form.addFormDataPart("media", toJson(media))
-
-        if (markup != null) {
-            form.addFormDataPart("reply_markup", toJson(markup))
-        }
+        markup?.let { form.addFormDataPart("reply_markup", toJson(it)) }
 
         return post("editMessageMedia", form.build())
     }
@@ -513,5 +505,80 @@ internal class TelegramClient(token: String) : TelegramApi {
                 "reply_markup" to markup
         ))
         return post("editMessageReplyMarkup", body)
+    }
+
+    override fun sendSticker(chatId: Any, sticker: Any, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+        val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
+
+        form.addFormDataPart("chat_id", id(chatId))
+
+        when (sticker) {
+            is File -> form.addFormDataPart("sticker", sticker.name, RequestBody.create(null, sticker))
+            is String -> form.addFormDataPart("sticker", sticker)
+        }
+
+        notification?.let { form.addFormDataPart("disable_notification", it.toString()) }
+        replyTo?.let { form.addFormDataPart("reply_to_message_id", it.toString()) }
+        markup?.let { form.addFormDataPart("reply_markup", toJson(it)) }
+
+        return post("sendSticker", form.build())
+    }
+
+    override fun getStickerSet(name: String): CompletableFuture<StickerSet> {
+        val body = toBody(mapOf("name" to name))
+        return post("getStickerSet", body)
+    }
+
+    override fun uploadStickerFile(userId: Long, pngSticker: File): CompletableFuture<bot.types.File> {
+        val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
+        form.addFormDataPart("user_id", userId.toString())
+        form.addFormDataPart("png_sticker", pngSticker.name, RequestBody.create(null, pngSticker))
+        return post("uploadStickerFile", form.build())
+    }
+
+    override fun createNewStickerSet(userId: Long, name: String, title: String, pngSticker: Any, emojis: String, containsMask: Boolean?, maskPosition: MaskPosition?): CompletableFuture<Boolean> {
+        val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
+        with(form) {
+            addFormDataPart("user_id", userId.toString())
+            addFormDataPart("name", name)
+            addFormDataPart("title", title)
+            addFormDataPart("emojis", emojis)
+            containsMask?.let { addFormDataPart("contains_masks", it.toString()) }
+            maskPosition?.let { addFormDataPart("mask_position", toJson(it)) }
+            when (pngSticker) {
+                is File -> form.addFormDataPart("png_sticker", pngSticker.name, RequestBody.create(null, pngSticker))
+                is String -> form.addFormDataPart("png_sticker", pngSticker)
+                else -> throw IllegalArgumentException()
+            }
+        }
+        return post("createNewStickerSet", form.build())
+    }
+
+    override fun addStickerToSet(userId: Long, name: String, pngSticker: Any, emojis: String, maskPosition: MaskPosition?): CompletableFuture<Boolean> {
+        val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
+        with(form) {
+            addFormDataPart("user_id", userId.toString())
+            addFormDataPart("name", name)
+            addFormDataPart("emojis", emojis)
+            maskPosition?.let { addFormDataPart("mask_position", toJson(it)) }
+            when (pngSticker) {
+                is File -> form.addFormDataPart("png_sticker", pngSticker.name, RequestBody.create(null, pngSticker))
+                is String -> form.addFormDataPart("png_sticker", pngSticker)
+                else -> throw IllegalArgumentException()
+            }
+        }
+        return post("addStickerToSet", form.build())
+    }
+
+    override fun setStickerPositionInSet(sticker: String, position: Int): CompletableFuture<Boolean> {
+        val body = toBody(mapOf(
+                "sticker" to sticker,
+                "position" to position))
+        return post("setStickerPositionInSet", body)
+    }
+
+    override fun deleteStickerFromSet(sticker: String): CompletableFuture<Boolean> {
+        val body = toBody(mapOf("sticker" to sticker))
+        return post("deleteStickerFromSet", body)
     }
 }

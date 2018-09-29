@@ -6,6 +6,7 @@ import kotlinx.coroutines.experimental.launch
 import java.io.File
 import java.util.concurrent.CompletableFuture
 
+// Fixme: protect command handlers from overriding after bot has started
 abstract class TelegramBot protected constructor(tk: String) : Bot {
     private val commands by lazy { mutableMapOf<String, (Message, String?) -> Unit>() }
     private val callbackQueries by lazy { mutableMapOf<String, (CallbackQuery) -> Unit>() }
@@ -29,6 +30,11 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
         private fun validateToken(token: String) {
             if (token.isBlank())
                 throw IllegalArgumentException("Token cannot be empty")
+        }
+
+        private fun validateInputFileOrString(obj: Any) {
+            if (obj !is File && obj !is String)
+                throw IllegalArgumentException("$obj is neither file nor string")
         }
 
         private fun extractCommandAndArgument(text: String): Pair<String, String?> {
@@ -199,21 +205,21 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
 
     override fun sendChatAction(chatId: Any, action: Actions) = client.sendChatAction(chatId, action)
 
-    override fun getUserProfilePhotos(userId: Int, offset: Int?, limit: Int?) = client.getUserProfilePhotos(userId, offset, limit)
+    override fun getUserProfilePhotos(userId: Long, offset: Int?, limit: Int?) = client.getUserProfilePhotos(userId, offset, limit)
 
     override fun getFile(fileId: String) = client.getFile(fileId)
 
-    override fun kickChatMember(chatId: Any, userId: Int, untilDate: Int?) =
+    override fun kickChatMember(chatId: Any, userId: Long, untilDate: Int?) =
             client.kickChatMember(chatId, userId, untilDate)
 
-    override fun unbanChatMember(chatId: Any, userId: Int) = client.unbanChatMember(chatId, userId)
+    override fun unbanChatMember(chatId: Any, userId: Long) = client.unbanChatMember(chatId, userId)
 
-    override fun restrictChatMember(chatId: Any, userId: Int, untilDate: Int?,
+    override fun restrictChatMember(chatId: Any, userId: Long, untilDate: Int?,
                                     canSendMessage: Boolean?, canSendMediaMessages: Boolean?,
                                     canSendOtherMessages: Boolean?, canAddWebPagePreview: Boolean?) = client.restrictChatMember(chatId, userId, untilDate,
             canSendMessage, canSendMediaMessages, canSendOtherMessages, canAddWebPagePreview)
 
-    override fun promoteChatMember(chatId: Any, userId: Int, canChangeInfo: Boolean?, canPostMessages: Boolean?,
+    override fun promoteChatMember(chatId: Any, userId: Long, canChangeInfo: Boolean?, canPostMessages: Boolean?,
                                    canEditMessages: Boolean?, canDeleteMessages: Boolean?, canInviteUsers: Boolean?,
                                    canRestrictMembers: Boolean?, canPinMessages: Boolean?, canPromoteMembers: Boolean?) = client.promoteChatMember(chatId, userId, canChangeInfo, canPostMessages, canEditMessages, canDeleteMessages, canInviteUsers, canRestrictMembers, canPinMessages, canPromoteMembers)
 
@@ -239,9 +245,9 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
 
     override fun getChatMembersCount(chatId: Any) = client.getChatMembersCount(chatId)
 
-    override fun getChatMember(chatId: Any, userId: Int) = client.getChatMember(chatId, userId)
+    override fun getChatMember(chatId: Any, userId: Long) = client.getChatMember(chatId, userId)
 
-    override fun setChatStickerSet(chatId: Any, stickerSet: String) = client.setChatStickerSet(chatId, stickerSet)
+    override fun setChatStickerSet(chatId: Any, stickerSetName: String) = client.setChatStickerSet(chatId, stickerSetName)
 
     override fun deleteChatStickerSet(chatId: Any) = client.deleteChatStickerSet(chatId)
 
@@ -268,6 +274,29 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
         validateIds(chatId, messageId, inlineMessageId)
         return client.editMessageReplyMarkup(chatId, messageId, inlineMessageId, markup)
     }
+
+    override fun sendSticker(chatId: Any, sticker: Any, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+        validateInputFileOrString(sticker)
+        return client.sendSticker(chatId, sticker, notification, replyTo, markup)
+    }
+
+    override fun getStickerSet(name: String) = client.getStickerSet(name)
+
+    override fun uploadStickerFile(userId: Long, pngSticker: File) = client.uploadStickerFile(userId, pngSticker)
+
+    override fun createNewStickerSet(userId: Long, name: String, title: String, pngSticker: Any, emojis: String, containsMask: Boolean?, maskPosition: MaskPosition?): CompletableFuture<Boolean> {
+        validateInputFileOrString(pngSticker)
+        return client.createNewStickerSet(userId, name, title, pngSticker, emojis, containsMask, maskPosition)
+    }
+
+    override fun addStickerToSet(userId: Long, name: String, pngSticker: Any, emojis: String, maskPosition: MaskPosition?): CompletableFuture<Boolean> {
+        validateInputFileOrString(pngSticker)
+        return client.addStickerToSet(userId, name, pngSticker, emojis, maskPosition)
+    }
+
+    override fun setStickerPositionInSet(sticker: String, position: Int) = client.setStickerPositionInSet(sticker, position)
+
+    override fun deleteStickerFromSet(sticker: String) = client.deleteStickerFromSet(sticker)
     /*
                 /\
                /  \

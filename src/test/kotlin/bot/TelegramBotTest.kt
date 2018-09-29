@@ -9,7 +9,9 @@ import org.junit.Test
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.*
+import java.util.concurrent.TimeUnit
 
+// Todo: test commands with arguments
 internal class TelegramBotTest {
     companion object {
         private lateinit var config: TestConfig
@@ -29,337 +31,271 @@ internal class TelegramBotTest {
 
     @Test
     fun getMe() {
-        bot.getMe().handle { msg, err ->
-            println(err)
-            assertNotNull(msg)
-        }.join()
+        val msg = bot.getMe().get()
+        assertTrue(msg.is_bot)
     }
 
     @Test
     fun sendMessage() {
         val testMsg = "This is test message"
-        bot.sendMessage(config.userId, testMsg).handle { msg, _ ->
-            assertNotNull(msg)
-            assertNotNull(msg.text)
-            assertTrue(msg.text!! == testMsg)
-        }.join()
+        val msg = bot.sendMessage(config.userId, testMsg).get()
+        assertNotNull(msg.text)
+        assertEquals(msg.text, testMsg)
     }
 
     @Test
     fun forwardMessage() {
-        bot.forwardMessage(config.userId, config.userId, config.msgId).handle { msg, _ ->
-            assertNotNull(msg)
-        }.join()
+        val msg = bot.forwardMessage(config.userId, config.userId, config.msgId).get()
+        assertNotNull(msg.forward_from)
     }
 
     @Test
     fun sendPhoto() {
         val file = file(config.photos[0])
-        bot.sendPhoto(config.userId, file, "<i>this is photo file</i>", "html", true)
-                .handle { msg, _ ->
-                    assertNotNull(msg)
-                    assertNotNull(msg.photo)
-                    val fileId = msg.photo?.get(0)?.file_id!!
-                    bot.sendPhoto(config.userId, fileId, "<b>this is file_id</b>", "html")
-                            .handle { msg1, _ ->
-                                assertNotNull(msg1)
-                                assertNotNull(msg1.photo)
-                            }.join()
-                }.join()
+        val msg1 = bot.sendPhoto(config.userId, file).get()
+        assertNotNull(msg1.photo)
+
+        val fileId = msg1.photo?.get(0)?.file_id!!
+        val msg2 = bot.sendPhoto(msg1.chat.id, fileId).get()
+        assertNotNull(msg2.photo)
     }
 
     @Test
     fun sendAudio() {
         val file = file(config.audio)
-        bot.sendAudio(config.userId, file, "*this is audio file*", "markdown",
-                4, "Test performer", "Test title")
-                .handle { msg, _ ->
-                    assertNotNull(msg)
-                    assertNotNull(msg.audio)
-                    assertNotNull(msg.audio?.file_id)
-                }.join()
+        val msg = bot.sendAudio(config.userId, file, "*this is audio file*", "markdown",
+                4, "Test performer", "Test title").get()
+        assertNotNull(msg.audio)
+        assertNotNull(msg.audio?.file_id)
     }
 
     @Test
     fun sendDocument() {
         val file = file(config.document)
-        bot.sendDocument(config.userId, file, "`this is document file`", "markdown")
-                .handle { msg, _ ->
-                    assertNotNull(msg)
-                    assertNotNull(msg.document)
-                    assertNotNull(msg.document?.file_id)
-                }.join()
+        val msg = bot.sendDocument(config.userId, file, "`this is document file`", "markdown").get()
+        assertNotNull(msg.document)
+        assertNotNull(msg.document?.file_id)
     }
 
     @Test
     fun sendVideo() {
         val file = file(config.video)
-        bot.sendVideo(config.userId, file, 5, 560, 320, "this is video file")
-                .handle { msg, _ ->
-                    assertNotNull(msg)
-                    assertNotNull(msg.video)
-                    assertNotNull(msg.video?.file_id)
-                }.join()
+        val msg = bot.sendVideo(config.userId, file, 5, 560, 320, "this is video file").get()
+        assertNotNull(msg.video)
+        assertNotNull(msg.video?.file_id)
     }
 
     @Test
     fun sendVoice() {
         val file = file(config.voice)
-        bot.sendVoice(config.userId, file, "this is voice file", duration = 10)
-                .handle { msg, _ ->
-                    assertNotNull(msg)
-                    assertNotNull(msg.voice)
-                    assertNotNull(msg.voice?.file_id)
-                }.join()
+        val msg = bot.sendVoice(config.userId, file, "this is voice file", duration = 10).get()
+        assertNotNull(msg.voice)
+        assertNotNull(msg.voice?.file_id)
     }
 
     @Test
     fun sendVideoNote() {
-        bot.sendVideoNote(config.userId, config.videoNote)
-                .handle { msg, _ ->
-                    assertNotNull(msg)
-                    assertNotNull(msg.video_note)
-                    assertNotNull(msg.video_note?.file_id)
-                }.join()
+        val msg = bot.sendVideoNote(config.userId, config.videoNote).get()
+        assertNotNull(msg.video_note)
+        assertNotNull(msg.video_note?.file_id)
     }
 
     @Test
     fun sendMediaGroup() {
-        bot.sendMediaGroup(config.userId, arrayOf(
+        val msg = bot.sendMediaGroup(config.userId, arrayOf(
                 bot.mediaPhoto("attach://photo1", attachment = file(config.photos[0])),
                 bot.mediaPhoto("attach://photo2", attachment = file(config.photos[1])),
                 bot.mediaVideo("attach://video1", attachment = file(config.video),
                         width = 560, height = 320, duration = 5)
-        )).handle { msg, _ ->
-            assertNotNull(msg)
-            assertTrue(msg.size == 3)
-        }.join()
+        )).get()
+        assertTrue(msg.size == 3)
     }
 
     @Test
     fun sendLocation() {
         val lat = config.location.latitude
         val lng = config.location.longitude
-        bot.sendLocation(config.userId, lat, lng, 60)
-                .handle { msg, _ ->
-                    assertNotNull(msg)
-                    assertNotNull(msg.location)
-                }.join()
+        val msg = bot.sendLocation(config.userId, lat, lng, 60).get()
+        assertNotNull(msg.location)
     }
 
     @Test
     fun editMessageLiveLocation() {
         val lat = config.location.latitude
         val lng = config.location.longitude
-        bot.sendLocation(config.userId, lat, lng, 60)
-                .handle { msg, _ ->
-                    assertNotNull(msg)
-                    assertNotNull(msg.location)
+        val msg1 = bot.sendLocation(config.userId, lat, lng, 60).get()
 
-                    Thread.sleep(5000L)
+        assertNotNull(msg1.location)
 
-                    val id = msg.chat.id
-                    val msgId = msg.message_id
-                    val newLat = config.location.latitude - 0.00004
-                    val newLng = config.location.longitude + 0.00005
+        val id = msg1.chat.id
+        val msgId = msg1.message_id
+        val newLat = config.location.latitude - 0.00004
+        val newLng = config.location.longitude + 0.00005
 
-                    bot.editMessageLiveLocation(newLat, newLng, id, msgId)
-                            .handle { msg1, _ ->
-                                assertNotNull(msg1)
-                                assertNotNull(msg1.location)
-                            }.join()
+        TimeUnit.SECONDS.sleep(3)
 
-                }.join()
+        val msg2 = bot.editMessageLiveLocation(newLat, newLng, id, msgId).get()
+        assertNotNull(msg2.location)
     }
 
     @Test
     fun stopMessageLiveLocation() {
         val lat = config.location.latitude
         val lng = config.location.longitude
-        bot.sendLocation(config.userId, lat, lng, 60)
-                .handle { msg, _ ->
-                    assertNotNull(msg)
-                    assertNotNull(msg.location)
+        val msg = bot.sendLocation(config.userId, lat, lng, 60).get()
 
-                    Thread.sleep(5000L)
-                    val id = msg.chat.id
-                    val msgId = msg.message_id
-                    bot.stopMessageLiveLocation(id, msgId).handle { msg1, _ ->
-                        assertNotNull(msg1)
-                        assertNotNull(msg1.location)
-                    }.join()
-                }.join()
+        assertNotNull(msg.location)
+
+        TimeUnit.SECONDS.sleep(3)
+
+        val id = msg.chat.id
+        val msgId = msg.message_id
+        val msg1 = bot.stopMessageLiveLocation(id, msgId).get()
+        assertNotNull(msg1.location)
     }
 
     @Test
     fun sendVenue() {
         val lat = config.location.latitude
         val lng = config.location.longitude
-        bot.sendVenue(config.userId, lat, lng, "This is venue", "This is address", "This is ID")
-                .handle { msg, _ ->
-                    assertNotNull(msg)
-                    assertNotNull(msg.venue)
-                }.join()
+        val msg = bot.sendVenue(config.userId, lat, lng,
+                "This is venue", "This is address", "This is ID").get()
+        assertNotNull(msg.venue)
     }
 
     @Test
     fun sendContact() {
-        bot.sendContact(config.userId, config.contact.phone, config.contact.firstName, config.contact.lastName)
-                .handle { msg, _ ->
-                    assertNotNull(msg)
-                    assertNotNull(msg.contact)
-                }.join()
+        val msg = bot.sendContact(config.userId, config.contact.phone, config.contact.firstName, config.contact.lastName).get()
+        assertNotNull(msg.contact)
     }
 
     @Test
     fun sendChatAction() {
-        bot.sendChatAction(config.userId, TelegramBot.Actions.RecordAudio)
-                .handle { msg, _ ->
-                    assertNotNull(msg)
-                    assertTrue(msg)
-                }.join()
+        val msg = bot.sendChatAction(config.userId, TelegramBot.Actions.RecordAudio).get()
+        assertTrue(msg)
     }
 
     @Test
     fun getUserProfilePhotos() {
-        bot.getUserProfilePhotos(config.userId).handle { msg, _ ->
-            assertNotNull(msg)
-            assertNotNull(msg.photos)
-        }.join()
+        val msg = bot.getUserProfilePhotos(config.userId).get()
+        assertNotNull(msg.photos)
     }
 
     @Test
     fun getFile() {
-        bot.getFile(config.fileId).handle { file, _ ->
-            assertNotNull(file)
-        }.join()
+        val file = bot.getFile(config.fileId).get()
+        assertNotNull(file)
     }
 
     @Test
     fun kickChatMember() {
         val date = (Date().time + 60 * 1000).toInt()
-        bot.kickChatMember(config.groupChatId, config.kikMemberId, date)
-                .handle { msg, err ->
-                    println(err)
-                    assertTrue(msg)
-                }.join()
+        val msg = bot.kickChatMember(config.groupChatId, config.kikMemberId, date).get()
+        assertTrue(msg)
     }
 
     @Test
     fun unbanChatMember() {
-        bot.unbanChatMember(config.groupChatId, config.kikMemberId)
-                .handle { msg, err ->
-                    println(err)
-                    assertTrue(msg)
-                }.join()
+        val msg = bot.unbanChatMember(config.groupChatId, config.kikMemberId).get()
+        assertTrue(msg)
     }
 
     @Test
     fun restrictChatMember() {
-        bot.restrictChatMember(config.groupChatId, config.kikMemberId, canSendMessage = false)
-                .handle { msg, _ ->
-                    assertTrue(msg)
-                }.join()
+        val msg = bot.restrictChatMember(config.groupChatId, config.kikMemberId, canSendMessage = false).get()
+        assertTrue(msg)
     }
 
     @Test
     fun promoteChatMember() {
-        bot.promoteChatMember(config.groupChatId, config.kikMemberId, canPinMessages = true)
-                .handle { msg, _ ->
-                    assertTrue(msg)
-                }.join()
+        val msg = bot.promoteChatMember(config.groupChatId, config.kikMemberId, canPinMessages = true).get()
+        assertTrue(msg)
     }
 
     @Test
     fun exportChatInviteLink() {
-        bot.exportChatInviteLink(config.groupChatId).handle { msg, _ ->
-            assertNotNull(msg)
-        }.join()
+        bot.exportChatInviteLink(config.groupChatId).get()
     }
 
     @Test
     fun setChatPhoto() {
-        bot.setChatPhoto(config.groupChatId, file(config.photos[1])).handle { msg, _ ->
-            {
-                assertTrue(msg)
-            }
-        }.join()
+        val msg = bot.setChatPhoto(config.groupChatId, file(config.photos[1])).get()
+        assertTrue(msg)
     }
 
     @Test
     fun deleteChatPhoto() {
-        bot.deleteChatPhoto(config.groupChatId).handle { msg, _ ->
-            {
-                assertTrue(msg)
-            }
-        }.join()
+        val msg = bot.deleteChatPhoto(config.groupChatId).get()
+        assertTrue(msg)
     }
 
     @Test
     fun setChatTitle() {
-        bot.setChatTitle(config.groupChatId, "This is chat title").handle { msg, _ ->
-            assertTrue(msg)
-        }.join()
+        val msg = bot.setChatTitle(config.groupChatId, "This is chat title").get()
+        assertTrue(msg)
     }
 
     @Test
     fun setChatDescription() {
-        bot.setChatDescription(config.groupChatId, "This is chat description").handle { msg, _ ->
-            assertTrue(msg)
-        }.join()
+        val msg = bot.setChatDescription(config.groupChatId, "This is chat description").get()
+        assertTrue(msg)
     }
 
     @Test
     fun pinChatMessage() {
-        bot.sendMessage(config.groupChatId, "This is universal message")
-                .thenAccept {
-                    bot.pinChatMessage(it.chat.id, it.message_id).handle { msg, _ -> assertTrue(msg) }.join()
-                }.join()
+        val msg = bot.sendMessage(config.groupChatId, "This is universal message").get()
+        val isMsgPinned = bot.pinChatMessage(msg.chat.id, msg.message_id).get()
+        assertTrue(isMsgPinned)
     }
 
     @Test
     fun unpinChatMessage() {
-        bot.sendMessage(config.groupChatId, "This is universal message")
-                .thenAccept { msg ->
-                    bot.pinChatMessage(msg.chat.id, msg.message_id)
-                            .thenAccept { bot.unpinChatMessage(msg.chat.id) }
-                            .join()
-                }.join()
+        val msg = bot.sendMessage(config.groupChatId, "This is universal message").get()
+        bot.pinChatMessage(msg.chat.id, msg.message_id).get()
+        val isMsgUnpinned = bot.unpinChatMessage(msg.chat.id).get()
+        assertTrue(isMsgUnpinned)
     }
 
     @Test
     fun leaveChat() {
-        bot.leaveChat(config.groupChatId).handle { msg, _ -> assertTrue(msg) }.join()
+        val msg = bot.leaveChat(config.groupChatId).get()
+        assertTrue(msg)
     }
 
     @Test
     fun getChat() {
-        bot.getChat(config.groupChatId).handle { chat, _ -> assertTrue(chat.id == config.groupChatId) }.join()
+        val chat = bot.getChat(config.groupChatId).get()
+        assertTrue(chat.id == config.groupChatId)
     }
 
     @Test
     fun getChatAdministrators() {
-        bot.getChatAdministrators(config.groupChatId).handle { members, _ -> assertNotNull(members) }.join()
+        val members = bot.getChatAdministrators(config.groupChatId).get()
+        assertTrue(members.isNotEmpty())
     }
 
     @Test
     fun getChatMembersCount() {
-        bot.getChatMembersCount(config.groupChatId).handle { count, _ -> assertTrue(count != 0) }.join()
+        val count = bot.getChatMembersCount(config.groupChatId).get()
+        assertTrue(count != 0)
     }
 
     @Test
     fun getChatMember() {
-        bot.getChatMember(config.groupChatId, config.userId).handle { member, _ -> assertNotNull(member) }.join()
+        val member = bot.getChatMember(config.groupChatId, config.userId).get()
+        assertEquals(member.user.id, config.userId)
     }
 
     @Test
     fun setChatStickerSet() {
-        bot.setChatStickerSet(config.groupChatId, config.stickerSet).handle { msg, _ -> assertTrue(msg) }.join()
+        val msg = bot.setChatStickerSet(config.groupChatId, config.stickerSetName).get()
+        assertTrue(msg)
     }
 
     @Test
     fun deleteChatStickerSet() {
-        bot.deleteChatStickerSet(config.groupChatId).handle { msg, _ -> assertTrue(msg) }.join()
+        val msg = bot.deleteChatStickerSet(config.groupChatId).get()
+        assertTrue(msg)
     }
 
     @Test(expected = RuntimeException::class)
@@ -419,5 +355,35 @@ internal class TelegramBotTest {
         val curr = bot.editMessageReplyMarkup(prev.chat.id, prev.message_id, markup = keyboard2).get()
         assertNotNull(curr)
         assertTrue(curr.edit_date != null)
+    }
+
+    @Test
+    fun sendSticker() {
+        val msg = bot.sendSticker(config.userId, config.sendStickerUrl).get()
+        assertTrue(msg.sticker != null)
+    }
+
+    @Test
+    fun getStickerSet() {
+        val set = bot.getStickerSet(config.stickerSetName).get()
+        assertEquals(set.name, config.stickerSetName)
+    }
+
+    @Test
+    fun createStickerSet_thenAddSticker_thenDeleteSticker() {
+        with(config.createStickerSet) {
+            val sticker = bot.uploadStickerFile(config.userId, file(createStickerFilename)).get()
+
+            val stickerSetName = "v${Math.random().toString().substring(2, 10)}$name"
+            bot.createNewStickerSet(userId, stickerSetName, title, sticker.file_id, emojisCreate).get()
+
+            val addedStickerFile = bot.uploadStickerFile(config.userId, file(addStickerFilename)).get()
+            bot.addStickerToSet(userId, stickerSetName, addedStickerFile.file_id, emojisAdd).get()
+
+            val stickers = bot.getStickerSet(stickerSetName).get().stickers
+            bot.setStickerPositionInSet(stickers.last().file_id, 0).get()
+
+            stickers.forEach { bot.deleteStickerFromSet(it.file_id).get() }
+        }
     }
 }

@@ -8,7 +8,7 @@ interface TelegramApi {
     fun getMe(): CompletableFuture<User>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
@@ -21,7 +21,7 @@ interface TelegramApi {
                     markup: ReplyKeyboard? = null): CompletableFuture<Message>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @param fromId is `Int` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
@@ -32,10 +32,10 @@ interface TelegramApi {
                        notification: Boolean? = null): CompletableFuture<Message>
 
     /**
-     * @param chatId is `Int` or `String`
-     * @param photo is `java.io.File` or `String`
+     * @param chatId is `Int`, `Long` or `String`
+     * @param photo is [java.io.File] or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
-     * @throws IllegalArgumentException if `photo` neither file nor string
+     * @throws IllegalArgumentException if `photo` neither [java.io.File] nor `String`
      * @throws TelegramApiError if error returned in response
      */
     fun sendPhoto(chatId: Any,
@@ -47,10 +47,10 @@ interface TelegramApi {
                   markup: ReplyKeyboard? = null): CompletableFuture<Message>
 
     /**
-     * @param chatId is `Int` or `String`
-     * @param audio is `java.io.File` or `String` (i.e. file_id)
+     * @param chatId is `Int`, `Long` or `String`
+     * @param audio is [java.io.File] or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
-     * @throws IllegalArgumentException if `audio` neither file nor string
+     * @throws IllegalArgumentException if `audio` neither [java.io.File] nor `String`
      * @throws TelegramApiError if error returned in response
      */
     fun sendAudio(chatId: Any,
@@ -66,10 +66,10 @@ interface TelegramApi {
             CompletableFuture<Message>
 
     /**
-     * @param chatId is `Int` or `String`
-     * @param document is `java.io.File` or `String` (i.e. file_id)
+     * @param chatId is `Int`, `Long` or `String`
+     * @param document is [java.io.File] or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
-     * @throws IllegalArgumentException if `document` neither file nor string
+     * @throws IllegalArgumentException if `document` neither [java.io.File] nor `String`
      * @throws TelegramApiError if error returned in response
      */
     fun sendDocument(chatId: Any,
@@ -81,10 +81,10 @@ interface TelegramApi {
                      markup: ReplyKeyboard? = null): CompletableFuture<Message>
 
     /**
-     * @param chatId is `Int` or `String`
-     * @param video is `java.io.File or `String` (i.e. file_id)
+     * @param chatId is `Int`, `Long` or `String`
+     * @param video is [java.io.File] or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
-     * @throws IllegalArgumentException if `video` neither file nor string
+     * @throws IllegalArgumentException if `video` neither [java.io.File] nor `String`
      * @throws TelegramApiError if error returned in response
      */
     fun sendVideo(chatId: Any,
@@ -100,9 +100,10 @@ interface TelegramApi {
                   markup: ReplyKeyboard? = null): CompletableFuture<Message>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
+     * @param voice is [java.io.File] or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
-     * @throws IllegalArgumentException if `voice` neither file nor string
+     * @throws IllegalArgumentException if `voice` neither [java.io.File] nor `String`
      * @throws TelegramApiError if error returned in response
      */
     fun sendVoice(chatId: Any,
@@ -115,9 +116,10 @@ interface TelegramApi {
                   markup: ReplyKeyboard? = null): CompletableFuture<Message>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
+     * @param note is [java.io.File] or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
-     * @throws IllegalArgumentException if `note` neither file nor string
+     * @throws IllegalArgumentException if `note` neither [java.io.File] nor `String`
      * @throws TelegramApiError if error returned in response
      */
     fun sendVideoNote(chatId: Any,
@@ -129,7 +131,7 @@ interface TelegramApi {
                       markup: ReplyKeyboard? = null): CompletableFuture<Message>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
@@ -139,7 +141,7 @@ interface TelegramApi {
                        replyTo: Int? = null): CompletableFuture<ArrayList<Message>>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
@@ -163,7 +165,7 @@ interface TelegramApi {
                                 markup: InlineKeyboardMarkup? = null): CompletableFuture<Message>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if not provided `inlineMessageId` or `chatId` and `messageId`
      * @throws TelegramApiError if error returned in response
      */
@@ -173,7 +175,7 @@ interface TelegramApi {
                                 markup: InlineKeyboardMarkup? = null): CompletableFuture<Message>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
@@ -187,7 +189,7 @@ interface TelegramApi {
                   markup: ReplyKeyboard? = null): CompletableFuture<Message>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
@@ -200,52 +202,52 @@ interface TelegramApi {
                     markup: ReplyKeyboard? = null): CompletableFuture<Message>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
     fun sendChatAction(chatId: Any,
                        action: TelegramBot.Actions): CompletableFuture<Boolean>
 
-    fun getUserProfilePhotos(userId: Int,
+    fun getUserProfilePhotos(userId: Long,
                              offset: Int? = null,
                              limit: Int? = null): CompletableFuture<UserProfilePhotos>
 
     fun getFile(fileId: String): CompletableFuture<File>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
     fun kickChatMember(chatId: Any,
-                       userId: Int,
+                       userId: Long,
                        untilDate: Int? = null): CompletableFuture<Boolean>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
     fun unbanChatMember(chatId: Any,
-                        userId: Int): CompletableFuture<Boolean>
+                        userId: Long): CompletableFuture<Boolean>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun restrictChatMember(chatId: Any, userId: Int, untilDate: Int? = null, canSendMessage: Boolean? = null,
+    fun restrictChatMember(chatId: Any, userId: Long, untilDate: Int? = null, canSendMessage: Boolean? = null,
                            canSendMediaMessages: Boolean? = null, canSendOtherMessages: Boolean? = null,
                            canAddWebPagePreview: Boolean? = null): CompletableFuture<Boolean>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
     fun promoteChatMember(chatId: Any,
-                          userId: Int,
+                          userId: Long,
                           canChangeInfo: Boolean? = null,
                           canPostMessages: Boolean? = null,
                           canEditMessages: Boolean? = null,
@@ -256,14 +258,14 @@ interface TelegramApi {
                           canPromoteMembers: Boolean? = null): CompletableFuture<Boolean>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
     fun exportChatInviteLink(chatId: Any): CompletableFuture<String>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @param photo is `java.io.File` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
@@ -272,14 +274,14 @@ interface TelegramApi {
                      photo: Any): CompletableFuture<Boolean>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
     fun deleteChatPhoto(chatId: Any): CompletableFuture<Boolean>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
@@ -287,7 +289,7 @@ interface TelegramApi {
                      title: String): CompletableFuture<Boolean>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
@@ -295,7 +297,7 @@ interface TelegramApi {
                            description: String): CompletableFuture<Boolean>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
@@ -304,58 +306,58 @@ interface TelegramApi {
                        notification: Boolean? = null): CompletableFuture<Boolean>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
     fun unpinChatMessage(chatId: Any): CompletableFuture<Boolean>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
     fun leaveChat(chatId: Any): CompletableFuture<Boolean>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
     fun getChat(chatId: Any): CompletableFuture<Chat>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
     fun getChatAdministrators(chatId: Any): CompletableFuture<ArrayList<ChatMember>>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
     fun getChatMembersCount(chatId: Any): CompletableFuture<Int>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
     fun getChatMember(chatId: Any,
-                      userId: Int): CompletableFuture<ChatMember>
+                      userId: Long): CompletableFuture<ChatMember>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
     fun setChatStickerSet(chatId: Any,
-                          stickerSet: String): CompletableFuture<Boolean>
+                          stickerSetName: String): CompletableFuture<Boolean>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
@@ -383,7 +385,7 @@ interface TelegramApi {
                           pmParameter: String? = null): CompletableFuture<Boolean>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if not provided `inlineMessageId` or `chatId` and `messageId`
      * @throws TelegramApiError if error returned in response
      */
@@ -396,7 +398,7 @@ interface TelegramApi {
                         markup: InlineKeyboardMarkup? = null): CompletableFuture<Message>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if not provided `inlineMessageId` or `chatId` and `messageId`
      * @throws TelegramApiError if error returned in response
      */
@@ -408,7 +410,7 @@ interface TelegramApi {
                            markup: InlineKeyboardMarkup? = null): CompletableFuture<Message>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if not provided `inlineMessageId` or `chatId` and `messageId`
      * @throws TelegramApiError if error returned in response
      */
@@ -419,7 +421,7 @@ interface TelegramApi {
                          markup: InlineKeyboardMarkup? = null): CompletableFuture<Message>
 
     /**
-     * @param chatId is `Int` or `String`
+     * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if not provided `inlineMessageId` or `chatId` and `messageId`
      * @throws TelegramApiError if error returned in response
      */
@@ -427,4 +429,61 @@ interface TelegramApi {
                                messageId: Int? = null,
                                inlineMessageId: String? = null,
                                markup: InlineKeyboardMarkup? = null): CompletableFuture<Message>
+
+    /**
+     * @param chatId is `Int`, `Long` or `String`
+     * @param sticker is [java.io.File] or `String`
+     * @throws IllegalArgumentException if not provided `inlineMessageId` or `chatId` and `messageId`
+     * @throws IllegalArgumentException if `sticker` neither [java.io.File] nor `String`
+     * @throws TelegramApiError if error returned in response
+     */
+    fun sendSticker(chatId: Any,
+                    sticker: Any,
+                    notification: Boolean? = null,
+                    replyTo: Int? = null,
+                    markup: ReplyKeyboard? = null): CompletableFuture<Message>
+
+    /**
+     * @throws TelegramApiError if error returned in response
+     */
+    fun getStickerSet(name: String): CompletableFuture<StickerSet>
+
+    /**
+     * @throws TelegramApiError if error returned in response
+     */
+    fun uploadStickerFile(userId: Long,
+                          pngSticker: java.io.File): CompletableFuture<File>
+
+    /**
+     * @param pngSticker is [java.io.File] or `String`
+     * @throws TelegramApiError if error returned in response
+     */
+    fun createNewStickerSet(userId: Long,
+                            name: String,
+                            title: String,
+                            pngSticker: Any,
+                            emojis: String,
+                            containsMask: Boolean? = null,
+                            maskPosition: MaskPosition? = null): CompletableFuture<Boolean>
+
+    /**
+     * @param pngSticker is [java.io.File] or `String`
+     * @throws TelegramApiError if error returned in response
+     */
+    fun addStickerToSet(userId: Long,
+                        name: String,
+                        pngSticker: Any,
+                        emojis: String,
+                        maskPosition: MaskPosition? = null): CompletableFuture<Boolean>
+
+    /**
+     * @throws TelegramApiError if error returned in response
+     */
+    fun setStickerPositionInSet(sticker: String,
+                                position: Int): CompletableFuture<Boolean>
+
+    /**
+     * @throws TelegramApiError if error returned in response
+     */
+    fun deleteStickerFromSet(sticker: String): CompletableFuture<Boolean>
 }
