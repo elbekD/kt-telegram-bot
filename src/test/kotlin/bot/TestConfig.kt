@@ -10,6 +10,8 @@ data class CreateStickerSet(val userId: Long,
                             val emojisCreate: String,
                             val emojisAdd: String)
 
+data class Game(val name: String)
+
 data class TestConfig(val token: String,
                       val userId: Long,
                       val resourcePath: String,
@@ -27,4 +29,5 @@ data class TestConfig(val token: String,
                       val kikMemberId: Long,
                       val stickerSetName: String,
                       val sendStickerUrl: String,
-                      val createStickerSet: CreateStickerSet)
+                      val createStickerSet: CreateStickerSet,
+                      val game: Game)

@@ -12,7 +12,7 @@ data class InlineQuery(val id: String,
 data class InlineQueryResultArticle(val id: String,
                                     val title: String,
                                     val input_message_content: InputMessageContent,
-                                    val reply_markup: ReplyKeyboard? = null,
+                                    val reply_markup: InlineKeyboardMarkup? = null,
                                     val url: String? = null,
                                     val hide_url: Boolean? = null,
                                     val description: String? = null,
@@ -31,7 +31,7 @@ data class InlineQueryResultPhoto(val id: String,
                                   val description: String? = null,
                                   val caption: String? = null,
                                   val parse_mode: String? = null,
-                                  val reply_markup: ReplyKeyboard? = null,
+                                  val reply_markup: InlineKeyboardMarkup? = null,
                                   val input_message_content: InputMessageContent? = null) : InlineQueryResult {
     val type: String = "photo"
 }
@@ -45,7 +45,7 @@ data class InlineQueryResultGif(val id: String,
                                 val title: String? = null,
                                 val caption: String? = null,
                                 val parse_mode: String? = null,
-                                val reply_markup: ReplyKeyboard? = null,
+                                val reply_markup: InlineKeyboardMarkup? = null,
                                 val input_message_content: InputMessageContent? = null) : InlineQueryResult {
     val type: String = "gif"
 }
@@ -58,7 +58,7 @@ data class InlineQueryResultMpeg4Gif(val id: String,
                                      val thumb_url: String? = null,
                                      val caption: String? = null,
                                      val parse_mode: String? = null,
-                                     val reply_markup: ReplyKeyboard? = null,
+                                     val reply_markup: InlineKeyboardMarkup? = null,
                                      val input_message_content: InputMessageContent? = null) : InlineQueryResult {
     val type: String = "mpeg4_gif"
 }
@@ -74,7 +74,7 @@ data class InlineQueryResultVideo(val id: String,
                                   val video_height: Int? = null,
                                   val video_duration: Int? = null,
                                   val description: String? = null,
-                                  val reply_markup: ReplyKeyboard? = null,
+                                  val reply_markup: InlineKeyboardMarkup? = null,
                                   val input_message_content: InputMessageContent? = null) : InlineQueryResult {
     val type: String = "video"
 }
@@ -86,7 +86,7 @@ data class InlineQueryResultAudio(val id: String,
                                   val parse_mode: String? = null,
                                   val performer: String? = null,
                                   val audio_duration: Int? = null,
-                                  val reply_markup: ReplyKeyboard? = null,
+                                  val reply_markup: InlineKeyboardMarkup? = null,
                                   val input_message_content: InputMessageContent? = null) : InlineQueryResult {
     val type: String = "audio"
 }
@@ -97,7 +97,7 @@ data class InlineQueryResultVoice(val id: String,
                                   val caption: String? = null,
                                   val parse_mode: String? = null,
                                   val voice_duration: Int? = null,
-                                  val reply_markup: ReplyKeyboard? = null,
+                                  val reply_markup: InlineKeyboardMarkup? = null,
                                   val input_message_content: InputMessageContent? = null) : InlineQueryResult {
     val type: String = "voice"
 }
@@ -109,7 +109,7 @@ data class InlineQueryResultDocument(val id: String,
                                      val document_url: String? = null,
                                      val mime_type: String? = null,
                                      val description: String? = null,
-                                     val reply_markup: ReplyKeyboard? = null,
+                                     val reply_markup: InlineKeyboardMarkup? = null,
                                      val input_message_content: InputMessageContent? = null,
                                      val thumb_url: String? = null,
                                      val thumb_width: Int? = null,
@@ -122,7 +122,7 @@ data class InlineQueryResultLocation(val id: String,
                                      val longitude: Float,
                                      val title: String,
                                      val live_period: Int? = null,
-                                     val reply_markup: ReplyKeyboard? = null,
+                                     val reply_markup: InlineKeyboardMarkup? = null,
                                      val input_message_content: InputMessageContent? = null,
                                      val thumb_url: String? = null,
                                      val thumb_width: Int? = null,
@@ -136,7 +136,7 @@ data class InlineQueryResultVenue(val id: String,
                                   val title: String,
                                   val address: String,
                                   val foursquare_id: String? = null,
-                                  val reply_markup: ReplyKeyboard? = null,
+                                  val reply_markup: InlineKeyboardMarkup? = null,
                                   val input_message_content: InputMessageContent? = null,
                                   val thumb_url: String? = null,
                                   val thumb_width: Int? = null,
@@ -148,7 +148,7 @@ data class InlineQueryResultContact(val id: String,
                                     val phone_number: String,
                                     val first_name: String,
                                     val last_name: String? = null,
-                                    val reply_markup: ReplyKeyboard? = null,
+                                    val reply_markup: InlineKeyboardMarkup? = null,
                                     val input_message_content: InputMessageContent? = null,
                                     val thumb_url: String? = null,
                                     val thumb_width: Int? = null,
@@ -158,7 +158,7 @@ data class InlineQueryResultContact(val id: String,
 
 data class InlineQueryResultGame(val id: String,
                                  val game_short_name: String,
-                                 val reply_markup: ReplyKeyboard? = null) : InlineQueryResult {
+                                 val reply_markup: InlineKeyboardMarkup? = null) : InlineQueryResult {
     val type: String = "game"
 }
 
@@ -168,7 +168,7 @@ data class InlineQueryResultCachedPhoto(val id: String,
                                         val description: String? = null,
                                         val caption: String? = null,
                                         val parse_mode: String? = null,
-                                        val reply_markup: ReplyKeyboard? = null,
+                                        val reply_markup: InlineKeyboardMarkup? = null,
                                         val input_message_content: InputMessageContent? = null) : InlineQueryResult {
     val type: String = "photo"
 }
@@ -178,7 +178,7 @@ data class InlineQueryResultCachedGif(val id: String,
                                       val title: String? = null,
                                       val caption: String? = null,
                                       val parse_mode: String? = null,
-                                      val reply_markup: ReplyKeyboard? = null,
+                                      val reply_markup: InlineKeyboardMarkup? = null,
                                       val input_message_content: InputMessageContent? = null) : InlineQueryResult {
     val type: String = "gif"
 }
@@ -188,14 +188,14 @@ data class InlineQueryResultCachedMpeg4Gif(val id: String,
                                            val title: String? = null,
                                            val caption: String? = null,
                                            val parse_mode: String? = null,
-                                           val reply_markup: ReplyKeyboard? = null,
+                                           val reply_markup: InlineKeyboardMarkup? = null,
                                            val input_message_content: InputMessageContent? = null) : InlineQueryResult {
     val type: String = "mpeg4_gif"
 }
 
 data class InlineQueryResultCachedSticker(val id: String,
                                           val sticker_file_id: String,
-                                          val reply_markup: ReplyKeyboard? = null,
+                                          val reply_markup: InlineKeyboardMarkup? = null,
                                           val input_message_content: InputMessageContent? = null) : InlineQueryResult {
     val type: String = "sticker"
 }
@@ -206,7 +206,7 @@ data class InlineQueryResultCachedDocument(val id: String,
                                            val description: String? = null,
                                            val caption: String? = null,
                                            val parse_mode: String? = null,
-                                           val reply_markup: ReplyKeyboard? = null,
+                                           val reply_markup: InlineKeyboardMarkup? = null,
                                            val input_message_content: InputMessageContent? = null) : InlineQueryResult {
     val type: String = "document"
 }
@@ -217,7 +217,7 @@ data class InlineQueryResultCachedVideo(val id: String,
                                         val description: String? = null,
                                         val caption: String? = null,
                                         val parse_mode: String? = null,
-                                        val reply_markup: ReplyKeyboard? = null,
+                                        val reply_markup: InlineKeyboardMarkup? = null,
                                         val input_message_content: InputMessageContent? = null) : InlineQueryResult {
     val type: String = "video"
 }
@@ -227,7 +227,7 @@ data class InlineQueryResultCachedVoice(val id: String,
                                         val description: String? = null,
                                         val caption: String? = null,
                                         val parse_mode: String? = null,
-                                        val reply_markup: ReplyKeyboard? = null,
+                                        val reply_markup: InlineKeyboardMarkup? = null,
                                         val input_message_content: InputMessageContent? = null) : InlineQueryResult {
     val type: String = "voice"
 }
@@ -236,7 +236,7 @@ data class InlineQueryResultCachedAudio(val id: String,
                                         val audio_file_id: String,
                                         val caption: String? = null,
                                         val parse_mode: String? = null,
-                                        val reply_markup: ReplyKeyboard? = null,
+                                        val reply_markup: InlineKeyboardMarkup? = null,
                                         val input_message_content: InputMessageContent? = null) : InlineQueryResult {
     val type: String = "audio"
 }

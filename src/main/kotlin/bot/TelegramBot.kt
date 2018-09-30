@@ -297,6 +297,18 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
     override fun setStickerPositionInSet(sticker: String, position: Int) = client.setStickerPositionInSet(sticker, position)
 
     override fun deleteStickerFromSet(sticker: String) = client.deleteStickerFromSet(sticker)
+
+    override fun sendGame(chatId: Long, gameShortName: String, notification: Boolean?, replyTo: Int?, markup: InlineKeyboardMarkup?) = client.sendGame(chatId, gameShortName, notification, replyTo, markup)
+
+    override fun setGameScore(userId: Long, score: Int, force: Boolean?, disableEditMessage: Boolean?, chatId: Long?, messageId: Int?, inlineMessageId: String?): CompletableFuture<Message> {
+        validateIds(chatId, messageId, inlineMessageId)
+        return client.setGameScore(userId, score, force, disableEditMessage, chatId, messageId, inlineMessageId)
+    }
+
+    override fun getGameHighScores(userId: Long, chatId: Long?, messageId: Int?, inlineMessageId: String?): CompletableFuture<List<GameHighScore>> {
+        validateIds(chatId, messageId, inlineMessageId)
+        return client.getGameHighScores(userId, chatId, messageId, inlineMessageId)
+    }
     /*
                 /\
                /  \

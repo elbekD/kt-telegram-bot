@@ -581,4 +581,38 @@ internal class TelegramClient(token: String) : TelegramApi {
         val body = toBody(mapOf("sticker" to sticker))
         return post("deleteStickerFromSet", body)
     }
+
+    override fun sendGame(chatId: Long, gameShortName: String, notification: Boolean?, replyTo: Int?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+        val body = toBody(mapOf(
+                "chat_id" to chatId,
+                "game_short_name" to gameShortName,
+                "disable_notification" to notification,
+                "reply_to_message_id" to replyTo,
+                "reply_markup" to markup
+        ))
+        return post("sendGame", body)
+    }
+
+    override fun setGameScore(userId: Long, score: Int, force: Boolean?, disableEditMessage: Boolean?, chatId: Long?, messageId: Int?, inlineMessageId: String?): CompletableFuture<Message> {
+        val body = toBody(mapOf(
+                "user_id" to userId,
+                "score" to score,
+                "force" to force,
+                "disable_edit_message" to disableEditMessage,
+                "chat_id" to chatId,
+                "message_id" to messageId,
+                "inline_message_id" to inlineMessageId
+        ))
+        return post("setGameScore", body)
+    }
+
+    override fun getGameHighScores(userId: Long, chatId: Long?, messageId: Int?, inlineMessageId: String?): CompletableFuture<List<GameHighScore>> {
+        val body = toBody(mapOf(
+                "user_id" to userId,
+                "chat_id" to chatId,
+                "message_id" to messageId,
+                "inline_message_id" to inlineMessageId
+        ))
+        return post("getGameHighScores", body)
+    }
 }

@@ -386,4 +386,12 @@ internal class TelegramBotTest {
             stickers.forEach { bot.deleteStickerFromSet(it.file_id).get() }
         }
     }
+
+    @Test
+    fun sendGame_thenGetGame_thenSetNewScore() {
+        val game = bot.sendGame(config.userId, config.game.name).get()
+        val scores = bot.getGameHighScores(config.userId, chatId = game.chat.id, messageId = game.message_id).get()
+        val newScore = if (scores.isNotEmpty()) scores[0].score + 100 else 100
+        bot.setGameScore(config.userId, newScore, chatId = game.chat.id, messageId = game.message_id).get()
+    }
 }

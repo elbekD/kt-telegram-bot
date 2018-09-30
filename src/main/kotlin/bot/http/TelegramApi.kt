@@ -486,4 +486,34 @@ interface TelegramApi {
      * @throws TelegramApiError if error returned in response
      */
     fun deleteStickerFromSet(sticker: String): CompletableFuture<Boolean>
+
+    /**
+     * @throws TelegramApiError if error returned in response
+     */
+    fun sendGame(chatId: Long,
+                 gameShortName: String,
+                 notification: Boolean? = null,
+                 replyTo: Int? = null,
+                 markup: InlineKeyboardMarkup? = null): CompletableFuture<Message>
+
+    /**
+     * @throws IllegalArgumentException if not provided `inlineMessageId` or `chatId` and `messageId`
+     * @throws TelegramApiError if error returned in response
+     */
+    fun setGameScore(userId: Long,
+                     score: Int,
+                     force: Boolean? = null,
+                     disableEditMessage: Boolean? = null,
+                     chatId: Long? = null,
+                     messageId: Int? = null,
+                     inlineMessageId: String? = null): CompletableFuture<Message>
+
+    /**
+     * @throws IllegalArgumentException if not provided `inlineMessageId` or `chatId` and `messageId`
+     * @throws TelegramApiError if error returned in response
+     */
+    fun getGameHighScores(userId: Long,
+                          chatId: Long? = null,
+                          messageId: Int? = null,
+                          inlineMessageId: String? = null): CompletableFuture<List<GameHighScore>>
 }
