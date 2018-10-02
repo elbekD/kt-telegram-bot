@@ -1,5 +1,7 @@
 package bot
 
+import bot.types.LabeledPrice
+
 data class Location(val latitude: Double, val longitude: Double)
 data class Contact(val phone: String, val firstName: String, val lastName: String)
 data class CreateStickerSet(val userId: Long,
@@ -11,11 +13,21 @@ data class CreateStickerSet(val userId: Long,
                             val emojisAdd: String)
 
 data class Game(val name: String)
+data class Invoice(val title: String,
+                   val desc: String,
+                   val payload: String,
+                   val token: String,
+                   val param: String,
+                   val currency: String,
+                   val prices: List<LabeledPrice>,
+                   val email: Boolean,
+                   val phone: Boolean,
+                   val address: Boolean)
 
 data class TestConfig(val token: String,
                       val userId: Long,
                       val resourcePath: String,
-                      val photos: Array<String>,
+                      val photos: List<String>,
                       val video: String,
                       val voice: String,
                       val msgId: Int,
@@ -30,4 +42,5 @@ data class TestConfig(val token: String,
                       val stickerSetName: String,
                       val sendStickerUrl: String,
                       val createStickerSet: CreateStickerSet,
-                      val game: Game)
+                      val game: Game,
+                      val invoice: Invoice)

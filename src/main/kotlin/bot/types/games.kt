@@ -2,9 +2,9 @@ package bot.types
 
 data class Game(val title: String,
                 val description: String,
-                val photo: Array<PhotoSize>,
+                val photo: List<PhotoSize>,
                 val text: String,
-                val text_entities: Array<MessageEntity>,
+                val text_entities: List<MessageEntity>,
                 val animation: Animation
 )
 

@@ -136,7 +136,7 @@ interface TelegramApi {
      * @throws TelegramApiError if error returned in response
      */
     fun sendMediaGroup(chatId: Any,
-                       media: Array<InputMedia>,
+                       media: List<InputMedia>,
                        notification: Boolean? = null,
                        replyTo: Int? = null): CompletableFuture<ArrayList<Message>>
 
@@ -377,7 +377,7 @@ interface TelegramApi {
      * @throws TelegramApiError if error returned in response
      */
     fun answerInlineQuery(queryId: String,
-                          results: Array<out InlineQueryResult>,
+                          results: List<InlineQueryResult>,
                           cacheTime: Int? = null,
                           personal: Boolean? = null,
                           offset: String? = null,
@@ -516,4 +516,31 @@ interface TelegramApi {
                           chatId: Long? = null,
                           messageId: Int? = null,
                           inlineMessageId: String? = null): CompletableFuture<List<GameHighScore>>
+
+    /**
+     * @throws TelegramApiError if error returned in response
+     */
+    fun sendInvoice(chatId: Long,
+                    title: String,
+                    description: String,
+                    payload: String,
+                    providerToken: String,
+                    startParam: String,
+                    currency: String,
+                    prices: List<LabeledPrice>,
+                    providerData: String? = null,
+                    photoUrl: String? = null,
+                    photoSize: Int? = null,
+                    photoWidth: Int? = null,
+                    photoHeight: Int? = null,
+                    needName: Boolean? = null,
+                    needPhoneNumber: Boolean? = null,
+                    needEmail: Boolean? = null,
+                    needShippingAddress: Boolean? = null,
+                    sendPhoneNumberToProvider: Boolean? = null,
+                    sendEmailToProvider: Boolean? = null,
+                    isFlexible: Boolean? = null,
+                    notification: Boolean? = null,
+                    replyTo: Int? = null,
+                    markup: InlineKeyboardMarkup? = null): CompletableFuture<Message>
 }

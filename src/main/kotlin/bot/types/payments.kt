@@ -23,7 +23,7 @@ data class OrderInfo(val name: String,
                      val shipping_address: ShippingAddress
 )
 
-data class ShippingOption(val id: String, val title: String, val prices: Array<LabeledPrice>)
+data class ShippingOption(val id: String, val title: String, val prices: List<LabeledPrice>)
 
 data class SuccessfulPayment(val currency: String,
                              val total_amount: Int,

@@ -198,7 +198,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         ), "videoNote")
     }
 
-    override fun sendMediaGroup(chatId: Any, media: Array<InputMedia>, notification: Boolean?, replyTo: Int?):
+    override fun sendMediaGroup(chatId: Any, media: List<InputMedia>, notification: Boolean?, replyTo: Int?):
             CompletableFuture<ArrayList<Message>> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
         form.addFormDataPart("chat_id", id(chatId))
@@ -443,7 +443,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post("answerCallbackQuery", body)
     }
 
-    override fun answerInlineQuery(queryId: String, results: Array<out InlineQueryResult>, cacheTime: Int?, personal: Boolean?, offset: String?, pmText: String?, pmParameter: String?): CompletableFuture<Boolean> {
+    override fun answerInlineQuery(queryId: String, results: List<InlineQueryResult>, cacheTime: Int?, personal: Boolean?, offset: String?, pmText: String?, pmParameter: String?): CompletableFuture<Boolean> {
         val body = toBody(mapOf(
                 "inline_query_id" to queryId,
                 "results" to results,
@@ -614,5 +614,34 @@ internal class TelegramClient(token: String) : TelegramApi {
                 "inline_message_id" to inlineMessageId
         ))
         return post("getGameHighScores", body)
+    }
+
+    override fun sendInvoice(chatId: Long, title: String, description: String, payload: String, providerToken: String, startParam: String, currency: String, prices: List<LabeledPrice>, providerData: String?, photoUrl: String?, photoSize: Int?, photoWidth: Int?, photoHeight: Int?, needName: Boolean?, needPhoneNumber: Boolean?, needEmail: Boolean?, needShippingAddress: Boolean?, sendPhoneNumberToProvider: Boolean?, sendEmailToProvider: Boolean?, isFlexible: Boolean?, notification: Boolean?, replyTo: Int?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+        val body = toBody(mapOf(
+                "chat_id" to chatId,
+                "title" to title,
+                "description" to description,
+                "payload" to payload,
+                "provider_token" to providerToken,
+                "start_parameter" to startParam,
+                "currency" to currency,
+                "prices" to prices,
+                "provider_data" to providerData,
+                "photo_url" to photoUrl,
+                "photo_size" to photoSize,
+                "photo_width" to photoWidth,
+                "photo_height" to photoHeight,
+                "need_name" to needName,
+                "need_phone_number" to needPhoneNumber,
+                "need_email" to needEmail,
+                "need_shipping_address" to needShippingAddress,
+                "send_phone_number_to_provider" to sendPhoneNumberToProvider,
+                "send_email_to_provider" to sendEmailToProvider,
+                "is_flexible" to isFlexible,
+                "disable_notification" to notification,
+                "reply_to_message_id" to replyTo,
+                "reply_markup" to markup
+        ))
+        return post("sendInvoice", body)
     }
 }

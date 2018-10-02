@@ -37,6 +37,13 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
                 throw IllegalArgumentException("$obj is neither file nor string")
         }
 
+        private fun validateIds(chatId: Any?, messageId: Int?, inlineMessageId: String?) {
+            if (
+                    inlineMessageId != null && (chatId != null || messageId != null)
+                    || inlineMessageId == null && (chatId == null || messageId == null)
+            ) throw IllegalArgumentException("Provide only inlineMessage or chatId and messageId")
+        }
+
         private fun extractCommandAndArgument(text: String): Pair<String, String?> {
             val cmd = text.substringBefore(' ')
             val arg = cmd.substringAfter(' ', "")
@@ -59,13 +66,6 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
         FindLocation("find_location"),
         RecordVideoNote("record_video_note"),
         UploadVideoNote("upload_video_note ");
-    }
-
-    private fun validateIds(chatId: Any?, messageId: Int?, inlineMessageId: String?) {
-        if (
-                inlineMessageId != null && (chatId != null || messageId != null)
-                || inlineMessageId == null && (chatId == null || messageId == null)
-        ) throw IllegalArgumentException("Provide only inlineMessage or chatId and messageId")
     }
 
     protected fun getUpdates(options: Map<String, Any?>) = client.getUpdates(options)
@@ -171,9 +171,9 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
                                replyTo: Int?, markup: ReplyKeyboard?) =
             client.sendVideoNote(chatId, note, duration, length, notification, replyTo, markup)
 
-    override fun sendMediaGroup(chatId: Any, media: Array<InputMedia>, notification: Boolean?, replyTo: Int?):
+    override fun sendMediaGroup(chatId: Any, media: List<InputMedia>, notification: Boolean?, replyTo: Int?):
             CompletableFuture<ArrayList<Message>> {
-        if (media.size < 2) throw IllegalArgumentException("Array must include 2-10 items")
+        if (media.size < 2) throw IllegalArgumentException("List must include 2-10 items")
         return client.sendMediaGroup(chatId, media, notification, replyTo)
     }
 
@@ -253,7 +253,7 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
 
     override fun answerCallbackQuery(id: String, text: String?, alert: Boolean?, url: String?, cacheTime: Int?) = client.answerCallbackQuery(id, text, alert, url, cacheTime)
 
-    override fun answerInlineQuery(queryId: String, results: Array<out InlineQueryResult>, cacheTime: Int?, personal: Boolean?, offset: String?, pmText: String?, pmParameter: String?) = client.answerInlineQuery(queryId, results, cacheTime, personal, offset, pmText, pmParameter)
+    override fun answerInlineQuery(queryId: String, results: List<InlineQueryResult>, cacheTime: Int?, personal: Boolean?, offset: String?, pmText: String?, pmParameter: String?) = client.answerInlineQuery(queryId, results, cacheTime, personal, offset, pmText, pmParameter)
 
     override fun editMessageText(chatId: Any?, messageId: Int?, inlineMessageId: String?, text: String, parseMode: String?, preview: Boolean?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
         validateIds(chatId, messageId, inlineMessageId)
@@ -308,6 +308,10 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
     override fun getGameHighScores(userId: Long, chatId: Long?, messageId: Int?, inlineMessageId: String?): CompletableFuture<List<GameHighScore>> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.getGameHighScores(userId, chatId, messageId, inlineMessageId)
+    }
+
+    override fun sendInvoice(chatId: Long, title: String, description: String, payload: String, providerToken: String, startParam: String, currency: String, prices: List<LabeledPrice>, providerData: String?, photoUrl: String?, photoSize: Int?, photoWidth: Int?, photoHeight: Int?, needName: Boolean?, needPhoneNumber: Boolean?, needEmail: Boolean?, needShippingAddress: Boolean?, sendPhoneNumberToProvider: Boolean?, sendEmailToProvider: Boolean?, isFlexible: Boolean?, notification: Boolean?, replyTo: Int?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+        return client.sendInvoice(chatId, title, description, payload, providerToken, startParam, currency, prices, providerData, photoUrl, photoSize, photoWidth, photoHeight, needName, needPhoneNumber, needEmail, needShippingAddress, sendPhoneNumberToProvider, sendEmailToProvider, isFlexible, notification, replyTo, markup)
     }
     /*
                 /\

@@ -2,7 +2,7 @@ package bot.types
 
 interface ReplyKeyboard
 
-data class ReplyKeyboardMarkup(val keyboard: Array<Array<KeyboardButton>>,
+data class ReplyKeyboardMarkup(val keyboard: List<List<KeyboardButton>>,
                                val resize_keyboard: Boolean? = null,
                                val one_time_keyboard: Boolean? = null,
                                val selective: Boolean? = null
@@ -14,7 +14,7 @@ data class KeyboardButton(val text: String,
 
 data class ReplyKeyboardRemove(val remove_keyboard: Boolean, val selective: Boolean? = null) : ReplyKeyboard
 
-data class InlineKeyboardMarkup(val inline_keyboard: Array<Array<InlineKeyboardButton>>) : ReplyKeyboard
+data class InlineKeyboardMarkup(val inline_keyboard: List<List<InlineKeyboardButton>>) : ReplyKeyboard
 
 data class InlineKeyboardButton(val text: String,
                                 val url: String? = null,

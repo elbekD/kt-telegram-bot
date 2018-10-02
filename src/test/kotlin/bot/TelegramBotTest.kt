@@ -102,7 +102,7 @@ internal class TelegramBotTest {
 
     @Test
     fun sendMediaGroup() {
-        val msg = bot.sendMediaGroup(config.userId, arrayOf(
+        val msg = bot.sendMediaGroup(config.userId, listOf(
                 bot.mediaPhoto("attach://photo1", attachment = file(config.photos[0])),
                 bot.mediaPhoto("attach://photo2", attachment = file(config.photos[1])),
                 bot.mediaVideo("attach://video1", attachment = file(config.video),
@@ -338,15 +338,15 @@ internal class TelegramBotTest {
 
     @Test
     fun editMessageReplyMarkup() {
-        val keyboard1 = InlineKeyboardMarkup(arrayOf(
-                arrayOf(
+        val keyboard1 = InlineKeyboardMarkup(listOf(
+                listOf(
                         InlineKeyboardButton("button 1", callback_data = "data1"),
                         InlineKeyboardButton("button 2", callback_data = "data2")
                 )
         ))
 
-        val keyboard2 = InlineKeyboardMarkup(arrayOf(
-                arrayOf(
+        val keyboard2 = InlineKeyboardMarkup(listOf(
+                listOf(
                         InlineKeyboardButton("button 2", callback_data = "data2")
                 )
         ))
@@ -393,5 +393,23 @@ internal class TelegramBotTest {
         val scores = bot.getGameHighScores(config.userId, chatId = game.chat.id, messageId = game.message_id).get()
         val newScore = if (scores.isNotEmpty()) scores[0].score + 100 else 100
         bot.setGameScore(config.userId, newScore, chatId = game.chat.id, messageId = game.message_id).get()
+    }
+
+    @Test
+    fun sendInvoice() {
+        with(config.invoice) {
+            val msg = bot.sendInvoice(config.userId,
+                    title,
+                    desc,
+                    payload,
+                    token,
+                    param,
+                    currency,
+                    prices,
+                    needEmail = email,
+                    needPhoneNumber = phone,
+                    needShippingAddress = false).get()
+            assertNotNull(msg.invoice)
+        }
     }
 }

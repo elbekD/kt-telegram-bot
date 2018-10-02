@@ -12,7 +12,7 @@ data class Sticker(val file_id: String,
 data class StickerSet(val name: String,
                       val title: String,
                       val contains_mask: Boolean,
-                      val stickers: Array<Sticker>)
+                      val stickers: List<Sticker>)
 
 data class MaskPosition(val point: String,
                         val x_shift: Float,
