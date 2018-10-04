@@ -313,6 +313,10 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
     override fun sendInvoice(chatId: Long, title: String, description: String, payload: String, providerToken: String, startParam: String, currency: String, prices: List<LabeledPrice>, providerData: String?, photoUrl: String?, photoSize: Int?, photoWidth: Int?, photoHeight: Int?, needName: Boolean?, needPhoneNumber: Boolean?, needEmail: Boolean?, needShippingAddress: Boolean?, sendPhoneNumberToProvider: Boolean?, sendEmailToProvider: Boolean?, isFlexible: Boolean?, notification: Boolean?, replyTo: Int?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
         return client.sendInvoice(chatId, title, description, payload, providerToken, startParam, currency, prices, providerData, photoUrl, photoSize, photoWidth, photoHeight, needName, needPhoneNumber, needEmail, needShippingAddress, sendPhoneNumberToProvider, sendEmailToProvider, isFlexible, notification, replyTo, markup)
     }
+
+    override fun answerShippingQuery(shippingQueryId: String, ok: Boolean, shippingOptions: List<ShippingOption>?, errorMessage: String?) = client.answerShippingQuery(shippingQueryId, ok, shippingOptions, errorMessage)
+
+    override fun answerPreCheckoutQuery(preCheckoutQueryId: String, ok: Boolean, errorMessage: String?) = client.answerPreCheckoutQuery(preCheckoutQueryId, ok, errorMessage)
     /*
                 /\
                /  \

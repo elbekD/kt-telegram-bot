@@ -412,4 +412,14 @@ internal class TelegramBotTest {
             assertNotNull(msg.invoice)
         }
     }
+
+    @Test(expected = RuntimeException::class)
+    fun answerShippingQuery() {
+        throw RuntimeException("no unit test provided")
+    }
+
+    @Test(expected = RuntimeException::class)
+    fun answerPreCheckoutQuery() {
+        throw RuntimeException("no unit test provided")
+    }
 }

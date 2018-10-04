@@ -3,7 +3,9 @@ package bot
 import bot.types.LabeledPrice
 
 data class Location(val latitude: Double, val longitude: Double)
+
 data class Contact(val phone: String, val firstName: String, val lastName: String)
+
 data class CreateStickerSet(val userId: Long,
                             val name: String,
                             val title: String,
@@ -13,6 +15,7 @@ data class CreateStickerSet(val userId: Long,
                             val emojisAdd: String)
 
 data class Game(val name: String)
+
 data class Invoice(val title: String,
                    val desc: String,
                    val payload: String,

@@ -644,4 +644,23 @@ internal class TelegramClient(token: String) : TelegramApi {
         ))
         return post("sendInvoice", body)
     }
+
+    override fun answerShippingQuery(shippingQueryId: String, ok: Boolean, shippingOptions: List<ShippingOption>?, errorMessage: String?): CompletableFuture<Boolean> {
+        val body = toBody(mapOf(
+                "shipping_query_id" to shippingQueryId,
+                "ok" to ok,
+                "shipping_options" to shippingOptions,
+                "error_message" to errorMessage
+        ))
+        return post("answerShippingQuery", body)
+    }
+
+    override fun answerPreCheckoutQuery(preCheckoutQueryId: String, ok: Boolean, errorMessage: String?): CompletableFuture<Boolean> {
+        val body = toBody(mapOf(
+                "pre_checkout_query_id" to preCheckoutQueryId,
+                "ok" to ok,
+                "error_message" to errorMessage
+        ))
+        return post("answerPreCheckoutQuery", body)
+    }
 }

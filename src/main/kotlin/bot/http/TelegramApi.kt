@@ -543,4 +543,13 @@ interface TelegramApi {
                     notification: Boolean? = null,
                     replyTo: Int? = null,
                     markup: InlineKeyboardMarkup? = null): CompletableFuture<Message>
+
+    fun answerShippingQuery(shippingQueryId: String,
+                            ok: Boolean,
+                            shippingOptions: List<ShippingOption>? = null,
+                            errorMessage: String? = null): CompletableFuture<Boolean>
+
+    fun answerPreCheckoutQuery(preCheckoutQueryId: String,
+                               ok: Boolean,
+                               errorMessage: String? = null): CompletableFuture<Boolean>
 }
