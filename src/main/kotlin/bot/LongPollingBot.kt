@@ -5,7 +5,6 @@ import kotlin.concurrent.timer
 
 internal class LongPollingBot(token: String, private val options: PollingOptions) : TelegramBot(token) {
     private var timer: Timer? = null
-    private var lastUpdateId = -1
 
     companion object {
         @JvmStatic
@@ -15,9 +14,11 @@ internal class LongPollingBot(token: String, private val options: PollingOptions
 
     override fun start() {
         if (!polling) {
+            var lastUpdateId = -1
             timer = timer("LongPollingBot", period = options.period) {
                 try {
-                    val updates = getUpdates(mapOf("offset" to lastUpdateId + 1,
+                    val updates = getUpdates(mapOf(
+                            "offset" to lastUpdateId + 1,
                             "allowed_updates" to options.allowedUpdates,
                             "timeout" to options.timeout,
                             "limit" to options.limit)).get()
@@ -33,6 +34,7 @@ internal class LongPollingBot(token: String, private val options: PollingOptions
 
     override fun stop() {
         if (polling) {
+            super.onStop()
             timer?.cancel()
             timer = null
             polling = false

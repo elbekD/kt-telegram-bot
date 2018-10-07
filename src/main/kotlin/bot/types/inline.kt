@@ -136,6 +136,7 @@ data class InlineQueryResultVenue(val id: String,
                                   val title: String,
                                   val address: String,
                                   val foursquare_id: String? = null,
+                                  val foursquare_type: String? = null,
                                   val reply_markup: InlineKeyboardMarkup? = null,
                                   val input_message_content: InputMessageContent? = null,
                                   val thumb_url: String? = null,
@@ -148,6 +149,7 @@ data class InlineQueryResultContact(val id: String,
                                     val phone_number: String,
                                     val first_name: String,
                                     val last_name: String? = null,
+                                    val vcard: String? = null,
                                     val reply_markup: InlineKeyboardMarkup? = null,
                                     val input_message_content: InputMessageContent? = null,
                                     val thumb_url: String? = null,
@@ -253,11 +255,13 @@ data class InputVenueMessageContent(val latitude: Float,
                                     val longitude: Float,
                                     val title: String,
                                     val address: String,
-                                    val foursquare_id: String? = null) : InputMessageContent
+                                    val foursquare_id: String? = null,
+                                    val foursquare_type: String? = null) : InputMessageContent
 
 data class InputContactMessageContent(val phone_number: String,
                                       val first_name: String,
-                                      val last_name: String? = null) : InputMessageContent
+                                      val last_name: String? = null,
+                                      val vcard: String? = null) : InputMessageContent
 
 data class ChosenInlineResult(val result_id: String,
                               val from: User,

@@ -43,7 +43,7 @@ data class Message(val message_id: Int,
                    val chat: Chat,
                    val forward_from: User?,
                    val forward_from_chat: Chat?,
-                   val forward_from_message_id: Int,
+                   val forward_from_message_id: Int?,
                    val forward_signature: String?,
                    val forward_date: Int?,
                    val reply_to_message: Message?,
@@ -54,6 +54,7 @@ data class Message(val message_id: Int,
                    val caption_entities: List<MessageEntity>?,
                    val audio: Audio?,
                    val document: Document?,
+                   val animation: Animation?,
                    val game: Game?,
                    val photo: List<PhotoSize>?,
                    val sticker: Sticker?,
@@ -92,7 +93,24 @@ data class MessageEntity(val type: String,
                          val offset: Int,
                          val length: Int,
                          val url: String?,
-                         val user: User?)
+                         val user: User?) {
+
+    enum class Types(@Transient val type: String) {
+        MENTION("mention"),
+        HASHTAG("hashtag"),
+        CASHTAG("cashtag"),
+        BOT_COMMAND("bot_command"),
+        URL("url"),
+        EMAIL("email"),
+        PHONE_NUMBER("phone_number"),
+        BOLD("bold"),
+        ITALIC("italic"),
+        CODE("code"),
+        PRE("pre"),
+        TEXT_LINK("text_link"),
+        TEXT_MENTION("text_mention")
+    }
+}
 
 data class PhotoSize(val file_id: String,
                      val width: Int,
@@ -104,7 +122,8 @@ data class Audio(val file_id: String,
                  val performer: String?,
                  val title: String?,
                  val mime_type: String?,
-                 val file_size: Int)
+                 val file_size: Int?,
+                 val thumb: PhotoSize?)
 
 data class Document(val file_id: String,
                     val thumb: PhotoSize?,
@@ -120,6 +139,15 @@ data class Video(val file_id: String,
                  val mime_type: String?,
                  val file_size: Int)
 
+data class Animation(val file_id: String,
+                     val width: Int,
+                     val height: Int,
+                     val duration: Int,
+                     val thumb: PhotoSize?,
+                     val file_name: String?,
+                     val mime_type: String?,
+                     val file_size: Int?)
+
 data class Voice(val file_id: String,
                  val duration: Int,
                  val mime_type: String,
@@ -133,15 +161,17 @@ data class VideoNote(val file_id: String,
 
 data class Contact(val phone_number: String,
                    val first_name: String,
-                   val last_name: String,
-                   val user_id: Int)
+                   val last_name: String?,
+                   val user_id: Int?,
+                   val vcard: String?)
 
 data class Location(val longitude: Float, val latitude: Float)
 
 data class Venue(val location: Location?,
                  val title: String,
                  val address: String,
-                 val foursquare_id: String)
+                 val foursquare_id: String?,
+                 val foursquare_type: String?)
 
 data class UserProfilePhotos(val total_count: Int, val photos: List<List<PhotoSize>>?)
 
@@ -172,23 +202,69 @@ data class ResponseParameters(val migrate_to_chat_id: Long, val retry_after: Int
 interface InputMedia {
     fun media(): String
     fun file(): File?
+    fun thumb(): Any?
 }
 
 internal data class InputMediaPhoto(val media: String,
                                     @Transient private val attachment: File?,
                                     val caption: String?,
+                                    val parse_mode: String?,
                                     val type: String = "photo") : InputMedia {
     override fun media() = media
     override fun file() = attachment
+    override fun thumb(): Any? = null
 }
 
 internal data class InputMediaVideo(val media: String,
                                     @Transient private val attachment: File?,
+                                    @Transient private val thumb: Any?,
                                     val caption: String?,
-                                    val width: Int,
-                                    val height: Int,
-                                    val duration: Int,
+                                    val parse_mode: String?,
+                                    val width: Int?,
+                                    val height: Int?,
+                                    val duration: Int?,
+                                    val supports_streaming: Boolean?,
                                     val type: String = "video") : InputMedia {
     override fun media() = media
     override fun file() = attachment
+    override fun thumb() = thumb
+}
+
+internal data class InputMediaAnimation(val media: String,
+                                        @Transient private val attachment: File?,
+                                        @Transient private val thumb: Any?,
+                                        val caption: String?,
+                                        val parse_mode: String?,
+                                        val width: Int?,
+                                        val height: Int?,
+                                        val duration: Int?,
+                                        val type: String = "animation") : InputMedia {
+    override fun media() = media
+    override fun file() = attachment
+    override fun thumb() = thumb
+}
+
+internal data class InputMediaAudio(val media: String,
+                                    @Transient private val attachment: File?,
+                                    @Transient private val thumb: Any?,
+                                    val caption: String?,
+                                    val parse_mode: String?,
+                                    val duration: Int?,
+                                    val performer: String?,
+                                    val title: String?,
+                                    val type: String = "audio") : InputMedia {
+    override fun media() = media
+    override fun file() = attachment
+    override fun thumb() = thumb
+}
+
+internal data class InputMediaDocument(val media: String,
+                                       @Transient private val attachment: File?,
+                                       @Transient private val thumb: Any?,
+                                       val caption: String?,
+                                       val parse_mode: String?,
+                                       val type: String = "document") : InputMedia {
+    override fun media() = media
+    override fun file() = attachment
+    override fun thumb() = thumb
 }

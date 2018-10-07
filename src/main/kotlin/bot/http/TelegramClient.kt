@@ -35,7 +35,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         }
     }
 
-    private val anyToString = { a: Any -> a.toString() }
+    private val anyToString = { a: Any -> a.toString(); }
     private val markupToString = { a: Any -> toJson(a) }
 
     private val sendFileOpts = mapOf(
@@ -87,8 +87,7 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     private fun url(method: String) = "$url/$method"
 
-    private fun sendFile(type: String, id: String, file: Any, opts: Map<String, Any?>, method: String = type):
-            CompletableFuture<Message> {
+    private fun sendFile(type: String, id: String, file: Any, opts: Map<String, Any?>, thumb: File? = null, method: String = type): CompletableFuture<Message> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
         form.addFormDataPart("chat_id", id)
         addOptsToForm(form, opts)
@@ -99,15 +98,21 @@ internal class TelegramClient(token: String) : TelegramApi {
             else -> throw IllegalArgumentException("Neither file nor string")
         }
 
+        thumb?.let {
+            form.addFormDataPart("attach://${it.name}", it.name, RequestBody.create(null, it))
+        }
+
         return post("send${method.capitalize()}", form.build())
     }
 
     private fun addOptsToForm(form: MultipartBody.Builder, opts: Map<String, Any?>) =
             sendFileOpts.filterKeys { opts[it] != null }.forEach { form.addFormDataPart(it.key, it.value(opts[it.key]!!)) }
 
-    internal fun getUpdates(options: Map<String, Any?>) =
-            post<ArrayList<Update>>("getUpdates", toBody(options))
+    internal fun getUpdates(options: Map<String, Any?>) = post<ArrayList<Update>>("getUpdates", toBody(options))
 
+    internal fun onStop() {
+        httpClient.dispatcher().cancelAll()
+    }
 
     override fun getMe() = get<User>("getMe")
 
@@ -144,7 +149,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 "reply_markup" to markup))
     }
 
-    override fun sendAudio(chatId: Any, audio: Any, caption: String?, parseMode: String?, duration: Int?, performer: String?, title: String?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+    override fun sendAudio(chatId: Any, audio: Any, caption: String?, parseMode: String?, duration: Int?, performer: String?, title: String?, thumb: File?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         return sendFile("audio", id(chatId), audio, mapOf(
                 "caption" to caption,
                 "parse_mode" to parseMode,
@@ -153,19 +158,19 @@ internal class TelegramClient(token: String) : TelegramApi {
                 "title" to title,
                 "disable_notification" to notification,
                 "reply_to_message_id" to replyTo,
-                "reply_markup" to markup))
+                "reply_markup" to markup), thumb)
     }
 
-    override fun sendDocument(chatId: Any, document: Any, caption: String?, parseMode: String?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+    override fun sendDocument(chatId: Any, document: Any, thumb: File?, caption: String?, parseMode: String?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         return sendFile("document", id(chatId), document, mapOf(
                 "caption" to caption,
                 "parse_mode" to parseMode,
                 "disable_notification" to notification,
                 "reply_to_message_id" to replyTo,
-                "reply_markup" to markup))
+                "reply_markup" to markup), thumb)
     }
 
-    override fun sendVideo(chatId: Any, video: Any, duration: Int?, width: Int?, height: Int?, caption: String?, parseMode: String?, streaming: Boolean?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+    override fun sendVideo(chatId: Any, video: Any, duration: Int?, width: Int?, height: Int?, thumb: File?, caption: String?, parseMode: String?, streaming: Boolean?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         return sendFile("video", id(chatId), video, mapOf(
                 "duration" to duration,
                 "width" to width,
@@ -176,7 +181,20 @@ internal class TelegramClient(token: String) : TelegramApi {
                 "disable_notification" to notification,
                 "reply_to_message_id" to replyTo,
                 "reply_markup" to markup
-        ))
+        ), thumb)
+    }
+
+    override fun sendAnimation(chatId: Any, animation: Any, duration: Int?, width: Int?, height: Int?, thumb: File?, caption: String?, parseMode: String?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+        return sendFile("animation", id(chatId), animation, mapOf(
+                "duration" to duration,
+                "width" to width,
+                "height" to height,
+                "caption" to caption,
+                "parse_mode" to parseMode,
+                "disable_notification" to notification,
+                "reply_to_message_id" to replyTo,
+                "reply_markup" to markup
+        ), thumb)
     }
 
     override fun sendVoice(chatId: Any, voice: Any, caption: String?, parseMode: String?, duration: Int?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
@@ -189,24 +207,31 @@ internal class TelegramClient(token: String) : TelegramApi {
                 "reply_markup" to markup))
     }
 
-    override fun sendVideoNote(chatId: Any, note: Any, duration: Int?, length: Int?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+    override fun sendVideoNote(chatId: Any, note: Any, duration: Int?, length: Int?, thumb: File?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         return sendFile("video_note", id(chatId), note, mapOf(
                 "duration" to duration,
                 "disable_notification" to notification,
                 "reply_to_message_id" to replyTo,
                 "reply_markup" to markup
-        ), "videoNote")
+        ), thumb, "videoNote")
     }
 
-    override fun sendMediaGroup(chatId: Any, media: List<InputMedia>, notification: Boolean?, replyTo: Int?):
-            CompletableFuture<ArrayList<Message>> {
+    override fun sendMediaGroup(chatId: Any, media: List<InputMedia>, notification: Boolean?, replyTo: Int?): CompletableFuture<ArrayList<Message>> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
         form.addFormDataPart("chat_id", id(chatId))
 
-        media.forEach {
-            if (it.file() != null)
-                form.addFormDataPart(it.media().split("//")[1], it.media(),
-                        RequestBody.create(MEDIA_TYPE_OCTET_STREAM, it.file()!!))
+        media.forEach { inputMedia ->
+            inputMedia.file()?.let {
+                form.addFormDataPart(inputMedia.media().split("//")[1], inputMedia.media(), RequestBody.create(MEDIA_TYPE_OCTET_STREAM, it))
+            }
+
+            inputMedia.thumb()?.let {
+                when (it) {
+                    is File -> form.addFormDataPart("attach://${it.name}", it.name, RequestBody.create(MEDIA_TYPE_OCTET_STREAM, it))
+                    is String -> form.addFormDataPart("thumb", it)
+                    else -> throw IllegalArgumentException("Neither file nor string")
+                }
+            }
         }
 
         form.addFormDataPart("media", toJson(media))
@@ -251,7 +276,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post("stopMessageLiveLocation", body)
     }
 
-    override fun sendVenue(chatId: Any, latitude: Double, longitude: Double, title: String, address: String, foursquareId: String?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+    override fun sendVenue(chatId: Any, latitude: Double, longitude: Double, title: String, address: String, foursquareId: String?, foursquareType: String?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         val body = toBody(mapOf(
                 "chat_id" to chatId,
                 "latitude" to latitude,
@@ -259,6 +284,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 "title" to title,
                 "address" to address,
                 "foursquare_id" to foursquareId,
+                "foursquare_type" to foursquareType,
                 "disable_notification" to notification,
                 "reply_to_message_id" to replyTo,
                 "reply_markup" to markup
@@ -266,12 +292,13 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post("sendVenue", body)
     }
 
-    override fun sendContact(chatId: Any, phone: String, firstName: String, lastName: String?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+    override fun sendContact(chatId: Any, phone: String, firstName: String, lastName: String?, vcard: String?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         val body = toBody(mapOf(
                 "chat_id" to chatId,
                 "phone_number" to phone,
                 "first_name" to firstName,
                 "last_name" to lastName,
+                "vcard" to vcard,
                 "disable_notification" to notification,
                 "reply_to_message_id" to replyTo,
                 "reply_markup" to markup
@@ -487,7 +514,15 @@ internal class TelegramClient(token: String) : TelegramApi {
             form.addFormDataPart("inline_message_id", inlineMessageId)
         } else {
             form.addFormDataPart("chat_id", id(chatId!!))
-            form.addFormDataPart("message_id", messageId.toString())
+            form.addFormDataPart("message_id", messageId!!.toString())
+        }
+
+        media.thumb()?.let {
+            when (it) {
+                is File -> form.addFormDataPart("attach://${it.name}", it.name, RequestBody.create(null, it))
+                is String -> form.addFormDataPart("thumb", it)
+                else -> throw IllegalArgumentException("Neither file nor string")
+            }
         }
 
         form.addFormDataPart(media.media().split("//")[1], media.media(), RequestBody.create(MEDIA_TYPE_OCTET_STREAM, media.file()!!))

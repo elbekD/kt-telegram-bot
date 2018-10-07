@@ -53,17 +53,64 @@ interface Bot : TelegramApi {
     /**
      * Helper method to create photo media object
      * @param media file_id, url or file_attach_name
-     * @throws [IllegalArgumentException] if `attachment` neither `File` nor `String`
+     * @throws [IllegalArgumentException] if `attachment` neither [java.io.File] nor `String`
      */
-    fun mediaPhoto(media: String, attachment: File? = null, caption: String? = null): InputMedia
+    fun mediaPhoto(media: String,
+                   attachment: File? = null,
+                   caption: String? = null,
+                   parseMode: String? = null): InputMedia
 
     /**
      * Helper method to create video media object
      * @param media file_id, url or file_attach_name
-     * @throws [IllegalArgumentException] if `attachment` neither `File` nor `String`
+     * @throws [IllegalArgumentException] if `attachment` neither [java.io.File] nor `String`
      */
-    fun mediaVideo(media: String, width: Int, height: Int, duration: Int,
-                   attachment: File? = null, caption: String? = null): InputMedia
+    fun mediaVideo(media: String,
+                   attachment: File? = null,
+                   thumb: File? = null,
+                   caption: String? = null,
+                   parseMode: String? = null,
+                   width: Int? = null,
+                   height: Int? = null,
+                   duration: Int? = null,
+                   supportsStreaming: Boolean? = null): InputMedia
 
+    /**
+     * Helper method to create animation media object
+     * @param media file_id, url or file_attach_name
+     * @throws [IllegalArgumentException] if `attachment` neither [java.io.File] nor `String`
+     */
+    fun mediaAnimation(media: String,
+                       attachment: File? = null,
+                       thumb: File? = null,
+                       caption: String? = null,
+                       parseMode: String? = null,
+                       width: Int? = null,
+                       height: Int? = null,
+                       duration: Int? = null): InputMedia
 
+    /**
+     * Helper method to create audio media object
+     * @param media file_id, url or file_attach_name
+     * @throws [IllegalArgumentException] if `attachment` neither [java.io.File] nor `String`
+     */
+    fun mediaAudio(media: String,
+                   attachment: File? = null,
+                   thumb: File? = null,
+                   caption: String? = null,
+                   parseMode: String? = null,
+                   duration: Int? = null,
+                   performer: String? = null,
+                   title: String? = null): InputMedia
+
+    /**
+     * Helper method to create document media object
+     * @param media file_id, url or file_attach_name
+     * @throws [IllegalArgumentException] if `attachment` neither [java.io.File] nor `String`
+     */
+    fun mediaDocument(media: String,
+                      attachment: File? = null,
+                      thumb: File? = null,
+                      caption: String? = null,
+                      parseMode: String? = null): InputMedia
 }

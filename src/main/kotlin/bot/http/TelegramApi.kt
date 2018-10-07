@@ -60,6 +60,7 @@ interface TelegramApi {
                   duration: Int? = null,
                   performer: String? = null,
                   title: String? = null,
+                  thumb: java.io.File? = null,
                   notification: Boolean? = null,
                   replyTo: Int? = null,
                   markup: ReplyKeyboard? = null):
@@ -74,6 +75,7 @@ interface TelegramApi {
      */
     fun sendDocument(chatId: Any,
                      document: Any,
+                     thumb: java.io.File? = null,
                      caption: String? = null,
                      parseMode: String? = null,
                      notification: Boolean? = null,
@@ -92,12 +94,34 @@ interface TelegramApi {
                   duration: Int? = null,
                   width: Int? = null,
                   height: Int? = null,
+                  thumb: java.io.File? = null,
                   caption: String? = null,
                   parseMode: String? = null,
                   streaming: Boolean? = null,
                   notification: Boolean? = null,
                   replyTo: Int? = null,
                   markup: ReplyKeyboard? = null): CompletableFuture<Message>
+
+    /**
+     * @param chatId is `Int`, `Long` or `String`
+     * @param animation is [java.io.File] or `String`
+     * @param thumb is [java.io.File] or `String`
+     * @throws IllegalArgumentException if `chatId` neither integer nor string
+     * @throws IllegalArgumentException if `animation` neither [java.io.File] nor `String`
+     * @throws IllegalArgumentException if `thumb` neither [java.io.File] nor `String`
+     * @throws TelegramApiError if error returned in response
+     */
+    fun sendAnimation(chatId: Any,
+                      animation: Any,
+                      duration: Int? = null,
+                      width: Int? = null,
+                      height: Int? = null,
+                      thumb: java.io.File? = null,
+                      caption: String? = null,
+                      parseMode: String? = null,
+                      notification: Boolean? = null,
+                      replyTo: Int? = null,
+                      markup: ReplyKeyboard? = null): CompletableFuture<Message>
 
     /**
      * @param chatId is `Int`, `Long` or `String`
@@ -126,6 +150,7 @@ interface TelegramApi {
                       note: Any,
                       duration: Int? = null,
                       length: Int? = null,
+                      thumb: java.io.File? = null,
                       notification: Boolean? = null,
                       replyTo: Int? = null,
                       markup: ReplyKeyboard? = null): CompletableFuture<Message>
@@ -184,6 +209,7 @@ interface TelegramApi {
                   title: String,
                   address: String,
                   foursquareId: String? = null,
+                  foursquareType: String? = null,
                   notification: Boolean? = null,
                   replyTo: Int? = null,
                   markup: ReplyKeyboard? = null): CompletableFuture<Message>
@@ -197,6 +223,7 @@ interface TelegramApi {
                     phone: String,
                     firstName: String,
                     lastName: String? = null,
+                    vcard: String? = null,
                     notification: Boolean? = null,
                     replyTo: Int? = null,
                     markup: ReplyKeyboard? = null): CompletableFuture<Message>
@@ -237,8 +264,12 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun restrictChatMember(chatId: Any, userId: Long, untilDate: Int? = null, canSendMessage: Boolean? = null,
-                           canSendMediaMessages: Boolean? = null, canSendOtherMessages: Boolean? = null,
+    fun restrictChatMember(chatId: Any,
+                           userId: Long,
+                           untilDate: Int? = null,
+                           canSendMessage: Boolean? = null,
+                           canSendMediaMessages: Boolean? = null,
+                           canSendOtherMessages: Boolean? = null,
                            canAddWebPagePreview: Boolean? = null): CompletableFuture<Boolean>
 
     /**

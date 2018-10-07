@@ -72,7 +72,7 @@ internal class TelegramBotTest {
     @Test
     fun sendDocument() {
         val file = file(config.document)
-        val msg = bot.sendDocument(config.userId, file, "`this is document file`", "markdown").get()
+        val msg = bot.sendDocument(config.userId, file, caption = "`this is document file`", parseMode = "markdown").get()
         assertNotNull(msg.document)
         assertNotNull(msg.document?.file_id)
     }
@@ -80,9 +80,16 @@ internal class TelegramBotTest {
     @Test
     fun sendVideo() {
         val file = file(config.video)
-        val msg = bot.sendVideo(config.userId, file, 5, 560, 320, "this is video file").get()
+        val msg = bot.sendVideo(config.userId, file, 5, 560, 320, caption = "this is video file").get()
         assertNotNull(msg.video)
         assertNotNull(msg.video?.file_id)
+    }
+
+    @Test
+    fun sendAnimation() {
+        val thumb = file(config.thumb)
+        val msg = bot.sendAnimation(config.userId, config.animation, thumb = thumb).get()
+        assertNotNull(msg.animation)
     }
 
     @Test

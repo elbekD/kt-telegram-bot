@@ -95,6 +95,10 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
         }
     }
 
+    protected fun onStop() {
+        client.onStop()
+    }
+
     override fun onCommand(command: String, action: (Message, String?) -> Unit) {
         if (!command.isCommand())
             throw IllegalArgumentException("$command is not a command")
@@ -117,123 +121,267 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
         onAnyUpdateAction = action
     }
 
-    override fun mediaPhoto(media: String, attachment: File?, caption: String?): InputMedia {
-        return InputMediaPhoto(media, attachment, caption)
-    }
+    override fun mediaPhoto(media: String,
+                            attachment: File?,
+                            caption: String?,
+                            parseMode: String?): InputMedia =
+            InputMediaPhoto(media, attachment, caption, parseMode)
 
-    override fun mediaVideo(media: String, width: Int, height: Int, duration: Int,
-                            attachment: File?, caption: String?): InputMedia {
-        return InputMediaVideo(media, attachment, caption, width, height, duration)
-    }
+    override fun mediaVideo(media: String,
+                            attachment: File?,
+                            thumb: File?,
+                            caption: String?,
+                            parseMode: String?,
+                            width: Int?,
+                            height: Int?,
+                            duration: Int?,
+                            supportsStreaming: Boolean?): InputMedia =
+            InputMediaVideo(media, attachment, thumb, caption, parseMode, width, height, duration, supportsStreaming)
+
+    override fun mediaAnimation(media: String,
+                                attachment: File?,
+                                thumb: File?,
+                                caption: String?,
+                                parseMode: String?,
+                                width: Int?,
+                                height: Int?,
+                                duration: Int?): InputMedia =
+            InputMediaAnimation(media, attachment, thumb, caption, parseMode, width, height, duration)
+
+    override fun mediaAudio(media: String,
+                            attachment: File?,
+                            thumb: File?,
+                            caption: String?,
+                            parseMode: String?,
+                            duration: Int?,
+                            performer: String?,
+                            title: String?): InputMedia =
+            InputMediaAudio(media, attachment, thumb, caption, parseMode, duration, performer, title)
+
+    override fun mediaDocument(media: String,
+                               attachment: File?,
+                               thumb: File?,
+                               caption: String?,
+                               parseMode: String?): InputMedia =
+            InputMediaDocument(media, attachment, thumb, caption, parseMode)
 
     /*
-          Telegram methods
-                |  |
-                |  |
-                |  |
-                |  |
-               \    /
-                \  /
-                 \/
-     */
+              Telegram methods
+                    |  |
+                    |  |
+                    |  |
+                    |  |
+                   \    /
+                    \  /
+                     \/
+         */
     override fun getMe() = client.getMe()
 
-    override fun sendMessage(chatId: Any, text: String, parseMode: String?, preview: Boolean?, notification: Boolean?,
-                             replyTo: Int?, markup: ReplyKeyboard?) =
+    override fun sendMessage(chatId: Any,
+                             text: String,
+                             parseMode: String?,
+                             preview: Boolean?,
+                             notification: Boolean?,
+                             replyTo: Int?,
+                             markup: ReplyKeyboard?) =
             client.sendMessage(chatId, text, parseMode, preview, notification, replyTo, markup)
 
-    override fun forwardMessage(chatId: Any, fromId: Any, msgId: Int, notification: Boolean?) =
+    override fun forwardMessage(chatId: Any,
+                                fromId: Any,
+                                msgId: Int,
+                                notification: Boolean?) =
             client.forwardMessage(chatId, fromId, msgId, notification)
 
-    override fun sendPhoto(chatId: Any, photo: Any, caption: String?, parseMode: String?, notification: Boolean?,
-                           replyTo: Int?, markup: ReplyKeyboard?) =
+    override fun sendPhoto(chatId: Any,
+                           photo: Any,
+                           caption: String?,
+                           parseMode: String?,
+                           notification: Boolean?,
+                           replyTo: Int?,
+                           markup: ReplyKeyboard?) =
             client.sendPhoto(chatId, photo, caption, parseMode, notification, replyTo, markup)
 
-    override fun sendAudio(chatId: Any, audio: Any, caption: String?, parseMode: String?, duration: Int?,
-                           performer: String?, title: String?, notification: Boolean?, replyTo: Int?,
+    override fun sendAudio(chatId: Any,
+                           audio: Any,
+                           caption: String?,
+                           parseMode: String?,
+                           duration: Int?,
+                           performer: String?,
+                           title: String?,
+                           thumb: File?,
+                           notification: Boolean?,
+                           replyTo: Int?,
                            markup: ReplyKeyboard?) =
-            client.sendAudio(chatId, audio, caption, parseMode, duration, performer, title, notification, replyTo, markup)
+            client.sendAudio(chatId, audio, caption, parseMode, duration, performer, title, thumb, notification, replyTo, markup)
 
-    override fun sendDocument(chatId: Any, document: Any, caption: String?, parseMode: String?,
-                              notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?) =
-            client.sendDocument(chatId, document, caption, parseMode, notification, replyTo, markup)
+    override fun sendDocument(chatId: Any,
+                              document: Any,
+                              thumb: File?,
+                              caption: String?,
+                              parseMode: String?,
+                              notification: Boolean?,
+                              replyTo: Int?,
+                              markup: ReplyKeyboard?) =
+            client.sendDocument(chatId, document, thumb, caption, parseMode, notification, replyTo, markup)
 
-    override fun sendVideo(chatId: Any, video: Any, duration: Int?, width: Int?, height: Int?, caption: String?,
-                           parseMode: String?, streaming: Boolean?, notification: Boolean?,
-                           replyTo: Int?, markup: ReplyKeyboard?) =
-            client.sendVideo(chatId, video, duration, width, height, caption, parseMode, streaming, notification, replyTo, markup)
+    override fun sendVideo(chatId: Any,
+                           video: Any,
+                           duration: Int?,
+                           width: Int?,
+                           height: Int?,
+                           thumb: File?,
+                           caption: String?,
+                           parseMode: String?,
+                           streaming: Boolean?,
+                           notification: Boolean?,
+                           replyTo: Int?,
+                           markup: ReplyKeyboard?) =
+            client.sendVideo(chatId, video, duration, width, height, thumb, caption, parseMode, streaming, notification, replyTo, markup)
 
-    override fun sendVoice(chatId: Any, voice: Any, caption: String?, parseMode: String?, duration: Int?,
-                           notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?) =
+    override fun sendAnimation(chatId: Any,
+                               animation: Any,
+                               duration: Int?,
+                               width: Int?,
+                               height: Int?,
+                               thumb: File?,
+                               caption: String?,
+                               parseMode: String?,
+                               notification: Boolean?,
+                               replyTo: Int?,
+                               markup: ReplyKeyboard?) =
+            client.sendAnimation(chatId, animation, duration, width, height, thumb, caption, parseMode, notification, replyTo, markup)
+
+    override fun sendVoice(chatId: Any,
+                           voice: Any,
+                           caption: String?,
+                           parseMode: String?,
+                           duration: Int?,
+                           notification: Boolean?,
+                           replyTo: Int?,
+                           markup: ReplyKeyboard?) =
             client.sendVoice(chatId, voice, caption, parseMode, duration, notification, replyTo, markup)
 
-    override fun sendVideoNote(chatId: Any, note: Any, duration: Int?, length: Int?, notification: Boolean?,
-                               replyTo: Int?, markup: ReplyKeyboard?) =
-            client.sendVideoNote(chatId, note, duration, length, notification, replyTo, markup)
+    override fun sendVideoNote(chatId: Any,
+                               note: Any,
+                               duration: Int?,
+                               length: Int?,
+                               thumb: File?,
+                               notification: Boolean?,
+                               replyTo: Int?,
+                               markup: ReplyKeyboard?) =
+            client.sendVideoNote(chatId, note, duration, length, thumb, notification, replyTo, markup)
 
-    override fun sendMediaGroup(chatId: Any, media: List<InputMedia>, notification: Boolean?, replyTo: Int?):
-            CompletableFuture<ArrayList<Message>> {
+    override fun sendMediaGroup(chatId: Any,
+                                media: List<InputMedia>,
+                                notification: Boolean?,
+                                replyTo: Int?): CompletableFuture<ArrayList<Message>> {
         if (media.size < 2) throw IllegalArgumentException("List must include 2-10 items")
         return client.sendMediaGroup(chatId, media, notification, replyTo)
     }
 
-    override fun sendLocation(chatId: Any, latitude: Double, longitude: Double, period: Int?, notification: Boolean?,
-                              replyTo: Int?, markup: ReplyKeyboard?) =
+    override fun sendLocation(chatId: Any,
+                              latitude: Double,
+                              longitude: Double,
+                              period: Int?,
+                              notification: Boolean?,
+                              replyTo: Int?,
+                              markup: ReplyKeyboard?) =
             client.sendLocation(chatId, latitude, longitude, period, notification, replyTo, markup)
 
-    override fun editMessageLiveLocation(latitude: Double, longitude: Double, chatId: Any?, messageId: Int?,
-                                         inlineMessageId: String?, markup: InlineKeyboardMarkup?):
-            CompletableFuture<Message> {
+    override fun editMessageLiveLocation(latitude: Double,
+                                         longitude: Double,
+                                         chatId: Any?,
+                                         messageId: Int?,
+                                         inlineMessageId: String?,
+                                         markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.editMessageLiveLocation(latitude, longitude, chatId, messageId, inlineMessageId, markup)
     }
 
-    override fun stopMessageLiveLocation(chatId: Any?, messageId: Int?, inlineMessageId: String?,
-                                         markup: InlineKeyboardMarkup?):
-            CompletableFuture<Message> {
+    override fun stopMessageLiveLocation(chatId: Any?,
+                                         messageId: Int?,
+                                         inlineMessageId: String?,
+                                         markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.stopMessageLiveLocation(chatId, messageId, inlineMessageId, markup)
     }
 
-    override fun sendVenue(chatId: Any, latitude: Double, longitude: Double, title: String, address: String,
-                           foursquareId: String?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?) =
-            client.sendVenue(chatId, latitude, longitude, title, address, foursquareId, notification, replyTo, markup)
+    override fun sendVenue(chatId: Any,
+                           latitude: Double,
+                           longitude: Double,
+                           title: String,
+                           address: String,
+                           foursquareId: String?,
+                           foursquareType: String?,
+                           notification: Boolean?,
+                           replyTo: Int?,
+                           markup: ReplyKeyboard?) =
+            client.sendVenue(chatId, latitude, longitude, title, address, foursquareId, foursquareType, notification, replyTo, markup)
 
-    override fun sendContact(chatId: Any, phone: String, firstName: String, lastName: String?,
-                             notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?) =
-            client.sendContact(chatId, phone, firstName, lastName, notification, replyTo, markup)
+    override fun sendContact(chatId: Any,
+                             phone: String,
+                             firstName: String,
+                             lastName: String?,
+                             vcard: String?,
+                             notification: Boolean?,
+                             replyTo: Int?,
+                             markup: ReplyKeyboard?) =
+            client.sendContact(chatId, phone, firstName, lastName, vcard, notification, replyTo, markup)
 
-    override fun sendChatAction(chatId: Any, action: Actions) = client.sendChatAction(chatId, action)
+    override fun sendChatAction(chatId: Any,
+                                action: Actions) = client.sendChatAction(chatId, action)
 
-    override fun getUserProfilePhotos(userId: Long, offset: Int?, limit: Int?) = client.getUserProfilePhotos(userId, offset, limit)
+    override fun getUserProfilePhotos(userId: Long,
+                                      offset: Int?,
+                                      limit: Int?) = client.getUserProfilePhotos(userId, offset, limit)
 
     override fun getFile(fileId: String) = client.getFile(fileId)
 
-    override fun kickChatMember(chatId: Any, userId: Long, untilDate: Int?) =
+    override fun kickChatMember(chatId: Any,
+                                userId: Long,
+                                untilDate: Int?) =
             client.kickChatMember(chatId, userId, untilDate)
 
-    override fun unbanChatMember(chatId: Any, userId: Long) = client.unbanChatMember(chatId, userId)
+    override fun unbanChatMember(chatId: Any,
+                                 userId: Long) = client.unbanChatMember(chatId, userId)
 
-    override fun restrictChatMember(chatId: Any, userId: Long, untilDate: Int?,
-                                    canSendMessage: Boolean?, canSendMediaMessages: Boolean?,
-                                    canSendOtherMessages: Boolean?, canAddWebPagePreview: Boolean?) = client.restrictChatMember(chatId, userId, untilDate,
-            canSendMessage, canSendMediaMessages, canSendOtherMessages, canAddWebPagePreview)
+    override fun restrictChatMember(chatId: Any,
+                                    userId: Long,
+                                    untilDate: Int?,
+                                    canSendMessage: Boolean?,
+                                    canSendMediaMessages: Boolean?,
+                                    canSendOtherMessages: Boolean?,
+                                    canAddWebPagePreview: Boolean?) =
+            client.restrictChatMember(chatId, userId, untilDate, canSendMessage, canSendMediaMessages, canSendOtherMessages, canAddWebPagePreview)
 
-    override fun promoteChatMember(chatId: Any, userId: Long, canChangeInfo: Boolean?, canPostMessages: Boolean?,
-                                   canEditMessages: Boolean?, canDeleteMessages: Boolean?, canInviteUsers: Boolean?,
-                                   canRestrictMembers: Boolean?, canPinMessages: Boolean?, canPromoteMembers: Boolean?) = client.promoteChatMember(chatId, userId, canChangeInfo, canPostMessages, canEditMessages, canDeleteMessages, canInviteUsers, canRestrictMembers, canPinMessages, canPromoteMembers)
+    override fun promoteChatMember(chatId: Any,
+                                   userId: Long,
+                                   canChangeInfo: Boolean?,
+                                   canPostMessages: Boolean?,
+                                   canEditMessages: Boolean?,
+                                   canDeleteMessages: Boolean?,
+                                   canInviteUsers: Boolean?,
+                                   canRestrictMembers: Boolean?,
+                                   canPinMessages: Boolean?,
+                                   canPromoteMembers: Boolean?) =
+            client.promoteChatMember(chatId, userId, canChangeInfo, canPostMessages, canEditMessages, canDeleteMessages, canInviteUsers, canRestrictMembers, canPinMessages, canPromoteMembers)
 
     override fun exportChatInviteLink(chatId: Any) = client.exportChatInviteLink(chatId)
 
-    override fun setChatPhoto(chatId: Any, photo: Any) = client.setChatPhoto(chatId, photo)
+    override fun setChatPhoto(chatId: Any,
+                              photo: Any) = client.setChatPhoto(chatId, photo)
 
     override fun deleteChatPhoto(chatId: Any) = client.deleteChatPhoto(chatId)
 
-    override fun setChatTitle(chatId: Any, title: String) = client.setChatTitle(chatId, title)
+    override fun setChatTitle(chatId: Any,
+                              title: String) = client.setChatTitle(chatId, title)
 
-    override fun setChatDescription(chatId: Any, description: String) = client.setChatDescription(chatId, description)
+    override fun setChatDescription(chatId: Any,
+                                    description: String) = client.setChatDescription(chatId, description)
 
-    override fun pinChatMessage(chatId: Any, messageId: Int, notification: Boolean?) = client.pinChatMessage(chatId, messageId, notification)
+    override fun pinChatMessage(chatId: Any,
+                                messageId: Int,
+                                notification: Boolean?) = client.pinChatMessage(chatId, messageId, notification)
 
     override fun unpinChatMessage(chatId: Any) = client.unpinChatMessage(chatId)
 
@@ -245,78 +393,171 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
 
     override fun getChatMembersCount(chatId: Any) = client.getChatMembersCount(chatId)
 
-    override fun getChatMember(chatId: Any, userId: Long) = client.getChatMember(chatId, userId)
+    override fun getChatMember(chatId: Any,
+                               userId: Long) =
+            client.getChatMember(chatId, userId)
 
-    override fun setChatStickerSet(chatId: Any, stickerSetName: String) = client.setChatStickerSet(chatId, stickerSetName)
+    override fun setChatStickerSet(chatId: Any,
+                                   stickerSetName: String) =
+            client.setChatStickerSet(chatId, stickerSetName)
 
     override fun deleteChatStickerSet(chatId: Any) = client.deleteChatStickerSet(chatId)
 
-    override fun answerCallbackQuery(id: String, text: String?, alert: Boolean?, url: String?, cacheTime: Int?) = client.answerCallbackQuery(id, text, alert, url, cacheTime)
+    override fun answerCallbackQuery(id: String,
+                                     text: String?,
+                                     alert: Boolean?,
+                                     url: String?,
+                                     cacheTime: Int?) =
+            client.answerCallbackQuery(id, text, alert, url, cacheTime)
 
-    override fun answerInlineQuery(queryId: String, results: List<InlineQueryResult>, cacheTime: Int?, personal: Boolean?, offset: String?, pmText: String?, pmParameter: String?) = client.answerInlineQuery(queryId, results, cacheTime, personal, offset, pmText, pmParameter)
+    override fun answerInlineQuery(queryId: String,
+                                   results: List<InlineQueryResult>,
+                                   cacheTime: Int?,
+                                   personal: Boolean?,
+                                   offset: String?,
+                                   pmText: String?,
+                                   pmParameter: String?) =
+            client.answerInlineQuery(queryId, results, cacheTime, personal, offset, pmText, pmParameter)
 
-    override fun editMessageText(chatId: Any?, messageId: Int?, inlineMessageId: String?, text: String, parseMode: String?, preview: Boolean?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+    override fun editMessageText(chatId: Any?,
+                                 messageId: Int?,
+                                 inlineMessageId: String?,
+                                 text: String,
+                                 parseMode: String?,
+                                 preview: Boolean?,
+                                 markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.editMessageText(chatId, messageId, inlineMessageId, text, parseMode, preview, markup)
     }
 
-    override fun editMessageCaption(chatId: Any?, messageId: Int?, inlineMessageId: String?, caption: String?, parseMode: String?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+    override fun editMessageCaption(chatId: Any?,
+                                    messageId: Int?,
+                                    inlineMessageId: String?,
+                                    caption: String?,
+                                    parseMode: String?,
+                                    markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.editMessageCaption(chatId, messageId, inlineMessageId, caption, parseMode, markup)
     }
 
-    override fun editMessageMedia(chatId: Any?, messageId: Int?, inlineMessageId: String?, media: InputMedia, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+    override fun editMessageMedia(chatId: Any?,
+                                  messageId: Int?,
+                                  inlineMessageId: String?,
+                                  media: InputMedia,
+                                  markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.editMessageMedia(chatId, messageId, inlineMessageId, media, markup)
     }
 
-    override fun editMessageReplyMarkup(chatId: Any?, messageId: Int?, inlineMessageId: String?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+    override fun editMessageReplyMarkup(chatId: Any?,
+                                        messageId: Int?,
+                                        inlineMessageId: String?,
+                                        markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.editMessageReplyMarkup(chatId, messageId, inlineMessageId, markup)
     }
 
-    override fun sendSticker(chatId: Any, sticker: Any, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+    override fun sendSticker(chatId: Any,
+                             sticker: Any,
+                             notification: Boolean?,
+                             replyTo: Int?,
+                             markup: ReplyKeyboard?): CompletableFuture<Message> {
         validateInputFileOrString(sticker)
         return client.sendSticker(chatId, sticker, notification, replyTo, markup)
     }
 
     override fun getStickerSet(name: String) = client.getStickerSet(name)
 
-    override fun uploadStickerFile(userId: Long, pngSticker: File) = client.uploadStickerFile(userId, pngSticker)
+    override fun uploadStickerFile(userId: Long,
+                                   pngSticker: File) = client.uploadStickerFile(userId, pngSticker)
 
-    override fun createNewStickerSet(userId: Long, name: String, title: String, pngSticker: Any, emojis: String, containsMask: Boolean?, maskPosition: MaskPosition?): CompletableFuture<Boolean> {
+    override fun createNewStickerSet(userId: Long,
+                                     name: String,
+                                     title: String,
+                                     pngSticker: Any,
+                                     emojis: String,
+                                     containsMask: Boolean?,
+                                     maskPosition: MaskPosition?): CompletableFuture<Boolean> {
         validateInputFileOrString(pngSticker)
         return client.createNewStickerSet(userId, name, title, pngSticker, emojis, containsMask, maskPosition)
     }
 
-    override fun addStickerToSet(userId: Long, name: String, pngSticker: Any, emojis: String, maskPosition: MaskPosition?): CompletableFuture<Boolean> {
+    override fun addStickerToSet(userId: Long,
+                                 name: String,
+                                 pngSticker: Any,
+                                 emojis: String,
+                                 maskPosition: MaskPosition?): CompletableFuture<Boolean> {
         validateInputFileOrString(pngSticker)
         return client.addStickerToSet(userId, name, pngSticker, emojis, maskPosition)
     }
 
-    override fun setStickerPositionInSet(sticker: String, position: Int) = client.setStickerPositionInSet(sticker, position)
+    override fun setStickerPositionInSet(sticker: String,
+                                         position: Int) =
+            client.setStickerPositionInSet(sticker, position)
 
     override fun deleteStickerFromSet(sticker: String) = client.deleteStickerFromSet(sticker)
 
-    override fun sendGame(chatId: Long, gameShortName: String, notification: Boolean?, replyTo: Int?, markup: InlineKeyboardMarkup?) = client.sendGame(chatId, gameShortName, notification, replyTo, markup)
+    override fun sendGame(chatId: Long,
+                          gameShortName: String,
+                          notification: Boolean?,
+                          replyTo: Int?,
+                          markup: InlineKeyboardMarkup?) =
+            client.sendGame(chatId, gameShortName, notification, replyTo, markup)
 
-    override fun setGameScore(userId: Long, score: Int, force: Boolean?, disableEditMessage: Boolean?, chatId: Long?, messageId: Int?, inlineMessageId: String?): CompletableFuture<Message> {
+    override fun setGameScore(userId: Long,
+                              score: Int,
+                              force: Boolean?,
+                              disableEditMessage: Boolean?,
+                              chatId: Long?,
+                              messageId: Int?, inlineMessageId: String?): CompletableFuture<Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.setGameScore(userId, score, force, disableEditMessage, chatId, messageId, inlineMessageId)
     }
 
-    override fun getGameHighScores(userId: Long, chatId: Long?, messageId: Int?, inlineMessageId: String?): CompletableFuture<List<GameHighScore>> {
+    override fun getGameHighScores(userId: Long,
+                                   chatId: Long?,
+                                   messageId: Int?,
+                                   inlineMessageId: String?): CompletableFuture<List<GameHighScore>> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.getGameHighScores(userId, chatId, messageId, inlineMessageId)
     }
 
-    override fun sendInvoice(chatId: Long, title: String, description: String, payload: String, providerToken: String, startParam: String, currency: String, prices: List<LabeledPrice>, providerData: String?, photoUrl: String?, photoSize: Int?, photoWidth: Int?, photoHeight: Int?, needName: Boolean?, needPhoneNumber: Boolean?, needEmail: Boolean?, needShippingAddress: Boolean?, sendPhoneNumberToProvider: Boolean?, sendEmailToProvider: Boolean?, isFlexible: Boolean?, notification: Boolean?, replyTo: Int?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+    override fun sendInvoice(chatId: Long,
+                             title: String,
+                             description: String,
+                             payload: String,
+                             providerToken: String,
+                             startParam: String,
+                             currency: String,
+                             prices: List<LabeledPrice>,
+                             providerData: String?,
+                             photoUrl: String?,
+                             photoSize: Int?,
+                             photoWidth: Int?,
+                             photoHeight: Int?,
+                             needName: Boolean?,
+                             needPhoneNumber: Boolean?,
+                             needEmail: Boolean?,
+                             needShippingAddress: Boolean?,
+                             sendPhoneNumberToProvider: Boolean?,
+                             sendEmailToProvider: Boolean?,
+                             isFlexible: Boolean?,
+                             notification: Boolean?,
+                             replyTo: Int?,
+                             markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
         return client.sendInvoice(chatId, title, description, payload, providerToken, startParam, currency, prices, providerData, photoUrl, photoSize, photoWidth, photoHeight, needName, needPhoneNumber, needEmail, needShippingAddress, sendPhoneNumberToProvider, sendEmailToProvider, isFlexible, notification, replyTo, markup)
     }
 
-    override fun answerShippingQuery(shippingQueryId: String, ok: Boolean, shippingOptions: List<ShippingOption>?, errorMessage: String?) = client.answerShippingQuery(shippingQueryId, ok, shippingOptions, errorMessage)
+    override fun answerShippingQuery(shippingQueryId: String,
+                                     ok: Boolean,
+                                     shippingOptions: List<ShippingOption>?,
+                                     errorMessage: String?) =
+            client.answerShippingQuery(shippingQueryId, ok, shippingOptions, errorMessage)
 
-    override fun answerPreCheckoutQuery(preCheckoutQueryId: String, ok: Boolean, errorMessage: String?) = client.answerPreCheckoutQuery(preCheckoutQueryId, ok, errorMessage)
+    override fun answerPreCheckoutQuery(preCheckoutQueryId: String,
+                                        ok: Boolean,
+                                        errorMessage: String?) =
+            client.answerPreCheckoutQuery(preCheckoutQueryId, ok, errorMessage)
     /*
                 /\
                /  \
