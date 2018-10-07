@@ -583,4 +583,7 @@ interface TelegramApi {
     fun answerPreCheckoutQuery(preCheckoutQueryId: String,
                                ok: Boolean,
                                errorMessage: String? = null): CompletableFuture<Boolean>
+
+    fun setPassportDataErrors(userId: Long,
+                              errors: List<PassportElementError>): CompletableFuture<Boolean>
 }

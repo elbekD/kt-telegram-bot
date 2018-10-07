@@ -694,8 +694,14 @@ internal class TelegramClient(token: String) : TelegramApi {
         val body = toBody(mapOf(
                 "pre_checkout_query_id" to preCheckoutQueryId,
                 "ok" to ok,
-                "error_message" to errorMessage
-        ))
+                "error_message" to errorMessage))
         return post("answerPreCheckoutQuery", body)
+    }
+
+    override fun setPassportDataErrors(userId: Long, errors: List<PassportElementError>): CompletableFuture<Boolean> {
+        val body = toBody(mapOf(
+                "user_id" to userId,
+                "errors" to errors))
+        return post("setPassportDataErrors", body)
     }
 }

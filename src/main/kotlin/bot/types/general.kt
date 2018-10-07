@@ -79,7 +79,8 @@ data class Message(val message_id: Int,
                    val pinned_message: Message?,
                    val invoice: Invoice?,
                    val successful_payment: SuccessfulPayment?,
-                   val connected_website: String?)
+                   val connected_website: String?,
+                   val passport_data: PassportData?)
 
 data class CallbackQuery(val id: String,
                          val from: User,
@@ -95,7 +96,7 @@ data class MessageEntity(val type: String,
                          val url: String?,
                          val user: User?) {
 
-    enum class Types(@Transient val type: String) {
+    enum class Types(@Transient @Suppress("unused") val type: String) {
         MENTION("mention"),
         HASHTAG("hashtag"),
         CASHTAG("cashtag"),
@@ -196,8 +197,8 @@ data class ChatMember(val user: User,
                       val can_send_other_messages: Boolean,
                       val can_add_web_page_previews: Boolean)
 
+@Suppress("unused")
 data class ResponseParameters(val migrate_to_chat_id: Long, val retry_after: Int)
-
 
 interface InputMedia {
     fun media(): String

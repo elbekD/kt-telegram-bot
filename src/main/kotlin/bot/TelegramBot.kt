@@ -558,6 +558,10 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
                                         ok: Boolean,
                                         errorMessage: String?) =
             client.answerPreCheckoutQuery(preCheckoutQueryId, ok, errorMessage)
+
+    override fun setPassportDataErrors(userId: Long,
+                                       errors: List<PassportElementError>) =
+            client.setPassportDataErrors(userId, errors)
     /*
                 /\
                /  \
