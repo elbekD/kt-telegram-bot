@@ -33,4 +33,4 @@ fun main(argv: Array<Strign>) {
     bot.start()
 }
 ```
-Return type of bot methods is `CompletableFuture<T>`. Also it has extension function `await()`
+Return type of bot's methods is `CompletableFuture<T>`. Also it has extension function `await()`

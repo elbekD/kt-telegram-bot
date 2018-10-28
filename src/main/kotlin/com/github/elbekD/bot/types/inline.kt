@@ -1,4 +1,4 @@
-package bot.types
+package com.github.elbekD.bot.types
 
 interface InlineQueryResult
 interface InputMessageContent

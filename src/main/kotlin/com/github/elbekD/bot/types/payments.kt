@@ -1,4 +1,4 @@
-package bot.types
+package com.github.elbekD.bot.types
 
 data class LabeledPrice(val label: String, val amount: Int)
 

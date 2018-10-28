@@ -1,4 +1,4 @@
-package bot.types
+package com.github.elbekD.bot.types
 
 data class Sticker(val file_id: String,
                    val width: Int,

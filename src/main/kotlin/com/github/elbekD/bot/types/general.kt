@@ -1,5 +1,6 @@
-package bot.types
+package com.github.elbekD.bot.types
 
+import com.github.elbekD.bot.AllowedUpdates
 import java.io.File
 
 data class TelegramObject<out T>(val ok: Boolean,
@@ -17,6 +18,14 @@ data class Update(val update_id: Int,
                   val callback_query: CallbackQuery?,
                   val shipping_query: ShippingQuery?,
                   val pre_checkout_query: PreCheckoutQuery?)
+
+data class WebhookInfo(val url: String,
+                       val has_custom_certificate: Boolean,
+                       val pending_update_count: Int,
+                       val last_error_date: Long?,
+                       val last_error_message: String?,
+                       val max_connections: Int?,
+                       val allowed_updates: List<AllowedUpdates>?)
 
 data class User(val id: Int,
                 val is_bot: Boolean,

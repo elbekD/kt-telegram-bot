@@ -1,11 +1,23 @@
-package bot.http
+package com.github.elbekD.bot.http
 
-import bot.TelegramBot
-import bot.types.*
+import com.github.elbekD.bot.AllowedUpdates
+import com.github.elbekD.bot.TelegramBot
+import com.github.elbekD.bot.types.*
 import java.util.concurrent.CompletableFuture
 
 interface TelegramApi {
     fun getMe(): CompletableFuture<User>
+
+    fun getUpdates(options: Map<String, Any?>): CompletableFuture<List<Update>>
+
+    fun setWebhook(url: String,
+                   certificate: java.io.File? = null,
+                   maxConnections: Int? = null,
+                   allowedUpdates: List<AllowedUpdates>? = null): CompletableFuture<Boolean>
+
+    fun deleteWebhook(): CompletableFuture<Boolean>
+
+    fun getWebhookInfo(): CompletableFuture<WebhookInfo>
 
     /**
      * @param chatId is `Int`, `Long` or `String`
@@ -575,15 +587,24 @@ interface TelegramApi {
                     replyTo: Int? = null,
                     markup: InlineKeyboardMarkup? = null): CompletableFuture<Message>
 
+    /**
+     * @throws TelegramApiError if error returned in response
+     */
     fun answerShippingQuery(shippingQueryId: String,
                             ok: Boolean,
                             shippingOptions: List<ShippingOption>? = null,
                             errorMessage: String? = null): CompletableFuture<Boolean>
 
+    /**
+     * @throws TelegramApiError if error returned in response
+     */
     fun answerPreCheckoutQuery(preCheckoutQueryId: String,
                                ok: Boolean,
                                errorMessage: String? = null): CompletableFuture<Boolean>
 
+    /**
+     * @throws TelegramApiError if error returned in response
+     */
     fun setPassportDataErrors(userId: Long,
                               errors: List<PassportElementError>): CompletableFuture<Boolean>
 }

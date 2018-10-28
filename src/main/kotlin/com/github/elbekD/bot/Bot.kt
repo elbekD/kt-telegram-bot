@@ -1,7 +1,7 @@
-package bot
+package com.github.elbekD.bot
 
-import bot.http.TelegramApi
-import bot.types.*
+import com.github.elbekD.bot.http.TelegramApi
+import com.github.elbekD.bot.types.*
 import java.io.File
 
 // Todo: regex command handler
@@ -25,7 +25,7 @@ interface Bot : TelegramApi {
      * @throws [IllegalArgumentException] if [command] exceeds constraints.
      * Check [Telegram Bot Commands](https://core.telegram.org/bots#commands)
      */
-    fun onCommand(command: String = "/*", action: (Message, String?) -> Unit)
+    fun onCommand(command: String = "/*", action: suspend (Message, String?) -> Unit)
 
     /**
      * By default this method is triggered on any data
@@ -34,7 +34,7 @@ interface Bot : TelegramApi {
      *
      * @throws [IllegalArgumentException] if [data] length not in `[1, 64]` range
      */
-    fun onCallbackQuery(data: String = "*", action: (CallbackQuery) -> Unit)
+    fun onCallbackQuery(data: String = "*", action: suspend (CallbackQuery) -> Unit)
 
     /**
      * By default this method is triggered on any query
@@ -43,12 +43,12 @@ interface Bot : TelegramApi {
      *
      * @throws [IllegalArgumentException] if [query] length not in `[0, 512]` range
      */
-    fun onInlineQuery(query: String = "*", action: (InlineQuery) -> Unit)
+    fun onInlineQuery(query: String = "*", action: suspend (InlineQuery) -> Unit)
 
     /**
      * Triggered if no matching update handler found. Pass `null` to remove action
      */
-    fun onAnyUpdate(action: ((Update) -> Unit)?)
+    fun onAnyUpdate(action: (suspend (Update) -> Unit)?)
 
     /**
      * Helper method to create photo media object

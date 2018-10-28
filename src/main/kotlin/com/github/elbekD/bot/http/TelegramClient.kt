@@ -1,7 +1,8 @@
-package bot.http
+package com.github.elbekD.bot.http
 
-import bot.TelegramBot
-import bot.types.*
+import com.github.elbekD.bot.AllowedUpdates
+import com.github.elbekD.bot.TelegramBot
+import com.github.elbekD.bot.types.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.*
@@ -108,11 +109,24 @@ internal class TelegramClient(token: String) : TelegramApi {
     private fun addOptsToForm(form: MultipartBody.Builder, opts: Map<String, Any?>) =
             sendFileOpts.filterKeys { opts[it] != null }.forEach { form.addFormDataPart(it.key, it.value(opts[it.key]!!)) }
 
-    internal fun getUpdates(options: Map<String, Any?>) = post<ArrayList<Update>>("getUpdates", toBody(options))
-
     internal fun onStop() {
         httpClient.dispatcher().cancelAll()
     }
+
+    override fun getUpdates(options: Map<String, Any?>) = post<List<Update>>("getUpdates", toBody(options))
+
+    override fun setWebhook(url: String, certificate: File?, maxConnections: Int?, allowedUpdates: List<AllowedUpdates>?): CompletableFuture<Boolean> {
+        val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
+        form.addFormDataPart("url", url)
+        certificate?.let { form.addFormDataPart("certificate", it.name, RequestBody.create(null, it)) }
+        maxConnections?.let { form.addFormDataPart("max_connections", it.toString()) }
+        allowedUpdates?.let { form.addFormDataPart("allowed_updates", toJson(it)) }
+        return post("setWebhook", form.build())
+    }
+
+    override fun deleteWebhook() = get<Boolean>("deleteWebhook")
+
+    override fun getWebhookInfo() = get<WebhookInfo>("getWebhookInfo")
 
     override fun getMe() = get<User>("getMe")
 
@@ -321,7 +335,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post("getUserProfilePhotos", RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
     }
 
-    override fun getFile(fileId: String): CompletableFuture<bot.types.File> {
+    override fun getFile(fileId: String): CompletableFuture<com.github.elbekD.bot.types.File> {
         return post("getFile", RequestBody.create(MEDIA_TYPE_JSON,
                 toJson(mapOf("file_id" to fileId))))
     }
@@ -564,7 +578,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post("getStickerSet", body)
     }
 
-    override fun uploadStickerFile(userId: Long, pngSticker: File): CompletableFuture<bot.types.File> {
+    override fun uploadStickerFile(userId: Long, pngSticker: File): CompletableFuture<com.github.elbekD.bot.types.File> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
         form.addFormDataPart("user_id", userId.toString())
         form.addFormDataPart("png_sticker", pngSticker.name, RequestBody.create(null, pngSticker))

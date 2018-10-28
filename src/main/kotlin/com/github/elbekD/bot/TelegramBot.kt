@@ -1,35 +1,45 @@
-package bot
+package com.github.elbekD.bot
 
-import bot.http.TelegramClient
-import bot.types.*
+import com.github.elbekD.bot.http.TelegramClient
+import com.github.elbekD.bot.types.*
 import kotlinx.coroutines.experimental.launch
 import java.io.File
 import java.util.concurrent.CompletableFuture
 
 // Fixme: protect command handlers from overriding after bot has started
 abstract class TelegramBot protected constructor(tk: String) : Bot {
-    private val commands by lazy { mutableMapOf<String, (Message, String?) -> Unit>() }
-    private val callbackQueries by lazy { mutableMapOf<String, (CallbackQuery) -> Unit>() }
-    private val inlineQueries by lazy { mutableMapOf<String, (InlineQuery) -> Unit>() }
-    private var onAnyUpdateAction: ((Update) -> Unit)? = null
+    private val commands by lazy { mutableMapOf<String, suspend (Message, String?) -> Unit>() }
+    private val callbackQueries by lazy { mutableMapOf<String, suspend (CallbackQuery) -> Unit>() }
+    private val inlineQueries by lazy { mutableMapOf<String, suspend (InlineQuery) -> Unit>() }
+    private var onAnyUpdateAction: (suspend (Update) -> Unit)? = null
     private val client = TelegramClient(tk)
 
     companion object {
         private const val ANY_CALLBACK_TRIGGER = "*"
 
-        fun createPolling(token: String, options: PollingOptions.() -> Unit = { PollingOptions() }): Bot {
+        /**
+         * @param token your bot token
+         * @param pollingOptions options used to configure [LongPollingBot]
+         */
+        fun createPolling(token: String,
+                          pollingOptions: PollingOptions.() -> Unit = { PollingOptions() }): Bot {
             validateToken(token)
-            return LongPollingBot(token, PollingOptions().apply(options))
+            return LongPollingBot(token, PollingOptions().apply(pollingOptions))
         }
 
-        fun createWebhook(token: String, url: String, options: WebhookOptions.() -> Unit = {}): Bot {
+        /**
+         * @param token your bot token
+         * @param webhookOptions options used to configure server and webhook params for `setWebhook()` method
+         */
+        fun createWebhook(token: String,
+                          webhookOptions: WebhookOptions.() -> Unit = { WebhookOptions() }): Bot {
             validateToken(token)
-            return WebhookBot(token, WebhookOptions(url).apply(options))
+            return WebhookBot(token, WebhookOptions().apply(webhookOptions))
         }
 
         private fun validateToken(token: String) {
             if (token.isBlank())
-                throw IllegalArgumentException("Token cannot be empty")
+                throw IllegalArgumentException("Invalid token: <$token>. Check and try again")
         }
 
         private fun validateInputFileOrString(obj: Any) {
@@ -52,7 +62,7 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
 
         private fun Message.isCommand() = text != null && text.split(' ')[0].isCommand()
 
-        private fun String.isCommand() = matches("^/[\\w]{1,32}$".toRegex())
+        private fun String.isCommand() = matches("^/([\\w]{1,32}|\\$ANY_CALLBACK_TRIGGER)$".toRegex())
     }
 
     enum class Actions(val value: String) {
@@ -68,30 +78,30 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
         UploadVideoNote("upload_video_note ");
     }
 
-    protected fun getUpdates(options: Map<String, Any?>) = client.getUpdates(options)
-
     protected fun onUpdate(upds: List<Update>) {
-        upds.forEach { upd ->
-            if (upd.message != null && upd.message.isCommand()) {
-                val (cmd, arg) = extractCommandAndArgument(upd.message.text!!)
-                val trigger = if (commands[cmd] != null) cmd else ANY_CALLBACK_TRIGGER
-                launch { commands[trigger]?.invoke(upd.message, arg) }
+        upds.forEach { onUpdate(it) }
+    }
 
-            } else if (upd.callback_query != null) {
-                upd.callback_query.data?.let {
-                    val trigger = if (callbackQueries[it] != null) it else ANY_CALLBACK_TRIGGER
-                    launch { callbackQueries[trigger]?.invoke(upd.callback_query) }
-                }
+    protected fun onUpdate(upd: Update) {
+        if (upd.message != null && upd.message.isCommand()) {
+            val (cmd, arg) = extractCommandAndArgument(upd.message.text!!)
+            val trigger = if (commands[cmd] != null) cmd else "/$ANY_CALLBACK_TRIGGER"
+            launch { commands[trigger]?.invoke(upd.message, arg) }
 
-            } else if (upd.inline_query != null) {
-                val trigger = if (inlineQueries[upd.inline_query.query] != null)
-                    upd.inline_query.query
-                else ANY_CALLBACK_TRIGGER
-                launch { inlineQueries[trigger]?.invoke(upd.inline_query) }
-
-            } else {
-                launch { onAnyUpdateAction?.invoke(upd) }
+        } else if (upd.callback_query != null) {
+            upd.callback_query.data?.let {
+                val trigger = if (callbackQueries[it] != null) it else ANY_CALLBACK_TRIGGER
+                launch { callbackQueries[trigger]?.invoke(upd.callback_query) }
             }
+
+        } else if (upd.inline_query != null) {
+            val trigger = if (inlineQueries[upd.inline_query.query] != null)
+                upd.inline_query.query
+            else ANY_CALLBACK_TRIGGER
+            launch { inlineQueries[trigger]?.invoke(upd.inline_query) }
+
+        } else {
+            launch { onAnyUpdateAction?.invoke(upd) }
         }
     }
 
@@ -99,25 +109,25 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
         client.onStop()
     }
 
-    override fun onCommand(command: String, action: (Message, String?) -> Unit) {
+    override fun onCommand(command: String, action: suspend (Message, String?) -> Unit) {
         if (!command.isCommand())
             throw IllegalArgumentException("$command is not a command")
         commands[command] = action
     }
 
-    override fun onCallbackQuery(data: String, action: (CallbackQuery) -> Unit) {
+    override fun onCallbackQuery(data: String, action: suspend (CallbackQuery) -> Unit) {
         if (data.length !in 1..64)
             throw IllegalArgumentException("'data' length must be in [1, 64] range")
         callbackQueries[data] = action
     }
 
-    override fun onInlineQuery(query: String, action: (InlineQuery) -> Unit) {
+    override fun onInlineQuery(query: String, action: suspend (InlineQuery) -> Unit) {
         if (query.length !in 0..512)
             throw IllegalArgumentException("'query' length must be in [1, 512] range")
         inlineQueries[query] = action
     }
 
-    override fun onAnyUpdate(action: ((Update) -> Unit)?) {
+    override fun onAnyUpdate(action: (suspend (Update) -> Unit)?) {
         onAnyUpdateAction = action
     }
 
@@ -176,6 +186,18 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
                      \/
          */
     override fun getMe() = client.getMe()
+
+    override fun getUpdates(options: Map<String, Any?>) = client.getUpdates(options)
+
+    override fun setWebhook(url: String,
+                            certificate: File?,
+                            maxConnections: Int?,
+                            allowedUpdates: List<AllowedUpdates>?) =
+            client.setWebhook(url, certificate, maxConnections, allowedUpdates)
+
+    override fun deleteWebhook() = client.deleteWebhook()
+
+    override fun getWebhookInfo() = client.getWebhookInfo()
 
     override fun sendMessage(chatId: Any,
                              text: String,

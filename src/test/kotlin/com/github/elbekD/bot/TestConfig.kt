@@ -1,6 +1,6 @@
-package bot
+package com.github.elbekD.bot
 
-import bot.types.LabeledPrice
+import com.github.elbekD.bot.types.LabeledPrice
 
 data class Location(val latitude: Double, val longitude: Double)
 

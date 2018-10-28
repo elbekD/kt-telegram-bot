@@ -1,6 +1,11 @@
 buildscript {
     ext.kotlin_version = '1.2.71'
+    ext.kotlin_coroutine = '0.22.5'
     ext.dokka_version = '0.9.16'
+    ext.okhttp = '3.10.0'
+    ext.gson = '2.8.5'
+    ext.jetty_server = '9.4.12.v20180830'
+    ext.junit = '4.12'
 
     repositories {
         jcenter()
@@ -23,11 +28,13 @@ repositories {
 }
 
 dependencies {
-    testCompile "junit:junit:4.12"
+    testCompile "junit:junit:$junit"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22.5"
-    compile "com.squareup.okhttp3:okhttp:3.10.0"
-    compile "com.google.code.gson:gson:2.8.5"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutine"
+    compile "com.squareup.okhttp3:okhttp:$okhttp"
+    compile "com.google.code.gson:gson:$gson"
+    compile "org.eclipse.jetty:jetty-server:$jetty_server"
+    compile "org.eclipse.jetty:jetty-webapp:$jetty_server"
 }
 
 compileKotlin {

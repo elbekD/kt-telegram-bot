@@ -1,4 +1,4 @@
-package bot.http
+package com.github.elbekD.bot.http
 
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.suspendCancellableCoroutine
@@ -7,7 +7,7 @@ import kotlin.coroutines.experimental.Continuation
 import kotlin.coroutines.experimental.CoroutineContext
 import kotlin.coroutines.experimental.startCoroutine
 
-suspend fun <T> CompletableFuture<T>.await(): T = suspendCancellableCoroutine<T> {
+suspend fun <T> CompletableFuture<T>.await(): T = suspendCancellableCoroutine {
     whenComplete { res, exp -> if (exp == null) it.resume(res) else it.resumeWithException(exp) }
 }
 

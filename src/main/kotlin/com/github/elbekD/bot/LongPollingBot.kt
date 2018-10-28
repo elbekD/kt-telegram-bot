@@ -1,4 +1,4 @@
-package bot
+package com.github.elbekD.bot
 
 import java.util.*
 import kotlin.concurrent.timer
@@ -13,17 +13,21 @@ internal class LongPollingBot(token: String, private val options: PollingOptions
     }
 
     override fun start() {
+        if (options.removeWebhookAutomatically)
+            deleteWebhook().join()
         if (!polling) {
             var lastUpdateId = -1
-            timer = timer("LongPollingBot", period = options.period) {
+            timer = timer("LongPollingBot", period = options.period, initialDelay = 2000) {
                 try {
-                    val updates = getUpdates(mapOf(
+                    getUpdates(mapOf(
                             "offset" to lastUpdateId + 1,
                             "allowed_updates" to options.allowedUpdates,
                             "timeout" to options.timeout,
-                            "limit" to options.limit)).get()
-                    onUpdate(updates)
-                    lastUpdateId = updates.last().update_id
+                            "limit" to options.limit)
+                    ).thenAccept {
+                        onUpdate(it)
+                        lastUpdateId = it.last().update_id
+                    }.join()
                 } catch (e: Exception) {
                     System.err.println(e.message)
                 }
