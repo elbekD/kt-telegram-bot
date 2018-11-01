@@ -7,7 +7,7 @@ Method names are the same as in [API](https://core.telegram.org/bots/api#availab
 
 ### Prerequisites
 - JDK 8 or higher
-- Kotlin 1.3 or higher
+- Kotlin 1.2 or higher
 - Gradle
 - IDE (*optionally*)
 
