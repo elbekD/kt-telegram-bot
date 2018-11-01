@@ -1,0 +1,5 @@
+out/*
+build/*
+.gradle/*
+.idea/*
+src/test/resources/test-config.json

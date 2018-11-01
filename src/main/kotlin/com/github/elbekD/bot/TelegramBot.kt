@@ -16,6 +16,8 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
 
     companion object {
         private const val ANY_CALLBACK_TRIGGER = "*"
+        @JvmStatic
+        private val COMMAND_REGEX = "^/([\\w]{1,32}|\\$ANY_CALLBACK_TRIGGER)$".toRegex()
 
         /**
          * @param token your bot token
@@ -62,7 +64,7 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
 
         private fun Message.isCommand() = text != null && text.split(' ')[0].isCommand()
 
-        private fun String.isCommand() = matches("^/([\\w]{1,32}|\\$ANY_CALLBACK_TRIGGER)$".toRegex())
+        private fun String.isCommand() = matches(COMMAND_REGEX)
     }
 
     enum class Actions(val value: String) {
@@ -78,9 +80,7 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
         UploadVideoNote("upload_video_note ");
     }
 
-    protected fun onUpdate(upds: List<Update>) {
-        upds.forEach { onUpdate(it) }
-    }
+    protected fun onUpdate(upds: List<Update>) = upds.forEach { onUpdate(it) }
 
     protected fun onUpdate(upd: Update) {
         if (upd.message != null && upd.message.isCommand()) {
@@ -105,13 +105,11 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
         }
     }
 
-    protected fun onStop() {
-        client.onStop()
-    }
+    protected fun onStop() = client.onStop()
 
     override fun onCommand(command: String, action: suspend (Message, String?) -> Unit) {
         if (!command.isCommand())
-            throw IllegalArgumentException("$command is not a command")
+            throw IllegalArgumentException("<$command> is not a command")
         commands[command] = action
     }
 
@@ -361,8 +359,7 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
 
     override fun kickChatMember(chatId: Any,
                                 userId: Long,
-                                untilDate: Int?) =
-            client.kickChatMember(chatId, userId, untilDate)
+                                untilDate: Int?) = client.kickChatMember(chatId, userId, untilDate)
 
     override fun unbanChatMember(chatId: Any,
                                  userId: Long) = client.unbanChatMember(chatId, userId)
@@ -416,12 +413,10 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
     override fun getChatMembersCount(chatId: Any) = client.getChatMembersCount(chatId)
 
     override fun getChatMember(chatId: Any,
-                               userId: Long) =
-            client.getChatMember(chatId, userId)
+                               userId: Long) = client.getChatMember(chatId, userId)
 
     override fun setChatStickerSet(chatId: Any,
-                                   stickerSetName: String) =
-            client.setChatStickerSet(chatId, stickerSetName)
+                                   stickerSetName: String) = client.setChatStickerSet(chatId, stickerSetName)
 
     override fun deleteChatStickerSet(chatId: Any) = client.deleteChatStickerSet(chatId)
 
@@ -429,8 +424,7 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
                                      text: String?,
                                      alert: Boolean?,
                                      url: String?,
-                                     cacheTime: Int?) =
-            client.answerCallbackQuery(id, text, alert, url, cacheTime)
+                                     cacheTime: Int?) = client.answerCallbackQuery(id, text, alert, url, cacheTime)
 
     override fun answerInlineQuery(queryId: String,
                                    results: List<InlineQueryResult>,
@@ -514,8 +508,7 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
     }
 
     override fun setStickerPositionInSet(sticker: String,
-                                         position: Int) =
-            client.setStickerPositionInSet(sticker, position)
+                                         position: Int) = client.setStickerPositionInSet(sticker, position)
 
     override fun deleteStickerFromSet(sticker: String) = client.deleteStickerFromSet(sticker)
 

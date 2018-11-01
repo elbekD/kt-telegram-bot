@@ -17,7 +17,11 @@ enum class AllowedUpdates(private val value: String) {
     override fun toString() = value
 }
 
-class PollingOptions(val removeWebhookAutomatically: Boolean = true) {
+/**
+ * @param removeWebhookAutomatically if `true` calls [TelegramBot.deleteWebhook] before switching to long polling.
+ * Default is `true`.
+ */
+class PollingOptions(var removeWebhookAutomatically: Boolean = true) {
     var limit: Int? = null
         set(value) {
             if (value == null)
@@ -36,7 +40,7 @@ class PollingOptions(val removeWebhookAutomatically: Boolean = true) {
             field = value
         }
 
-    var allowedUpdates: Array<AllowedUpdates>? = null
+    var allowedUpdates: List<AllowedUpdates>? = null
         set(value) {
             if (value == null)
                 throw NullPointerException()
@@ -57,7 +61,7 @@ annotation class OptionsMarker
 
 /**
  * @param setWebhookAutomatically if true then calls `setWebhook()` method when server is started.
- * Else call `setWebhook()` method manually. By default is `true`
+ * Else call `setWebhook()` method manually. Default is `true`
  */
 @OptionsMarker
 class WebhookOptions(var setWebhookAutomatically: Boolean = true,
@@ -92,7 +96,8 @@ class WebhookOptions(var setWebhookAutomatically: Boolean = true,
 
     var allowedUpdates: List<AllowedUpdates>? = null
         set(value) {
-            if (value == null) throw NullPointerException()
+            if (value == null)
+                throw NullPointerException()
             field = value
         }
 }
