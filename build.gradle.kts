@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    testCompile("junit:junit:${project.extra["junit"]}")
+    testCompileOnly("junit:junit:${project.extra["junit"]}")
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${project.extra["kotlin_version"]}")
     compile("org.jetbrains.kotlinx:kotlinx-coroutines-core:${project.extra["kotlin_coroutine"]}")
     compile("com.squareup.okhttp3:okhttp:${project.extra["okhttp"]}")

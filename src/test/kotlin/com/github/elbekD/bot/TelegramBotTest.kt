@@ -21,7 +21,7 @@ internal class TelegramBotTest {
         @BeforeClass
         fun initConfig() {
             val gson = Gson()
-            val reader = Files.newBufferedReader(Paths.get("D:\\Dev\\kt-telegram-bot.com.github.elbekD\\src\\test\\resources\\test-config.json"))
+            val reader = Files.newBufferedReader(Paths.get("D:\\Dev\\kt-telegram-bot\\src\\test\\resources\\test-config.json"))
             config = gson.fromJson(reader, TestConfig::class.java)
             bot = TelegramBot.createPolling(config.token)
         }

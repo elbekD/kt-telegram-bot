@@ -7,7 +7,7 @@ Method names are the same as in [API](https://core.telegram.org/bots/api#availab
 
 ### Prerequisites
 - JDK 8 or higher
-- Kotlin 1.3 or higher
+- Kotlin 1.2 or higher
 - Gradle
 - IDE (*optionally*)
 
@@ -72,6 +72,11 @@ tasks.withType<Jar> {
 ```
 Then run this task. Checkout your `build/libs` directory where you'll find
 `.jar` file. Run this file using next line: `java -jar <PATH TO YOUR FILE>.jar` 
+
+## [Examples](/examples/src/main/kotlin)
+- [Long polling bot](/examples/src/main/kotlin/LongPollingExample.kt)
+- [Webhook bot](/examples/src/main/kotlin/WebhookExample.kt)
+and [nginx configuration file](/examples/bot.conf)
 
 ## Bot methods
 See details in [source code](/src/main/kotlin/com/github/elbekD/bot/Bot.kt).
