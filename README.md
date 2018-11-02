@@ -1,4 +1,6 @@
 # kt-telegram-bot
+[![](https://jitpack.io/v/elbekD/kt-telegram-bot.svg)](https://jitpack.io/#elbekD/kt-telegram-bot)
+
 Convenient way to build Telegram bots using powerful Kotlin language.
 Support for [Telegram Bot API 4.1](https://core.telegram.org/bots/api).
 Method names are the same as in [API](https://core.telegram.org/bots/api#available-methods).
