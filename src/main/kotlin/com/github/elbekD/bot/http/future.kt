@@ -1,25 +1,27 @@
 package com.github.elbekD.bot.http
 
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.suspendCancellableCoroutine
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.util.concurrent.CompletableFuture
-import kotlin.coroutines.experimental.Continuation
-import kotlin.coroutines.experimental.CoroutineContext
-import kotlin.coroutines.experimental.startCoroutine
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.startCoroutine
 
 suspend fun <T> CompletableFuture<T>.await(): T = suspendCancellableCoroutine {
-    whenComplete { res, exp -> if (exp == null) it.resume(res) else it.resumeWithException(exp) }
+    whenComplete { res, ex -> if (ex == null) it.resume(res) else it.resumeWithException(ex) }
 }
 
-fun <T> future(context: CoroutineContext = CommonPool, block: suspend () -> T): CompletableFuture<T> =
+fun <T> future(context: CoroutineContext = Dispatchers.Default, block: suspend () -> T): CompletableFuture<T> =
         CompletableFutureCoroutine<T>(context).also { block.startCoroutine(completion = it) }
 
 class CompletableFutureCoroutine<T>(override val context: CoroutineContext) : CompletableFuture<T>(), Continuation<T> {
-    override fun resume(value: T) {
-        complete(value)
-    }
-
-    override fun resumeWithException(exception: Throwable) {
-        completeExceptionally(exception)
+    override fun resumeWith(result: Result<T>) {
+        if (result.isSuccess) {
+            complete(result.getOrThrow())
+        } else {
+            completeExceptionally(result.exceptionOrNull())
+        }
     }
 }

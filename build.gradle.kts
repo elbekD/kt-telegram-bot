@@ -11,7 +11,7 @@ buildscript {
 }
 
 plugins {
-    kotlin("jvm") version "1.2.71"
+    kotlin("jvm") version "1.3.10"
     maven
 }
 
@@ -34,8 +34,4 @@ val compileKotlin by tasks.getting(KotlinCompile::class) {
 }
 val compileTestKotlin by tasks.getting(KotlinCompile::class) {
     kotlinOptions.jvmTarget = "1.8"
-}
-
-kotlin {
-    experimental.coroutines = Coroutines.ENABLE
 }

@@ -2,10 +2,32 @@ package com.github.elbekD.bot.http
 
 import com.github.elbekD.bot.AllowedUpdates
 import com.github.elbekD.bot.TelegramBot
-import com.github.elbekD.bot.types.*
+import com.github.elbekD.bot.types.Chat
+import com.github.elbekD.bot.types.ChatMember
+import com.github.elbekD.bot.types.GameHighScore
+import com.github.elbekD.bot.types.InlineKeyboardMarkup
+import com.github.elbekD.bot.types.InlineQueryResult
+import com.github.elbekD.bot.types.InputMedia
+import com.github.elbekD.bot.types.LabeledPrice
+import com.github.elbekD.bot.types.MaskPosition
+import com.github.elbekD.bot.types.Message
+import com.github.elbekD.bot.types.PassportElementError
+import com.github.elbekD.bot.types.ReplyKeyboard
+import com.github.elbekD.bot.types.ShippingOption
+import com.github.elbekD.bot.types.StickerSet
+import com.github.elbekD.bot.types.TelegramObject
+import com.github.elbekD.bot.types.Update
+import com.github.elbekD.bot.types.User
+import com.github.elbekD.bot.types.UserProfilePhotos
+import com.github.elbekD.bot.types.WebhookInfo
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import okhttp3.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.Response
 import java.io.File
 import java.lang.reflect.Type
 import java.util.concurrent.CompletableFuture
@@ -19,7 +41,7 @@ internal class TelegramClient(token: String) : TelegramApi {
             .readTimeout(60L, TimeUnit.SECONDS)
             .writeTimeout(60L, TimeUnit.SECONDS)
             .build()
-    private val url = "https://api.telegram.org/bot$token"
+    private val url = "${ApiConstants.API_URL}$token"
 
     private companion object {
         @JvmStatic
@@ -40,17 +62,17 @@ internal class TelegramClient(token: String) : TelegramApi {
     private val markupToString = { a: Any -> toJson(a) }
 
     private val sendFileOpts = mapOf(
-            "caption" to anyToString,
-            "parse_mode" to anyToString,
-            "disable_notification" to anyToString,
-            "reply_to_message_id" to anyToString,
-            "reply_markup" to markupToString,
-            "duration" to anyToString,
-            "performer" to anyToString,
-            "title" to anyToString,
-            "width" to anyToString,
-            "height" to anyToString,
-            "supports_streaming" to anyToString)
+            ApiConstants.CAPTION to anyToString,
+            ApiConstants.PARSE_MODE to anyToString,
+            ApiConstants.DISABLE_NOTIFICATION to anyToString,
+            ApiConstants.REPLY_TO_MESSAGE_ID to anyToString,
+            ApiConstants.REPLY_MARKUP to markupToString,
+            ApiConstants.DURATION to anyToString,
+            ApiConstants.PERFORMER to anyToString,
+            ApiConstants.TITLE to anyToString,
+            ApiConstants.WIDTH to anyToString,
+            ApiConstants.HEIGHT to anyToString,
+            ApiConstants.SUPPORTS_STREAMING to anyToString)
 
     private inline fun <reified T> get(method: String) = future {
         // FixMe: without this hack fails with ClassCastException in Gson
@@ -90,7 +112,7 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     private fun sendFile(type: String, id: String, file: Any, opts: Map<String, Any?>, thumb: File? = null, method: String = type): CompletableFuture<Message> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
-        form.addFormDataPart("chat_id", id)
+        form.addFormDataPart(ApiConstants.CHAT_ID, id)
         addOptsToForm(form, opts)
 
         when (file) {
@@ -113,126 +135,126 @@ internal class TelegramClient(token: String) : TelegramApi {
         httpClient.dispatcher().cancelAll()
     }
 
-    override fun getUpdates(options: Map<String, Any?>) = post<List<Update>>("getUpdates", toBody(options))
+    override fun getUpdates(options: Map<String, Any?>) = post<List<Update>>(ApiConstants.METHOD_GET_UPDATES, toBody(options))
 
     override fun setWebhook(url: String, certificate: File?, maxConnections: Int?, allowedUpdates: List<AllowedUpdates>?): CompletableFuture<Boolean> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
-        form.addFormDataPart("url", url)
-        certificate?.let { form.addFormDataPart("certificate", it.name, RequestBody.create(null, it)) }
-        maxConnections?.let { form.addFormDataPart("max_connections", it.toString()) }
-        allowedUpdates?.let { form.addFormDataPart("allowed_updates", toJson(it)) }
-        return post("setWebhook", form.build())
+        form.addFormDataPart(ApiConstants.URL, url)
+        certificate?.let { form.addFormDataPart(ApiConstants.CERTIFICATE, it.name, RequestBody.create(null, it)) }
+        maxConnections?.let { form.addFormDataPart(ApiConstants.MAX_CONNECTIONS, it.toString()) }
+        allowedUpdates?.let { form.addFormDataPart(ApiConstants.ALLOWED_UPDATES, toJson(it)) }
+        return post(ApiConstants.METHOD_SET_WEBHOOK, form.build())
     }
 
-    override fun deleteWebhook() = get<Boolean>("deleteWebhook")
+    override fun deleteWebhook() = get<Boolean>(ApiConstants.METHOD_DELETE_WEBHOOK)
 
-    override fun getWebhookInfo() = get<WebhookInfo>("getWebhookInfo")
+    override fun getWebhookInfo() = get<WebhookInfo>(ApiConstants.METHOD_GET_WEBHOOK_INFO)
 
-    override fun getMe() = get<User>("getMe")
+    override fun getMe() = get<User>(ApiConstants.METHOD_GET_ME)
 
     override fun sendMessage(chatId: Any, text: String, parseMode: String?, preview: Boolean?, notification: Boolean?,
                              replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         val body = toBody(mapOf(
-                "chat_id" to id(chatId),
-                "text" to text,
-                "parse_mode" to parseMode,
-                "disable_web_page_preview" to preview,
-                "disable_notification" to notification,
-                "reply_to_message_id" to replyTo,
-                "reply_markup" to markup
+                ApiConstants.CHAT_ID to id(chatId),
+                ApiConstants.TEXT to text,
+                ApiConstants.PARSE_MODE to parseMode,
+                ApiConstants.DISABLE_WEB_PAGE_PREVIEW to preview,
+                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.REPLY_MARKUP to markup
         ))
-        return post("sendMessage", body)
+        return post(ApiConstants.METHOD_SEND_MESSAGE, body)
     }
 
     override fun forwardMessage(chatId: Any, fromId: Any, msgId: Int, notification: Boolean?): CompletableFuture<Message> {
         val body = toBody(mapOf(
-                "chat_id" to id(chatId),
-                "from_chat_id" to id(fromId),
-                "message_id" to msgId,
-                "disable_notification" to notification
+                ApiConstants.CHAT_ID to id(chatId),
+                ApiConstants.FROM_CHAT_ID to id(fromId),
+                ApiConstants.MESSAGE_ID to msgId,
+                ApiConstants.DISABLE_NOTIFICATION to notification
         ))
-        return post("forwardMessage", body)
+        return post(ApiConstants.METHOD_FORWARD_MESSAGE, body)
     }
 
     override fun sendPhoto(chatId: Any, photo: Any, caption: String?, parseMode: String?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
-        return sendFile("photo", id(chatId), photo, mapOf(
-                "caption" to caption,
-                "parse_mode" to parseMode,
-                "disable_notification" to notification,
-                "reply_to_message_id" to replyTo,
-                "reply_markup" to markup))
+        return sendFile(ApiConstants.PHOTO, id(chatId), photo, mapOf(
+                ApiConstants.CAPTION to caption,
+                ApiConstants.PARSE_MODE to parseMode,
+                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.REPLY_MARKUP to markup))
     }
 
     override fun sendAudio(chatId: Any, audio: Any, caption: String?, parseMode: String?, duration: Int?, performer: String?, title: String?, thumb: File?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
-        return sendFile("audio", id(chatId), audio, mapOf(
-                "caption" to caption,
-                "parse_mode" to parseMode,
-                "duration" to duration,
-                "performer" to performer,
-                "title" to title,
-                "disable_notification" to notification,
-                "reply_to_message_id" to replyTo,
-                "reply_markup" to markup), thumb)
+        return sendFile(ApiConstants.AUDIO, id(chatId), audio, mapOf(
+                ApiConstants.CAPTION to caption,
+                ApiConstants.PARSE_MODE to parseMode,
+                ApiConstants.DURATION to duration,
+                ApiConstants.PERFORMER to performer,
+                ApiConstants.TITLE to title,
+                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.REPLY_MARKUP to markup), thumb)
     }
 
     override fun sendDocument(chatId: Any, document: Any, thumb: File?, caption: String?, parseMode: String?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
-        return sendFile("document", id(chatId), document, mapOf(
-                "caption" to caption,
-                "parse_mode" to parseMode,
-                "disable_notification" to notification,
-                "reply_to_message_id" to replyTo,
-                "reply_markup" to markup), thumb)
+        return sendFile(ApiConstants.DOCUMENT, id(chatId), document, mapOf(
+                ApiConstants.CAPTION to caption,
+                ApiConstants.PARSE_MODE to parseMode,
+                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.REPLY_MARKUP to markup), thumb)
     }
 
     override fun sendVideo(chatId: Any, video: Any, duration: Int?, width: Int?, height: Int?, thumb: File?, caption: String?, parseMode: String?, streaming: Boolean?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
-        return sendFile("video", id(chatId), video, mapOf(
-                "duration" to duration,
-                "width" to width,
-                "height" to height,
-                "caption" to caption,
-                "parse_mode" to parseMode,
-                "supports_streaming" to streaming,
-                "disable_notification" to notification,
-                "reply_to_message_id" to replyTo,
-                "reply_markup" to markup
+        return sendFile(ApiConstants.VIDEO, id(chatId), video, mapOf(
+                ApiConstants.DURATION to duration,
+                ApiConstants.WIDTH to width,
+                ApiConstants.HEIGHT to height,
+                ApiConstants.CAPTION to caption,
+                ApiConstants.PARSE_MODE to parseMode,
+                ApiConstants.SUPPORTS_STREAMING to streaming,
+                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.REPLY_MARKUP to markup
         ), thumb)
     }
 
     override fun sendAnimation(chatId: Any, animation: Any, duration: Int?, width: Int?, height: Int?, thumb: File?, caption: String?, parseMode: String?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
-        return sendFile("animation", id(chatId), animation, mapOf(
-                "duration" to duration,
-                "width" to width,
-                "height" to height,
-                "caption" to caption,
-                "parse_mode" to parseMode,
-                "disable_notification" to notification,
-                "reply_to_message_id" to replyTo,
-                "reply_markup" to markup
+        return sendFile(ApiConstants.ANIMATION, id(chatId), animation, mapOf(
+                ApiConstants.DURATION to duration,
+                ApiConstants.WIDTH to width,
+                ApiConstants.HEIGHT to height,
+                ApiConstants.CAPTION to caption,
+                ApiConstants.PARSE_MODE to parseMode,
+                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.REPLY_MARKUP to markup
         ), thumb)
     }
 
     override fun sendVoice(chatId: Any, voice: Any, caption: String?, parseMode: String?, duration: Int?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
-        return sendFile("voice", id(chatId), voice, mapOf(
-                "caption" to caption,
-                "parse_mode" to parseMode,
-                "duration" to duration,
-                "disable_notification" to notification,
-                "reply_to_message_id" to replyTo,
-                "reply_markup" to markup))
+        return sendFile(ApiConstants.VOICE, id(chatId), voice, mapOf(
+                ApiConstants.CAPTION to caption,
+                ApiConstants.PARSE_MODE to parseMode,
+                ApiConstants.DURATION to duration,
+                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.REPLY_MARKUP to markup))
     }
 
     override fun sendVideoNote(chatId: Any, note: Any, duration: Int?, length: Int?, thumb: File?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
-        return sendFile("video_note", id(chatId), note, mapOf(
-                "duration" to duration,
-                "disable_notification" to notification,
-                "reply_to_message_id" to replyTo,
-                "reply_markup" to markup
-        ), thumb, "videoNote")
+        return sendFile(ApiConstants.VIDEO_NOTE, id(chatId), note, mapOf(
+                ApiConstants.DURATION to duration,
+                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.REPLY_MARKUP to markup
+        ), thumb, ApiConstants.METHOD_VIDEO_NOTE)
     }
 
     override fun sendMediaGroup(chatId: Any, media: List<InputMedia>, notification: Boolean?, replyTo: Int?): CompletableFuture<ArrayList<Message>> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
-        form.addFormDataPart("chat_id", id(chatId))
+        form.addFormDataPart(ApiConstants.CHAT_ID, id(chatId))
 
         media.forEach { inputMedia ->
             inputMedia.file()?.let {
@@ -242,164 +264,164 @@ internal class TelegramClient(token: String) : TelegramApi {
             inputMedia.thumb()?.let {
                 when (it) {
                     is File -> form.addFormDataPart("attach://${it.name}", it.name, RequestBody.create(MEDIA_TYPE_OCTET_STREAM, it))
-                    is String -> form.addFormDataPart("thumb", it)
+                    is String -> form.addFormDataPart(ApiConstants.THUMB, it)
                     else -> throw IllegalArgumentException("Neither file nor string")
                 }
             }
         }
 
-        form.addFormDataPart("media", toJson(media))
-        notification?.let { form.addFormDataPart("disable_notification", it.toString()) }
-        replyTo?.let { form.addFormDataPart("reply_to_message_id", it.toString()) }
+        form.addFormDataPart(ApiConstants.MEDIA, toJson(media))
+        notification?.let { form.addFormDataPart(ApiConstants.DISABLE_NOTIFICATION, it.toString()) }
+        replyTo?.let { form.addFormDataPart(ApiConstants.REPLY_TO_MESSAGE_ID, it.toString()) }
 
-        return post("sendMediaGroup", form.build())
+        return post(ApiConstants.METHOD_SEND_MEDIA_GROUP, form.build())
     }
 
     override fun sendLocation(chatId: Any, latitude: Double, longitude: Double, period: Int?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         val body = toBody(mapOf(
-                "chat_id" to chatId,
-                "latitude" to latitude,
-                "longitude" to longitude,
-                "live_period" to period,
-                "disable_notification" to notification,
-                "reply_to_message_id" to replyTo,
-                "reply_markup" to markup
+                ApiConstants.CHAT_ID to chatId,
+                ApiConstants.LATITUDE to latitude,
+                ApiConstants.LONGITUDE to longitude,
+                ApiConstants.LIVE_PERIOD to period,
+                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.REPLY_MARKUP to markup
         ))
-        return post("sendLocation", body)
+        return post(ApiConstants.METHOD_SEND_LOCATION, body)
     }
 
     override fun editMessageLiveLocation(latitude: Double, longitude: Double, chatId: Any?, messageId: Int?, inlineMessageId: String?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
         val body = toBody(mapOf(
-                "chat_id" to if (chatId != null) id(chatId) else null,
-                "message_id" to messageId,
-                "inline_message_id" to inlineMessageId,
-                "latitude" to latitude,
-                "longitude" to longitude,
-                "reply_markup" to markup
+                ApiConstants.CHAT_ID to if (chatId != null) id(chatId) else null,
+                ApiConstants.MESSAGE_ID to messageId,
+                ApiConstants.INLINE_MESSAGE_ID to inlineMessageId,
+                ApiConstants.LATITUDE to latitude,
+                ApiConstants.LONGITUDE to longitude,
+                ApiConstants.REPLY_MARKUP to markup
         ))
-        return post("editMessageLiveLocation", body)
+        return post(ApiConstants.METHOD_EDIT_MESSAGE_LIVE_LOCATION, body)
     }
 
     override fun stopMessageLiveLocation(chatId: Any?, messageId: Int?, inlineMessageId: String?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
         val body = toBody(mapOf(
-                "chat_id" to if (chatId != null) id(chatId) else null,
-                "message_id" to messageId,
-                "inline_message_id" to inlineMessageId,
-                "reply_markup" to markup
+                ApiConstants.CHAT_ID to if (chatId != null) id(chatId) else null,
+                ApiConstants.MESSAGE_ID to messageId,
+                ApiConstants.INLINE_MESSAGE_ID to inlineMessageId,
+                ApiConstants.REPLY_MARKUP to markup
         ))
-        return post("stopMessageLiveLocation", body)
+        return post(ApiConstants.METHOD_STOP_MESSAGE_LIVE_LOCATION, body)
     }
 
     override fun sendVenue(chatId: Any, latitude: Double, longitude: Double, title: String, address: String, foursquareId: String?, foursquareType: String?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         val body = toBody(mapOf(
-                "chat_id" to chatId,
-                "latitude" to latitude,
-                "longitude" to longitude,
-                "title" to title,
-                "address" to address,
-                "foursquare_id" to foursquareId,
-                "foursquare_type" to foursquareType,
-                "disable_notification" to notification,
-                "reply_to_message_id" to replyTo,
-                "reply_markup" to markup
+                ApiConstants.CHAT_ID to chatId,
+                ApiConstants.LATITUDE to latitude,
+                ApiConstants.LONGITUDE to longitude,
+                ApiConstants.TITLE to title,
+                ApiConstants.ADDRESS to address,
+                ApiConstants.FOURSQUARE_ID to foursquareId,
+                ApiConstants.FOURSQUARE_TYPE to foursquareType,
+                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.REPLY_MARKUP to markup
         ))
-        return post("sendVenue", body)
+        return post(ApiConstants.METHOD_SEND_VENUE, body)
     }
 
     override fun sendContact(chatId: Any, phone: String, firstName: String, lastName: String?, vcard: String?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         val body = toBody(mapOf(
-                "chat_id" to chatId,
-                "phone_number" to phone,
-                "first_name" to firstName,
-                "last_name" to lastName,
-                "vcard" to vcard,
-                "disable_notification" to notification,
-                "reply_to_message_id" to replyTo,
-                "reply_markup" to markup
+                ApiConstants.CHAT_ID to chatId,
+                ApiConstants.PHONE_NUMBER to phone,
+                ApiConstants.FIRST_NAME to firstName,
+                ApiConstants.LAST_NAME to lastName,
+                ApiConstants.VCARD to vcard,
+                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.REPLY_MARKUP to markup
         ))
-        return post("sendContact", body)
+        return post(ApiConstants.METHOD_SEND_CONTACT, body)
     }
 
     override fun sendChatAction(chatId: Any, action: TelegramBot.Actions): CompletableFuture<Boolean> {
         val body = mapOf(
-                "chat_id" to id(chatId),
-                "action" to action.value)
-        return post("sendChatAction", RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
+                ApiConstants.CHAT_ID to id(chatId),
+                ApiConstants.ACTION to action.value)
+        return post(ApiConstants.METHOD_SEND_CHAT_ACTION, RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
     }
 
     override fun getUserProfilePhotos(userId: Long, offset: Int?, limit: Int?): CompletableFuture<UserProfilePhotos> {
         val body = mapOf(
-                "user_id" to userId,
-                "offset" to offset,
-                "limit" to limit)
-        return post("getUserProfilePhotos", RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
+                ApiConstants.USER_ID to userId,
+                ApiConstants.OFFSET to offset,
+                ApiConstants.LIMIT to limit)
+        return post(ApiConstants.METHOD_GET_USER_PROFILE_PHOTOS, RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
     }
 
     override fun getFile(fileId: String): CompletableFuture<com.github.elbekD.bot.types.File> {
-        return post("getFile", RequestBody.create(MEDIA_TYPE_JSON,
-                toJson(mapOf("file_id" to fileId))))
+        return post(ApiConstants.METHOD_GET_FILE, RequestBody.create(MEDIA_TYPE_JSON,
+                toJson(mapOf(ApiConstants.FILE_ID to fileId))))
     }
 
     override fun kickChatMember(chatId: Any, userId: Long, untilDate: Int?): CompletableFuture<Boolean> {
         val body = mapOf(
-                "chat_id" to id(chatId),
-                "user_id" to userId,
-                "until_date" to untilDate)
-        return post("kickChatMember", RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
+                ApiConstants.CHAT_ID to id(chatId),
+                ApiConstants.USER_ID to userId,
+                ApiConstants.UNTIL_DATE to untilDate)
+        return post(ApiConstants.METHOD_KICK_CHAT_MEMBER, RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
     }
 
     override fun unbanChatMember(chatId: Any, userId: Long): CompletableFuture<Boolean> {
         val body = mapOf(
-                "chat_id" to id(chatId),
-                "user_id" to userId)
-        return post("unbanChatMember", RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
+                ApiConstants.CHAT_ID to id(chatId),
+                ApiConstants.USER_ID to userId)
+        return post(ApiConstants.METHOD_UNBAN_CHAT_MEMBER, RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
     }
 
     override fun restrictChatMember(chatId: Any, userId: Long, untilDate: Int?, canSendMessage: Boolean?,
                                     canSendMediaMessages: Boolean?, canSendOtherMessages: Boolean?, canAddWebPagePreview: Boolean?): CompletableFuture<Boolean> {
         val body = mapOf(
-                "chat_id" to id(chatId),
-                "user_id" to userId,
-                "until_date" to untilDate,
-                "can_send_messages" to canSendMessage,
-                "can_send_media_messages" to canSendMediaMessages,
-                "can_send_other_messages" to canSendOtherMessages,
-                "can_add_web_page_previews" to canAddWebPagePreview)
-        return post("restrictChatMember", RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
+                ApiConstants.CHAT_ID to id(chatId),
+                ApiConstants.USER_ID to userId,
+                ApiConstants.UNTIL_DATE to untilDate,
+                ApiConstants.CAN_SEND_MESSAGES to canSendMessage,
+                ApiConstants.CAN_SEND_MEDIA_MESSAGES to canSendMediaMessages,
+                ApiConstants.CAN_SEND_OTHER_MESSAGES to canSendOtherMessages,
+                ApiConstants.CAN_ADD_WEB_PAGE_PREVIEWS to canAddWebPagePreview)
+        return post(ApiConstants.METHOD_RESTRICT_CHAT_MEMBER, RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
     }
 
     override fun promoteChatMember(chatId: Any, userId: Long, canChangeInfo: Boolean?, canPostMessages: Boolean?, canEditMessages: Boolean?, canDeleteMessages: Boolean?, canInviteUsers: Boolean?, canRestrictMembers: Boolean?, canPinMessages: Boolean?, canPromoteMembers: Boolean?): CompletableFuture<Boolean> {
         val body = mapOf(
-                "chat_id" to id(chatId),
-                "user_id" to userId,
-                "can_change_info" to canChangeInfo,
-                "can_post_messages" to canPostMessages,
-                "can_edit_messages" to canEditMessages,
-                "can_delete_messages" to canDeleteMessages,
-                "can_invite_users" to canInviteUsers,
-                "can_restrict_members" to canRestrictMembers,
-                "can_pin_messages" to canPinMessages,
-                "can_promote_members" to canPromoteMembers)
-        return post("promoteChatMember", RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
+                ApiConstants.CHAT_ID to id(chatId),
+                ApiConstants.USER_ID to userId,
+                ApiConstants.CAN_CHANGE_INFO to canChangeInfo,
+                ApiConstants.CAN_POST_MESSAGES to canPostMessages,
+                ApiConstants.CAN_EDIT_MESSAGES to canEditMessages,
+                ApiConstants.CAN_DELETE_MESSAGES to canDeleteMessages,
+                ApiConstants.CAN_INVITE_USERS to canInviteUsers,
+                ApiConstants.CAN_RESTRICT_MEMBERS to canRestrictMembers,
+                ApiConstants.CAN_PIN_MESSAGES to canPinMessages,
+                ApiConstants.CAN_PROMOTE_MEMBERS to canPromoteMembers)
+        return post(ApiConstants.METHOD_PROMOTE_CHAT_MEMBER, RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
     }
 
-    override fun exportChatInviteLink(chatId: Any): CompletableFuture<String> = post("exportChatInviteLink",
-            RequestBody.create(MEDIA_TYPE_JSON, toJson(mapOf("chat_id" to chatId))))
+    override fun exportChatInviteLink(chatId: Any): CompletableFuture<String> = post(ApiConstants.METHOD_EXPORT_CHAT_INVITE_LINK,
+            RequestBody.create(MEDIA_TYPE_JSON, toJson(mapOf(ApiConstants.CHAT_ID to chatId))))
 
     override fun setChatPhoto(chatId: Any, photo: Any): CompletableFuture<Boolean> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
-        form.addFormDataPart("chat_id", id(chatId))
+        form.addFormDataPart(ApiConstants.CHAT_ID, id(chatId))
         when (photo) {
-            is File -> form.addFormDataPart("photo", photo.name, RequestBody.create(null, photo))
-            is String -> form.addFormDataPart("photo", photo)
+            is File -> form.addFormDataPart(ApiConstants.PHOTO, photo.name, RequestBody.create(null, photo))
+            is String -> form.addFormDataPart(ApiConstants.PHOTO, photo)
             else -> throw IllegalArgumentException("<photo> neither java.io.File nor string")
         }
-        return post("setChatPhoto", form.build())
+        return post(ApiConstants.METHOD_SET_CHAT_PHOTO, form.build())
     }
 
     override fun deleteChatPhoto(chatId: Any): CompletableFuture<Boolean> {
-        val body = toBody(mapOf("chat_id" to id(chatId)))
-        return post("deleteChatPhoto", body)
+        val body = toBody(mapOf(ApiConstants.CHAT_ID to id(chatId)))
+        return post(ApiConstants.METHOD_DELETE_CHAT_PHOTO, body)
     }
 
     override fun setChatTitle(chatId: Any, title: String): CompletableFuture<Boolean> {
@@ -407,9 +429,9 @@ internal class TelegramClient(token: String) : TelegramApi {
             throw IllegalArgumentException("title length must be greater then 1 and less then 255")
 
         val body = toBody(mapOf(
-                "chat_id" to id(chatId),
-                "title" to title))
-        return post("setChatTitle", body)
+                ApiConstants.CHAT_ID to id(chatId),
+                ApiConstants.TITLE to title))
+        return post(ApiConstants.METHOD_SET_CHAT_TITLE, body)
     }
 
     override fun setChatDescription(chatId: Any, description: String): CompletableFuture<Boolean> {
@@ -417,305 +439,305 @@ internal class TelegramClient(token: String) : TelegramApi {
             throw IllegalArgumentException("title length must be 0 or less then 255")
 
         val body = toBody(mapOf(
-                "chat_id" to id(chatId),
-                "description" to description))
-        return post("setChatDescription", body)
+                ApiConstants.CHAT_ID to id(chatId),
+                ApiConstants.DESCRIPTION to description))
+        return post(ApiConstants.METHOD_SET_CHAT_DESCRIPTION, body)
     }
 
     override fun pinChatMessage(chatId: Any, messageId: Int, notification: Boolean?): CompletableFuture<Boolean> {
         val body = toBody(mapOf(
-                "chat_id" to id(chatId),
-                "message_id" to messageId,
-                "disable_notification" to notification))
-        return post("pinChatMessage", body)
+                ApiConstants.CHAT_ID to id(chatId),
+                ApiConstants.MESSAGE_ID to messageId,
+                ApiConstants.DISABLE_NOTIFICATION to notification))
+        return post(ApiConstants.METHOD_PIN_CHAT_MESSAGE, body)
     }
 
     override fun unpinChatMessage(chatId: Any): CompletableFuture<Boolean> {
-        val body = toBody(mapOf("chat_id" to id(chatId)))
-        return post("unpinChatMessage", body)
+        val body = toBody(mapOf(ApiConstants.CHAT_ID to id(chatId)))
+        return post(ApiConstants.METHOD_UNPIN_CHAT_MESSAGE, body)
     }
 
     override fun leaveChat(chatId: Any): CompletableFuture<Boolean> {
-        val body = toBody(mapOf("chat_id" to id(chatId)))
-        return post("leaveChat", body)
+        val body = toBody(mapOf(ApiConstants.CHAT_ID to id(chatId)))
+        return post(ApiConstants.METHOD_LEAVE_CHAT, body)
     }
 
     override fun getChat(chatId: Any): CompletableFuture<Chat> {
-        val body = toBody(mapOf("chat_id" to id(chatId)))
-        return post("getChat", body)
+        val body = toBody(mapOf(ApiConstants.CHAT_ID to id(chatId)))
+        return post(ApiConstants.METHOD_GET_CHAT, body)
     }
 
     override fun getChatAdministrators(chatId: Any): CompletableFuture<ArrayList<ChatMember>> {
-        val body = toBody(mapOf("chat_id" to id(chatId)))
-        return post("getChatAdministrators", body)
+        val body = toBody(mapOf(ApiConstants.CHAT_ID to id(chatId)))
+        return post(ApiConstants.METHOD_GET_CHAT_ADMINISTRATORS, body)
     }
 
     override fun getChatMembersCount(chatId: Any): CompletableFuture<Int> {
-        val body = toBody(mapOf("chat_id" to id(chatId)))
-        return post("getChatMembersCount", body)
+        val body = toBody(mapOf(ApiConstants.CHAT_ID to id(chatId)))
+        return post(ApiConstants.METHOD_GET_CHAT_MEMBERS_COUNT, body)
     }
 
     override fun getChatMember(chatId: Any, userId: Long): CompletableFuture<ChatMember> {
         val body = toBody(mapOf(
-                "chat_id" to id(chatId),
-                "user_id" to userId))
-        return post("getChatMember", body)
+                ApiConstants.CHAT_ID to id(chatId),
+                ApiConstants.USER_ID to userId))
+        return post(ApiConstants.METHOD_GET_CHAT_MEMBER, body)
     }
 
     override fun setChatStickerSet(chatId: Any, stickerSetName: String): CompletableFuture<Boolean> {
         val body = toBody(mapOf(
-                "chat_id" to id(chatId),
-                "sticker_set_name" to stickerSetName))
-        return post("setChatStickerSet", body)
+                ApiConstants.CHAT_ID to id(chatId),
+                ApiConstants.STICKER_SET_NAME to stickerSetName))
+        return post(ApiConstants.METHOD_SET_CHAT_STICKER_SET, body)
     }
 
     override fun deleteChatStickerSet(chatId: Any): CompletableFuture<Boolean> {
-        val body = toBody(mapOf("chat_id" to id(chatId)))
-        return post("deleteChatStickerSet", body)
+        val body = toBody(mapOf(ApiConstants.CHAT_ID to id(chatId)))
+        return post(ApiConstants.METHOD_DELETE_CHAT_STICKER_SET, body)
     }
 
     override fun answerCallbackQuery(id: String, text: String?, alert: Boolean?, url: String?, cacheTime: Int?): CompletableFuture<Boolean> {
         val body = toBody(mapOf(
-                "callback_query_id" to id,
-                "text" to text,
-                "show_alert" to alert,
-                "url" to url,
-                "cache_time" to cacheTime))
-        return post("answerCallbackQuery", body)
+                ApiConstants.CALLBACK_QUERY_ID to id,
+                ApiConstants.TEXT to text,
+                ApiConstants.SHOW_ALERT to alert,
+                ApiConstants.URL to url,
+                ApiConstants.CACHE_TIME to cacheTime))
+        return post(ApiConstants.METHOD_ANSWER_CALLBACK_QUERY, body)
     }
 
     override fun answerInlineQuery(queryId: String, results: List<InlineQueryResult>, cacheTime: Int?, personal: Boolean?, offset: String?, pmText: String?, pmParameter: String?): CompletableFuture<Boolean> {
         val body = toBody(mapOf(
-                "inline_query_id" to queryId,
-                "results" to results,
-                "cache_time" to cacheTime,
-                "is_personal" to personal,
-                "next_offset" to offset,
-                "switch_pm_text" to pmText,
-                "switch_pm_parameter" to pmParameter))
-        return post("answerInlineQuery", body)
+                ApiConstants.INLINE_QUERY_ID to queryId,
+                ApiConstants.RESULTS to results,
+                ApiConstants.CACHE_TIME to cacheTime,
+                ApiConstants.IS_PERSONAL to personal,
+                ApiConstants.NEXT_OFFSET to offset,
+                ApiConstants.SWITCH_PM_TEXT to pmText,
+                ApiConstants.SWITCH_PM_PARAMETER to pmParameter))
+        return post(ApiConstants.METHOD_ANSWER_INLINE_QUERY, body)
     }
 
     override fun editMessageText(chatId: Any?, messageId: Int?, inlineMessageId: String?, text: String, parseMode: String?, preview: Boolean?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
         val body = toBody(mapOf(
-                "chat_id" to if (chatId != null) id(chatId) else null,
-                "message_id" to messageId,
-                "inline_message_id" to inlineMessageId,
-                "text" to text,
-                "parse_mode" to parseMode,
-                "disable_web_page_preview" to preview,
-                "reply_markup" to markup
+                ApiConstants.CHAT_ID to if (chatId != null) id(chatId) else null,
+                ApiConstants.MESSAGE_ID to messageId,
+                ApiConstants.INLINE_MESSAGE_ID to inlineMessageId,
+                ApiConstants.TEXT to text,
+                ApiConstants.PARSE_MODE to parseMode,
+                ApiConstants.DISABLE_WEB_PAGE_PREVIEW to preview,
+                ApiConstants.REPLY_MARKUP to markup
         ))
-        return post("editMessageText", body)
+        return post(ApiConstants.METHOD_EDIT_MESSAGE_TEXT, body)
     }
 
     override fun editMessageCaption(chatId: Any?, messageId: Int?, inlineMessageId: String?, caption: String?, parseMode: String?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
         val body = toBody(mapOf(
-                "chat_id" to if (chatId != null) id(chatId) else null,
-                "message_id" to messageId,
-                "inline_message_id" to inlineMessageId,
-                "caption" to caption,
-                "parse_mode" to parseMode,
-                "reply_markup" to markup
+                ApiConstants.CHAT_ID to if (chatId != null) id(chatId) else null,
+                ApiConstants.MESSAGE_ID to messageId,
+                ApiConstants.INLINE_MESSAGE_ID to inlineMessageId,
+                ApiConstants.CAPTION to caption,
+                ApiConstants.PARSE_MODE to parseMode,
+                ApiConstants.REPLY_MARKUP to markup
         ))
-        return post("editMessageCaption", body)
+        return post(ApiConstants.METHOD_EDIT_MESSAGE_CAPTION, body)
     }
 
     override fun editMessageMedia(chatId: Any?, messageId: Int?, inlineMessageId: String?, media: InputMedia, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
 
         if (inlineMessageId != null) {
-            form.addFormDataPart("inline_message_id", inlineMessageId)
+            form.addFormDataPart(ApiConstants.INLINE_MESSAGE_ID, inlineMessageId)
         } else {
-            form.addFormDataPart("chat_id", id(chatId!!))
-            form.addFormDataPart("message_id", messageId!!.toString())
+            form.addFormDataPart(ApiConstants.CHAT_ID, id(chatId!!))
+            form.addFormDataPart(ApiConstants.MESSAGE_ID, messageId!!.toString())
         }
 
         media.thumb()?.let {
             when (it) {
                 is File -> form.addFormDataPart("attach://${it.name}", it.name, RequestBody.create(null, it))
-                is String -> form.addFormDataPart("thumb", it)
+                is String -> form.addFormDataPart(ApiConstants.THUMB, it)
                 else -> throw IllegalArgumentException("Neither file nor string")
             }
         }
 
         form.addFormDataPart(media.media().split("//")[1], media.media(), RequestBody.create(MEDIA_TYPE_OCTET_STREAM, media.file()!!))
-        form.addFormDataPart("media", toJson(media))
-        markup?.let { form.addFormDataPart("reply_markup", toJson(it)) }
+        form.addFormDataPart(ApiConstants.MEDIA, toJson(media))
+        markup?.let { form.addFormDataPart(ApiConstants.REPLY_MARKUP, toJson(it)) }
 
-        return post("editMessageMedia", form.build())
+        return post(ApiConstants.METHOD_EDIT_MESSAGE_MEDIA, form.build())
     }
 
     override fun editMessageReplyMarkup(chatId: Any?, messageId: Int?, inlineMessageId: String?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
         val body = toBody(mapOf(
-                "chat_id" to if (chatId != null) id(chatId) else null,
-                "message_id" to messageId,
-                "inline_message_id" to inlineMessageId,
-                "reply_markup" to markup
+                ApiConstants.CHAT_ID to if (chatId != null) id(chatId) else null,
+                ApiConstants.MESSAGE_ID to messageId,
+                ApiConstants.INLINE_MESSAGE_ID to inlineMessageId,
+                ApiConstants.REPLY_MARKUP to markup
         ))
-        return post("editMessageReplyMarkup", body)
+        return post(ApiConstants.METHOD_EDIT_MESSAGE_REPLY_MARKUP, body)
     }
 
     override fun sendSticker(chatId: Any, sticker: Any, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
 
-        form.addFormDataPart("chat_id", id(chatId))
+        form.addFormDataPart(ApiConstants.CHAT_ID, id(chatId))
 
         when (sticker) {
-            is File -> form.addFormDataPart("sticker", sticker.name, RequestBody.create(null, sticker))
-            is String -> form.addFormDataPart("sticker", sticker)
+            is File -> form.addFormDataPart(ApiConstants.STICKER, sticker.name, RequestBody.create(null, sticker))
+            is String -> form.addFormDataPart(ApiConstants.STICKER, sticker)
         }
 
-        notification?.let { form.addFormDataPart("disable_notification", it.toString()) }
-        replyTo?.let { form.addFormDataPart("reply_to_message_id", it.toString()) }
-        markup?.let { form.addFormDataPart("reply_markup", toJson(it)) }
+        notification?.let { form.addFormDataPart(ApiConstants.DISABLE_NOTIFICATION, it.toString()) }
+        replyTo?.let { form.addFormDataPart(ApiConstants.REPLY_TO_MESSAGE_ID, it.toString()) }
+        markup?.let { form.addFormDataPart(ApiConstants.REPLY_MARKUP, toJson(it)) }
 
-        return post("sendSticker", form.build())
+        return post(ApiConstants.METHOD_SEND_STICKER, form.build())
     }
 
     override fun getStickerSet(name: String): CompletableFuture<StickerSet> {
-        val body = toBody(mapOf("name" to name))
-        return post("getStickerSet", body)
+        val body = toBody(mapOf(ApiConstants.NAME to name))
+        return post(ApiConstants.METHOD_GET_STICKER_SET, body)
     }
 
     override fun uploadStickerFile(userId: Long, pngSticker: File): CompletableFuture<com.github.elbekD.bot.types.File> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
-        form.addFormDataPart("user_id", userId.toString())
-        form.addFormDataPart("png_sticker", pngSticker.name, RequestBody.create(null, pngSticker))
-        return post("uploadStickerFile", form.build())
+        form.addFormDataPart(ApiConstants.USER_ID, userId.toString())
+        form.addFormDataPart(ApiConstants.PNG_STICKER, pngSticker.name, RequestBody.create(null, pngSticker))
+        return post(ApiConstants.METHOD_UPLOAD_STICKER_FILE, form.build())
     }
 
     override fun createNewStickerSet(userId: Long, name: String, title: String, pngSticker: Any, emojis: String, containsMask: Boolean?, maskPosition: MaskPosition?): CompletableFuture<Boolean> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
         with(form) {
-            addFormDataPart("user_id", userId.toString())
-            addFormDataPart("name", name)
-            addFormDataPart("title", title)
-            addFormDataPart("emojis", emojis)
-            containsMask?.let { addFormDataPart("contains_masks", it.toString()) }
-            maskPosition?.let { addFormDataPart("mask_position", toJson(it)) }
+            addFormDataPart(ApiConstants.USER_ID, userId.toString())
+            addFormDataPart(ApiConstants.NAME, name)
+            addFormDataPart(ApiConstants.TITLE, title)
+            addFormDataPart(ApiConstants.EMOJIS, emojis)
+            containsMask?.let { addFormDataPart(ApiConstants.CONTAINS_MASKS, it.toString()) }
+            maskPosition?.let { addFormDataPart(ApiConstants.MASK_POSITION, toJson(it)) }
             when (pngSticker) {
-                is File -> form.addFormDataPart("png_sticker", pngSticker.name, RequestBody.create(null, pngSticker))
-                is String -> form.addFormDataPart("png_sticker", pngSticker)
+                is File -> form.addFormDataPart(ApiConstants.PNG_STICKER, pngSticker.name, RequestBody.create(null, pngSticker))
+                is String -> form.addFormDataPart(ApiConstants.PNG_STICKER, pngSticker)
                 else -> throw IllegalArgumentException()
             }
         }
-        return post("createNewStickerSet", form.build())
+        return post(ApiConstants.METHOD_CREATE_NEW_STICKER_SET, form.build())
     }
 
     override fun addStickerToSet(userId: Long, name: String, pngSticker: Any, emojis: String, maskPosition: MaskPosition?): CompletableFuture<Boolean> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
         with(form) {
-            addFormDataPart("user_id", userId.toString())
-            addFormDataPart("name", name)
-            addFormDataPart("emojis", emojis)
-            maskPosition?.let { addFormDataPart("mask_position", toJson(it)) }
+            addFormDataPart(ApiConstants.USER_ID, userId.toString())
+            addFormDataPart(ApiConstants.NAME, name)
+            addFormDataPart(ApiConstants.EMOJIS, emojis)
+            maskPosition?.let { addFormDataPart(ApiConstants.MASK_POSITION, toJson(it)) }
             when (pngSticker) {
-                is File -> form.addFormDataPart("png_sticker", pngSticker.name, RequestBody.create(null, pngSticker))
-                is String -> form.addFormDataPart("png_sticker", pngSticker)
+                is File -> form.addFormDataPart(ApiConstants.PNG_STICKER, pngSticker.name, RequestBody.create(null, pngSticker))
+                is String -> form.addFormDataPart(ApiConstants.PNG_STICKER, pngSticker)
                 else -> throw IllegalArgumentException()
             }
         }
-        return post("addStickerToSet", form.build())
+        return post(ApiConstants.METHOD_ADD_STICKER_TO_SET, form.build())
     }
 
     override fun setStickerPositionInSet(sticker: String, position: Int): CompletableFuture<Boolean> {
         val body = toBody(mapOf(
-                "sticker" to sticker,
-                "position" to position))
-        return post("setStickerPositionInSet", body)
+                ApiConstants.STICKER to sticker,
+                ApiConstants.POSITION to position))
+        return post(ApiConstants.METHOD_SET_STICKER_POSITION_IN_SET, body)
     }
 
     override fun deleteStickerFromSet(sticker: String): CompletableFuture<Boolean> {
-        val body = toBody(mapOf("sticker" to sticker))
-        return post("deleteStickerFromSet", body)
+        val body = toBody(mapOf(ApiConstants.STICKER to sticker))
+        return post(ApiConstants.METHOD_DELETE_STICKER_FROM_SET, body)
     }
 
     override fun sendGame(chatId: Long, gameShortName: String, notification: Boolean?, replyTo: Int?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
         val body = toBody(mapOf(
-                "chat_id" to chatId,
-                "game_short_name" to gameShortName,
-                "disable_notification" to notification,
-                "reply_to_message_id" to replyTo,
-                "reply_markup" to markup
+                ApiConstants.CHAT_ID to chatId,
+                ApiConstants.GAME_SHORT_NAME to gameShortName,
+                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.REPLY_MARKUP to markup
         ))
-        return post("sendGame", body)
+        return post(ApiConstants.METHOD_SEND_GAME, body)
     }
 
     override fun setGameScore(userId: Long, score: Int, force: Boolean?, disableEditMessage: Boolean?, chatId: Long?, messageId: Int?, inlineMessageId: String?): CompletableFuture<Message> {
         val body = toBody(mapOf(
-                "user_id" to userId,
-                "score" to score,
-                "force" to force,
-                "disable_edit_message" to disableEditMessage,
-                "chat_id" to chatId,
-                "message_id" to messageId,
-                "inline_message_id" to inlineMessageId
+                ApiConstants.USER_ID to userId,
+                ApiConstants.SCORE to score,
+                ApiConstants.FORCE to force,
+                ApiConstants.DISABLE_EDIT_MESSAGE to disableEditMessage,
+                ApiConstants.CHAT_ID to chatId,
+                ApiConstants.MESSAGE_ID to messageId,
+                ApiConstants.INLINE_MESSAGE_ID to inlineMessageId
         ))
-        return post("setGameScore", body)
+        return post(ApiConstants.METHOD_SET_GAME_SCORE, body)
     }
 
     override fun getGameHighScores(userId: Long, chatId: Long?, messageId: Int?, inlineMessageId: String?): CompletableFuture<List<GameHighScore>> {
         val body = toBody(mapOf(
-                "user_id" to userId,
-                "chat_id" to chatId,
-                "message_id" to messageId,
-                "inline_message_id" to inlineMessageId
+                ApiConstants.USER_ID to userId,
+                ApiConstants.CHAT_ID to chatId,
+                ApiConstants.MESSAGE_ID to messageId,
+                ApiConstants.INLINE_MESSAGE_ID to inlineMessageId
         ))
-        return post("getGameHighScores", body)
+        return post(ApiConstants.METHOD_GET_GAME_HIGH_SCORES, body)
     }
 
     override fun sendInvoice(chatId: Long, title: String, description: String, payload: String, providerToken: String, startParam: String, currency: String, prices: List<LabeledPrice>, providerData: String?, photoUrl: String?, photoSize: Int?, photoWidth: Int?, photoHeight: Int?, needName: Boolean?, needPhoneNumber: Boolean?, needEmail: Boolean?, needShippingAddress: Boolean?, sendPhoneNumberToProvider: Boolean?, sendEmailToProvider: Boolean?, isFlexible: Boolean?, notification: Boolean?, replyTo: Int?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
         val body = toBody(mapOf(
-                "chat_id" to chatId,
-                "title" to title,
-                "description" to description,
-                "payload" to payload,
-                "provider_token" to providerToken,
-                "start_parameter" to startParam,
-                "currency" to currency,
-                "prices" to prices,
-                "provider_data" to providerData,
-                "photo_url" to photoUrl,
-                "photo_size" to photoSize,
-                "photo_width" to photoWidth,
-                "photo_height" to photoHeight,
-                "need_name" to needName,
-                "need_phone_number" to needPhoneNumber,
-                "need_email" to needEmail,
-                "need_shipping_address" to needShippingAddress,
-                "send_phone_number_to_provider" to sendPhoneNumberToProvider,
-                "send_email_to_provider" to sendEmailToProvider,
-                "is_flexible" to isFlexible,
-                "disable_notification" to notification,
-                "reply_to_message_id" to replyTo,
-                "reply_markup" to markup
+                ApiConstants.CHAT_ID to chatId,
+                ApiConstants.TITLE to title,
+                ApiConstants.DESCRIPTION to description,
+                ApiConstants.PAYLOAD to payload,
+                ApiConstants.PROVIDER_TOKEN to providerToken,
+                ApiConstants.START_PARAMETER to startParam,
+                ApiConstants.CURRENCY to currency,
+                ApiConstants.PRICES to prices,
+                ApiConstants.PROVIDER_DATA to providerData,
+                ApiConstants.PHOTO_URL to photoUrl,
+                ApiConstants.PHOTO_SIZE to photoSize,
+                ApiConstants.PHOTO_WIDTH to photoWidth,
+                ApiConstants.PHOTO_HEIGHT to photoHeight,
+                ApiConstants.NEED_NAME to needName,
+                ApiConstants.NEED_PHONE_NUMBER to needPhoneNumber,
+                ApiConstants.NEED_EMAIL to needEmail,
+                ApiConstants.NEED_SHIPPING_ADDRESS to needShippingAddress,
+                ApiConstants.SEND_PHONE_NUMBER_TO_PROVIDER to sendPhoneNumberToProvider,
+                ApiConstants.SEND_EMAIL_TO_PROVIDER to sendEmailToProvider,
+                ApiConstants.IS_FLEXIBLE to isFlexible,
+                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.REPLY_MARKUP to markup
         ))
-        return post("sendInvoice", body)
+        return post(ApiConstants.METHOD_SEND_INVOICE, body)
     }
 
     override fun answerShippingQuery(shippingQueryId: String, ok: Boolean, shippingOptions: List<ShippingOption>?, errorMessage: String?): CompletableFuture<Boolean> {
         val body = toBody(mapOf(
-                "shipping_query_id" to shippingQueryId,
-                "ok" to ok,
-                "shipping_options" to shippingOptions,
-                "error_message" to errorMessage
+                ApiConstants.SHIPPING_QUERY_ID to shippingQueryId,
+                ApiConstants.OK to ok,
+                ApiConstants.SHIPPING_OPTIONS to shippingOptions,
+                ApiConstants.ERROR_MESSAGE to errorMessage
         ))
-        return post("answerShippingQuery", body)
+        return post(ApiConstants.METHOD_ANSWER_SHIPPING_QUERY, body)
     }
 
     override fun answerPreCheckoutQuery(preCheckoutQueryId: String, ok: Boolean, errorMessage: String?): CompletableFuture<Boolean> {
         val body = toBody(mapOf(
-                "pre_checkout_query_id" to preCheckoutQueryId,
-                "ok" to ok,
-                "error_message" to errorMessage))
-        return post("answerPreCheckoutQuery", body)
+                ApiConstants.PRE_CHECKOUT_QUERY_ID to preCheckoutQueryId,
+                ApiConstants.OK to ok,
+                ApiConstants.ERROR_MESSAGE to errorMessage))
+        return post(ApiConstants.METHOD_ANSWER_PRE_CHECKOUT_QUERY, body)
     }
 
     override fun setPassportDataErrors(userId: Long, errors: List<PassportElementError>): CompletableFuture<Boolean> {
         val body = toBody(mapOf(
-                "user_id" to userId,
-                "errors" to errors))
-        return post("setPassportDataErrors", body)
+                ApiConstants.USER_ID to userId,
+                ApiConstants.ERRORS to errors))
+        return post(ApiConstants.METHOD_SET_PASSPORT_DATA_ERRORS, body)
     }
 }

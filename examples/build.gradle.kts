@@ -30,7 +30,3 @@ tasks.withType<Jar> {
         if (it.isDirectory) it else zipTree(it)
     })
 }
-
-kotlin {
-    experimental.coroutines = Coroutines.ENABLE
-}

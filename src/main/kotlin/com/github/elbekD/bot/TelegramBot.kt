@@ -1,8 +1,26 @@
 package com.github.elbekD.bot
 
 import com.github.elbekD.bot.http.TelegramClient
-import com.github.elbekD.bot.types.*
-import kotlinx.coroutines.experimental.launch
+import com.github.elbekD.bot.types.CallbackQuery
+import com.github.elbekD.bot.types.GameHighScore
+import com.github.elbekD.bot.types.InlineKeyboardMarkup
+import com.github.elbekD.bot.types.InlineQuery
+import com.github.elbekD.bot.types.InlineQueryResult
+import com.github.elbekD.bot.types.InputMedia
+import com.github.elbekD.bot.types.InputMediaAnimation
+import com.github.elbekD.bot.types.InputMediaAudio
+import com.github.elbekD.bot.types.InputMediaDocument
+import com.github.elbekD.bot.types.InputMediaPhoto
+import com.github.elbekD.bot.types.InputMediaVideo
+import com.github.elbekD.bot.types.LabeledPrice
+import com.github.elbekD.bot.types.MaskPosition
+import com.github.elbekD.bot.types.Message
+import com.github.elbekD.bot.types.PassportElementError
+import com.github.elbekD.bot.types.ReplyKeyboard
+import com.github.elbekD.bot.types.ShippingOption
+import com.github.elbekD.bot.types.Update
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.File
 import java.util.concurrent.CompletableFuture
 
@@ -86,22 +104,21 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
         if (upd.message != null && upd.message.isCommand()) {
             val (cmd, arg) = extractCommandAndArgument(upd.message.text!!)
             val trigger = if (commands[cmd] != null) cmd else "/$ANY_CALLBACK_TRIGGER"
-            launch { commands[trigger]?.invoke(upd.message, arg) }
+            GlobalScope.launch { commands[trigger]?.invoke(upd.message, arg) }
 
         } else if (upd.callback_query != null) {
             upd.callback_query.data?.let {
                 val trigger = if (callbackQueries[it] != null) it else ANY_CALLBACK_TRIGGER
-                launch { callbackQueries[trigger]?.invoke(upd.callback_query) }
+                GlobalScope.launch { callbackQueries[trigger]?.invoke(upd.callback_query) }
             }
 
         } else if (upd.inline_query != null) {
             val trigger = if (inlineQueries[upd.inline_query.query] != null)
                 upd.inline_query.query
             else ANY_CALLBACK_TRIGGER
-            launch { inlineQueries[trigger]?.invoke(upd.inline_query) }
-
+            GlobalScope.launch { inlineQueries[trigger]?.invoke(upd.inline_query) }
         } else {
-            launch { onAnyUpdateAction?.invoke(upd) }
+            GlobalScope.launch { onAnyUpdateAction?.invoke(upd) }
         }
     }
 

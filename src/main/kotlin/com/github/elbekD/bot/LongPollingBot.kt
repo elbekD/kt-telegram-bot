@@ -6,7 +6,7 @@ import kotlin.concurrent.timer
 internal class LongPollingBot(token: String, private val options: PollingOptions) : TelegramBot(token) {
     private var timer: Timer? = null
 
-    companion object {
+    private companion object {
         @JvmStatic
         @Volatile
         private var polling = false
@@ -15,6 +15,7 @@ internal class LongPollingBot(token: String, private val options: PollingOptions
     override fun start() {
         if (options.removeWebhookAutomatically)
             deleteWebhook().join()
+
         if (!polling) {
             var lastUpdateId = -1
             timer = timer("LongPollingBot", period = options.period, initialDelay = 2000) {
