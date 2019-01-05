@@ -28,7 +28,6 @@ import com.github.elbekD.bot.util.isCommand
 import java.io.File
 import java.util.concurrent.CompletableFuture
 
-// Fixme: protect command handlers from overriding after bot has started
 internal abstract class TelegramBot protected constructor(tk: String) : Bot {
     private val updateHandler = UpdateHandler()
     private val client = TelegramClient(tk)

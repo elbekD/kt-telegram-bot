@@ -11,7 +11,6 @@ import com.github.elbekD.bot.types.ShippingQuery
 import com.github.elbekD.bot.types.Update
 import java.io.File
 
-// Todo: regex command handler
 interface Bot : TelegramApi {
     companion object {
         /**
