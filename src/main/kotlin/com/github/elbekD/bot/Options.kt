@@ -1,21 +1,8 @@
 package com.github.elbekD.bot
 
+import com.github.elbekD.bot.util.AllowedUpdate
 import java.io.File
 import java.util.*
-
-enum class AllowedUpdates(private val value: String) {
-    Message("message"),
-    EditedMessage("edited_message"),
-    ChannelPost("channel_post"),
-    EditedChannelPost("edited_channel_post"),
-    InlineQuery("inline_query"),
-    ChosenInlineQuery("chosen_inline_result"),
-    CallbackQuery("callback_query"),
-    ShippingQuery("shipping_query"),
-    PreCheckoutQuery("pre_checkout_query");
-
-    override fun toString() = value
-}
 
 /**
  * @param removeWebhookAutomatically if `true` calls [TelegramBot.deleteWebhook] before switching to long polling.
@@ -40,7 +27,7 @@ class PollingOptions(var removeWebhookAutomatically: Boolean = true) {
             field = value
         }
 
-    var allowedUpdates: List<AllowedUpdates>? = null
+    var allowedUpdates: List<AllowedUpdate>? = null
         set(value) {
             if (value == null)
                 throw NullPointerException()
@@ -94,7 +81,7 @@ class WebhookOptions(var setWebhookAutomatically: Boolean = true,
             field = value
         }
 
-    var allowedUpdates: List<AllowedUpdates>? = null
+    var allowedUpdates: List<AllowedUpdate>? = null
         set(value) {
             if (value == null)
                 throw NullPointerException()

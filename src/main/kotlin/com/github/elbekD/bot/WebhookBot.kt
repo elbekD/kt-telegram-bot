@@ -50,7 +50,7 @@ internal class WebhookBot(token: String, private val webhookOptions: WebhookOpti
             server.start()
             if (webhookOptions.setWebhookAutomatically) {
                 deleteWebhook()
-                        .thenAccept { _ ->
+                        .thenAccept {
                             setWebhook(webhookOptions.url,
                                     webhookOptions.certificate,
                                     webhookOptions.maxConnections,

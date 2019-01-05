@@ -2,6 +2,7 @@ package com.github.elbekD.bot
 
 import com.github.elbekD.bot.http.TelegramClient
 import com.github.elbekD.bot.types.CallbackQuery
+import com.github.elbekD.bot.types.ChosenInlineResult
 import com.github.elbekD.bot.types.GameHighScore
 import com.github.elbekD.bot.types.InlineKeyboardMarkup
 import com.github.elbekD.bot.types.InlineQuery
@@ -16,52 +17,23 @@ import com.github.elbekD.bot.types.LabeledPrice
 import com.github.elbekD.bot.types.MaskPosition
 import com.github.elbekD.bot.types.Message
 import com.github.elbekD.bot.types.PassportElementError
+import com.github.elbekD.bot.types.PreCheckoutQuery
 import com.github.elbekD.bot.types.ReplyKeyboard
 import com.github.elbekD.bot.types.ShippingOption
+import com.github.elbekD.bot.types.ShippingQuery
 import com.github.elbekD.bot.types.Update
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.github.elbekD.bot.util.Action
+import com.github.elbekD.bot.util.AllowedUpdate
+import com.github.elbekD.bot.util.isCommand
 import java.io.File
 import java.util.concurrent.CompletableFuture
 
 // Fixme: protect command handlers from overriding after bot has started
-abstract class TelegramBot protected constructor(tk: String) : Bot {
-    private val commands by lazy { mutableMapOf<String, suspend (Message, String?) -> Unit>() }
-    private val callbackQueries by lazy { mutableMapOf<String, suspend (CallbackQuery) -> Unit>() }
-    private val inlineQueries by lazy { mutableMapOf<String, suspend (InlineQuery) -> Unit>() }
-    private var onAnyUpdateAction: (suspend (Update) -> Unit)? = null
+internal abstract class TelegramBot protected constructor(tk: String) : Bot {
+    private val updateHandler = UpdateHandler()
     private val client = TelegramClient(tk)
 
     companion object {
-        private const val ANY_CALLBACK_TRIGGER = "*"
-        @JvmStatic
-        private val COMMAND_REGEX = "^/([\\w]{1,32}|\\$ANY_CALLBACK_TRIGGER)$".toRegex()
-
-        /**
-         * @param token your bot token
-         * @param pollingOptions options used to configure [LongPollingBot]
-         */
-        fun createPolling(token: String,
-                          pollingOptions: PollingOptions.() -> Unit = { PollingOptions() }): Bot {
-            validateToken(token)
-            return LongPollingBot(token, PollingOptions().apply(pollingOptions))
-        }
-
-        /**
-         * @param token your bot token
-         * @param webhookOptions options used to configure server and webhook params for `setWebhook()` method
-         */
-        fun createWebhook(token: String,
-                          webhookOptions: WebhookOptions.() -> Unit = { WebhookOptions() }): Bot {
-            validateToken(token)
-            return WebhookBot(token, WebhookOptions().apply(webhookOptions))
-        }
-
-        private fun validateToken(token: String) {
-            if (token.isBlank())
-                throw IllegalArgumentException("Invalid token: <$token>. Check and try again")
-        }
-
         private fun validateInputFileOrString(obj: Any) {
             if (obj !is File && obj !is String)
                 throw IllegalArgumentException("$obj is neither file nor string")
@@ -73,77 +45,104 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
                     || inlineMessageId == null && (chatId == null || messageId == null)
             ) throw IllegalArgumentException("Provide only inlineMessage or chatId and messageId")
         }
-
-        private fun extractCommandAndArgument(text: String): Pair<String, String?> {
-            val cmd = text.substringBefore(' ')
-            val arg = cmd.substringAfter(' ', "")
-            return Pair(cmd, if (arg.isEmpty()) null else arg)
-        }
-
-        private fun Message.isCommand() = text != null && text.split(' ')[0].isCommand()
-
-        private fun String.isCommand() = matches(COMMAND_REGEX)
-    }
-
-    enum class Actions(val value: String) {
-        Typing("typing"),
-        UploadPhoto("upload_photo"),
-        RecordVideo("record_video"),
-        UploadVideo("upload_video"),
-        RecordAudio("record_audio"),
-        UploadAudio("upload_audio"),
-        UploadDocument("upload_document"),
-        FindLocation("find_location"),
-        RecordVideoNote("record_video_note"),
-        UploadVideoNote("upload_video_note ");
     }
 
     protected fun onUpdate(upds: List<Update>) = upds.forEach { onUpdate(it) }
 
     protected fun onUpdate(upd: Update) {
-        if (upd.message != null && upd.message.isCommand()) {
-            val (cmd, arg) = extractCommandAndArgument(upd.message.text!!)
-            val trigger = if (commands[cmd] != null) cmd else "/$ANY_CALLBACK_TRIGGER"
-            GlobalScope.launch { commands[trigger]?.invoke(upd.message, arg) }
-
-        } else if (upd.callback_query != null) {
-            upd.callback_query.data?.let {
-                val trigger = if (callbackQueries[it] != null) it else ANY_CALLBACK_TRIGGER
-                GlobalScope.launch { callbackQueries[trigger]?.invoke(upd.callback_query) }
-            }
-
-        } else if (upd.inline_query != null) {
-            val trigger = if (inlineQueries[upd.inline_query.query] != null)
-                upd.inline_query.query
-            else ANY_CALLBACK_TRIGGER
-            GlobalScope.launch { inlineQueries[trigger]?.invoke(upd.inline_query) }
-        } else {
-            GlobalScope.launch { onAnyUpdateAction?.invoke(upd) }
-        }
+        updateHandler.handle(upd)
     }
 
     protected fun onStop() = client.onStop()
 
+    override fun onMessage(action: suspend (Message) -> Unit) {
+        updateHandler.on(AllowedUpdate.Message, action)
+    }
+
+    override fun removeMessageAction() {
+        updateHandler.on<Message>(AllowedUpdate.Message, null)
+    }
+
+    override fun onEditedMessage(action: suspend (Message) -> Unit) {
+        updateHandler.on(AllowedUpdate.EditedMessage, action)
+    }
+
+    override fun removeEditedMessageAction() {
+        updateHandler.on<Message>(AllowedUpdate.EditedMessage, null)
+    }
+
+    override fun onChannelPost(action: suspend (Message) -> Unit) {
+        updateHandler.on(AllowedUpdate.ChannelPost, action)
+    }
+
+    override fun removeChannelPostAction() {
+        updateHandler.on<Message>(AllowedUpdate.ChannelPost, null)
+    }
+
+    override fun onEditedChannelPost(action: suspend (Message) -> Unit) {
+        updateHandler.on(AllowedUpdate.EditedChannelPost, action)
+    }
+
+    override fun removeEditedChannelPostAction() {
+        updateHandler.on<Message>(AllowedUpdate.EditedChannelPost, null)
+    }
+
+    override fun onInlineQuery(action: suspend (InlineQuery) -> Unit) {
+        updateHandler.on(AllowedUpdate.InlineQuery, action)
+    }
+
+    override fun removeInlineQueryAction() {
+        updateHandler.on<InlineQuery>(AllowedUpdate.InlineQuery, null)
+    }
+
+    override fun onChosenInlineQuery(action: suspend (ChosenInlineResult) -> Unit) {
+        updateHandler.on(AllowedUpdate.ChosenInlineQuery, action)
+    }
+
+    override fun removeChosenInlineQueryAction() {
+        updateHandler.on<ChosenInlineResult>(AllowedUpdate.ChosenInlineQuery, null)
+    }
+
+    override fun onCallbackQuery(action: suspend (InlineQuery) -> Unit) {
+        updateHandler.on(AllowedUpdate.CallbackQuery, action)
+    }
+
+    override fun removeCallbackQueryAction() {
+        updateHandler.on<CallbackQuery>(AllowedUpdate.CallbackQuery, null)
+    }
+
+    override fun onShippingQuery(action: suspend (ShippingQuery) -> Unit) {
+        updateHandler.on(AllowedUpdate.ShippingQuery, action)
+    }
+
+    override fun removeShippingQueryAction() {
+        updateHandler.on<ShippingQuery>(AllowedUpdate.ShippingQuery, null)
+    }
+
+    override fun onPreCheckoutQuery(action: suspend (PreCheckoutQuery) -> Unit) {
+        updateHandler.on(AllowedUpdate.PreCheckoutQuery, action)
+    }
+
+    override fun removePreCheckoutQueryAction() {
+        updateHandler.on<PreCheckoutQuery>(AllowedUpdate.PreCheckoutQuery, null)
+    }
+
     override fun onCommand(command: String, action: suspend (Message, String?) -> Unit) {
         if (!command.isCommand())
             throw IllegalArgumentException("<$command> is not a command")
-        commands[command] = action
+        updateHandler.onCommand(command, action)
     }
 
     override fun onCallbackQuery(data: String, action: suspend (CallbackQuery) -> Unit) {
-        if (data.length !in 1..64)
-            throw IllegalArgumentException("'data' length must be in [1, 64] range")
-        callbackQueries[data] = action
+        updateHandler.onCallbackQuery(data, action)
     }
 
     override fun onInlineQuery(query: String, action: suspend (InlineQuery) -> Unit) {
-        if (query.length !in 0..512)
-            throw IllegalArgumentException("'query' length must be in [1, 512] range")
-        inlineQueries[query] = action
+        updateHandler.onInlineQuery(query, action)
     }
 
-    override fun onAnyUpdate(action: (suspend (Update) -> Unit)?) {
-        onAnyUpdateAction = action
+    override fun onAnyUpdate(action: suspend (Update) -> Unit) {
+        updateHandler.onAnyUpdate(action)
     }
 
     override fun mediaPhoto(media: String,
@@ -199,7 +198,7 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
                    \    /
                     \  /
                      \/
-         */
+    */
     override fun getMe() = client.getMe()
 
     override fun getUpdates(options: Map<String, Any?>) = client.getUpdates(options)
@@ -207,7 +206,7 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
     override fun setWebhook(url: String,
                             certificate: File?,
                             maxConnections: Int?,
-                            allowedUpdates: List<AllowedUpdates>?) =
+                            allowedUpdates: List<AllowedUpdate>?) =
             client.setWebhook(url, certificate, maxConnections, allowedUpdates)
 
     override fun deleteWebhook() = client.deleteWebhook()
@@ -366,7 +365,7 @@ abstract class TelegramBot protected constructor(tk: String) : Bot {
             client.sendContact(chatId, phone, firstName, lastName, vcard, notification, replyTo, markup)
 
     override fun sendChatAction(chatId: Any,
-                                action: Actions) = client.sendChatAction(chatId, action)
+                                action: Action) = client.sendChatAction(chatId, action)
 
     override fun getUserProfilePhotos(userId: Long,
                                       offset: Int?,

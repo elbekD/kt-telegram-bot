@@ -1,8 +1,25 @@
 package com.github.elbekD.bot.http
 
-import com.github.elbekD.bot.AllowedUpdates
-import com.github.elbekD.bot.TelegramBot
-import com.github.elbekD.bot.types.*
+import com.github.elbekD.bot.util.Action
+import com.github.elbekD.bot.util.AllowedUpdate
+import com.github.elbekD.bot.types.Chat
+import com.github.elbekD.bot.types.ChatMember
+import com.github.elbekD.bot.types.File
+import com.github.elbekD.bot.types.GameHighScore
+import com.github.elbekD.bot.types.InlineKeyboardMarkup
+import com.github.elbekD.bot.types.InlineQueryResult
+import com.github.elbekD.bot.types.InputMedia
+import com.github.elbekD.bot.types.LabeledPrice
+import com.github.elbekD.bot.types.MaskPosition
+import com.github.elbekD.bot.types.Message
+import com.github.elbekD.bot.types.PassportElementError
+import com.github.elbekD.bot.types.ReplyKeyboard
+import com.github.elbekD.bot.types.ShippingOption
+import com.github.elbekD.bot.types.StickerSet
+import com.github.elbekD.bot.types.Update
+import com.github.elbekD.bot.types.User
+import com.github.elbekD.bot.types.UserProfilePhotos
+import com.github.elbekD.bot.types.WebhookInfo
 import java.util.concurrent.CompletableFuture
 
 interface TelegramApi {
@@ -13,7 +30,7 @@ interface TelegramApi {
     fun setWebhook(url: String,
                    certificate: java.io.File? = null,
                    maxConnections: Int? = null,
-                   allowedUpdates: List<AllowedUpdates>? = null): CompletableFuture<Boolean>
+                   allowedUpdates: List<AllowedUpdate>? = null): CompletableFuture<Boolean>
 
     fun deleteWebhook(): CompletableFuture<Boolean>
 
@@ -246,7 +263,7 @@ interface TelegramApi {
      * @throws TelegramApiError if error returned in response
      */
     fun sendChatAction(chatId: Any,
-                       action: TelegramBot.Actions): CompletableFuture<Boolean>
+                       action: Action): CompletableFuture<Boolean>
 
     fun getUserProfilePhotos(userId: Long,
                              offset: Int? = null,

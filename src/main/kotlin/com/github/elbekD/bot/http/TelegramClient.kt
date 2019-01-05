@@ -1,7 +1,7 @@
 package com.github.elbekD.bot.http
 
-import com.github.elbekD.bot.AllowedUpdates
-import com.github.elbekD.bot.TelegramBot
+import com.github.elbekD.bot.util.Action
+import com.github.elbekD.bot.util.AllowedUpdate
 import com.github.elbekD.bot.types.Chat
 import com.github.elbekD.bot.types.ChatMember
 import com.github.elbekD.bot.types.GameHighScore
@@ -41,7 +41,7 @@ internal class TelegramClient(token: String) : TelegramApi {
             .readTimeout(60L, TimeUnit.SECONDS)
             .writeTimeout(60L, TimeUnit.SECONDS)
             .build()
-    private val url = "${ApiConstants.API_URL}$token"
+    private val url = ApiConstants.API_URL.format(token)
 
     private companion object {
         @JvmStatic
@@ -137,7 +137,7 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     override fun getUpdates(options: Map<String, Any?>) = post<List<Update>>(ApiConstants.METHOD_GET_UPDATES, toBody(options))
 
-    override fun setWebhook(url: String, certificate: File?, maxConnections: Int?, allowedUpdates: List<AllowedUpdates>?): CompletableFuture<Boolean> {
+    override fun setWebhook(url: String, certificate: File?, maxConnections: Int?, allowedUpdates: List<AllowedUpdate>?): CompletableFuture<Boolean> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
         form.addFormDataPart(ApiConstants.URL, url)
         certificate?.let { form.addFormDataPart(ApiConstants.CERTIFICATE, it.name, RequestBody.create(null, it)) }
@@ -342,56 +342,56 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post(ApiConstants.METHOD_SEND_CONTACT, body)
     }
 
-    override fun sendChatAction(chatId: Any, action: TelegramBot.Actions): CompletableFuture<Boolean> {
-        val body = mapOf(
+    override fun sendChatAction(chatId: Any, action: Action): CompletableFuture<Boolean> {
+        val body = toBody(mapOf(
                 ApiConstants.CHAT_ID to id(chatId),
-                ApiConstants.ACTION to action.value)
-        return post(ApiConstants.METHOD_SEND_CHAT_ACTION, RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
+                ApiConstants.ACTION to action.value))
+        return post(ApiConstants.METHOD_SEND_CHAT_ACTION, body)
     }
 
     override fun getUserProfilePhotos(userId: Long, offset: Int?, limit: Int?): CompletableFuture<UserProfilePhotos> {
-        val body = mapOf(
+        val body = toBody(mapOf(
                 ApiConstants.USER_ID to userId,
                 ApiConstants.OFFSET to offset,
-                ApiConstants.LIMIT to limit)
-        return post(ApiConstants.METHOD_GET_USER_PROFILE_PHOTOS, RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
+                ApiConstants.LIMIT to limit))
+        return post(ApiConstants.METHOD_GET_USER_PROFILE_PHOTOS, body)
     }
 
     override fun getFile(fileId: String): CompletableFuture<com.github.elbekD.bot.types.File> {
-        return post(ApiConstants.METHOD_GET_FILE, RequestBody.create(MEDIA_TYPE_JSON,
-                toJson(mapOf(ApiConstants.FILE_ID to fileId))))
+        val body = toBody(mapOf(ApiConstants.FILE_ID to fileId))
+        return post(ApiConstants.METHOD_GET_FILE, body)
     }
 
     override fun kickChatMember(chatId: Any, userId: Long, untilDate: Int?): CompletableFuture<Boolean> {
-        val body = mapOf(
+        val body = toBody(mapOf(
                 ApiConstants.CHAT_ID to id(chatId),
                 ApiConstants.USER_ID to userId,
-                ApiConstants.UNTIL_DATE to untilDate)
-        return post(ApiConstants.METHOD_KICK_CHAT_MEMBER, RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
+                ApiConstants.UNTIL_DATE to untilDate))
+        return post(ApiConstants.METHOD_KICK_CHAT_MEMBER, body)
     }
 
     override fun unbanChatMember(chatId: Any, userId: Long): CompletableFuture<Boolean> {
-        val body = mapOf(
+        val body = toBody(mapOf(
                 ApiConstants.CHAT_ID to id(chatId),
-                ApiConstants.USER_ID to userId)
-        return post(ApiConstants.METHOD_UNBAN_CHAT_MEMBER, RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
+                ApiConstants.USER_ID to userId))
+        return post(ApiConstants.METHOD_UNBAN_CHAT_MEMBER, body)
     }
 
     override fun restrictChatMember(chatId: Any, userId: Long, untilDate: Int?, canSendMessage: Boolean?,
                                     canSendMediaMessages: Boolean?, canSendOtherMessages: Boolean?, canAddWebPagePreview: Boolean?): CompletableFuture<Boolean> {
-        val body = mapOf(
+        val body = toBody(mapOf(
                 ApiConstants.CHAT_ID to id(chatId),
                 ApiConstants.USER_ID to userId,
                 ApiConstants.UNTIL_DATE to untilDate,
                 ApiConstants.CAN_SEND_MESSAGES to canSendMessage,
                 ApiConstants.CAN_SEND_MEDIA_MESSAGES to canSendMediaMessages,
                 ApiConstants.CAN_SEND_OTHER_MESSAGES to canSendOtherMessages,
-                ApiConstants.CAN_ADD_WEB_PAGE_PREVIEWS to canAddWebPagePreview)
-        return post(ApiConstants.METHOD_RESTRICT_CHAT_MEMBER, RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
+                ApiConstants.CAN_ADD_WEB_PAGE_PREVIEWS to canAddWebPagePreview))
+        return post(ApiConstants.METHOD_RESTRICT_CHAT_MEMBER, body)
     }
 
     override fun promoteChatMember(chatId: Any, userId: Long, canChangeInfo: Boolean?, canPostMessages: Boolean?, canEditMessages: Boolean?, canDeleteMessages: Boolean?, canInviteUsers: Boolean?, canRestrictMembers: Boolean?, canPinMessages: Boolean?, canPromoteMembers: Boolean?): CompletableFuture<Boolean> {
-        val body = mapOf(
+        val body = toBody(mapOf(
                 ApiConstants.CHAT_ID to id(chatId),
                 ApiConstants.USER_ID to userId,
                 ApiConstants.CAN_CHANGE_INFO to canChangeInfo,
@@ -401,12 +401,12 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.CAN_INVITE_USERS to canInviteUsers,
                 ApiConstants.CAN_RESTRICT_MEMBERS to canRestrictMembers,
                 ApiConstants.CAN_PIN_MESSAGES to canPinMessages,
-                ApiConstants.CAN_PROMOTE_MEMBERS to canPromoteMembers)
-        return post(ApiConstants.METHOD_PROMOTE_CHAT_MEMBER, RequestBody.create(MEDIA_TYPE_JSON, toJson(body)))
+                ApiConstants.CAN_PROMOTE_MEMBERS to canPromoteMembers))
+        return post(ApiConstants.METHOD_PROMOTE_CHAT_MEMBER, body)
     }
 
     override fun exportChatInviteLink(chatId: Any): CompletableFuture<String> = post(ApiConstants.METHOD_EXPORT_CHAT_INVITE_LINK,
-            RequestBody.create(MEDIA_TYPE_JSON, toJson(mapOf(ApiConstants.CHAT_ID to chatId))))
+            toBody(mapOf(ApiConstants.CHAT_ID to chatId)))
 
     override fun setChatPhoto(chatId: Any, photo: Any): CompletableFuture<Boolean> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
@@ -659,8 +659,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.GAME_SHORT_NAME to gameShortName,
                 ApiConstants.DISABLE_NOTIFICATION to notification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
-                ApiConstants.REPLY_MARKUP to markup
-        ))
+                ApiConstants.REPLY_MARKUP to markup))
         return post(ApiConstants.METHOD_SEND_GAME, body)
     }
 
@@ -672,8 +671,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.DISABLE_EDIT_MESSAGE to disableEditMessage,
                 ApiConstants.CHAT_ID to chatId,
                 ApiConstants.MESSAGE_ID to messageId,
-                ApiConstants.INLINE_MESSAGE_ID to inlineMessageId
-        ))
+                ApiConstants.INLINE_MESSAGE_ID to inlineMessageId))
         return post(ApiConstants.METHOD_SET_GAME_SCORE, body)
     }
 
@@ -682,8 +680,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.USER_ID to userId,
                 ApiConstants.CHAT_ID to chatId,
                 ApiConstants.MESSAGE_ID to messageId,
-                ApiConstants.INLINE_MESSAGE_ID to inlineMessageId
-        ))
+                ApiConstants.INLINE_MESSAGE_ID to inlineMessageId))
         return post(ApiConstants.METHOD_GET_GAME_HIGH_SCORES, body)
     }
 
@@ -711,8 +708,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.IS_FLEXIBLE to isFlexible,
                 ApiConstants.DISABLE_NOTIFICATION to notification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
-                ApiConstants.REPLY_MARKUP to markup
-        ))
+                ApiConstants.REPLY_MARKUP to markup))
         return post(ApiConstants.METHOD_SEND_INVOICE, body)
     }
 

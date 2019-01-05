@@ -2,8 +2,11 @@ package com.github.elbekD.bot
 
 import com.github.elbekD.bot.types.InlineKeyboardButton
 import com.github.elbekD.bot.types.InlineKeyboardMarkup
+import com.github.elbekD.bot.util.Action
 import com.google.gson.Gson
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.BeforeClass
 import org.junit.Test
 import java.nio.file.Files
@@ -23,7 +26,7 @@ internal class TelegramBotTest {
             val gson = Gson()
             val reader = Files.newBufferedReader(Paths.get("D:\\Dev\\kt-telegram-bot\\src\\test\\resources\\test-config.json"))
             config = gson.fromJson(reader, TestConfig::class.java)
-            bot = TelegramBot.createPolling(config.token)
+            bot = Bot.createPolling(config.token)
         }
     }
 
@@ -178,7 +181,7 @@ internal class TelegramBotTest {
 
     @Test
     fun sendChatAction() {
-        val msg = bot.sendChatAction(config.userId, TelegramBot.Actions.RecordAudio).get()
+        val msg = bot.sendChatAction(config.userId, Action.RecordAudio).get()
         assertTrue(msg)
     }
 
