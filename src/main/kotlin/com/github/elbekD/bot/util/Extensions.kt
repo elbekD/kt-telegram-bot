@@ -2,8 +2,6 @@ package com.github.elbekD.bot.util
 
 import com.github.elbekD.bot.types.Message
 import com.github.elbekD.bot.types.Update
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.contract
 
 private val COMMAND_REGEX = "^/([\\w]{1,32}|$ANY_CALLBACK_TRIGGER)$".toRegex()
 
@@ -18,7 +16,7 @@ fun Update.isMessage(): Boolean {
 }
 
 fun Update.isEditedMessage(): Boolean {
-    return message != null && message.isEditedMessage()
+    return edited_message != null
 }
 
 fun Update.isChannelPost(): Boolean {
@@ -26,7 +24,7 @@ fun Update.isChannelPost(): Boolean {
 }
 
 fun Update.isEditedChannelPost(): Boolean {
-    return isChannelPost() && channel_post!!.edit_date != null
+    return edited_channel_post != null
 }
 
 fun Update.isInlineQuery(): Boolean {
@@ -51,8 +49,4 @@ fun Update.isPreCheckoutQuery(): Boolean {
 
 fun Message.isCommand(): Boolean {
     return text != null && text.split(' ')[0].isCommand()
-}
-
-fun Message.isEditedMessage(): Boolean {
-    return text != null && edit_date != null
 }

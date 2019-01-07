@@ -24,7 +24,6 @@ import com.github.elbekD.bot.types.ShippingQuery
 import com.github.elbekD.bot.types.Update
 import com.github.elbekD.bot.util.Action
 import com.github.elbekD.bot.util.AllowedUpdate
-import com.github.elbekD.bot.util.isCommand
 import java.io.File
 import java.util.concurrent.CompletableFuture
 
@@ -127,8 +126,6 @@ internal abstract class TelegramBot protected constructor(tk: String) : Bot {
     }
 
     override fun onCommand(command: String, action: suspend (Message, String?) -> Unit) {
-        if (!command.isCommand())
-            throw IllegalArgumentException("<$command> is not a command")
         updateHandler.onCommand(command, action)
     }
 

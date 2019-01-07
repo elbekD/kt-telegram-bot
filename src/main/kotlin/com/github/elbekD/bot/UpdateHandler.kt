@@ -40,7 +40,7 @@ internal class UpdateHandler {
     private companion object {
         private fun extractCommandAndArgument(text: String): Pair<String, String?> {
             val cmd = text.substringBefore(' ')
-            val arg = cmd.substringAfter(' ', "")
+            val arg = text.substringAfter(' ', "")
             return Pair(cmd, if (arg.isEmpty()) null else arg)
         }
     }
@@ -93,7 +93,7 @@ internal class UpdateHandler {
             }
 
             update.isEditedMessage() -> {
-                GlobalScope.launch { onAnyEditedMessage?.invoke(update.message!!) }
+                GlobalScope.launch { onAnyEditedMessage?.invoke(update.edited_message!!) }
             }
 
             update.isChannelPost() -> {
@@ -101,7 +101,7 @@ internal class UpdateHandler {
             }
 
             update.isEditedChannelPost() -> {
-                GlobalScope.launch { onAnyEditedChannelPost?.invoke(update.channel_post!!) }
+                GlobalScope.launch { onAnyEditedChannelPost?.invoke(update.edited_channel_post!!) }
             }
 
             update.isInlineQuery() -> {
