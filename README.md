@@ -39,7 +39,7 @@ dependencies {
 ```kotlin
 fun main(args: Array<String>) {
     val token = "<TOKEN>"
-    val bot = TelegramBot.createPolling(token)
+    val bot = Bot.createPolling(token)
     bot.onCommand("/start") { msg, _ ->
         bot.sendMessage(msg.chat.id, "Hello World!")
     }
@@ -89,14 +89,30 @@ Common methods
 - `stop()`
 
 Event handlers
-- `onCommand()`
-- `onCallbackQuery()`
-- `onInlineQuery()`
-- `onAnyUpdate()`
+- `onMessage` -- called on any message
+- `removeMessageAction`
+- `onEditedMessage` -- called on any edited message
+- `removeEditedMessageAction`
+- `onChannelPost` -- called on any channel post
+- `removeChannelPostAction`
+- `onEditedChannelPost` -- called on any edited channel post
+- `removeEditedChannelPostAction`
+- `onInlineQuery` -- called on any inline query or on specific `query` provided in [`InlineQuery`](/src/main/kotlin/com/github/elbekD/bot/types/inline.kt)
+- `removeInlineQueryAction`
+- `onChosenInlineQuery` -- called on chosen inline query event
+- `removeChosenInlineQueryAction`
+- `onCallbackQuery` -- called on any callback query or on specific `callback_data` provided in [`InlineKeyboardButton`](/src/main/kotlin/com/github/elbekD/bot/types/inline.kt)
+- `removeCallbackQueryAction`
+- `onShippingQuery` -- called on any shipping query
+- `removeShippingQueryAction`
+- `onPreCheckoutQuery` -- called on any pre checkout query
+- `removePreCheckoutQueryAction`
+- `onCommand` -- called on specific command
+- `onAnyUpdate` -- called on any update
 
 Helper methods
-- `mediaPhoto()`
-- `mediaVideo()`
-- `mediaAnimation()`
-- `mediaAudio()`
-- `mediaDocument()`
+- `mediaPhoto`
+- `mediaVideo`
+- `mediaAnimation`
+- `mediaAudio`
+- `mediaDocument`
