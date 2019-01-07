@@ -1,8 +1,8 @@
-import com.github.elbekD.bot.TelegramBot
+import com.github.elbekD.bot.Bot
 
 fun main(args: Array<String>) {
     val token = "<TOKEN>"
-    val bot = TelegramBot.createWebhook(token) {
+    val bot = Bot.createWebhook(token) {
         url = "<URL>"
         // below is optional parameters
         // certificate = Paths.get("<PATH TO CERTIFICATE>").toFile()

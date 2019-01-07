@@ -1,4 +1,4 @@
-package com.github.elbekD.bot.http
+package com.elbekD.bot.http
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine

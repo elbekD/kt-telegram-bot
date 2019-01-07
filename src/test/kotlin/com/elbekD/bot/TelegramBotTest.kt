@@ -1,8 +1,8 @@
-package com.github.elbekD.bot
+package com.elbekD.bot
 
-import com.github.elbekD.bot.types.InlineKeyboardButton
-import com.github.elbekD.bot.types.InlineKeyboardMarkup
-import com.github.elbekD.bot.util.Action
+import com.elbekD.bot.types.InlineKeyboardButton
+import com.elbekD.bot.types.InlineKeyboardMarkup
+import com.elbekD.bot.util.Action
 import com.google.gson.Gson
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull

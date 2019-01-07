@@ -1,4 +1,4 @@
-package com.github.elbekD.bot
+package com.elbekD.bot
 
 import java.util.*
 import kotlin.concurrent.timer

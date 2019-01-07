@@ -1,4 +1,4 @@
-package com.github.elbekD.bot.util
+package com.elbekD.bot.util
 
 internal const val ANY_CALLBACK_TRIGGER = "="
 

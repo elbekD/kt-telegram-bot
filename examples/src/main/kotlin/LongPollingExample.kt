@@ -1,8 +1,8 @@
-import com.github.elbekD.bot.TelegramBot
+import com.github.elbekD.bot.Bot
 
 fun main(args: Array<String>) {
-    val token = "<TOKEN>"
-    val bot = TelegramBot.createPolling(token) {
+    val token = "439178594:AAFna-4TIFOaTmhuvUlaCvuszlBKyZa2a_4"
+    val bot = Bot.createPolling(token) {
         // below is optional parameters
         // limit = 50
         // timeout = 30

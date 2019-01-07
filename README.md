@@ -9,7 +9,7 @@ Method names are the same as in [API](https://core.telegram.org/bots/api#availab
 
 ### Prerequisites
 - JDK 8 or higher
-- Kotlin 1.2 or higher
+- Kotlin 1.3 or higher
 - Gradle
 - IDE (*optionally*)
 
@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    compile "com.github.elbekD:kt-telegram-bot:1.0.0-alpha"
+    implementation "com.github.elbekD:kt-telegram-bot:1.0.0-alpha"
 }
 ```
 Or Gradle Kotlin DSL

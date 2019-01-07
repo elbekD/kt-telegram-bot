@@ -1,7 +1,7 @@
-package com.github.elbekD.bot.util
+package com.elbekD.bot.util
 
-import com.github.elbekD.bot.types.Message
-import com.github.elbekD.bot.types.Update
+import com.elbekD.bot.types.Message
+import com.elbekD.bot.types.Update
 
 private val COMMAND_REGEX = "^/([\\w]{1,32}|$ANY_CALLBACK_TRIGGER)$".toRegex()
 

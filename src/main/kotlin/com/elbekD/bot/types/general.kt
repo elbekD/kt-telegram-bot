@@ -1,6 +1,6 @@
-package com.github.elbekD.bot.types
+package com.elbekD.bot.types
 
-import com.github.elbekD.bot.util.AllowedUpdate
+import com.elbekD.bot.util.AllowedUpdate
 import java.io.File
 
 data class TelegramObject<out T>(val ok: Boolean,

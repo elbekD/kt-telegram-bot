@@ -1,4 +1,4 @@
-package com.github.elbekD.bot.http
+package com.elbekD.bot.http
 
 object ApiConstants {
     const val BASE_URL = "https://api.telegram.org"

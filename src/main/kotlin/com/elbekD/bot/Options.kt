@@ -1,6 +1,6 @@
-package com.github.elbekD.bot
+package com.elbekD.bot
 
-import com.github.elbekD.bot.util.AllowedUpdate
+import com.elbekD.bot.util.AllowedUpdate
 import java.io.File
 import java.util.*
 

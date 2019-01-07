@@ -1,25 +1,25 @@
-package com.github.elbekD.bot.http
+package com.elbekD.bot.http
 
-import com.github.elbekD.bot.util.Action
-import com.github.elbekD.bot.util.AllowedUpdate
-import com.github.elbekD.bot.types.Chat
-import com.github.elbekD.bot.types.ChatMember
-import com.github.elbekD.bot.types.GameHighScore
-import com.github.elbekD.bot.types.InlineKeyboardMarkup
-import com.github.elbekD.bot.types.InlineQueryResult
-import com.github.elbekD.bot.types.InputMedia
-import com.github.elbekD.bot.types.LabeledPrice
-import com.github.elbekD.bot.types.MaskPosition
-import com.github.elbekD.bot.types.Message
-import com.github.elbekD.bot.types.PassportElementError
-import com.github.elbekD.bot.types.ReplyKeyboard
-import com.github.elbekD.bot.types.ShippingOption
-import com.github.elbekD.bot.types.StickerSet
-import com.github.elbekD.bot.types.TelegramObject
-import com.github.elbekD.bot.types.Update
-import com.github.elbekD.bot.types.User
-import com.github.elbekD.bot.types.UserProfilePhotos
-import com.github.elbekD.bot.types.WebhookInfo
+import com.elbekD.bot.types.Chat
+import com.elbekD.bot.types.ChatMember
+import com.elbekD.bot.types.GameHighScore
+import com.elbekD.bot.types.InlineKeyboardMarkup
+import com.elbekD.bot.types.InlineQueryResult
+import com.elbekD.bot.types.InputMedia
+import com.elbekD.bot.types.LabeledPrice
+import com.elbekD.bot.types.MaskPosition
+import com.elbekD.bot.types.Message
+import com.elbekD.bot.types.PassportElementError
+import com.elbekD.bot.types.ReplyKeyboard
+import com.elbekD.bot.types.ShippingOption
+import com.elbekD.bot.types.StickerSet
+import com.elbekD.bot.types.TelegramObject
+import com.elbekD.bot.types.Update
+import com.elbekD.bot.types.User
+import com.elbekD.bot.types.UserProfilePhotos
+import com.elbekD.bot.types.WebhookInfo
+import com.elbekD.bot.util.Action
+import com.elbekD.bot.util.AllowedUpdate
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.MediaType
@@ -357,7 +357,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post(ApiConstants.METHOD_GET_USER_PROFILE_PHOTOS, body)
     }
 
-    override fun getFile(fileId: String): CompletableFuture<com.github.elbekD.bot.types.File> {
+    override fun getFile(fileId: String): CompletableFuture<com.elbekD.bot.types.File> {
         val body = toBody(mapOf(ApiConstants.FILE_ID to fileId))
         return post(ApiConstants.METHOD_GET_FILE, body)
     }
@@ -600,7 +600,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post(ApiConstants.METHOD_GET_STICKER_SET, body)
     }
 
-    override fun uploadStickerFile(userId: Long, pngSticker: File): CompletableFuture<com.github.elbekD.bot.types.File> {
+    override fun uploadStickerFile(userId: Long, pngSticker: File): CompletableFuture<com.elbekD.bot.types.File> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
         form.addFormDataPart(ApiConstants.USER_ID, userId.toString())
         form.addFormDataPart(ApiConstants.PNG_STICKER, pngSticker.name, RequestBody.create(null, pngSticker))

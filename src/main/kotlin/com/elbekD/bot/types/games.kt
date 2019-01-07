@@ -1,4 +1,4 @@
-package com.github.elbekD.bot.types
+package com.elbekD.bot.types
 
 data class Game(val title: String,
                 val description: String,

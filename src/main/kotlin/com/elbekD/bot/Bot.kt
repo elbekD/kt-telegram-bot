@@ -1,14 +1,14 @@
-package com.github.elbekD.bot
+package com.elbekD.bot
 
-import com.github.elbekD.bot.http.TelegramApi
-import com.github.elbekD.bot.types.CallbackQuery
-import com.github.elbekD.bot.types.ChosenInlineResult
-import com.github.elbekD.bot.types.InlineQuery
-import com.github.elbekD.bot.types.InputMedia
-import com.github.elbekD.bot.types.Message
-import com.github.elbekD.bot.types.PreCheckoutQuery
-import com.github.elbekD.bot.types.ShippingQuery
-import com.github.elbekD.bot.types.Update
+import com.elbekD.bot.http.TelegramApi
+import com.elbekD.bot.types.CallbackQuery
+import com.elbekD.bot.types.ChosenInlineResult
+import com.elbekD.bot.types.InlineQuery
+import com.elbekD.bot.types.InputMedia
+import com.elbekD.bot.types.Message
+import com.elbekD.bot.types.PreCheckoutQuery
+import com.elbekD.bot.types.ShippingQuery
+import com.elbekD.bot.types.Update
 import java.io.File
 
 interface Bot : TelegramApi {

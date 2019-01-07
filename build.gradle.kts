@@ -1,3 +1,4 @@
+import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.dsl.Coroutines
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -11,8 +12,16 @@ buildscript {
 }
 
 plugins {
+    `build-scan`
+    id("org.jetbrains.dokka") version "0.9.17"
     kotlin("jvm") version "1.3.10"
     maven
+}
+
+buildScan {
+    setLicenseAgreementUrl("https://gradle.com/terms-of-service")
+    setLicenseAgree("yes")
+    publishAlways()
 }
 
 repositories {
@@ -21,12 +30,12 @@ repositories {
 }
 
 dependencies {
-    testCompileOnly("junit:junit:${project.extra["junit"]}")
-    compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${project.extra["kotlin_version"]}")
-    compile("org.jetbrains.kotlinx:kotlinx-coroutines-core:${project.extra["kotlin_coroutine"]}")
-    compile("com.squareup.okhttp3:okhttp:${project.extra["okhttp"]}")
-    compile("com.google.code.gson:gson:${project.extra["gson"]}")
-    compile("org.eclipse.jetty:jetty-server:${project.extra["jetty_server"]}")
+    testImplementation("junit:junit:${project.extra["junit"]}")
+    implementation(kotlin("stdlib"))
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${project.extra["kotlin_coroutine"]}")
+    implementation("com.squareup.okhttp3:okhttp:${project.extra["okhttp"]}")
+    implementation("com.google.code.gson:gson:${project.extra["gson"]}")
+    implementation("org.eclipse.jetty:jetty-server:${project.extra["jetty_server"]}")
 }
 
 val compileKotlin by tasks.getting(KotlinCompile::class) {
@@ -34,4 +43,9 @@ val compileKotlin by tasks.getting(KotlinCompile::class) {
 }
 val compileTestKotlin by tasks.getting(KotlinCompile::class) {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+val dokka by tasks.getting(DokkaTask::class) {
+    outputFormat = "html"
+    outputDirectory = "$buildDir/dokka"
 }

@@ -1,8 +1,14 @@
-package com.github.elbekD.bot
+package com.elbekD.bot
 
-import com.github.elbekD.bot.types.Update
+import com.elbekD.bot.types.Update
 import com.google.gson.Gson
-import org.eclipse.jetty.server.*
+import org.eclipse.jetty.server.HttpConfiguration
+import org.eclipse.jetty.server.HttpConnectionFactory
+import org.eclipse.jetty.server.Request
+import org.eclipse.jetty.server.SecureRequestCustomizer
+import org.eclipse.jetty.server.Server
+import org.eclipse.jetty.server.ServerConnector
+import org.eclipse.jetty.server.SslConnectionFactory
 import org.eclipse.jetty.server.handler.AbstractHandler
 import org.eclipse.jetty.util.ssl.SslContextFactory
 import javax.servlet.http.HttpServletRequest
