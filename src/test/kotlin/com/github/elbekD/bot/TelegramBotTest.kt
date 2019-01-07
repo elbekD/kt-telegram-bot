@@ -196,117 +196,101 @@ internal class TelegramBotTest {
         assertNotNull(file)
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun kickChatMember() {
-        throw RuntimeException("no unit test provided")
         val date = (Date().time + 60 * 1000).toInt()
         val msg = bot.kickChatMember(config.groupChatId, config.kikMemberId, date).get()
         assertTrue(msg)
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun unbanChatMember() {
-        throw RuntimeException("no unit test provided")
         val msg = bot.unbanChatMember(config.groupChatId, config.kikMemberId).get()
         assertTrue(msg)
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun restrictChatMember() {
-        throw RuntimeException("no unit test provided")
         val msg = bot.restrictChatMember(config.groupChatId, config.kikMemberId, canSendMessage = false).get()
         assertTrue(msg)
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun promoteChatMember() {
-        throw RuntimeException("no unit test provided")
         val msg = bot.promoteChatMember(config.groupChatId, config.kikMemberId, canPinMessages = true).get()
         assertTrue(msg)
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun exportChatInviteLink() {
-        throw RuntimeException("no unit test provided")
         bot.exportChatInviteLink(config.groupChatId).get()
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun setChatPhoto() {
-        throw RuntimeException("no unit test provided")
         val msg = bot.setChatPhoto(config.groupChatId, file(config.photos[1])).get()
         assertTrue(msg)
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun deleteChatPhoto() {
-        throw RuntimeException("no unit test provided")
         val msg = bot.deleteChatPhoto(config.groupChatId).get()
         assertTrue(msg)
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun setChatTitle() {
-        throw RuntimeException("no unit test provided")
         val msg = bot.setChatTitle(config.groupChatId, "This is chat title").get()
         assertTrue(msg)
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun setChatDescription() {
-        throw RuntimeException("no unit test provided")
         val msg = bot.setChatDescription(config.groupChatId, "This is chat description").get()
         assertTrue(msg)
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun pinChatMessage() {
-        throw RuntimeException("no unit test provided")
         val msg = bot.sendMessage(config.groupChatId, "This is universal message").get()
         val isMsgPinned = bot.pinChatMessage(msg.chat.id, msg.message_id).get()
         assertTrue(isMsgPinned)
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun unpinChatMessage() {
-        throw RuntimeException("no unit test provided")
         val msg = bot.sendMessage(config.groupChatId, "This is universal message").get()
         bot.pinChatMessage(msg.chat.id, msg.message_id).get()
         val isMsgUnpinned = bot.unpinChatMessage(msg.chat.id).get()
         assertTrue(isMsgUnpinned)
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun leaveChat() {
-        throw RuntimeException("no unit test provided")
         val msg = bot.leaveChat(config.groupChatId).get()
         assertTrue(msg)
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun getChat() {
-        throw RuntimeException("no unit test provided")
         val chat = bot.getChat(config.groupChatId).get()
         assertTrue(chat.id == config.groupChatId)
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun getChatAdministrators() {
-        throw RuntimeException("no unit test provided")
         val members = bot.getChatAdministrators(config.groupChatId).get()
         assertTrue(members.isNotEmpty())
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun getChatMembersCount() {
-        throw RuntimeException("no unit test provided")
         val count = bot.getChatMembersCount(config.groupChatId).get()
         assertTrue(count != 0)
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun getChatMember() {
-        throw RuntimeException("no unit test provided")
         val member = bot.getChatMember(config.groupChatId, config.userId).get()
         assertEquals(member.user.id, config.userId)
     }
@@ -412,9 +396,8 @@ internal class TelegramBotTest {
         }
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun sendGame_thenGetGame_thenSetNewScore() {
-        throw RuntimeException("no unit test provided")
         val game = bot.sendGame(config.userId, config.game.name).get()
         val scores = bot.getGameHighScores(config.userId, chatId = game.chat.id, messageId = game.message_id).get()
         val newScore = if (scores.isNotEmpty()) scores[0].score + 100 else 100
