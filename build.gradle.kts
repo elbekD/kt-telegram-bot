@@ -14,6 +14,7 @@ plugins {
     `build-scan`
     id("org.jetbrains.dokka") version "0.9.17"
     kotlin("jvm") version "1.3.10"
+    maven
 }
 
 buildScan {
