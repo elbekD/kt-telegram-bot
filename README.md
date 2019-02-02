@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.github.elbekD:kt-telegram-bot:1.0.0-alpha"
+    implementation "com.github.elbekD:kt-telegram-bot:$version"
 }
 ```
 Or Gradle Kotlin DSL
@@ -31,7 +31,7 @@ repositories {
 }
 
 dependencies {
-    compile("com.github.elbekD:kt-telegram-bot:1.0.0-alpha")
+    compile("com.github.elbekD:kt-telegram-bot:${version}")
 }
 ```
 
