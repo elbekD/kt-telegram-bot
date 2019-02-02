@@ -1,7 +1,3 @@
-import org.jetbrains.dokka.gradle.DokkaTask
-import org.jetbrains.kotlin.gradle.dsl.Coroutines
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 buildscript {
     project.apply { from("config.gradle.kts") }
 
@@ -15,7 +11,6 @@ plugins {
     `build-scan`
     id("org.jetbrains.dokka") version "0.9.17"
     kotlin("jvm") version "1.3.10"
-    maven
 }
 
 buildScan {
