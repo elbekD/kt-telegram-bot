@@ -1,3 +1,6 @@
+import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 buildscript {
     project.apply { from("config.gradle.kts") }
 
