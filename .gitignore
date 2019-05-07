@@ -4,3 +4,6 @@ build/*
 .idea/*
 src/test/resources/*
 *.iml
+examples/build/*
+examples/.gradle/*
+src/main/kotlin/testapp/*

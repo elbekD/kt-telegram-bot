@@ -2,7 +2,7 @@ import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm")
+    kotlin("jvm") version "1.3.10"
 }
 
 repositories {
@@ -11,8 +11,8 @@ repositories {
 }
 
 dependencies {
-    compile(kotlin("stdlib-jdk8"))
-    compile("com.github.elbekD:kt-telegram-bot:1.0.0-alpha")
+    implementation(kotlin("stdlib-jdk8"))
+    implementation("com.github.elbekD:kt-telegram-bot:1.1.3")
 }
 
 tasks.withType<KotlinCompile> {
@@ -23,9 +23,5 @@ tasks.withType<Jar> {
     manifest {
         attributes["Main-Class"] = "LongPollingExampleKt"
     }
-
-    from(configurations.compile.map {
-        @Suppress("IMPLICIT_CAST_TO_ANY")
-        if (it.isDirectory) it else zipTree(it)
-    })
+    from(configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) })
 }

@@ -1,4 +1,4 @@
-import com.github.elbekD.bot.Bot
+import com.elbekD.bot.Bot
 
 fun main(args: Array<String>) {
     val token = "<TOKEN>"
