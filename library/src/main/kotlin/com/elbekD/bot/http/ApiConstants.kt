@@ -61,6 +61,8 @@ object ApiConstants {
     const val METHOD_SET_PASSPORT_DATA_ERRORS = "setPassportDataErrors"
     const val METHOD_SEND_POLL = "sendPoll"
     const val METHOD_STOP_POLL = "stopPoll"
+    const val METHOD_SET_CHAT_PERMISSIONS = "setChatPermissions"
+    const val METHOD_SET_CHAT_ADMINISTRATOR_CUSTOM_TITLE = "setChatAdministratorCustomTitle"
 
     const val CHAT_ID = "chat_id"
     const val CAPTION = "caption"
@@ -114,10 +116,6 @@ object ApiConstants {
     const val LIMIT = "limit"
     const val FILE_ID = "file_id"
     const val UNTIL_DATE = "until_date"
-    const val CAN_SEND_MESSAGES = "can_send_messages"
-    const val CAN_SEND_MEDIA_MESSAGES = "can_send_media_messages"
-    const val CAN_SEND_OTHER_MESSAGES = "can_send_other_messages"
-    const val CAN_ADD_WEB_PAGE_PREVIEWS = "can_add_web_page_previews"
     const val CAN_CHANGE_INFO = "can_change_info"
     const val CAN_POST_MESSAGES = "can_post_messages"
     const val CAN_EDIT_MESSAGES = "can_edit_messages"
@@ -167,4 +165,6 @@ object ApiConstants {
     const val ERRORS = "errors"
     const val QUESTION = "question"
     const val OPTIONS = "options"
+    const val PERMISSIONS = "permissions"
+    const val CUSTOM_TITLE = "custom_title"
 }

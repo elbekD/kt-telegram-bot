@@ -1,6 +1,25 @@
 package com.elbekD.bot.http
 
-import com.elbekD.bot.types.*
+import com.elbekD.bot.types.Chat
+import com.elbekD.bot.types.ChatMember
+import com.elbekD.bot.types.ChatPermissions
+import com.elbekD.bot.types.File
+import com.elbekD.bot.types.GameHighScore
+import com.elbekD.bot.types.InlineKeyboardMarkup
+import com.elbekD.bot.types.InlineQueryResult
+import com.elbekD.bot.types.InputMedia
+import com.elbekD.bot.types.LabeledPrice
+import com.elbekD.bot.types.MaskPosition
+import com.elbekD.bot.types.Message
+import com.elbekD.bot.types.PassportElementError
+import com.elbekD.bot.types.Poll
+import com.elbekD.bot.types.ReplyKeyboard
+import com.elbekD.bot.types.ShippingOption
+import com.elbekD.bot.types.StickerSet
+import com.elbekD.bot.types.Update
+import com.elbekD.bot.types.User
+import com.elbekD.bot.types.UserProfilePhotos
+import com.elbekD.bot.types.WebhookInfo
 import com.elbekD.bot.util.Action
 import com.elbekD.bot.util.AllowedUpdate
 import java.util.concurrent.CompletableFuture
@@ -278,11 +297,8 @@ interface TelegramApi {
      */
     fun restrictChatMember(chatId: Any,
                            userId: Long,
-                           untilDate: Int? = null,
-                           canSendMessage: Boolean? = null,
-                           canSendMediaMessages: Boolean? = null,
-                           canSendOtherMessages: Boolean? = null,
-                           canAddWebPagePreview: Boolean? = null): CompletableFuture<Boolean>
+                           permissions: ChatPermissions,
+                           untilDate: Int? = null): CompletableFuture<Boolean>
 
     /**
      * @param chatId is `Int`, `Long` or `String`
@@ -618,4 +634,8 @@ interface TelegramApi {
     fun stopPoll(chatId: Any,
                  messageId: Int,
                  markup: InlineKeyboardMarkup? = null): CompletableFuture<Poll>
+
+    fun setChatPermissions(chatId: Any, permissions: ChatPermissions): CompletableFuture<Boolean>
+
+    fun setChatAdministratorCustomTitle(chatId: Any, userId: Long, customTitle: String): CompletableFuture<Boolean>
 }

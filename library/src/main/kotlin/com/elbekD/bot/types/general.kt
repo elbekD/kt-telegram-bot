@@ -41,11 +41,23 @@ data class Chat(val id: Long,
                 val username: String?,
                 val first_name: String?,
                 val last_name: String?,
-                val all_members_are_administrators: Boolean,
                 val photo: ChatPhoto?,
                 val description: String?,
                 val invite_link: String?,
-                val pinned_message: Message?)
+                val pinned_message: Message?,
+                val permissions: ChatPermissions?,
+                val slow_mode_delay: Boolean?,
+                val sticker_set_name: String?,
+                val can_set_sticker_set: Boolean?)
+
+data class ChatPermissions(val can_send_messages: Boolean? = null,
+                           val can_send_media_messages: Boolean? = null,
+                           val can_send_polls: Boolean? = null,
+                           val can_send_other_messages: Boolean? = null,
+                           val can_add_web_page_previews: Boolean? = null,
+                           val can_change_info: Boolean? = null,
+                           val can_invite_users: Boolean? = null,
+                           val can_pin_messages: Boolean? = null)
 
 data class Message(val message_id: Int,
                    val from: User?,
@@ -55,9 +67,11 @@ data class Message(val message_id: Int,
                    val forward_from_chat: Chat?,
                    val forward_from_message_id: Int?,
                    val forward_signature: String?,
+                   val forward_sender_name: String?,
                    val forward_date: Int?,
                    val reply_to_message: Message?,
                    val edit_date: Int?,
+                   val media_group_id: String?,
                    val author_signature: String?,
                    val text: String?,
                    val entities: List<MessageEntity>?,
@@ -71,13 +85,12 @@ data class Message(val message_id: Int,
                    val video: Video?,
                    val voice: Voice?,
                    val video_note: VideoNote?,
-                   val new_chat_members: List<User>?,
                    val caption: String?,
                    val contact: Contact?,
                    val location: Location?,
                    val venue: Venue?,
                    val poll: Poll?,
-                   val new_chat_member: User?,
+                   val new_chat_members: List<User>?,
                    val left_chat_member: User?,
                    val new_chat_title: String?,
                    val new_chat_photo: List<PhotoSize>?,
@@ -91,7 +104,8 @@ data class Message(val message_id: Int,
                    val invoice: Invoice?,
                    val successful_payment: SuccessfulPayment?,
                    val connected_website: String?,
-                   val passport_data: PassportData?)
+                   val passport_data: PassportData?,
+                   val reply_markup: InlineKeyboardMarkup?)
 
 data class CallbackQuery(val id: String,
                          val from: User,
@@ -130,6 +144,7 @@ data class PhotoSize(val file_id: String,
                      val file_size: Int)
 
 data class Audio(val file_id: String,
+                 val file_unique_id: String,
                  val duration: Int,
                  val performer: String?,
                  val title: String?,
@@ -138,12 +153,14 @@ data class Audio(val file_id: String,
                  val thumb: PhotoSize?)
 
 data class Document(val file_id: String,
+                    val file_unique_id: String,
                     val thumb: PhotoSize?,
                     val file_name: String?,
                     val mime_type: String?,
                     val file_size: Int)
 
 data class Video(val file_id: String,
+                 val file_unique_id: String,
                  val width: Int,
                  val height: Int,
                  val duration: Int,
@@ -152,6 +169,7 @@ data class Video(val file_id: String,
                  val file_size: Int)
 
 data class Animation(val file_id: String,
+                     val file_unique_id: String,
                      val width: Int,
                      val height: Int,
                      val duration: Int,
@@ -161,11 +179,13 @@ data class Animation(val file_id: String,
                      val file_size: Int?)
 
 data class Voice(val file_id: String,
+                 val file_unique_id: String,
                  val duration: Int,
                  val mime_type: String,
                  val file_size: Int)
 
 data class VideoNote(val file_id: String,
+                     val file_unique_id: String,
                      val length: Int,
                      val duration: Int,
                      val thumb: PhotoSize?,
@@ -187,26 +207,35 @@ data class Venue(val location: Location?,
 
 data class UserProfilePhotos(val total_count: Int, val photos: List<List<PhotoSize>>?)
 
-data class File(val file_id: String, val file_size: Int, val file_path: String)
+data class File(val file_id: String,
+                val file_unique_id: String,
+                val file_size: Int,
+                val file_path: String)
 
-data class ChatPhoto(val small_file_id: String, val big_file_id: String)
+data class ChatPhoto(val small_file_id: String,
+                     val small_file_unique_id: String,
+                     val big_file_id: String,
+                     val big_file_unique_id: String)
 
 data class ChatMember(val user: User,
                       val status: String,
-                      val until_date: Int,
-                      val can_be_edited: Boolean,
-                      val can_change_info: Boolean,
-                      val can_post_messages: Boolean,
-                      val can_edit_messages: Boolean,
-                      val can_delete_messages: Boolean,
-                      val can_invite_users: Boolean,
-                      val can_restrict_members: Boolean,
-                      val can_pin_messages: Boolean,
-                      val can_promote_members: Boolean,
-                      val can_send_messages: Boolean,
-                      val can_send_media_messages: Boolean,
-                      val can_send_other_messages: Boolean,
-                      val can_add_web_page_previews: Boolean)
+                      val custom_title: String?,
+                      val until_date: Int?,
+                      val can_be_edited: Boolean?,
+                      val can_post_messages: Boolean?,
+                      val can_edit_messages: Boolean?,
+                      val can_delete_messages: Boolean?,
+                      val can_restrict_members: Boolean?,
+                      val can_promote_members: Boolean?,
+                      val can_change_info: Boolean?,
+                      val can_invite_users: Boolean?,
+                      val can_pin_messages: Boolean?,
+                      val is_member: Boolean?,
+                      val can_send_messages: Boolean?,
+                      val can_send_media_messages: Boolean?,
+                      val can_send_polls: Boolean?,
+                      val can_send_other_messages: Boolean?,
+                      val can_add_web_page_previews: Boolean?)
 
 @Suppress("unused")
 data class ResponseParameters(val migrate_to_chat_id: Long, val retry_after: Int)

@@ -1,5 +1,6 @@
 package com.elbekD.bot
 
+import com.elbekD.bot.types.ChatPermissions
 import com.elbekD.bot.types.InlineKeyboardButton
 import com.elbekD.bot.types.InlineKeyboardMarkup
 import com.elbekD.bot.util.Action
@@ -211,7 +212,7 @@ internal class TelegramBotTest {
 
     @Test
     fun restrictChatMember() {
-        val msg = bot.restrictChatMember(config.groupChatId, config.kikMemberId, canSendMessage = false).get()
+        val msg = bot.restrictChatMember(config.groupChatId, config.kikMemberId, ChatPermissions(can_send_messages = false)).get()
         assertTrue(msg)
     }
 
@@ -444,6 +445,7 @@ internal class TelegramBotTest {
         val poll = bot.stopPoll(
                 config.groupChatId,
                 config.msgId).get()
+
         assertTrue(poll.is_closed)
     }
 

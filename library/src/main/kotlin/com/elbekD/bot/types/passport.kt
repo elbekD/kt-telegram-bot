@@ -4,6 +4,7 @@ data class PassportData(val data: List<EncryptedPassportElement>,
                         val credentials: EncryptedCredentials)
 
 data class PassportFile(val file_id: String,
+                        val file_unique_id: String,
                         val file_size: Int,
                         val file_date: Long)
 

@@ -18,10 +18,16 @@ data class InlineKeyboardMarkup(val inline_keyboard: List<List<InlineKeyboardBut
 
 data class InlineKeyboardButton(val text: String,
                                 val url: String? = null,
+                                val login_url: LoginUrl? = null,
                                 val callback_data: String? = null,
                                 val switch_inline_query: String? = null,
                                 val switch_inline_query_current_chat: String? = null,
                                 val callback_game: Any? = null,
                                 val pay: Boolean? = null)
+
+data class LoginUrl(val url: String,
+                    val forward_text: String? = null,
+                    val bot_username: String? = null,
+                    val request_write_access: Boolean? = null)
 
 data class ForceReply(val force_reply: Boolean, val selective: Boolean) : ReplyKeyboard

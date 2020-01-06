@@ -2,6 +2,7 @@ package com.elbekD.bot.http
 
 import com.elbekD.bot.types.Chat
 import com.elbekD.bot.types.ChatMember
+import com.elbekD.bot.types.ChatPermissions
 import com.elbekD.bot.types.GameHighScore
 import com.elbekD.bot.types.InlineKeyboardMarkup
 import com.elbekD.bot.types.InlineQueryResult
@@ -153,61 +154,61 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     override fun getMe() = get<User>(ApiConstants.METHOD_GET_ME)
 
-    override fun sendMessage(chatId: Any, text: String, parseMode: String?, preview: Boolean?, notification: Boolean?,
+    override fun sendMessage(chatId: Any, text: String, parseMode: String?, preview: Boolean?, disableNotification: Boolean?,
                              replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         val body = toBody(mapOf(
                 ApiConstants.CHAT_ID to id(chatId),
                 ApiConstants.TEXT to text,
                 ApiConstants.PARSE_MODE to parseMode,
                 ApiConstants.DISABLE_WEB_PAGE_PREVIEW to preview,
-                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup
         ))
         return post(ApiConstants.METHOD_SEND_MESSAGE, body)
     }
 
-    override fun forwardMessage(chatId: Any, fromId: Any, msgId: Int, notification: Boolean?): CompletableFuture<Message> {
+    override fun forwardMessage(chatId: Any, fromId: Any, msgId: Int, disableNotification: Boolean?): CompletableFuture<Message> {
         val body = toBody(mapOf(
                 ApiConstants.CHAT_ID to id(chatId),
                 ApiConstants.FROM_CHAT_ID to id(fromId),
                 ApiConstants.MESSAGE_ID to msgId,
-                ApiConstants.DISABLE_NOTIFICATION to notification
+                ApiConstants.DISABLE_NOTIFICATION to disableNotification
         ))
         return post(ApiConstants.METHOD_FORWARD_MESSAGE, body)
     }
 
-    override fun sendPhoto(chatId: Any, photo: Any, caption: String?, parseMode: String?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+    override fun sendPhoto(chatId: Any, photo: Any, caption: String?, parseMode: String?, disableNotification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         return sendFile(ApiConstants.PHOTO, id(chatId), photo, mapOf(
                 ApiConstants.CAPTION to caption,
                 ApiConstants.PARSE_MODE to parseMode,
-                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup))
     }
 
-    override fun sendAudio(chatId: Any, audio: Any, caption: String?, parseMode: String?, duration: Int?, performer: String?, title: String?, thumb: File?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+    override fun sendAudio(chatId: Any, audio: Any, caption: String?, parseMode: String?, duration: Int?, performer: String?, title: String?, thumb: File?, disableNotification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         return sendFile(ApiConstants.AUDIO, id(chatId), audio, mapOf(
                 ApiConstants.CAPTION to caption,
                 ApiConstants.PARSE_MODE to parseMode,
                 ApiConstants.DURATION to duration,
                 ApiConstants.PERFORMER to performer,
                 ApiConstants.TITLE to title,
-                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup), thumb)
     }
 
-    override fun sendDocument(chatId: Any, document: Any, thumb: File?, caption: String?, parseMode: String?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+    override fun sendDocument(chatId: Any, document: Any, thumb: File?, caption: String?, parseMode: String?, disableNotification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         return sendFile(ApiConstants.DOCUMENT, id(chatId), document, mapOf(
                 ApiConstants.CAPTION to caption,
                 ApiConstants.PARSE_MODE to parseMode,
-                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup), thumb)
     }
 
-    override fun sendVideo(chatId: Any, video: Any, duration: Int?, width: Int?, height: Int?, thumb: File?, caption: String?, parseMode: String?, streaming: Boolean?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+    override fun sendVideo(chatId: Any, video: Any, duration: Int?, width: Int?, height: Int?, thumb: File?, caption: String?, parseMode: String?, streaming: Boolean?, disableNotification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         return sendFile(ApiConstants.VIDEO, id(chatId), video, mapOf(
                 ApiConstants.DURATION to duration,
                 ApiConstants.WIDTH to width,
@@ -215,45 +216,45 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.CAPTION to caption,
                 ApiConstants.PARSE_MODE to parseMode,
                 ApiConstants.SUPPORTS_STREAMING to streaming,
-                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup
         ), thumb)
     }
 
-    override fun sendAnimation(chatId: Any, animation: Any, duration: Int?, width: Int?, height: Int?, thumb: File?, caption: String?, parseMode: String?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+    override fun sendAnimation(chatId: Any, animation: Any, duration: Int?, width: Int?, height: Int?, thumb: File?, caption: String?, parseMode: String?, disableNotification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         return sendFile(ApiConstants.ANIMATION, id(chatId), animation, mapOf(
                 ApiConstants.DURATION to duration,
                 ApiConstants.WIDTH to width,
                 ApiConstants.HEIGHT to height,
                 ApiConstants.CAPTION to caption,
                 ApiConstants.PARSE_MODE to parseMode,
-                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup
         ), thumb)
     }
 
-    override fun sendVoice(chatId: Any, voice: Any, caption: String?, parseMode: String?, duration: Int?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+    override fun sendVoice(chatId: Any, voice: Any, caption: String?, parseMode: String?, duration: Int?, disableNotification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         return sendFile(ApiConstants.VOICE, id(chatId), voice, mapOf(
                 ApiConstants.CAPTION to caption,
                 ApiConstants.PARSE_MODE to parseMode,
                 ApiConstants.DURATION to duration,
-                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup))
     }
 
-    override fun sendVideoNote(chatId: Any, note: Any, duration: Int?, length: Int?, thumb: File?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+    override fun sendVideoNote(chatId: Any, note: Any, duration: Int?, length: Int?, thumb: File?, disableNotification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         return sendFile(ApiConstants.VIDEO_NOTE, id(chatId), note, mapOf(
                 ApiConstants.DURATION to duration,
-                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup
         ), thumb, ApiConstants.METHOD_VIDEO_NOTE)
     }
 
-    override fun sendMediaGroup(chatId: Any, media: List<InputMedia>, notification: Boolean?, replyTo: Int?): CompletableFuture<ArrayList<Message>> {
+    override fun sendMediaGroup(chatId: Any, media: List<InputMedia>, disableNotification: Boolean?, replyTo: Int?): CompletableFuture<ArrayList<Message>> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
         form.addFormDataPart(ApiConstants.CHAT_ID, id(chatId))
 
@@ -272,19 +273,19 @@ internal class TelegramClient(token: String) : TelegramApi {
         }
 
         form.addFormDataPart(ApiConstants.MEDIA, toJson(media))
-        notification?.let { form.addFormDataPart(ApiConstants.DISABLE_NOTIFICATION, it.toString()) }
+        disableNotification?.let { form.addFormDataPart(ApiConstants.DISABLE_NOTIFICATION, it.toString()) }
         replyTo?.let { form.addFormDataPart(ApiConstants.REPLY_TO_MESSAGE_ID, it.toString()) }
 
         return post(ApiConstants.METHOD_SEND_MEDIA_GROUP, form.build())
     }
 
-    override fun sendLocation(chatId: Any, latitude: Double, longitude: Double, period: Int?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+    override fun sendLocation(chatId: Any, latitude: Double, longitude: Double, period: Int?, disableNotification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         val body = toBody(mapOf(
                 ApiConstants.CHAT_ID to chatId,
                 ApiConstants.LATITUDE to latitude,
                 ApiConstants.LONGITUDE to longitude,
                 ApiConstants.LIVE_PERIOD to period,
-                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup
         ))
@@ -313,7 +314,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post(ApiConstants.METHOD_STOP_MESSAGE_LIVE_LOCATION, body)
     }
 
-    override fun sendVenue(chatId: Any, latitude: Double, longitude: Double, title: String, address: String, foursquareId: String?, foursquareType: String?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+    override fun sendVenue(chatId: Any, latitude: Double, longitude: Double, title: String, address: String, foursquareId: String?, foursquareType: String?, disableNotification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         val body = toBody(mapOf(
                 ApiConstants.CHAT_ID to chatId,
                 ApiConstants.LATITUDE to latitude,
@@ -322,21 +323,21 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.ADDRESS to address,
                 ApiConstants.FOURSQUARE_ID to foursquareId,
                 ApiConstants.FOURSQUARE_TYPE to foursquareType,
-                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup
         ))
         return post(ApiConstants.METHOD_SEND_VENUE, body)
     }
 
-    override fun sendContact(chatId: Any, phone: String, firstName: String, lastName: String?, vcard: String?, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+    override fun sendContact(chatId: Any, phone: String, firstName: String, lastName: String?, vcard: String?, disableNotification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         val body = toBody(mapOf(
                 ApiConstants.CHAT_ID to chatId,
                 ApiConstants.PHONE_NUMBER to phone,
                 ApiConstants.FIRST_NAME to firstName,
                 ApiConstants.LAST_NAME to lastName,
                 ApiConstants.VCARD to vcard,
-                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup
         ))
@@ -378,16 +379,12 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post(ApiConstants.METHOD_UNBAN_CHAT_MEMBER, body)
     }
 
-    override fun restrictChatMember(chatId: Any, userId: Long, untilDate: Int?, canSendMessage: Boolean?,
-                                    canSendMediaMessages: Boolean?, canSendOtherMessages: Boolean?, canAddWebPagePreview: Boolean?): CompletableFuture<Boolean> {
+    override fun restrictChatMember(chatId: Any, userId: Long, permissions: ChatPermissions, untilDate: Int?): CompletableFuture<Boolean> {
         val body = toBody(mapOf(
                 ApiConstants.CHAT_ID to id(chatId),
                 ApiConstants.USER_ID to userId,
-                ApiConstants.UNTIL_DATE to untilDate,
-                ApiConstants.CAN_SEND_MESSAGES to canSendMessage,
-                ApiConstants.CAN_SEND_MEDIA_MESSAGES to canSendMediaMessages,
-                ApiConstants.CAN_SEND_OTHER_MESSAGES to canSendOtherMessages,
-                ApiConstants.CAN_ADD_WEB_PAGE_PREVIEWS to canAddWebPagePreview))
+                ApiConstants.PERMISSIONS to permissions,
+                ApiConstants.UNTIL_DATE to untilDate))
         return post(ApiConstants.METHOD_RESTRICT_CHAT_MEMBER, body)
     }
 
@@ -445,11 +442,11 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post(ApiConstants.METHOD_SET_CHAT_DESCRIPTION, body)
     }
 
-    override fun pinChatMessage(chatId: Any, messageId: Int, notification: Boolean?): CompletableFuture<Boolean> {
+    override fun pinChatMessage(chatId: Any, messageId: Int, disableNotification: Boolean?): CompletableFuture<Boolean> {
         val body = toBody(mapOf(
                 ApiConstants.CHAT_ID to id(chatId),
                 ApiConstants.MESSAGE_ID to messageId,
-                ApiConstants.DISABLE_NOTIFICATION to notification))
+                ApiConstants.DISABLE_NOTIFICATION to disableNotification))
         return post(ApiConstants.METHOD_PIN_CHAT_MESSAGE, body)
     }
 
@@ -579,7 +576,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post(ApiConstants.METHOD_EDIT_MESSAGE_REPLY_MARKUP, body)
     }
 
-    override fun sendSticker(chatId: Any, sticker: Any, notification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+    override fun sendSticker(chatId: Any, sticker: Any, disableNotification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
 
         form.addFormDataPart(ApiConstants.CHAT_ID, id(chatId))
@@ -589,7 +586,7 @@ internal class TelegramClient(token: String) : TelegramApi {
             is String -> form.addFormDataPart(ApiConstants.STICKER, sticker)
         }
 
-        notification?.let { form.addFormDataPart(ApiConstants.DISABLE_NOTIFICATION, it.toString()) }
+        disableNotification?.let { form.addFormDataPart(ApiConstants.DISABLE_NOTIFICATION, it.toString()) }
         replyTo?.let { form.addFormDataPart(ApiConstants.REPLY_TO_MESSAGE_ID, it.toString()) }
         markup?.let { form.addFormDataPart(ApiConstants.REPLY_MARKUP, toJson(it)) }
 
@@ -654,11 +651,11 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post(ApiConstants.METHOD_DELETE_STICKER_FROM_SET, body)
     }
 
-    override fun sendGame(chatId: Long, gameShortName: String, notification: Boolean?, replyTo: Int?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+    override fun sendGame(chatId: Long, gameShortName: String, disableNotification: Boolean?, replyTo: Int?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
         val body = toBody(mapOf(
                 ApiConstants.CHAT_ID to chatId,
                 ApiConstants.GAME_SHORT_NAME to gameShortName,
-                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup))
         return post(ApiConstants.METHOD_SEND_GAME, body)
@@ -685,7 +682,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post(ApiConstants.METHOD_GET_GAME_HIGH_SCORES, body)
     }
 
-    override fun sendInvoice(chatId: Long, title: String, description: String, payload: String, providerToken: String, startParam: String, currency: String, prices: List<LabeledPrice>, providerData: String?, photoUrl: String?, photoSize: Int?, photoWidth: Int?, photoHeight: Int?, needName: Boolean?, needPhoneNumber: Boolean?, needEmail: Boolean?, needShippingAddress: Boolean?, sendPhoneNumberToProvider: Boolean?, sendEmailToProvider: Boolean?, isFlexible: Boolean?, notification: Boolean?, replyTo: Int?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+    override fun sendInvoice(chatId: Long, title: String, description: String, payload: String, providerToken: String, startParam: String, currency: String, prices: List<LabeledPrice>, providerData: String?, photoUrl: String?, photoSize: Int?, photoWidth: Int?, photoHeight: Int?, needName: Boolean?, needPhoneNumber: Boolean?, needEmail: Boolean?, needShippingAddress: Boolean?, sendPhoneNumberToProvider: Boolean?, sendEmailToProvider: Boolean?, isFlexible: Boolean?, disableNotification: Boolean?, replyTo: Int?, markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
         val body = toBody(mapOf(
                 ApiConstants.CHAT_ID to chatId,
                 ApiConstants.TITLE to title,
@@ -707,7 +704,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.SEND_PHONE_NUMBER_TO_PROVIDER to sendPhoneNumberToProvider,
                 ApiConstants.SEND_EMAIL_TO_PROVIDER to sendEmailToProvider,
                 ApiConstants.IS_FLEXIBLE to isFlexible,
-                ApiConstants.DISABLE_NOTIFICATION to notification,
+                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup))
         return post(ApiConstants.METHOD_SEND_INVOICE, body)
@@ -757,5 +754,22 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.REPLY_MARKUP to markup
         ))
         return post(ApiConstants.METHOD_STOP_POLL, body)
+    }
+
+    override fun setChatPermissions(chatId: Any, permissions: ChatPermissions): CompletableFuture<Boolean> {
+        val body = toBody(mapOf(
+                ApiConstants.CHAT_ID to id(chatId),
+                ApiConstants.PERMISSIONS to permissions
+        ))
+        return post(ApiConstants.METHOD_SET_CHAT_PERMISSIONS, body)
+    }
+
+    override fun setChatAdministratorCustomTitle(chatId: Any, userId: Long, customTitle: String): CompletableFuture<Boolean> {
+        val body = toBody(mapOf(
+                ApiConstants.CHAT_ID to id(chatId),
+                ApiConstants.USER_ID to userId,
+                ApiConstants.CUSTOM_TITLE to customTitle
+        ))
+        return post(ApiConstants.METHOD_SET_CHAT_ADMINISTRATOR_CUSTOM_TITLE, body)
     }
 }

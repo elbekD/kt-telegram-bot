@@ -7,3 +7,4 @@ library/src/test/resources/*
 examples/build/*
 examples/.gradle/*
 library/build/*
+library/.gradle/*

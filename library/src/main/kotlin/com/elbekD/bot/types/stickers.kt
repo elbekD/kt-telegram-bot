@@ -1,8 +1,10 @@
 package com.elbekD.bot.types
 
 data class Sticker(val file_id: String,
+                   val file_unique_id: String,
                    val width: Int,
                    val height: Int,
+                   val is_animated: Boolean,
                    val thumb: PhotoSize?,
                    val emoji: String?,
                    val set_name: String?,
@@ -11,6 +13,7 @@ data class Sticker(val file_id: String,
 
 data class StickerSet(val name: String,
                       val title: String,
+                      val is_animated: Boolean,
                       val contains_mask: Boolean,
                       val stickers: List<Sticker>)
 
