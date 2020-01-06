@@ -13,7 +13,7 @@ suspend fun <T> CompletableFuture<T>.await(): T = suspendCancellableCoroutine {
     whenComplete { res, ex -> if (ex == null) it.resume(res) else it.resumeWithException(ex) }
 }
 
-fun <T> future(context: CoroutineContext = Dispatchers.Default, block: suspend () -> T): CompletableFuture<T> =
+fun <T> future(context: CoroutineContext = Dispatchers.IO, block: suspend () -> T): CompletableFuture<T> =
         CompletableFutureCoroutine<T>(context).also { block.startCoroutine(completion = it) }
 
 class CompletableFutureCoroutine<T>(override val context: CoroutineContext) : CompletableFuture<T>(), Continuation<T> {

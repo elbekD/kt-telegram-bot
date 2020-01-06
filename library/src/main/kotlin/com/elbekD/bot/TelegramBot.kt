@@ -17,6 +17,7 @@ import com.elbekD.bot.types.LabeledPrice
 import com.elbekD.bot.types.MaskPosition
 import com.elbekD.bot.types.Message
 import com.elbekD.bot.types.PassportElementError
+import com.elbekD.bot.types.Poll
 import com.elbekD.bot.types.PreCheckoutQuery
 import com.elbekD.bot.types.ReplyKeyboard
 import com.elbekD.bot.types.ShippingOption
@@ -589,6 +590,11 @@ internal abstract class TelegramBot protected constructor(tk: String) : Bot {
     override fun setPassportDataErrors(userId: Long,
                                        errors: List<PassportElementError>) =
             client.setPassportDataErrors(userId, errors)
+
+    override fun sendPoll(chatId: Any, question: String, options: List<String>, disableNotification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?) =
+            client.sendPoll(chatId, question, options, disableNotification, replyTo, markup)
+
+    override fun stopPoll(chatId: Any, messageId: Int, markup: InlineKeyboardMarkup?): CompletableFuture<Poll> = client.stopPoll(chatId, messageId, markup)
     /*
                 /\
                /  \

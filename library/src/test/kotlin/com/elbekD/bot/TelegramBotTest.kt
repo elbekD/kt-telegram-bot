@@ -193,7 +193,7 @@ internal class TelegramBotTest {
     @Test
     fun getFile() {
         val file = bot.getFile(config.fileId).get()
-        assertNotNull(file)
+        assertTrue(file.file_size > 0)
     }
 
     @Test
@@ -321,7 +321,6 @@ internal class TelegramBotTest {
     fun editMessageText() {
         val prev = bot.sendMessage(config.userId, "helo").get()
         val curr = bot.editMessageText(prev.chat.id, prev.message_id, text = "Hello").get()
-        assertNotNull(curr)
         assertEquals("Hello", curr.text)
     }
 
@@ -330,7 +329,6 @@ internal class TelegramBotTest {
         val file = file(config.photos[0])
         val prev = bot.sendPhoto(config.userId, file, "cccaption").get()
         val curr = bot.editMessageCaption(prev.chat.id, prev.message_id, caption = "Caption").get()
-        assertNotNull(curr)
         assertEquals("Caption", curr.caption)
     }
 
@@ -362,7 +360,6 @@ internal class TelegramBotTest {
 
         val prev = bot.sendMessage(config.userId, "hello", markup = keyboard1).get()
         val curr = bot.editMessageReplyMarkup(prev.chat.id, prev.message_id, markup = keyboard2).get()
-        assertNotNull(curr)
         assertTrue(curr.edit_date != null)
     }
 
@@ -431,4 +428,23 @@ internal class TelegramBotTest {
     fun answerPreCheckoutQuery() {
         throw RuntimeException("no unit test provided")
     }
+
+    @Test
+    fun sendPoll() {
+        val msg = bot.sendPoll(
+                config.groupChatId,
+                "Test poll question",
+                listOf("Option 1", "Option 2")).get()
+
+        assertNotNull(msg.poll)
+    }
+
+    @Test
+    fun stopPoll() {
+        val poll = bot.stopPoll(
+                config.groupChatId,
+                config.msgId).get()
+        assertTrue(poll.is_closed)
+    }
+
 }

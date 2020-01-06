@@ -17,7 +17,8 @@ data class Update(val update_id: Int,
                   val chosen_inline_result: ChosenInlineResult?,
                   val callback_query: CallbackQuery?,
                   val shipping_query: ShippingQuery?,
-                  val pre_checkout_query: PreCheckoutQuery?)
+                  val pre_checkout_query: PreCheckoutQuery?,
+                  val poll: Poll?)
 
 data class WebhookInfo(val url: String,
                        val has_custom_certificate: Boolean,
@@ -75,6 +76,7 @@ data class Message(val message_id: Int,
                    val contact: Contact?,
                    val location: Location?,
                    val venue: Venue?,
+                   val poll: Poll?,
                    val new_chat_member: User?,
                    val left_chat_member: User?,
                    val new_chat_title: String?,

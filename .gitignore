@@ -2,8 +2,8 @@ out/*
 build/*
 .gradle/*
 .idea/*
-src/test/resources/*
+library/src/test/resources/*
 *.iml
 examples/build/*
 examples/.gradle/*
-src/main/kotlin/testapp/*
+library/build/*

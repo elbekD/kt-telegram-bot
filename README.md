@@ -81,7 +81,7 @@ Then run this task. Checkout your `build/libs` directory where you'll find
 and [nginx configuration file](/examples/bot.conf)
 
 ## Bot methods
-See details in [source code](/src/main/kotlin/com/github/elbekD/bot/Bot.kt).
+See details in [source code](/library/src/main/kotlin/com/github/elbekD/bot/Bot.kt).
 
 ### Overview
 Common methods
@@ -97,11 +97,11 @@ Event handlers
 - `removeChannelPostAction`
 - `onEditedChannelPost` -- called on any edited channel post
 - `removeEditedChannelPostAction`
-- `onInlineQuery` -- called on any inline query or on specific `query` provided in [`InlineQuery`](/src/main/kotlin/com/github/elbekD/bot/types/inline.kt)
+- `onInlineQuery` -- called on any inline query or on specific `query` provided in [`InlineQuery`](/library/src/main/kotlin/com/github/elbekD/bot/types/inline.kt)
 - `removeInlineQueryAction`
 - `onChosenInlineQuery` -- called on chosen inline query event
 - `removeChosenInlineQueryAction`
-- `onCallbackQuery` -- called on any callback query or on specific `callback_data` provided in [`InlineKeyboardButton`](/src/main/kotlin/com/github/elbekD/bot/types/inline.kt)
+- `onCallbackQuery` -- called on any callback query or on specific `callback_data` provided in [`InlineKeyboardButton`](/library/src/main/kotlin/com/github/elbekD/bot/types/inline.kt)
 - `removeCallbackQueryAction`
 - `onShippingQuery` -- called on any shipping query
 - `removeShippingQueryAction`

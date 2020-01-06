@@ -10,6 +10,7 @@ import com.elbekD.bot.types.LabeledPrice
 import com.elbekD.bot.types.MaskPosition
 import com.elbekD.bot.types.Message
 import com.elbekD.bot.types.PassportElementError
+import com.elbekD.bot.types.Poll
 import com.elbekD.bot.types.ReplyKeyboard
 import com.elbekD.bot.types.ShippingOption
 import com.elbekD.bot.types.StickerSet
@@ -735,5 +736,26 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.USER_ID to userId,
                 ApiConstants.ERRORS to errors))
         return post(ApiConstants.METHOD_SET_PASSPORT_DATA_ERRORS, body)
+    }
+
+    override fun sendPoll(chatId: Any, question: String, options: List<String>, disableNotification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+        val body = toBody(mapOf(
+                ApiConstants.CHAT_ID to id(chatId),
+                ApiConstants.QUESTION to question,
+                ApiConstants.OPTIONS to options,
+                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
+                ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.REPLY_MARKUP to markup
+        ))
+        return post(ApiConstants.METHOD_SEND_POLL, body)
+    }
+
+    override fun stopPoll(chatId: Any, messageId: Int, markup: InlineKeyboardMarkup?): CompletableFuture<Poll> {
+        val body = toBody(mapOf(
+                ApiConstants.CHAT_ID to id(chatId),
+                ApiConstants.MESSAGE_ID to messageId,
+                ApiConstants.REPLY_MARKUP to markup
+        ))
+        return post(ApiConstants.METHOD_STOP_POLL, body)
     }
 }

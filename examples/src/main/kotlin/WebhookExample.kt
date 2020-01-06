@@ -1,6 +1,7 @@
 import com.elbekD.bot.Bot
+import com.elbekD.bot.server
 
-fun main(args: Array<String>) {
+fun main() {
     val token = "<TOKEN>"
     val bot = Bot.createWebhook(token) {
         url = "<URL>"
@@ -13,22 +14,22 @@ fun main(args: Array<String>) {
         /*
             Jetty server is used to listen to incoming request from Telegram servers.
             Recommended way to use webhook is to set configured nginx as proxy server.
-         */
-        // server {
-        //   run on localhost
-        //   host = "localhost"
+        */
+        server {
+            //   run on localhost
+            host = "localhost"
 
-        //   and listen to desired port
-        //   port = 5200
+            //   and listen to desired port
+            port = 5200
 
-        //   configuring TLS layer if no nginx used
-        //   tls {
-        //       port = 443
-        //       keyStorePath = "<PATH TO KEYSTORE>"
-        //       keyStorePassword = "<KEYSTORE PASSWORD>"
-        //       keyManagerPassword = "<KEY MANAGER PASSWORD>"
-        //   }
-        // }
+            //   configuring TLS layer if no nginx used
+            //   tls {
+            //       port = 443
+            //       keyStorePath = "<PATH TO KEYSTORE>"
+            //       keyStorePassword = "<KEYSTORE PASSWORD>"
+            //       keyManagerPassword = "<KEY MANAGER PASSWORD>"
+            //   }
+        }
     }
 
     bot.onCommand("/start") { msg, _ ->

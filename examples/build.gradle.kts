@@ -2,17 +2,21 @@ import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.3.10"
+    // uncomment
+    kotlin("jvm") // version "1.3.61"
 }
 
 repositories {
     mavenCentral()
-    maven("https://jitpack.io")
+    // uncomment
+//    maven("https://jitpack.io")
 }
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("com.github.elbekD:kt-telegram-bot:1.1.3")
+    implementation(project(":library"))
+    // comment/remove the line above and uncomment the line below
+//    implementation("com.github.elbekD:kt-telegram-bot:1.1.3")
 }
 
 tasks.withType<KotlinCompile> {
@@ -20,8 +24,6 @@ tasks.withType<KotlinCompile> {
 }
 
 tasks.withType<Jar> {
-    manifest {
-        attributes["Main-Class"] = "LongPollingExampleKt"
-    }
+    manifest { attributes["Main-Class"] = "WebhookExampleKt" }
     from(configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) })
 }

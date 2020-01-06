@@ -1,23 +1,6 @@
 package com.elbekD.bot.http
 
-import com.elbekD.bot.types.Chat
-import com.elbekD.bot.types.ChatMember
-import com.elbekD.bot.types.File
-import com.elbekD.bot.types.GameHighScore
-import com.elbekD.bot.types.InlineKeyboardMarkup
-import com.elbekD.bot.types.InlineQueryResult
-import com.elbekD.bot.types.InputMedia
-import com.elbekD.bot.types.LabeledPrice
-import com.elbekD.bot.types.MaskPosition
-import com.elbekD.bot.types.Message
-import com.elbekD.bot.types.PassportElementError
-import com.elbekD.bot.types.ReplyKeyboard
-import com.elbekD.bot.types.ShippingOption
-import com.elbekD.bot.types.StickerSet
-import com.elbekD.bot.types.Update
-import com.elbekD.bot.types.User
-import com.elbekD.bot.types.UserProfilePhotos
-import com.elbekD.bot.types.WebhookInfo
+import com.elbekD.bot.types.*
 import com.elbekD.bot.util.Action
 import com.elbekD.bot.util.AllowedUpdate
 import java.util.concurrent.CompletableFuture
@@ -45,7 +28,7 @@ interface TelegramApi {
                     text: String,
                     parseMode: String? = null,
                     preview: Boolean? = null,
-                    notification: Boolean? = null,
+                    disableNotification: Boolean? = null,
                     replyTo: Int? = null,
                     markup: ReplyKeyboard? = null): CompletableFuture<Message>
 
@@ -58,7 +41,7 @@ interface TelegramApi {
     fun forwardMessage(chatId: Any,
                        fromId: Any,
                        msgId: Int,
-                       notification: Boolean? = null): CompletableFuture<Message>
+                       disableNotification: Boolean? = null): CompletableFuture<Message>
 
     /**
      * @param chatId is `Int`, `Long` or `String`
@@ -71,7 +54,7 @@ interface TelegramApi {
                   photo: Any,
                   caption: String? = null,
                   parseMode: String? = null,
-                  notification: Boolean? = null,
+                  disableNotification: Boolean? = null,
                   replyTo: Int? = null,
                   markup: ReplyKeyboard? = null): CompletableFuture<Message>
 
@@ -90,7 +73,7 @@ interface TelegramApi {
                   performer: String? = null,
                   title: String? = null,
                   thumb: java.io.File? = null,
-                  notification: Boolean? = null,
+                  disableNotification: Boolean? = null,
                   replyTo: Int? = null,
                   markup: ReplyKeyboard? = null):
             CompletableFuture<Message>
@@ -107,7 +90,7 @@ interface TelegramApi {
                      thumb: java.io.File? = null,
                      caption: String? = null,
                      parseMode: String? = null,
-                     notification: Boolean? = null,
+                     disableNotification: Boolean? = null,
                      replyTo: Int? = null,
                      markup: ReplyKeyboard? = null): CompletableFuture<Message>
 
@@ -127,7 +110,7 @@ interface TelegramApi {
                   caption: String? = null,
                   parseMode: String? = null,
                   streaming: Boolean? = null,
-                  notification: Boolean? = null,
+                  disableNotification: Boolean? = null,
                   replyTo: Int? = null,
                   markup: ReplyKeyboard? = null): CompletableFuture<Message>
 
@@ -148,7 +131,7 @@ interface TelegramApi {
                       thumb: java.io.File? = null,
                       caption: String? = null,
                       parseMode: String? = null,
-                      notification: Boolean? = null,
+                      disableNotification: Boolean? = null,
                       replyTo: Int? = null,
                       markup: ReplyKeyboard? = null): CompletableFuture<Message>
 
@@ -164,7 +147,7 @@ interface TelegramApi {
                   caption: String? = null,
                   parseMode: String? = null,
                   duration: Int? = null,
-                  notification: Boolean? = null,
+                  disableNotification: Boolean? = null,
                   replyTo: Int? = null,
                   markup: ReplyKeyboard? = null): CompletableFuture<Message>
 
@@ -180,7 +163,7 @@ interface TelegramApi {
                       duration: Int? = null,
                       length: Int? = null,
                       thumb: java.io.File? = null,
-                      notification: Boolean? = null,
+                      disableNotification: Boolean? = null,
                       replyTo: Int? = null,
                       markup: ReplyKeyboard? = null): CompletableFuture<Message>
 
@@ -191,7 +174,7 @@ interface TelegramApi {
      */
     fun sendMediaGroup(chatId: Any,
                        media: List<InputMedia>,
-                       notification: Boolean? = null,
+                       disableNotification: Boolean? = null,
                        replyTo: Int? = null): CompletableFuture<ArrayList<Message>>
 
     /**
@@ -203,7 +186,7 @@ interface TelegramApi {
                      latitude: Double,
                      longitude: Double,
                      period: Int? = null,
-                     notification: Boolean? = null,
+                     disableNotification: Boolean? = null,
                      replyTo: Int? = null,
                      markup: ReplyKeyboard? = null): CompletableFuture<Message>
 
@@ -239,7 +222,7 @@ interface TelegramApi {
                   address: String,
                   foursquareId: String? = null,
                   foursquareType: String? = null,
-                  notification: Boolean? = null,
+                  disableNotification: Boolean? = null,
                   replyTo: Int? = null,
                   markup: ReplyKeyboard? = null): CompletableFuture<Message>
 
@@ -253,7 +236,7 @@ interface TelegramApi {
                     firstName: String,
                     lastName: String? = null,
                     vcard: String? = null,
-                    notification: Boolean? = null,
+                    disableNotification: Boolean? = null,
                     replyTo: Int? = null,
                     markup: ReplyKeyboard? = null): CompletableFuture<Message>
 
@@ -363,7 +346,7 @@ interface TelegramApi {
      */
     fun pinChatMessage(chatId: Any,
                        messageId: Int,
-                       notification: Boolean? = null): CompletableFuture<Boolean>
+                       disableNotification: Boolean? = null): CompletableFuture<Boolean>
 
     /**
      * @param chatId is `Int`, `Long` or `String`
@@ -499,7 +482,7 @@ interface TelegramApi {
      */
     fun sendSticker(chatId: Any,
                     sticker: Any,
-                    notification: Boolean? = null,
+                    disableNotification: Boolean? = null,
                     replyTo: Int? = null,
                     markup: ReplyKeyboard? = null): CompletableFuture<Message>
 
@@ -552,7 +535,7 @@ interface TelegramApi {
      */
     fun sendGame(chatId: Long,
                  gameShortName: String,
-                 notification: Boolean? = null,
+                 disableNotification: Boolean? = null,
                  replyTo: Int? = null,
                  markup: InlineKeyboardMarkup? = null): CompletableFuture<Message>
 
@@ -600,7 +583,7 @@ interface TelegramApi {
                     sendPhoneNumberToProvider: Boolean? = null,
                     sendEmailToProvider: Boolean? = null,
                     isFlexible: Boolean? = null,
-                    notification: Boolean? = null,
+                    disableNotification: Boolean? = null,
                     replyTo: Int? = null,
                     markup: InlineKeyboardMarkup? = null): CompletableFuture<Message>
 
@@ -624,4 +607,15 @@ interface TelegramApi {
      */
     fun setPassportDataErrors(userId: Long,
                               errors: List<PassportElementError>): CompletableFuture<Boolean>
+
+    fun sendPoll(chatId: Any,
+                 question: String,
+                 options: List<String>,
+                 disableNotification: Boolean? = null,
+                 replyTo: Int? = null,
+                 markup: ReplyKeyboard? = null): CompletableFuture<Message>
+
+    fun stopPoll(chatId: Any,
+                 messageId: Int,
+                 markup: InlineKeyboardMarkup? = null): CompletableFuture<Poll>
 }

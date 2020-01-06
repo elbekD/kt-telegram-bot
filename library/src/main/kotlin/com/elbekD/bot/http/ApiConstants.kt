@@ -59,6 +59,8 @@ object ApiConstants {
     const val METHOD_ANSWER_SHIPPING_QUERY = "answerShippingQuery"
     const val METHOD_ANSWER_PRE_CHECKOUT_QUERY = "answerPreCheckoutQuery"
     const val METHOD_SET_PASSPORT_DATA_ERRORS = "setPassportDataErrors"
+    const val METHOD_SEND_POLL = "sendPoll"
+    const val METHOD_STOP_POLL = "stopPoll"
 
     const val CHAT_ID = "chat_id"
     const val CAPTION = "caption"
@@ -163,4 +165,6 @@ object ApiConstants {
     const val ERROR_MESSAGE = "error_message"
     const val PRE_CHECKOUT_QUERY_ID = "pre_checkout_query_id"
     const val ERRORS = "errors"
+    const val QUESTION = "question"
+    const val OPTIONS = "options"
 }

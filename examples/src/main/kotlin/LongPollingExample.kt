@@ -1,6 +1,6 @@
 import com.elbekD.bot.Bot
 
-fun main(args: Array<String>) {
+fun main() {
     val token = "<TOKEN>"
     val bot = Bot.createPolling(token) {
         // below is optional parameters
