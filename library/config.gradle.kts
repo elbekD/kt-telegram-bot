@@ -3,7 +3,7 @@ mapOf(
         "dokka" to "0.9.17",
         "okhttp" to "3.10.0",
         "gson" to "2.8.5",
-        "jetty_server" to "9.4.12.v20180830",
+        "jetty_server" to "9.4.25.v20191220",
         "junit" to "4.12"
 ).entries.forEach {
     project.extra.set(it.key, it.value)
