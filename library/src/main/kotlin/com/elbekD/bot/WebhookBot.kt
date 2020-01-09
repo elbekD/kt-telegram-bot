@@ -43,10 +43,11 @@ internal class WebhookBot(token: String, private val webhookOptions: WebhookOpti
         server.addConnector(connector)
 
         server.handler = object : AbstractHandler() {
-            override fun handle(target: String?, baseRequest: Request?, request: HttpServletRequest?, response: HttpServletResponse?) {
-                val content = request?.inputStream?.bufferedReader()?.readText()
+            override fun handle(target: String, baseRequest: Request, request: HttpServletRequest, response: HttpServletResponse) {
+                val content = request.inputStream?.bufferedReader()?.readText()
                 val updates = gson.fromJson<Update>(content, Update::class.java)
                 onUpdate(updates)
+                baseRequest.isHandled = true
             }
         }
     }
