@@ -56,12 +56,12 @@ class WebhookOptions(var setWebhookAutomatically: Boolean = true,
     var url: String = ""
         set(value) {
             if (!value.matches("^https://.+$".toRegex()))
-                throw IllegalArgumentException("<$url> is invalid. Check and try again")
+                throw IllegalArgumentException("$value is invalid. Check and try again")
             field = value
         }
         get() {
             if (!field.matches("^https://.+$".toRegex()))
-                throw IllegalArgumentException("<$field> is invalid. Check and try again")
+                throw IllegalArgumentException("$field is invalid. Check and try again")
             return field
         }
 

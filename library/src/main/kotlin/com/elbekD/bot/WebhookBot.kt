@@ -23,7 +23,7 @@ internal class WebhookBot(token: String, private val webhookOptions: WebhookOpti
             val https = HttpConfiguration()
             https.addCustomizer(SecureRequestCustomizer())
 
-            val sslContextFactory = SslContextFactory()
+            val sslContextFactory = SslContextFactory.Client()
 
             sslContextFactory.keyStorePath = WebhookBot::class.java.getResource(tls.keyStorePath).toExternalForm()
             sslContextFactory.setKeyStorePassword(tls.keyStorePassword)
