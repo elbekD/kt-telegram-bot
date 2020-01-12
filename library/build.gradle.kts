@@ -22,6 +22,11 @@ dependencies {
     testImplementation("junit:junit:4.12")
 }
 
+tasks.withType<Jar> {
+    baseName = "${rootProject.name}-${rootProject.version}"
+    buildDir = rootProject.buildDir
+}
+
 tasks {
     compileKotlin { kotlinOptions.jvmTarget = "1.8" }
 }
