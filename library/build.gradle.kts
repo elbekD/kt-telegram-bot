@@ -23,7 +23,6 @@ dependencies {
 }
 
 tasks.withType<Jar> {
-    baseName = "${rootProject.name}-${rootProject.version}"
     buildDir = rootProject.buildDir
 }
 
