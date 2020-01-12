@@ -1,8 +1,10 @@
-import org.gradle.jvm.tasks.Jar
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     // uncomment
     kotlin("jvm") // version "1.3.61"
+    id("com.github.johnrengelman.shadow") version "5.2.0"
+
 }
 
 repositories {
@@ -22,7 +24,6 @@ tasks {
     compileKotlin { kotlinOptions.jvmTarget = "1.8" }
 }
 
-tasks.withType<Jar> {
+tasks.withType<ShadowJar> {
     manifest { attributes["Main-Class"] = "WebhookExampleKt" }
-    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
 }
