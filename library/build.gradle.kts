@@ -6,6 +6,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "5.2.0"
     id("org.jetbrains.dokka") version "0.9.17"
     kotlin("jvm")
+    `java-library`
 }
 
 repositories {
