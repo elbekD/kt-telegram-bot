@@ -14,7 +14,9 @@ import org.eclipse.jetty.util.ssl.SslContextFactory
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-internal class WebhookBot(token: String, private val webhookOptions: WebhookOptions) : TelegramBot(token) {
+internal class WebhookBot(username: String,
+                          token: String,
+                          private val webhookOptions: WebhookOptions) : TelegramBot(username, token) {
     private val server: Server = Server()
     private val gson = Gson()
 

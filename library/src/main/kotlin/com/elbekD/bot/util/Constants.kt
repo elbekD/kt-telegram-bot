@@ -1,7 +1,5 @@
 package com.elbekD.bot.util
 
-internal const val ANY_CALLBACK_TRIGGER = "="
-
 enum class AllowedUpdate(val value: String) {
     Message("message"),
     EditedMessage("edited_message"),

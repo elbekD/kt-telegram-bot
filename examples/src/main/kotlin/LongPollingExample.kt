@@ -2,7 +2,8 @@ import com.elbekD.bot.Bot
 
 fun main() {
     val token = "<TOKEN>"
-    val bot = Bot.createPolling(token) {
+    val username = "<BOT USERNAME>"
+    val bot = Bot.createPolling(username, token) {
         // below is optional parameters
         // limit = 50
         // timeout = 30

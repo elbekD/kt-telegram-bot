@@ -3,7 +3,9 @@ package com.elbekD.bot
 import java.util.*
 import kotlin.concurrent.timer
 
-internal class LongPollingBot(token: String, private val options: PollingOptions) : TelegramBot(token) {
+internal class LongPollingBot(username: String,
+                              token: String,
+                              private val options: PollingOptions) : TelegramBot(username, token) {
     private var timer: Timer? = null
 
     private companion object {

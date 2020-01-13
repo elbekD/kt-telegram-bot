@@ -21,7 +21,7 @@ import com.elbekD.bot.util.isShippingQuery
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-internal class UpdateHandler {
+internal class UpdateHandler(private val username: String) {
     private var onAnyMessage: (suspend (Message) -> Unit)? = null
     private var onAnyEditedMessage: (suspend (Message) -> Unit)? = null
     private var onAnyChannelPost: (suspend (Message) -> Unit)? = null
@@ -39,7 +39,7 @@ internal class UpdateHandler {
 
     private companion object {
         private fun extractCommandAndArgument(text: String): Pair<String, String?> {
-            val cmd = text.substringBefore(' ')
+            val cmd = text.substringBefore(' ').substringBefore('@')
             val arg = text.substringAfter(' ', "")
             return Pair(cmd, if (arg.isEmpty()) null else arg)
         }
@@ -79,7 +79,7 @@ internal class UpdateHandler {
     internal fun handle(update: Update) {
         when {
             update.isMessage() -> {
-                if (update.isCommand()) {
+                if (update.isCommand(username)) {
                     val (cmd, args) = extractCommandAndArgument(update.message!!.text!!)
                     val trigger = if (onCommand.containsKey(cmd)) {
                         cmd

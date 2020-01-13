@@ -14,25 +14,34 @@ import java.io.File
 interface Bot : TelegramApi {
     companion object {
         /**
+         * @param username bot's username without leading @-symbol
          * @param token your bot token
          * @param pollingOptions options used to configure [LongPollingBot]
          */
         @JvmStatic
-        fun createPolling(token: String,
+        fun createPolling(username: String,
+                          token: String,
                           pollingOptions: PollingOptions.() -> Unit = { PollingOptions() }): Bot {
             validateToken(token)
-            return LongPollingBot(token, PollingOptions().apply(pollingOptions))
+            return LongPollingBot(username, token, PollingOptions().apply(pollingOptions))
         }
 
         /**
+         * @param username bot's username without leading @-symbol
          * @param token your bot token
-         * @param webhookOptions options used to configure server and webhook params for `setWebhook()` method
+         * @param webhookOptions options used to configure server and webhook params for [setWebhook] method
          */
         @JvmStatic
-        fun createWebhook(token: String,
+        fun createWebhook(username: String,
+                          token: String,
                           webhookOptions: WebhookOptions.() -> Unit = { WebhookOptions() }): Bot {
             validateToken(token)
-            return WebhookBot(token, WebhookOptions().apply(webhookOptions))
+            return WebhookBot(username, token, WebhookOptions().apply(webhookOptions))
+        }
+
+        private fun validateUsername(username: String) {
+            if (username.isBlank() || username.startsWith("@"))
+                throw IllegalArgumentException("Invalid username. Check and try again")
         }
 
         private fun validateToken(token: String) {
@@ -175,7 +184,6 @@ interface Bot : TelegramApi {
     /**
      * Helper method to create photo media object
      * @param media file_id, url or file_attach_name
-     * @throws [IllegalArgumentException] if `attachment` neither [java.io.File] nor `String`
      */
     fun mediaPhoto(media: String,
                    attachment: File? = null,
@@ -185,7 +193,6 @@ interface Bot : TelegramApi {
     /**
      * Helper method to create video media object
      * @param media file_id, url or file_attach_name
-     * @throws [IllegalArgumentException] if `attachment` neither [java.io.File] nor `String`
      */
     fun mediaVideo(media: String,
                    attachment: File? = null,
@@ -200,7 +207,6 @@ interface Bot : TelegramApi {
     /**
      * Helper method to create animation media object
      * @param media file_id, url or file_attach_name
-     * @throws [IllegalArgumentException] if `attachment` neither [java.io.File] nor `String`
      */
     fun mediaAnimation(media: String,
                        attachment: File? = null,
@@ -214,7 +220,6 @@ interface Bot : TelegramApi {
     /**
      * Helper method to create audio media object
      * @param media file_id, url or file_attach_name
-     * @throws [IllegalArgumentException] if `attachment` neither [java.io.File] nor `String`
      */
     fun mediaAudio(media: String,
                    attachment: File? = null,
@@ -228,7 +233,6 @@ interface Bot : TelegramApi {
     /**
      * Helper method to create document media object
      * @param media file_id, url or file_attach_name
-     * @throws [IllegalArgumentException] if `attachment` neither [java.io.File] nor `String`
      */
     fun mediaDocument(media: String,
                       attachment: File? = null,

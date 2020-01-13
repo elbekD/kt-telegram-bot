@@ -29,8 +29,8 @@ import com.elbekD.bot.util.AllowedUpdate
 import java.io.File
 import java.util.concurrent.CompletableFuture
 
-internal abstract class TelegramBot protected constructor(tk: String) : Bot {
-    private val updateHandler = UpdateHandler()
+internal abstract class TelegramBot protected constructor(username: String, tk: String) : Bot {
+    private val updateHandler = UpdateHandler(username)
     private val client = TelegramClient(tk)
 
     companion object {

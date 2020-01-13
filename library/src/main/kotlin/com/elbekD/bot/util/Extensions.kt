@@ -3,12 +3,12 @@ package com.elbekD.bot.util
 import com.elbekD.bot.types.Message
 import com.elbekD.bot.types.Update
 
-private val COMMAND_REGEX = "^/([\\w]{1,32}|$ANY_CALLBACK_TRIGGER)$".toRegex()
+private const val COMMAND_FORMAT = "^/([\\w]{1,32}(@%s)?)$"
 
-fun String.isCommand() = matches(COMMAND_REGEX)
+fun String.isCommand(username: String) = matches(COMMAND_FORMAT.format(username).toRegex())
 
-fun Update.isCommand(): Boolean {
-    return isMessage() && message!!.isCommand()
+fun Update.isCommand(username: String): Boolean {
+    return isMessage() && message!!.isCommand(username)
 }
 
 fun Update.isMessage(): Boolean {
@@ -47,6 +47,6 @@ fun Update.isPreCheckoutQuery(): Boolean {
     return pre_checkout_query != null
 }
 
-fun Message.isCommand(): Boolean {
-    return text != null && text.split(' ')[0].isCommand()
+fun Message.isCommand(username: String): Boolean {
+    return text != null && text.split(' ')[0].isCommand(username)
 }

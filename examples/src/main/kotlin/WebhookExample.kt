@@ -3,7 +3,8 @@ import com.elbekD.bot.server
 
 fun main() {
     val token = "<TOKEN>"
-    val bot = Bot.createWebhook(token) {
+    val username = "<BOT USERNAME>"
+    val bot = Bot.createWebhook(username, token) {
         url = "<URL>"
         // below is optional parameters
         // certificate = Paths.get("<PATH TO CERTIFICATE>").toFile()
