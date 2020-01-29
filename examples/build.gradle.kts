@@ -25,5 +25,5 @@ tasks {
 }
 
 tasks.withType<ShadowJar> {
-    manifest { attributes["Main-Class"] = "WebhookExampleKt" }
+    manifest { attributes["Main-Class"] = "LongPollingExampleKt" }
 }

@@ -772,4 +772,12 @@ internal class TelegramClient(token: String) : TelegramApi {
         ))
         return post(ApiConstants.METHOD_SET_CHAT_ADMINISTRATOR_CUSTOM_TITLE, body)
     }
+
+    override fun deleteMessage(chatId: Any, messageId: Int): CompletableFuture<Boolean> {
+        val body = toBody(mapOf(
+                ApiConstants.CHAT_ID to id(chatId),
+                ApiConstants.MESSAGE_ID to messageId
+        ))
+        return post(ApiConstants.METHOD_DELETE_MESSAGE, body)
+    }
 }

@@ -50,30 +50,7 @@ Return type of bot's API methods is `CompletableFuture<T>`.
 Also it has extension suspend function `await()`.
 
 ## Deployment
-Add to your `build.gradle` file next task:
-```groovy
-jar {
-    manifest {
-        attributes 'Main-Class': '<YOUR MAIN>Kt'
-    }
-
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-}
-```
-Or add to your `build.gradle.kts` file next task:
-```kotlin
-tasks.withType<Jar> {
-    manifest {
-        attributes["Main-Class"] = "<YOUR MAIN>Kt"
-    }
-
-    from(configurations.compile.map {
-        if (it.isDirectory) it else zipTree(it)
-    })
-}
-```
-Then run this task. Checkout your `build/libs` directory where you'll find
-`.jar` file. Run this file using next line: `java -jar <PATH TO YOUR FILE>.jar` 
+Use [ShadowJar](https://github.com/johnrengelman/shadow) plugin or any other way you like. 
 
 ## [Examples](/examples/src/main/kotlin)
 - [Long polling bot](/examples/src/main/kotlin/LongPollingExample.kt)

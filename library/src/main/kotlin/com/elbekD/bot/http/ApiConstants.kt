@@ -63,6 +63,7 @@ object ApiConstants {
     const val METHOD_STOP_POLL = "stopPoll"
     const val METHOD_SET_CHAT_PERMISSIONS = "setChatPermissions"
     const val METHOD_SET_CHAT_ADMINISTRATOR_CUSTOM_TITLE = "setChatAdministratorCustomTitle"
+    const val METHOD_DELETE_MESSAGE = "deleteMessage"
 
     const val CHAT_ID = "chat_id"
     const val CAPTION = "caption"

@@ -597,6 +597,8 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
     override fun setChatPermissions(chatId: Any, permissions: ChatPermissions) = client.setChatPermissions(chatId, permissions)
 
     override fun setChatAdministratorCustomTitle(chatId: Any, userId: Long, customTitle: String) = client.setChatAdministratorCustomTitle(chatId, userId, customTitle)
+
+    override fun deleteMessage(chatId: Any, messageId: Int): CompletableFuture<Boolean> = client.deleteMessage(chatId, messageId)
     /*
                 /\
                /  \

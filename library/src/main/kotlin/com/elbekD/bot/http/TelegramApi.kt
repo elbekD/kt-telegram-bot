@@ -624,6 +624,9 @@ interface TelegramApi {
     fun setPassportDataErrors(userId: Long,
                               errors: List<PassportElementError>): CompletableFuture<Boolean>
 
+    /**
+     * @throws TelegramApiError if error returned in response
+     */
     fun sendPoll(chatId: Any,
                  question: String,
                  options: List<String>,
@@ -631,11 +634,25 @@ interface TelegramApi {
                  replyTo: Int? = null,
                  markup: ReplyKeyboard? = null): CompletableFuture<Message>
 
+    /**
+     * @throws TelegramApiError if error returned in response
+     */
     fun stopPoll(chatId: Any,
                  messageId: Int,
                  markup: InlineKeyboardMarkup? = null): CompletableFuture<Poll>
 
+    /**
+     * @throws TelegramApiError if error returned in response
+     */
     fun setChatPermissions(chatId: Any, permissions: ChatPermissions): CompletableFuture<Boolean>
 
+    /**
+     * @throws TelegramApiError if error returned in response
+     */
     fun setChatAdministratorCustomTitle(chatId: Any, userId: Long, customTitle: String): CompletableFuture<Boolean>
+
+    /**
+     * @throws TelegramApiError if error returned in response
+     */
+    fun deleteMessage(chatId: Any, messageId: Int): CompletableFuture<Boolean>
 }
