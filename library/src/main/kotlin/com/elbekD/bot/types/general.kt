@@ -123,7 +123,8 @@ data class MessageEntity(val type: String,
                          val offset: Int,
                          val length: Int,
                          val url: String?,
-                         val user: User?) {
+                         val user: User?,
+                         val language: String?) {
 
     enum class Types(@Transient @Suppress("unused") val type: String) {
         MENTION("mention"),
