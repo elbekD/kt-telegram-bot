@@ -1,29 +1,7 @@
 package com.elbekD.bot
 
 import com.elbekD.bot.http.TelegramClient
-import com.elbekD.bot.types.CallbackQuery
-import com.elbekD.bot.types.ChatPermissions
-import com.elbekD.bot.types.ChosenInlineResult
-import com.elbekD.bot.types.GameHighScore
-import com.elbekD.bot.types.InlineKeyboardMarkup
-import com.elbekD.bot.types.InlineQuery
-import com.elbekD.bot.types.InlineQueryResult
-import com.elbekD.bot.types.InputMedia
-import com.elbekD.bot.types.InputMediaAnimation
-import com.elbekD.bot.types.InputMediaAudio
-import com.elbekD.bot.types.InputMediaDocument
-import com.elbekD.bot.types.InputMediaPhoto
-import com.elbekD.bot.types.InputMediaVideo
-import com.elbekD.bot.types.LabeledPrice
-import com.elbekD.bot.types.MaskPosition
-import com.elbekD.bot.types.Message
-import com.elbekD.bot.types.PassportElementError
-import com.elbekD.bot.types.Poll
-import com.elbekD.bot.types.PreCheckoutQuery
-import com.elbekD.bot.types.ReplyKeyboard
-import com.elbekD.bot.types.ShippingOption
-import com.elbekD.bot.types.ShippingQuery
-import com.elbekD.bot.types.Update
+import com.elbekD.bot.types.*
 import com.elbekD.bot.util.Action
 import com.elbekD.bot.util.AllowedUpdate
 import java.io.File
@@ -589,7 +567,8 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
                                        errors: List<PassportElementError>) =
             client.setPassportDataErrors(userId, errors)
 
-    override fun sendPoll(chatId: Any, question: String, options: List<String>, disableNotification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?) =
+    override fun sendPoll(chatId: Any, question: String, options: List<String>, disableNotification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?,
+                          anonymous: Boolean?, type: String?, allowsMultipleAnswers: Boolean?, correctOptionId: Int?, closed: Boolean?) =
             client.sendPoll(chatId, question, options, disableNotification, replyTo, markup)
 
     override fun stopPoll(chatId: Any, messageId: Int, markup: InlineKeyboardMarkup?): CompletableFuture<Poll> = client.stopPoll(chatId, messageId, markup)

@@ -168,4 +168,9 @@ object ApiConstants {
     const val OPTIONS = "options"
     const val PERMISSIONS = "permissions"
     const val CUSTOM_TITLE = "custom_title"
+    const val IS_ANONYMOUS = "is_anonymous"
+    const val TYPE = "type"
+    const val ALLOWS_MULTIPLE_ANSWERS = "allows_multiple_answers"
+    const val CORRECT_OPTION_ID = "correct_option_id"
+    const val IS_CLOSED = "is_closed"
 }

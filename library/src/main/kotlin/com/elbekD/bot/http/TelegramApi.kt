@@ -1,25 +1,6 @@
 package com.elbekD.bot.http
 
-import com.elbekD.bot.types.Chat
-import com.elbekD.bot.types.ChatMember
-import com.elbekD.bot.types.ChatPermissions
-import com.elbekD.bot.types.File
-import com.elbekD.bot.types.GameHighScore
-import com.elbekD.bot.types.InlineKeyboardMarkup
-import com.elbekD.bot.types.InlineQueryResult
-import com.elbekD.bot.types.InputMedia
-import com.elbekD.bot.types.LabeledPrice
-import com.elbekD.bot.types.MaskPosition
-import com.elbekD.bot.types.Message
-import com.elbekD.bot.types.PassportElementError
-import com.elbekD.bot.types.Poll
-import com.elbekD.bot.types.ReplyKeyboard
-import com.elbekD.bot.types.ShippingOption
-import com.elbekD.bot.types.StickerSet
-import com.elbekD.bot.types.Update
-import com.elbekD.bot.types.User
-import com.elbekD.bot.types.UserProfilePhotos
-import com.elbekD.bot.types.WebhookInfo
+import com.elbekD.bot.types.*
 import com.elbekD.bot.util.Action
 import com.elbekD.bot.util.AllowedUpdate
 import java.util.concurrent.CompletableFuture
@@ -632,7 +613,12 @@ interface TelegramApi {
                  options: List<String>,
                  disableNotification: Boolean? = null,
                  replyTo: Int? = null,
-                 markup: ReplyKeyboard? = null): CompletableFuture<Message>
+                 markup: ReplyKeyboard? = null,
+                 anonymous: Boolean? = null,
+                 type: String? = null,
+                 allowsMultipleAnswers: Boolean? = null,
+                 correctOptionId: Int? = null,
+                 closed: Boolean? = null): CompletableFuture<Message>
 
     /**
      * @throws TelegramApiError if error returned in response
