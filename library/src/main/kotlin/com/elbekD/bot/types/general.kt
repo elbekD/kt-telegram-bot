@@ -18,7 +18,8 @@ data class Update(val update_id: Int,
                   val callback_query: CallbackQuery?,
                   val shipping_query: ShippingQuery?,
                   val pre_checkout_query: PreCheckoutQuery?,
-                  val poll: Poll?)
+                  val poll: Poll?,
+                  val poll_answer: PollAnswer?)
 
 data class WebhookInfo(val url: String,
                        val has_custom_certificate: Boolean,

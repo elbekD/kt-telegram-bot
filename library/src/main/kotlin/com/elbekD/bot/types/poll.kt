@@ -6,3 +6,5 @@ data class Poll(val id: String,
                 val is_closed: Boolean)
 
 data class PollOption(val text: String, val voter_count: Int)
+
+data class PollAnswer(val poll_id: String, val user: User, val option_ids: List<Int>)
