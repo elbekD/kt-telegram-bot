@@ -87,6 +87,12 @@ class WebhookOptions(var setWebhookAutomatically: Boolean = true,
                 throw NullPointerException()
             field = value
         }
+
+    /**
+     * Set to false if you use proxy engines like nginx.
+     * If set to true than request path must contain /token path spec.
+     */
+    var useTokenBasedPathSpec: Boolean = false
 }
 
 fun WebhookOptions.server(block: ServerOptions.() -> Unit) {

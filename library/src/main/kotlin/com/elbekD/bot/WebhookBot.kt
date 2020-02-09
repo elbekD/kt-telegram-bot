@@ -57,7 +57,7 @@ internal class WebhookBot(
 
         val contextHandler = ServletContextHandler().apply {
             contextPath = "/"
-            addServlet(createServletHolder(), "/$token")
+            addServlet(createServletHolder(), if (webhookOptions.useTokenBasedPathSpec) "/$token" else "/")
         }
 
         val handlers = HandlerCollection().apply {
