@@ -1,0 +1,58 @@
+{
+  "token": "",
+  "userId": 0,
+  "resourcePath": "",
+  "photos": [
+    "",
+    ""
+  ],
+  "video": "",
+  "animation": "",
+  "thumb": "",
+  "voice": "",
+  "msgId": 0,
+  "audio": "",
+  "document": "",
+  "videoNote": "",
+  "location": {
+    "latitude": 0.0,
+    "longitude": 0.0
+  },
+  "contact": {
+    "phone": "",
+    "firstName": "",
+    "lastName": ""
+  },
+  "fileId": "",
+  "groupChatId": 0,
+  "kikMemberId": 0,
+  "stickerSetName": "",
+  "sendStickerUrl": "",
+  "createStickerSet": {
+    "userId": 0,
+    "name": "",
+    "title": "",
+    "createStickerFilename": "",
+    "addStickerFilename": "",
+    "emojisCreate": "",
+    "emojisAdd": ""
+  },
+  "game": {
+    "name": ""
+  },
+  "invoice": {
+    "title": "",
+    "desc": "",
+    "payload": "",
+    "token": "",
+    "param": "",
+    "currency": "",
+    "prices": [
+      "",
+      ""
+    ],
+    "email": false,
+    "phone": false,
+    "address": false
+  }
+}

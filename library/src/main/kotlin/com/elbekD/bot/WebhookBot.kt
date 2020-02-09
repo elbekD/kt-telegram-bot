@@ -4,54 +4,67 @@ import com.elbekD.bot.types.Update
 import com.google.gson.Gson
 import org.eclipse.jetty.server.HttpConfiguration
 import org.eclipse.jetty.server.HttpConnectionFactory
-import org.eclipse.jetty.server.Request
 import org.eclipse.jetty.server.SecureRequestCustomizer
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.server.ServerConnector
 import org.eclipse.jetty.server.SslConnectionFactory
-import org.eclipse.jetty.server.handler.AbstractHandler
+import org.eclipse.jetty.server.handler.DefaultHandler
+import org.eclipse.jetty.server.handler.HandlerCollection
+import org.eclipse.jetty.servlet.ServletContextHandler
+import org.eclipse.jetty.servlet.ServletHolder
 import org.eclipse.jetty.util.ssl.SslContextFactory
+import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-internal class WebhookBot(username: String,
-                          token: String,
-                          private val webhookOptions: WebhookOptions) : TelegramBot(username, token) {
+internal class WebhookBot(
+        username: String,
+        token: String,
+        private val webhookOptions: WebhookOptions
+) : TelegramBot(username, token) {
+
     private val server: Server = Server()
     private val gson = Gson()
 
     init {
         webhookOptions.serverOptions.tlsOptions?.let { tls ->
-            val https = HttpConfiguration()
-            https.addCustomizer(SecureRequestCustomizer())
+            val https = HttpConfiguration().apply { addCustomizer(SecureRequestCustomizer()) }
 
-            val sslContextFactory = SslContextFactory.Client()
+            val sslContextFactory = SslContextFactory.Client().apply {
+                keyStorePath = WebhookBot::class.java.getResource(tls.keyStorePath).toExternalForm()
+                setKeyStorePassword(tls.keyStorePassword)
+                setKeyManagerPassword(tls.keyManagerPassword)
+            }
 
-            sslContextFactory.keyStorePath = WebhookBot::class.java.getResource(tls.keyStorePath).toExternalForm()
-            sslContextFactory.setKeyStorePassword(tls.keyStorePassword)
-            sslContextFactory.setKeyManagerPassword(tls.keyManagerPassword)
-
-            val sslConnector = ServerConnector(server,
+            val sslConnector = ServerConnector(
+                    server,
                     SslConnectionFactory(sslContextFactory, "http/1.1"),
-                    HttpConnectionFactory(https))
-            sslConnector.host = webhookOptions.serverOptions.host
-            sslConnector.port = tls.port
+                    HttpConnectionFactory(https)
+            ).apply {
+                host = webhookOptions.serverOptions.host
+                port = tls.port
+            }
+
             server.addConnector(sslConnector)
         }
 
-        val connector = ServerConnector(server)
-        connector.host = webhookOptions.serverOptions.host
-        connector.port = webhookOptions.serverOptions.port
+        val connector = ServerConnector(server).apply {
+            host = webhookOptions.serverOptions.host
+            port = webhookOptions.serverOptions.port
+        }
+
         server.addConnector(connector)
 
-        server.handler = object : AbstractHandler() {
-            override fun handle(target: String, baseRequest: Request, request: HttpServletRequest, response: HttpServletResponse) {
-                val content = request.inputStream?.bufferedReader()?.readText()
-                val updates = gson.fromJson<Update>(content, Update::class.java)
-                onUpdate(updates)
-                baseRequest.isHandled = true
-            }
+        val contextHandler = ServletContextHandler().apply {
+            contextPath = "/"
+            addServlet(createServletHolder(), "/$token")
         }
+
+        val handlers = HandlerCollection().apply {
+            handlers = arrayOf(contextHandler, DefaultHandler())
+        }
+
+        server.handler = handlers
     }
 
     override fun start() {
@@ -77,6 +90,16 @@ internal class WebhookBot(username: String,
             server.stop()
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    private fun createServletHolder() = ServletHolder("Webhook bot servlet", createServlet())
+
+    private fun createServlet() = object : HttpServlet() {
+        override fun doPost(req: HttpServletRequest, resp: HttpServletResponse) {
+            val content = req.inputStream?.bufferedReader()?.readText()
+            val updates = gson.fromJson<Update>(content, Update::class.java)
+            onUpdate(updates)
         }
     }
 }
