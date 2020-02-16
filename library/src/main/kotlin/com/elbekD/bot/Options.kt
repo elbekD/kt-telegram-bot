@@ -2,7 +2,7 @@ package com.elbekD.bot
 
 import com.elbekD.bot.util.AllowedUpdate
 import java.io.File
-import java.util.*
+import java.util.Timer
 
 /**
  * @param removeWebhookAutomatically if `true` calls [TelegramBot.deleteWebhook] before switching to long polling.

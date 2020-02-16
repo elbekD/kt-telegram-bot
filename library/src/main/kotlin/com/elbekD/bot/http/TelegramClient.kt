@@ -1,11 +1,35 @@
 package com.elbekD.bot.http
 
-import com.elbekD.bot.types.*
+import com.elbekD.bot.types.Chat
+import com.elbekD.bot.types.ChatMember
+import com.elbekD.bot.types.ChatPermissions
+import com.elbekD.bot.types.GameHighScore
+import com.elbekD.bot.types.InlineKeyboardMarkup
+import com.elbekD.bot.types.InlineQueryResult
+import com.elbekD.bot.types.InputMedia
+import com.elbekD.bot.types.LabeledPrice
+import com.elbekD.bot.types.MaskPosition
+import com.elbekD.bot.types.Message
+import com.elbekD.bot.types.PassportElementError
+import com.elbekD.bot.types.Poll
+import com.elbekD.bot.types.ReplyKeyboard
+import com.elbekD.bot.types.ShippingOption
+import com.elbekD.bot.types.StickerSet
+import com.elbekD.bot.types.TelegramObject
+import com.elbekD.bot.types.Update
+import com.elbekD.bot.types.User
+import com.elbekD.bot.types.UserProfilePhotos
+import com.elbekD.bot.types.WebhookInfo
 import com.elbekD.bot.util.Action
 import com.elbekD.bot.util.AllowedUpdate
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import okhttp3.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.Response
 import java.io.File
 import java.lang.reflect.Type
 import java.util.concurrent.CompletableFuture
@@ -19,7 +43,7 @@ internal class TelegramClient(token: String) : TelegramApi {
             .readTimeout(60L, TimeUnit.SECONDS)
             .writeTimeout(60L, TimeUnit.SECONDS)
             .build()
-    private val url = ApiConstants.API_URL.format(token)
+    private val url = ApiConstants.API_URL_FORMAT.format(token)
 
     private companion object {
         @JvmStatic
@@ -711,8 +735,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post(ApiConstants.METHOD_SET_PASSPORT_DATA_ERRORS, body)
     }
 
-    override fun sendPoll(chatId: Any, question: String, options: List<String>, disableNotification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?,
-                          anonymous: Boolean?, type: String?, allowsMultipleAnswers: Boolean?, correctOptionId: Int?, closed: Boolean?): CompletableFuture<Message> {
+    override fun sendPoll(chatId: Any, question: String, options: List<String>, anonymous: Boolean?, type: String?, allowsMultipleAnswers: Boolean?, correctOptionId: Int?, closed: Boolean?, disableNotification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         val body = toBody(mapOf(
                 ApiConstants.CHAT_ID to id(chatId),
                 ApiConstants.QUESTION to question,

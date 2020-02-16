@@ -5,12 +5,14 @@ import com.elbekD.bot.types.InlineKeyboardButton
 import com.elbekD.bot.types.InlineKeyboardMarkup
 import com.elbekD.bot.util.Action
 import com.google.gson.Gson
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.BeforeClass
 import org.junit.Test
 import java.nio.file.Files
 import java.nio.file.Paths
-import java.util.*
+import java.util.Date
 import java.util.concurrent.TimeUnit
 
 internal class TelegramBotTest {

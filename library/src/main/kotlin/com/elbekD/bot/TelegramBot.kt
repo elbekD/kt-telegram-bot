@@ -1,7 +1,29 @@
 package com.elbekD.bot
 
 import com.elbekD.bot.http.TelegramClient
-import com.elbekD.bot.types.*
+import com.elbekD.bot.types.CallbackQuery
+import com.elbekD.bot.types.ChatPermissions
+import com.elbekD.bot.types.ChosenInlineResult
+import com.elbekD.bot.types.GameHighScore
+import com.elbekD.bot.types.InlineKeyboardMarkup
+import com.elbekD.bot.types.InlineQuery
+import com.elbekD.bot.types.InlineQueryResult
+import com.elbekD.bot.types.InputMedia
+import com.elbekD.bot.types.InputMediaAnimation
+import com.elbekD.bot.types.InputMediaAudio
+import com.elbekD.bot.types.InputMediaDocument
+import com.elbekD.bot.types.InputMediaPhoto
+import com.elbekD.bot.types.InputMediaVideo
+import com.elbekD.bot.types.LabeledPrice
+import com.elbekD.bot.types.MaskPosition
+import com.elbekD.bot.types.Message
+import com.elbekD.bot.types.PassportElementError
+import com.elbekD.bot.types.Poll
+import com.elbekD.bot.types.PreCheckoutQuery
+import com.elbekD.bot.types.ReplyKeyboard
+import com.elbekD.bot.types.ShippingOption
+import com.elbekD.bot.types.ShippingQuery
+import com.elbekD.bot.types.Update
 import com.elbekD.bot.util.Action
 import com.elbekD.bot.util.AllowedUpdate
 import java.io.File
@@ -430,7 +452,8 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
                                  text: String,
                                  parseMode: String?,
                                  preview: Boolean?,
-                                 markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+                                 markup: InlineKeyboardMarkup?
+    ): CompletableFuture<Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.editMessageText(chatId, messageId, inlineMessageId, text, parseMode, preview, markup)
     }
@@ -440,7 +463,8 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
                                     inlineMessageId: String?,
                                     caption: String?,
                                     parseMode: String?,
-                                    markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+                                    markup: InlineKeyboardMarkup?
+    ): CompletableFuture<Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.editMessageCaption(chatId, messageId, inlineMessageId, caption, parseMode, markup)
     }
@@ -449,7 +473,8 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
                                   messageId: Int?,
                                   inlineMessageId: String?,
                                   media: InputMedia,
-                                  markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+                                  markup: InlineKeyboardMarkup?
+    ): CompletableFuture<Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.editMessageMedia(chatId, messageId, inlineMessageId, media, markup)
     }
@@ -457,7 +482,8 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
     override fun editMessageReplyMarkup(chatId: Any?,
                                         messageId: Int?,
                                         inlineMessageId: String?,
-                                        markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
+                                        markup: InlineKeyboardMarkup?
+    ): CompletableFuture<Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.editMessageReplyMarkup(chatId, messageId, inlineMessageId, markup)
     }
@@ -466,7 +492,8 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
                              sticker: Any,
                              disableNotification: Boolean?,
                              replyTo: Int?,
-                             markup: ReplyKeyboard?): CompletableFuture<Message> {
+                             markup: ReplyKeyboard?
+    ): CompletableFuture<Message> {
         validateInputFileOrString(sticker)
         return client.sendSticker(chatId, sticker, disableNotification, replyTo, markup)
     }
@@ -482,7 +509,8 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
                                      pngSticker: Any,
                                      emojis: String,
                                      containsMask: Boolean?,
-                                     maskPosition: MaskPosition?): CompletableFuture<Boolean> {
+                                     maskPosition: MaskPosition?
+    ): CompletableFuture<Boolean> {
         validateInputFileOrString(pngSticker)
         return client.createNewStickerSet(userId, name, title, pngSticker, emojis, containsMask, maskPosition)
     }
@@ -491,7 +519,8 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
                                  name: String,
                                  pngSticker: Any,
                                  emojis: String,
-                                 maskPosition: MaskPosition?): CompletableFuture<Boolean> {
+                                 maskPosition: MaskPosition?
+    ): CompletableFuture<Boolean> {
         validateInputFileOrString(pngSticker)
         return client.addStickerToSet(userId, name, pngSticker, emojis, maskPosition)
     }
@@ -505,15 +534,15 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
                           gameShortName: String,
                           disableNotification: Boolean?,
                           replyTo: Int?,
-                          markup: InlineKeyboardMarkup?) =
-            client.sendGame(chatId, gameShortName, disableNotification, replyTo, markup)
+                          markup: InlineKeyboardMarkup?) = client.sendGame(chatId, gameShortName, disableNotification, replyTo, markup)
 
     override fun setGameScore(userId: Long,
                               score: Int,
                               force: Boolean?,
                               disableEditMessage: Boolean?,
                               chatId: Long?,
-                              messageId: Int?, inlineMessageId: String?): CompletableFuture<Message> {
+                              messageId: Int?, inlineMessageId: String?
+    ): CompletableFuture<Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.setGameScore(userId, score, force, disableEditMessage, chatId, messageId, inlineMessageId)
     }
@@ -521,7 +550,8 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
     override fun getGameHighScores(userId: Long,
                                    chatId: Long?,
                                    messageId: Int?,
-                                   inlineMessageId: String?): CompletableFuture<List<GameHighScore>> {
+                                   inlineMessageId: String?
+    ): CompletableFuture<List<GameHighScore>> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.getGameHighScores(userId, chatId, messageId, inlineMessageId)
     }
@@ -548,28 +578,33 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
                              isFlexible: Boolean?,
                              disableNotification: Boolean?,
                              replyTo: Int?,
-                             markup: InlineKeyboardMarkup?): CompletableFuture<Message> {
-        return client.sendInvoice(chatId, title, description, payload, providerToken, startParam, currency, prices, providerData, photoUrl, photoSize, photoWidth, photoHeight, needName, needPhoneNumber, needEmail, needShippingAddress, sendPhoneNumberToProvider, sendEmailToProvider, isFlexible, disableNotification, replyTo, markup)
-    }
+                             markup: InlineKeyboardMarkup?
+    ) = client.sendInvoice(chatId, title, description, payload, providerToken, startParam, currency, prices, providerData, photoUrl, photoSize, photoWidth, photoHeight, needName, needPhoneNumber, needEmail, needShippingAddress, sendPhoneNumberToProvider, sendEmailToProvider, isFlexible, disableNotification, replyTo, markup)
 
     override fun answerShippingQuery(shippingQueryId: String,
                                      ok: Boolean,
                                      shippingOptions: List<ShippingOption>?,
-                                     errorMessage: String?) =
-            client.answerShippingQuery(shippingQueryId, ok, shippingOptions, errorMessage)
+                                     errorMessage: String?) = client.answerShippingQuery(shippingQueryId, ok, shippingOptions, errorMessage)
 
     override fun answerPreCheckoutQuery(preCheckoutQueryId: String,
                                         ok: Boolean,
-                                        errorMessage: String?) =
-            client.answerPreCheckoutQuery(preCheckoutQueryId, ok, errorMessage)
+                                        errorMessage: String?) = client.answerPreCheckoutQuery(preCheckoutQueryId, ok, errorMessage)
 
     override fun setPassportDataErrors(userId: Long,
-                                       errors: List<PassportElementError>) =
-            client.setPassportDataErrors(userId, errors)
+                                       errors: List<PassportElementError>) = client.setPassportDataErrors(userId, errors)
 
-    override fun sendPoll(chatId: Any, question: String, options: List<String>, disableNotification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?,
-                          anonymous: Boolean?, type: String?, allowsMultipleAnswers: Boolean?, correctOptionId: Int?, closed: Boolean?) =
-            client.sendPoll(chatId, question, options, disableNotification, replyTo, markup)
+    override fun sendPoll(chatId: Any,
+                          question: String,
+                          options: List<String>,
+                          anonymous: Boolean?,
+                          type: String?,
+                          allowsMultipleAnswers: Boolean?,
+                          correctOptionId: Int?,
+                          closed: Boolean?,
+                          disableNotification: Boolean?,
+                          replyTo: Int?,
+                          markup: ReplyKeyboard?
+    ) = client.sendPoll(chatId, question, options, anonymous, type, allowsMultipleAnswers, correctOptionId, closed, disableNotification, replyTo, markup)
 
     override fun stopPoll(chatId: Any, messageId: Int, markup: InlineKeyboardMarkup?): CompletableFuture<Poll> = client.stopPoll(chatId, messageId, markup)
 
