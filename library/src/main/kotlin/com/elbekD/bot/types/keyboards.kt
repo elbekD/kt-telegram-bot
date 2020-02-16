@@ -10,7 +10,10 @@ data class ReplyKeyboardMarkup(val keyboard: List<List<KeyboardButton>>,
 
 data class KeyboardButton(val text: String,
                           val request_contact: Boolean? = null,
-                          val request_location: Boolean? = null)
+                          val request_location: Boolean? = null,
+                          val request_poll: KeyboardButtonPollType? = null)
+
+data class KeyboardButtonPollType(val type: String)
 
 data class ReplyKeyboardRemove(val remove_keyboard: Boolean, val selective: Boolean? = null) : ReplyKeyboard
 

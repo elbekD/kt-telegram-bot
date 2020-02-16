@@ -18,7 +18,8 @@ data class Update(val update_id: Int,
                   val callback_query: CallbackQuery?,
                   val shipping_query: ShippingQuery?,
                   val pre_checkout_query: PreCheckoutQuery?,
-                  val poll: Poll?)
+                  val poll: Poll?,
+                  val poll_answer: PollAnswer?)
 
 data class WebhookInfo(val url: String,
                        val has_custom_certificate: Boolean,
@@ -33,7 +34,10 @@ data class User(val id: Int,
                 val first_name: String,
                 val last_name: String?,
                 val username: String?,
-                val language_code: String?)
+                val language_code: String?,
+                val can_join_groups: Boolean?,
+                val can_read_all_group_messages: Boolean?,
+                val supports_inline_queries: Boolean?)
 
 data class Chat(val id: Long,
                 val type: String,
@@ -119,7 +123,8 @@ data class MessageEntity(val type: String,
                          val offset: Int,
                          val length: Int,
                          val url: String?,
-                         val user: User?) {
+                         val user: User?,
+                         val language: String?) {
 
     enum class Types(@Transient @Suppress("unused") val type: String) {
         MENTION("mention"),

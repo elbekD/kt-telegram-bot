@@ -2,7 +2,7 @@ package com.elbekD.bot.http
 
 object ApiConstants {
     const val BASE_URL = "https://api.telegram.org"
-    const val API_URL = "$BASE_URL/bot%s"
+    const val API_URL_FORMAT = "$BASE_URL/bot%s"
 
     const val METHOD_GET_UPDATES = "getUpdates"
     const val METHOD_SET_WEBHOOK = "setWebhook"
@@ -168,4 +168,9 @@ object ApiConstants {
     const val OPTIONS = "options"
     const val PERMISSIONS = "permissions"
     const val CUSTOM_TITLE = "custom_title"
+    const val IS_ANONYMOUS = "is_anonymous"
+    const val TYPE = "type"
+    const val ALLOWS_MULTIPLE_ANSWERS = "allows_multiple_answers"
+    const val CORRECT_OPTION_ID = "correct_option_id"
+    const val IS_CLOSED = "is_closed"
 }

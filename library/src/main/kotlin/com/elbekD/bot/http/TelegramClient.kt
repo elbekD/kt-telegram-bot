@@ -43,7 +43,7 @@ internal class TelegramClient(token: String) : TelegramApi {
             .readTimeout(60L, TimeUnit.SECONDS)
             .writeTimeout(60L, TimeUnit.SECONDS)
             .build()
-    private val url = ApiConstants.API_URL.format(token)
+    private val url = ApiConstants.API_URL_FORMAT.format(token)
 
     private companion object {
         @JvmStatic
@@ -735,11 +735,16 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post(ApiConstants.METHOD_SET_PASSPORT_DATA_ERRORS, body)
     }
 
-    override fun sendPoll(chatId: Any, question: String, options: List<String>, disableNotification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
+    override fun sendPoll(chatId: Any, question: String, options: List<String>, anonymous: Boolean?, type: String?, allowsMultipleAnswers: Boolean?, correctOptionId: Int?, closed: Boolean?, disableNotification: Boolean?, replyTo: Int?, markup: ReplyKeyboard?): CompletableFuture<Message> {
         val body = toBody(mapOf(
                 ApiConstants.CHAT_ID to id(chatId),
                 ApiConstants.QUESTION to question,
                 ApiConstants.OPTIONS to options,
+                ApiConstants.IS_ANONYMOUS to anonymous,
+                ApiConstants.TYPE to type,
+                ApiConstants.ALLOWS_MULTIPLE_ANSWERS to allowsMultipleAnswers,
+                ApiConstants.CORRECT_OPTION_ID to correctOptionId,
+                ApiConstants.IS_CLOSED to closed,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup

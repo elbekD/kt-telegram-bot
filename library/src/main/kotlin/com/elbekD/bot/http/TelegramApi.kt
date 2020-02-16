@@ -630,6 +630,11 @@ interface TelegramApi {
     fun sendPoll(chatId: Any,
                  question: String,
                  options: List<String>,
+                 anonymous: Boolean? = null,
+                 type: String? = null,
+                 allowsMultipleAnswers: Boolean? = null,
+                 correctOptionId: Int? = null,
+                 closed: Boolean? = null,
                  disableNotification: Boolean? = null,
                  replyTo: Int? = null,
                  markup: ReplyKeyboard? = null): CompletableFuture<Message>
