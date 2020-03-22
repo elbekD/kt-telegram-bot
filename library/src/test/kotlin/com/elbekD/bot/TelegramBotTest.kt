@@ -66,8 +66,9 @@ internal class TelegramBotTest {
     @Test
     fun sendAudio() {
         val file = file(config.audio)
-        val msg = bot.sendAudio(config.userId, file, "*this is audio file*", "markdown",
-                4, "Test performer", "Test title").get()
+        val msg = bot.sendAudio(
+            config.userId, file, "*this is audio file*", "markdown", 4, "Test performer", "Test title"
+        ).get()
         assertNotNull(msg.audio)
         assertNotNull(msg.audio?.file_id)
     }
@@ -76,7 +77,8 @@ internal class TelegramBotTest {
     fun sendDocument() {
         val file = config.document
         bot.sendChatAction(config.userId, Action.UploadDocument)
-        val msg = bot.sendDocument(config.userId, file, caption = "`this is document file`", parseMode = "markdown").get()
+        val msg =
+            bot.sendDocument(config.userId, file, caption = "`this is document file`", parseMode = "markdown").get()
         assertNotNull(msg.document)
     }
 
@@ -112,12 +114,16 @@ internal class TelegramBotTest {
 
     @Test
     fun sendMediaGroup() {
-        val msg = bot.sendMediaGroup(config.userId, listOf(
+        val msg = bot.sendMediaGroup(
+            config.userId, listOf(
                 bot.mediaPhoto("attach://photo1", attachment = file(config.photos[0])),
                 bot.mediaPhoto("attach://photo2", attachment = file(config.photos[1])),
-                bot.mediaVideo("attach://video1", attachment = file(config.video),
-                        width = 560, height = 320, duration = 5)
-        )).get()
+                bot.mediaVideo(
+                    "attach://video1", attachment = file(config.video),
+                    width = 560, height = 320, duration = 5
+                )
+            )
+        ).get()
         assertTrue(msg.size == 3)
     }
 
@@ -168,14 +174,18 @@ internal class TelegramBotTest {
     fun sendVenue() {
         val lat = config.location.latitude
         val lng = config.location.longitude
-        val msg = bot.sendVenue(config.userId, lat, lng,
-                "This is venue", "This is address", "This is ID").get()
+        val msg = bot.sendVenue(
+            config.userId, lat, lng,
+            "This is venue", "This is address", "This is ID"
+        ).get()
         assertNotNull(msg.venue)
     }
 
     @Test
     fun sendContact() {
-        val msg = bot.sendContact(config.userId, config.contact.phone, config.contact.firstName, config.contact.lastName).get()
+        val msg =
+            bot.sendContact(config.userId, config.contact.phone, config.contact.firstName, config.contact.lastName)
+                .get()
         assertNotNull(msg.contact)
     }
 
@@ -212,7 +222,9 @@ internal class TelegramBotTest {
 
     @Test
     fun restrictChatMember() {
-        val msg = bot.restrictChatMember(config.groupChatId, config.kikMemberId, ChatPermissions(can_send_messages = false)).get()
+        val msg =
+            bot.restrictChatMember(config.groupChatId, config.kikMemberId, ChatPermissions(can_send_messages = false))
+                .get()
         assertTrue(msg)
     }
 
@@ -338,26 +350,32 @@ internal class TelegramBotTest {
         val file = file(config.photos[0])
 
         val prev = bot.sendPhoto(config.userId, file).get()
-        val cur = bot.editMessageMedia(prev.chat.id, prev.message_id,
-                media = bot.mediaPhoto("attach://photo2", attachment = file(config.photos[1]))).get()
+        val cur = bot.editMessageMedia(
+            prev.chat.id, prev.message_id,
+            media = bot.mediaPhoto("attach://photo2", attachment = file(config.photos[1]))
+        ).get()
 
         assertTrue(cur.edit_date != null)
     }
 
     @Test
     fun editMessageReplyMarkup() {
-        val keyboard1 = InlineKeyboardMarkup(listOf(
+        val keyboard1 = InlineKeyboardMarkup(
+            listOf(
                 listOf(
-                        InlineKeyboardButton("button 1", callback_data = "data1"),
-                        InlineKeyboardButton("button 2", callback_data = "data2")
+                    InlineKeyboardButton("button 1", callback_data = "data1"),
+                    InlineKeyboardButton("button 2", callback_data = "data2")
                 )
-        ))
+            )
+        )
 
-        val keyboard2 = InlineKeyboardMarkup(listOf(
+        val keyboard2 = InlineKeyboardMarkup(
+            listOf(
                 listOf(
-                        InlineKeyboardButton("button 2", callback_data = "data2")
+                    InlineKeyboardButton("button 2", callback_data = "data2")
                 )
-        ))
+            )
+        )
 
         val prev = bot.sendMessage(config.userId, "hello", markup = keyboard1).get()
         val curr = bot.editMessageReplyMarkup(prev.chat.id, prev.message_id, markup = keyboard2).get()
@@ -405,17 +423,19 @@ internal class TelegramBotTest {
     @Test
     fun sendInvoice() {
         with(config.invoice) {
-            val msg = bot.sendInvoice(config.userId,
-                    title,
-                    desc,
-                    payload,
-                    token,
-                    param,
-                    currency,
-                    prices,
-                    needEmail = email,
-                    needPhoneNumber = phone,
-                    needShippingAddress = address).get()
+            val msg = bot.sendInvoice(
+                config.userId,
+                title,
+                desc,
+                payload,
+                token,
+                param,
+                currency,
+                prices,
+                needEmail = email,
+                needPhoneNumber = phone,
+                needShippingAddress = address
+            ).get()
             assertNotNull(msg.invoice)
         }
     }
@@ -433,9 +453,10 @@ internal class TelegramBotTest {
     @Test
     fun sendPoll() {
         val msg = bot.sendPoll(
-                chatId = config.groupChatId,
-                question = "Test poll question",
-                options = listOf("Option 1", "Option 2")).get()
+            chatId = config.groupChatId,
+            question = "Test poll question",
+            options = listOf("Option 1", "Option 2")
+        ).get()
 
         assertNotNull(msg.poll)
     }
@@ -443,8 +464,9 @@ internal class TelegramBotTest {
     @Test
     fun stopPoll() {
         val poll = bot.stopPoll(
-                config.groupChatId,
-                config.msgId).get()
+            config.groupChatId,
+            config.msgId
+        ).get()
 
         assertTrue(poll.is_closed)
     }

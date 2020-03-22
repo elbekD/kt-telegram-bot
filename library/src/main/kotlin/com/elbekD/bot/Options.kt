@@ -51,8 +51,10 @@ annotation class OptionsMarker
  * Else call `setWebhook()` method manually. Default is `true`
  */
 @OptionsMarker
-class WebhookOptions(var setWebhookAutomatically: Boolean = true,
-                     internal var serverOptions: ServerOptions = ServerOptions()) {
+class WebhookOptions(
+    var setWebhookAutomatically: Boolean = true,
+    internal var serverOptions: ServerOptions = ServerOptions()
+) {
     var url: String = ""
         set(value) {
             if (!value.matches("^https://.+$".toRegex()))
@@ -136,9 +138,11 @@ class TLSOptions {
 }
 
 @OptionsMarker
-class ServerOptions(var host: String = "127.0.0.1",
-                    var port: Int = 8080,
-                    internal var tlsOptions: TLSOptions? = null)
+class ServerOptions(
+    var host: String = "127.0.0.1",
+    var port: Int = 8080,
+    internal var tlsOptions: TLSOptions? = null
+)
 
 fun ServerOptions.tls(block: TLSOptions.() -> Unit) {
     tlsOptions = TLSOptions().apply(block)

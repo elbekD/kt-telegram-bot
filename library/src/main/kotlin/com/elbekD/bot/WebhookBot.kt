@@ -18,9 +18,9 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 internal class WebhookBot(
-        username: String,
-        token: String,
-        private val webhookOptions: WebhookOptions
+    username: String,
+    token: String,
+    private val webhookOptions: WebhookOptions
 ) : TelegramBot(username, token) {
 
     private val server: Server = Server()
@@ -37,9 +37,9 @@ internal class WebhookBot(
             }
 
             val sslConnector = ServerConnector(
-                    server,
-                    SslConnectionFactory(sslContextFactory, "http/1.1"),
-                    HttpConnectionFactory(https)
+                server,
+                SslConnectionFactory(sslContextFactory, "http/1.1"),
+                HttpConnectionFactory(https)
             ).apply {
                 host = webhookOptions.serverOptions.host
                 port = tls.port
@@ -72,12 +72,14 @@ internal class WebhookBot(
             server.start()
             if (webhookOptions.setWebhookAutomatically) {
                 deleteWebhook()
-                        .thenAccept {
-                            setWebhook(webhookOptions.url,
-                                    webhookOptions.certificate,
-                                    webhookOptions.maxConnections,
-                                    webhookOptions.allowedUpdates)
-                        }.join()
+                    .thenAccept {
+                        setWebhook(
+                            webhookOptions.url,
+                            webhookOptions.certificate,
+                            webhookOptions.maxConnections,
+                            webhookOptions.allowedUpdates
+                        )
+                    }.join()
             }
             server.join()
         } catch (e: Exception) {

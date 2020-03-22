@@ -19,9 +19,11 @@ interface Bot : TelegramApi {
          * @param pollingOptions options used to configure [LongPollingBot]
          */
         @JvmStatic
-        fun createPolling(username: String,
-                          token: String,
-                          pollingOptions: PollingOptions.() -> Unit = { PollingOptions() }): Bot {
+        fun createPolling(
+            username: String,
+            token: String,
+            pollingOptions: PollingOptions.() -> Unit = { PollingOptions() }
+        ): Bot {
             validateToken(token)
             return LongPollingBot(username, token, PollingOptions().apply(pollingOptions))
         }
@@ -32,9 +34,11 @@ interface Bot : TelegramApi {
          * @param webhookOptions options used to configure server and webhook params for [setWebhook] method
          */
         @JvmStatic
-        fun createWebhook(username: String,
-                          token: String,
-                          webhookOptions: WebhookOptions.() -> Unit = { WebhookOptions() }): Bot {
+        fun createWebhook(
+            username: String,
+            token: String,
+            webhookOptions: WebhookOptions.() -> Unit = { WebhookOptions() }
+        ): Bot {
             validateToken(token)
             return WebhookBot(username, token, WebhookOptions().apply(webhookOptions))
         }
@@ -185,58 +189,68 @@ interface Bot : TelegramApi {
      * Helper method to create photo media object
      * @param media file_id, url or file_attach_name
      */
-    fun mediaPhoto(media: String,
-                   attachment: File? = null,
-                   caption: String? = null,
-                   parseMode: String? = null): InputMedia
+    fun mediaPhoto(
+        media: String,
+        attachment: File? = null,
+        caption: String? = null,
+        parseMode: String? = null
+    ): InputMedia
 
     /**
      * Helper method to create video media object
      * @param media file_id, url or file_attach_name
      */
-    fun mediaVideo(media: String,
-                   attachment: File? = null,
-                   thumb: File? = null,
-                   caption: String? = null,
-                   parseMode: String? = null,
-                   width: Int? = null,
-                   height: Int? = null,
-                   duration: Int? = null,
-                   supportsStreaming: Boolean? = null): InputMedia
+    fun mediaVideo(
+        media: String,
+        attachment: File? = null,
+        thumb: File? = null,
+        caption: String? = null,
+        parseMode: String? = null,
+        width: Int? = null,
+        height: Int? = null,
+        duration: Int? = null,
+        supportsStreaming: Boolean? = null
+    ): InputMedia
 
     /**
      * Helper method to create animation media object
      * @param media file_id, url or file_attach_name
      */
-    fun mediaAnimation(media: String,
-                       attachment: File? = null,
-                       thumb: File? = null,
-                       caption: String? = null,
-                       parseMode: String? = null,
-                       width: Int? = null,
-                       height: Int? = null,
-                       duration: Int? = null): InputMedia
+    fun mediaAnimation(
+        media: String,
+        attachment: File? = null,
+        thumb: File? = null,
+        caption: String? = null,
+        parseMode: String? = null,
+        width: Int? = null,
+        height: Int? = null,
+        duration: Int? = null
+    ): InputMedia
 
     /**
      * Helper method to create audio media object
      * @param media file_id, url or file_attach_name
      */
-    fun mediaAudio(media: String,
-                   attachment: File? = null,
-                   thumb: File? = null,
-                   caption: String? = null,
-                   parseMode: String? = null,
-                   duration: Int? = null,
-                   performer: String? = null,
-                   title: String? = null): InputMedia
+    fun mediaAudio(
+        media: String,
+        attachment: File? = null,
+        thumb: File? = null,
+        caption: String? = null,
+        parseMode: String? = null,
+        duration: Int? = null,
+        performer: String? = null,
+        title: String? = null
+    ): InputMedia
 
     /**
      * Helper method to create document media object
      * @param media file_id, url or file_attach_name
      */
-    fun mediaDocument(media: String,
-                      attachment: File? = null,
-                      thumb: File? = null,
-                      caption: String? = null,
-                      parseMode: String? = null): InputMedia
+    fun mediaDocument(
+        media: String,
+        attachment: File? = null,
+        thumb: File? = null,
+        caption: String? = null,
+        parseMode: String? = null
+    ): InputMedia
 }

@@ -1,11 +1,13 @@
 package com.elbekD.bot
 
-import java.util.*
+import java.util.Timer
 import kotlin.concurrent.timer
 
-internal class LongPollingBot(username: String,
-                              token: String,
-                              private val options: PollingOptions) : TelegramBot(username, token) {
+internal class LongPollingBot(
+    username: String,
+    token: String,
+    private val options: PollingOptions
+) : TelegramBot(username, token) {
     private var timer: Timer? = null
 
     private companion object {
@@ -22,11 +24,13 @@ internal class LongPollingBot(username: String,
             var lastUpdateId = -1
             timer = timer("LongPollingBot", period = options.period) {
                 try {
-                    getUpdates(mapOf(
+                    getUpdates(
+                        mapOf(
                             "offset" to lastUpdateId + 1,
                             "allowed_updates" to options.allowedUpdates,
                             "timeout" to options.timeout,
-                            "limit" to options.limit)
+                            "limit" to options.limit
+                        )
                     ).thenAccept {
                         if (it.isNotEmpty()) {
                             onUpdate(it)

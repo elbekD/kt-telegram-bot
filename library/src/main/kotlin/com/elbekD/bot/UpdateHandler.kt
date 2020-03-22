@@ -53,7 +53,8 @@ internal class UpdateHandler(private val username: String) {
             AllowedUpdate.ChannelPost -> onAnyChannelPost = action as? (suspend (Message) -> Unit)
             AllowedUpdate.EditedChannelPost -> onAnyEditedChannelPost = action as? (suspend (Message) -> Unit)
             AllowedUpdate.InlineQuery -> onAnyInlineQuery = action as? (suspend (InlineQuery) -> Unit)
-            AllowedUpdate.ChosenInlineQuery -> onAnyChosenInlineQuery = action as? (suspend (ChosenInlineResult) -> Unit)
+            AllowedUpdate.ChosenInlineQuery -> onAnyChosenInlineQuery =
+                action as? (suspend (ChosenInlineResult) -> Unit)
             AllowedUpdate.CallbackQuery -> onAnyCallbackQuery = action as? (suspend (CallbackQuery) -> Unit)
             AllowedUpdate.ShippingQuery -> onAnyShippingQuery = action as? (suspend (ShippingQuery) -> Unit)
             AllowedUpdate.PreCheckoutQuery -> onAnyPreCheckoutQuery = action as? (suspend (PreCheckoutQuery) -> Unit)
