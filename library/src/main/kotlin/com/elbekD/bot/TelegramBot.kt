@@ -103,7 +103,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         updateHandler.on<ChosenInlineResult>(AllowedUpdate.ChosenInlineQuery, null)
     }
 
-    override fun onCallbackQuery(action: suspend (InlineQuery) -> Unit) {
+    override fun onCallbackQuery(action: suspend (CallbackQuery) -> Unit) {
         updateHandler.on(AllowedUpdate.CallbackQuery, action)
     }
 

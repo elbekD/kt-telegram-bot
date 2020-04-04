@@ -125,12 +125,12 @@ interface Bot : TelegramApi {
     fun removeChosenInlineQueryAction()
 
     /**
-     * @param action called on [InlineQuery] update
+     * @param action called on [CallbackQuery] update
      */
-    fun onCallbackQuery(action: suspend (InlineQuery) -> Unit)
+    fun onCallbackQuery(action: suspend (CallbackQuery) -> Unit)
 
     /**
-     * Removes [InlineQuery] update action
+     * Removes [CallbackQuery] update action
      */
     fun removeCallbackQueryAction()
 
