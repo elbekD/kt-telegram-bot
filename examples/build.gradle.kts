@@ -2,9 +2,8 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     // uncomment
-    kotlin("jvm") // version "1.3.61"
+    kotlin("jvm") // version "1.3.71"
     id("com.github.johnrengelman.shadow") version "5.2.0"
-
 }
 
 repositories {
@@ -17,7 +16,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(project(":library"))
     // comment/remove the line above and uncomment the line below
-//    implementation("com.github.elbekD:kt-telegram-bot:1.2.0-beta")
+//    implementation("com.github.elbekD:kt-telegram-bot:1.3.0-beta")
 }
 
 tasks {

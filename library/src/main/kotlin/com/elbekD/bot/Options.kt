@@ -41,6 +41,16 @@ class PollingOptions(var removeWebhookAutomatically: Boolean = true) {
         set(value) {
             if (value > 1000L) field = value
         }
+
+    override fun toString(): String {
+        return """
+            PollingOptions:
+              limit: $limit
+              timeout: $timeout
+              allowedUpdated: $allowedUpdates
+              period: $period
+        """.trimIndent()
+    }
 }
 
 @DslMarker
@@ -95,6 +105,17 @@ class WebhookOptions(
      * If set to true than request path must contain /token path spec.
      */
     var useTokenBasedPathSpec: Boolean = false
+
+    override fun toString(): String {
+        return """
+            WebhookOptions:
+              url: $url
+              certificate: ${certificate?.absolutePath}
+              maxConnections: $maxConnections
+              allowedUpdates: $allowedUpdates
+              useTokenBasedPathSpec: $useTokenBasedPathSpec
+        """.trimIndent()
+    }
 }
 
 fun WebhookOptions.server(block: ServerOptions.() -> Unit) {
@@ -104,7 +125,7 @@ fun WebhookOptions.server(block: ServerOptions.() -> Unit) {
 @OptionsMarker
 class TLSOptions {
     private companion object {
-        @JvmStatic
+        @JvmField
         val supportedPorts = listOf(80, 88, 443, 8443)
     }
 
@@ -135,6 +156,16 @@ class TLSOptions {
                 throw NullPointerException()
             field = value
         }
+
+    override fun toString(): String {
+        return """
+            TLSOptions:
+              port: $port
+              keyStorePath: $keyStorePath
+              keyStorePassword: $keyStorePassword
+              keyManagerPassword: $keyManagerPassword
+        """.trimIndent()
+    }
 }
 
 @OptionsMarker
@@ -142,7 +173,16 @@ class ServerOptions(
     var host: String = "127.0.0.1",
     var port: Int = 8080,
     internal var tlsOptions: TLSOptions? = null
-)
+) {
+    override fun toString(): String {
+        return """
+            ServerOptions:
+              host: $host
+              port: $port
+              tlsOptions: $tlsOptions
+        """.trimIndent()
+    }
+}
 
 fun ServerOptions.tls(block: TLSOptions.() -> Unit) {
     tlsOptions = TLSOptions().apply(block)
