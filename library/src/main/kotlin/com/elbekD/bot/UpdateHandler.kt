@@ -1,5 +1,6 @@
 package com.elbekD.bot
 
+import com.elbekD.bot.feature.chain.ChainController
 import com.elbekD.bot.types.CallbackQuery
 import com.elbekD.bot.types.ChosenInlineResult
 import com.elbekD.bot.types.InlineQuery
@@ -80,16 +81,24 @@ internal class UpdateHandler(private val username: String) {
     internal fun handle(update: Update) {
         when {
             update.isMessage() -> {
-                if (update.isCommand(username)) {
-                    val (cmd, args) = extractCommandAndArgument(update.message!!.text!!)
-                    val trigger = if (onCommand.containsKey(cmd)) {
-                        cmd
-                    } else {
-                        onCommand.keys.firstOrNull { cmd.matches(it.toRegex()) }
+                when {
+                    ChainController.canHandle(update.message!!) -> {
+                        ChainController.handle(update.message)
                     }
-                    trigger?.let { GlobalScope.launch { onCommand[it]?.invoke(update.message, args) } }
-                } else {
-                    onAnyMessage?.let { GlobalScope.launch { it.invoke(update.message!!) } }
+
+                    update.isCommand(username) -> {
+                        val (cmd, args) = extractCommandAndArgument(update.message.text!!)
+                        val trigger = if (onCommand.containsKey(cmd)) {
+                            cmd
+                        } else {
+                            onCommand.keys.firstOrNull { cmd.matches(it.toRegex()) }
+                        }
+                        trigger?.let { GlobalScope.launch { onCommand[it]?.invoke(update.message, args) } }
+                    }
+
+                    else -> {
+                        onAnyMessage?.let { GlobalScope.launch { it.invoke(update.message) } }
+                    }
                 }
             }
 
