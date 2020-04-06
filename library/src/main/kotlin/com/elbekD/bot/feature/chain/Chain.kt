@@ -4,7 +4,7 @@ import com.elbekD.bot.types.Message
 
 data class Chain internal constructor(
     private val label: String,
-    private val firePredicate: (Message) -> Boolean,
+    private val predicate: (Message) -> Boolean,
     private val chainList: List<Node>
 ) {
 
@@ -16,7 +16,7 @@ data class Chain internal constructor(
     }
 
     internal fun canFire(message: Message): Boolean {
-        return firePredicate(message)
+        return predicate(message)
     }
 
     internal fun fire(message: Message) {
