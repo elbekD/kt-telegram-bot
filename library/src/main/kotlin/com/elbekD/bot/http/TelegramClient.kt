@@ -1,5 +1,6 @@
 package com.elbekD.bot.http
 
+import com.elbekD.bot.types.BotCommand
 import com.elbekD.bot.types.Chat
 import com.elbekD.bot.types.ChatMember
 import com.elbekD.bot.types.ChatPermissions
@@ -148,6 +149,13 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     override fun getUpdates(options: Map<String, Any?>) =
         post<List<Update>>(ApiConstants.METHOD_GET_UPDATES, toBody(options))
+
+    override fun getMyCommands(): CompletableFuture<List<BotCommand>> = get(ApiConstants.METHOD_GET_MY_COMMANDS)
+
+    override fun setMyCommands(commands: List<BotCommand>): CompletableFuture<Boolean> {
+        val body = toBody(mapOf(ApiConstants.COMMANDS to commands))
+        return post(ApiConstants.METHOD_SET_MY_COMMANDS, body)
+    }
 
     override fun setWebhook(
         url: String,
@@ -905,7 +913,8 @@ internal class TelegramClient(token: String) : TelegramApi {
         userId: Long,
         name: String,
         title: String,
-        pngSticker: Any,
+        pngSticker: Any?,
+        tgsSticker: File?,
         emojis: String,
         containsMask: Boolean?,
         maskPosition: MaskPosition?
@@ -919,13 +928,20 @@ internal class TelegramClient(token: String) : TelegramApi {
             containsMask?.let { addFormDataPart(ApiConstants.CONTAINS_MASKS, it.toString()) }
             maskPosition?.let { addFormDataPart(ApiConstants.MASK_POSITION, toJson(it)) }
             when (pngSticker) {
-                is File -> form.addFormDataPart(
+                is File -> addFormDataPart(
                     ApiConstants.PNG_STICKER,
                     pngSticker.name,
                     RequestBody.create(null, pngSticker)
                 )
-                is String -> form.addFormDataPart(ApiConstants.PNG_STICKER, pngSticker)
+                is String -> addFormDataPart(ApiConstants.PNG_STICKER, pngSticker)
                 else -> throw IllegalArgumentException()
+            }
+            tgsSticker?.let {
+                addFormDataPart(
+                    ApiConstants.TGS_STICKER,
+                    tgsSticker.name,
+                    RequestBody.create(null, tgsSticker)
+                )
             }
         }
         return post(ApiConstants.METHOD_CREATE_NEW_STICKER_SET, form.build())
@@ -934,7 +950,8 @@ internal class TelegramClient(token: String) : TelegramApi {
     override fun addStickerToSet(
         userId: Long,
         name: String,
-        pngSticker: Any,
+        pngSticker: Any?,
+        tgsSticker: File?,
         emojis: String,
         maskPosition: MaskPosition?
     ): CompletableFuture<Boolean> {
@@ -945,13 +962,20 @@ internal class TelegramClient(token: String) : TelegramApi {
             addFormDataPart(ApiConstants.EMOJIS, emojis)
             maskPosition?.let { addFormDataPart(ApiConstants.MASK_POSITION, toJson(it)) }
             when (pngSticker) {
-                is File -> form.addFormDataPart(
+                is File -> addFormDataPart(
                     ApiConstants.PNG_STICKER,
                     pngSticker.name,
                     RequestBody.create(null, pngSticker)
                 )
-                is String -> form.addFormDataPart(ApiConstants.PNG_STICKER, pngSticker)
+                is String -> addFormDataPart(ApiConstants.PNG_STICKER, pngSticker)
                 else -> throw IllegalArgumentException()
+            }
+            tgsSticker?.let {
+                addFormDataPart(
+                    ApiConstants.TGS_STICKER,
+                    tgsSticker.name,
+                    RequestBody.create(null, tgsSticker)
+                )
             }
         }
         return post(ApiConstants.METHOD_ADD_STICKER_TO_SET, form.build())
@@ -970,6 +994,20 @@ internal class TelegramClient(token: String) : TelegramApi {
     override fun deleteStickerFromSet(sticker: String): CompletableFuture<Boolean> {
         val body = toBody(mapOf(ApiConstants.STICKER to sticker))
         return post(ApiConstants.METHOD_DELETE_STICKER_FROM_SET, body)
+    }
+
+    override fun setStickerSetThumb(name: String, userId: Long, thumb: Any?): CompletableFuture<Boolean> {
+        val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
+        form.addFormDataPart(ApiConstants.NAME, name)
+        form.addFormDataPart(ApiConstants.USER_ID, userId.toString())
+
+        when (thumb) {
+            is File -> form.addFormDataPart(ApiConstants.THUMB, thumb.name, RequestBody.create(null, thumb))
+            is String -> form.addFormDataPart(ApiConstants.THUMB, thumb)
+            else -> throw IllegalArgumentException()
+        }
+
+        return post(ApiConstants.METHOD_SET_STICKER_SET_THUMB, form.build())
     }
 
     override fun sendGame(
@@ -1203,5 +1241,22 @@ internal class TelegramClient(token: String) : TelegramApi {
             )
         )
         return post(ApiConstants.METHOD_DELETE_MESSAGE, body)
+    }
+
+    override fun sendDice(
+        chatId: Any,
+        disableNotification: Boolean?,
+        replyTo: Int?,
+        markup: ReplyKeyboard?
+    ): CompletableFuture<Message> {
+        val body = toBody(
+            mapOf(
+                ApiConstants.CHAT_ID to id(chatId),
+                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
+                ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.REPLY_MARKUP to markup
+            )
+        )
+        return post(ApiConstants.METHOD_SEND_DICE, body)
     }
 }

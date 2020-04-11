@@ -1,10 +1,12 @@
 package com.elbekD.bot.http
 
-object ApiConstants {
-    const val BASE_URL = "https://api.telegram.org"
+internal object ApiConstants {
+    private const val BASE_URL = "https://api.telegram.org"
     const val API_URL_FORMAT = "$BASE_URL/bot%s"
 
     const val METHOD_GET_UPDATES = "getUpdates"
+    const val METHOD_GET_MY_COMMANDS = "getMyCommands"
+    const val METHOD_SET_MY_COMMANDS = "setMyCommands"
     const val METHOD_SET_WEBHOOK = "setWebhook"
     const val METHOD_DELETE_WEBHOOK = "deleteWebhook"
     const val METHOD_GET_WEBHOOK_INFO = "getWebhookInfo"
@@ -52,6 +54,7 @@ object ApiConstants {
     const val METHOD_ADD_STICKER_TO_SET = "addStickerToSet"
     const val METHOD_SET_STICKER_POSITION_IN_SET = "setStickerPositionInSet"
     const val METHOD_DELETE_STICKER_FROM_SET = "deleteStickerFromSet"
+    const val METHOD_SET_STICKER_SET_THUMB = "setStickerSetThumb"
     const val METHOD_SEND_GAME = "sendGame"
     const val METHOD_SET_GAME_SCORE = "setGameScore"
     const val METHOD_GET_GAME_HIGH_SCORES = "getGameHighScores"
@@ -64,6 +67,7 @@ object ApiConstants {
     const val METHOD_SET_CHAT_PERMISSIONS = "setChatPermissions"
     const val METHOD_SET_CHAT_ADMINISTRATOR_CUSTOM_TITLE = "setChatAdministratorCustomTitle"
     const val METHOD_DELETE_MESSAGE = "deleteMessage"
+    const val METHOD_SEND_DICE = "sendDice"
 
     const val CHAT_ID = "chat_id"
     const val CAPTION = "caption"
@@ -138,6 +142,7 @@ object ApiConstants {
     const val STICKER = "sticker"
     const val NAME = "name"
     const val PNG_STICKER = "png_sticker"
+    const val TGS_STICKER = "tgs_sticker"
     const val EMOJIS = "emojis"
     const val CONTAINS_MASKS = "contains_masks"
     const val MASK_POSITION = "mask_position"
@@ -173,4 +178,5 @@ object ApiConstants {
     const val ALLOWS_MULTIPLE_ANSWERS = "allows_multiple_answers"
     const val CORRECT_OPTION_ID = "correct_option_id"
     const val IS_CLOSED = "is_closed"
+    const val COMMANDS = "commands"
 }

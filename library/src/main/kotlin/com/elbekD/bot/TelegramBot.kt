@@ -1,6 +1,7 @@
 package com.elbekD.bot
 
 import com.elbekD.bot.http.TelegramClient
+import com.elbekD.bot.types.BotCommand
 import com.elbekD.bot.types.CallbackQuery
 import com.elbekD.bot.types.ChatPermissions
 import com.elbekD.bot.types.ChosenInlineResult
@@ -210,6 +211,10 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
     override fun getMe() = client.getMe()
 
     override fun getUpdates(options: Map<String, Any?>) = client.getUpdates(options)
+
+    override fun getMyCommands(): CompletableFuture<List<BotCommand>> = client.getMyCommands()
+
+    override fun setMyCommands(commands: List<BotCommand>): CompletableFuture<Boolean> = client.setMyCommands(commands)
 
     override fun setWebhook(
         url: String,
@@ -643,24 +648,43 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         userId: Long,
         name: String,
         title: String,
-        pngSticker: Any,
+        pngSticker: Any?,
+        tgsSticker: File?,
         emojis: String,
         containsMask: Boolean?,
         maskPosition: MaskPosition?
     ): CompletableFuture<Boolean> {
-        validateInputFileOrString(pngSticker)
-        return client.createNewStickerSet(userId, name, title, pngSticker, emojis, containsMask, maskPosition)
+        if (pngSticker != null && tgsSticker != null) {
+            throw IllegalArgumentException("Use exactly one of the fields pngSticker or tgsSticker")
+        }
+
+        pngSticker?.let { validateInputFileOrString(it) }
+        return client.createNewStickerSet(
+            userId,
+            name,
+            title,
+            pngSticker,
+            tgsSticker,
+            emojis,
+            containsMask,
+            maskPosition
+        )
     }
 
     override fun addStickerToSet(
         userId: Long,
         name: String,
-        pngSticker: Any,
+        pngSticker: Any?,
+        tgsSticker: File?,
         emojis: String,
         maskPosition: MaskPosition?
     ): CompletableFuture<Boolean> {
-        validateInputFileOrString(pngSticker)
-        return client.addStickerToSet(userId, name, pngSticker, emojis, maskPosition)
+        if (pngSticker != null && tgsSticker != null) {
+            throw IllegalArgumentException("Use exactly one of the fields pngSticker or tgsSticker")
+        }
+
+        pngSticker?.let { validateInputFileOrString(it) }
+        return client.addStickerToSet(userId, name, pngSticker, tgsSticker, emojis, maskPosition)
     }
 
     override fun setStickerPositionInSet(
@@ -669,6 +693,14 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
     ) = client.setStickerPositionInSet(sticker, position)
 
     override fun deleteStickerFromSet(sticker: String) = client.deleteStickerFromSet(sticker)
+
+    override fun setStickerSetThumb(name: String, userId: Long, thumb: Any?): CompletableFuture<Boolean> {
+        if (thumb !is File || thumb !is String) {
+            throw IllegalArgumentException("Neither file nor string")
+        }
+
+        return client.setStickerSetThumb(name, userId, thumb)
+    }
 
     override fun sendGame(
         chatId: Long,
@@ -805,6 +837,13 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
 
     override fun deleteMessage(chatId: Any, messageId: Int): CompletableFuture<Boolean> =
         client.deleteMessage(chatId, messageId)
+
+    override fun sendDice(
+        chatId: Any,
+        disableNotification: Boolean?,
+        replyTo: Int?,
+        markup: ReplyKeyboard?
+    ): CompletableFuture<Message> = client.sendDice(chatId, disableNotification, replyTo, markup)
     /*
                 /\
                /  \

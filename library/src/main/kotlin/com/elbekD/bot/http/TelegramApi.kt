@@ -1,5 +1,6 @@
 package com.elbekD.bot.http
 
+import com.elbekD.bot.types.BotCommand
 import com.elbekD.bot.types.Chat
 import com.elbekD.bot.types.ChatMember
 import com.elbekD.bot.types.ChatPermissions
@@ -28,6 +29,16 @@ interface TelegramApi {
     fun getMe(): CompletableFuture<User>
 
     fun getUpdates(options: Map<String, Any?>): CompletableFuture<List<Update>>
+
+    /**
+     * @throws TelegramApiError if error returned in response
+     */
+    fun getMyCommands(): CompletableFuture<List<BotCommand>>
+
+    /**
+     * @throws TelegramApiError if error returned in response
+     */
+    fun setMyCommands(commands: List<BotCommand>): CompletableFuture<Boolean>
 
     fun setWebhook(
         url: String,
@@ -593,7 +604,8 @@ interface TelegramApi {
         userId: Long,
         name: String,
         title: String,
-        pngSticker: Any,
+        pngSticker: Any? = null,
+        tgsSticker: java.io.File? = null,
         emojis: String,
         containsMask: Boolean? = null,
         maskPosition: MaskPosition? = null
@@ -606,7 +618,8 @@ interface TelegramApi {
     fun addStickerToSet(
         userId: Long,
         name: String,
-        pngSticker: Any,
+        pngSticker: Any? = null,
+        tgsSticker: java.io.File? = null,
         emojis: String,
         maskPosition: MaskPosition? = null
     ): CompletableFuture<Boolean>
@@ -623,6 +636,11 @@ interface TelegramApi {
      * @throws TelegramApiError if error returned in response
      */
     fun deleteStickerFromSet(sticker: String): CompletableFuture<Boolean>
+
+    /**
+     * @throws TelegramApiError if error returned in response
+     */
+    fun setStickerSetThumb(name: String, userId: Long, thumb: Any? = null): CompletableFuture<Boolean>
 
     /**
      * @throws TelegramApiError if error returned in response
@@ -756,4 +774,14 @@ interface TelegramApi {
      * @throws TelegramApiError if error returned in response
      */
     fun deleteMessage(chatId: Any, messageId: Int): CompletableFuture<Boolean>
+
+    /**
+     * @throws TelegramApiError if error returned in response
+     */
+    fun sendDice(
+        chatId: Any,
+        disableNotification: Boolean? = null,
+        replyTo: Int? = null,
+        markup: ReplyKeyboard? = null
+    ): CompletableFuture<Message>
 }

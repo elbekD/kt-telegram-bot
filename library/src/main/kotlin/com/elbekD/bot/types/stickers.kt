@@ -18,7 +18,8 @@ data class StickerSet(
     val title: String,
     val is_animated: Boolean,
     val contains_mask: Boolean,
-    val stickers: List<Sticker>
+    val stickers: List<Sticker>,
+    val thumb: PhotoSize?
 )
 
 data class MaskPosition(

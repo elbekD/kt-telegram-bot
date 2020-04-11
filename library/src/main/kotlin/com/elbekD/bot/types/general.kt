@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.elbekD.bot.types
 
 import com.elbekD.bot.util.AllowedUpdate
@@ -107,6 +109,7 @@ data class Message(
     val location: Location?,
     val venue: Venue?,
     val poll: Poll?,
+    val dice: Dice?,
     val new_chat_members: List<User>?,
     val left_chat_member: User?,
     val new_chat_title: String?,
@@ -286,8 +289,11 @@ data class ChatMember(
     val can_add_web_page_previews: Boolean?
 )
 
-@Suppress("unused")
 data class ResponseParameters(val migrate_to_chat_id: Long, val retry_after: Int)
+
+data class Dice(val value: Int)
+
+data class BotCommand(val command: String, val description: String)
 
 interface InputMedia {
     fun media(): String
