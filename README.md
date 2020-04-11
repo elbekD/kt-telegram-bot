@@ -6,6 +6,9 @@ Support for [Telegram Bot API 4.6](https://core.telegram.org/bots/api).
 Method names are the same as in [API](https://core.telegram.org/bots/api#available-methods).
 
 ## Changelog
+#### Version 1.3.0-beta1
+- Updated API to 4.7
+
 #### Version 1.3.0-beta
 - Added new feature - Chain. Checkout [changelog](./CHANGELOG.md#version-130-beta) for details.
 Please feel free to give any feedback for this version in [issue](https://github.com/elbekD/kt-telegram-bot/issues/22).
