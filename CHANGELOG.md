@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 1.3.0-beta1
+- Updated API to 4.7
+
 ## Version 1.3.0-beta
 Added new feature - Chain. It is common case when you need to ask the user several
 questions sequentially and process user errors. Now you can create such chains easily.
