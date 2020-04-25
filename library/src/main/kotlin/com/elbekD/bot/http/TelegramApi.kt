@@ -745,6 +745,10 @@ interface TelegramApi {
         type: String? = null,
         allowsMultipleAnswers: Boolean? = null,
         correctOptionId: Int? = null,
+        explanation: String? = null,
+        explanationParseMode: String? = null,
+        openPeriod: Int? = null,
+        closeDate: Long? = null,
         closed: Boolean? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
@@ -780,6 +784,7 @@ interface TelegramApi {
      */
     fun sendDice(
         chatId: Any,
+        emoji: String? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
         markup: ReplyKeyboard? = null

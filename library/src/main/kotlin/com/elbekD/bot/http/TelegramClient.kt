@@ -1174,6 +1174,10 @@ internal class TelegramClient(token: String) : TelegramApi {
         type: String?,
         allowsMultipleAnswers: Boolean?,
         correctOptionId: Int?,
+        explanation: String?,
+        explanationParseMode: String?,
+        openPeriod: Int?,
+        closeDate: Long?,
         closed: Boolean?,
         disableNotification: Boolean?,
         replyTo: Int?,
@@ -1188,6 +1192,10 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.TYPE to type,
                 ApiConstants.ALLOWS_MULTIPLE_ANSWERS to allowsMultipleAnswers,
                 ApiConstants.CORRECT_OPTION_ID to correctOptionId,
+                ApiConstants.EXPLANATION to explanation,
+                ApiConstants.EXPLANATION_PARSE_MODE to explanationParseMode,
+                ApiConstants.OPEN_PERIOD to explanationParseMode,
+                ApiConstants.CLOSE_DATE to explanationParseMode,
                 ApiConstants.IS_CLOSED to closed,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
@@ -1245,6 +1253,7 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     override fun sendDice(
         chatId: Any,
+        emoji: String?,
         disableNotification: Boolean?,
         replyTo: Int?,
         markup: ReplyKeyboard?
@@ -1252,6 +1261,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         val body = toBody(
             mapOf(
                 ApiConstants.CHAT_ID to id(chatId),
+                ApiConstants.EMOJI to emoji,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup

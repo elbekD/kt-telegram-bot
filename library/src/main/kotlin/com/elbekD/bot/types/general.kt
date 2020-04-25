@@ -291,7 +291,7 @@ data class ChatMember(
 
 data class ResponseParameters(val migrate_to_chat_id: Long, val retry_after: Int)
 
-data class Dice(val value: Int)
+data class Dice(val emoji: String, val value: Int)
 
 data class BotCommand(val command: String, val description: String)
 

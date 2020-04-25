@@ -808,23 +808,37 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         type: String?,
         allowsMultipleAnswers: Boolean?,
         correctOptionId: Int?,
+        explanation: String?,
+        explanationParseMode: String?,
+        openPeriod: Int?,
+        closeDate: Long?,
         closed: Boolean?,
         disableNotification: Boolean?,
         replyTo: Int?,
         markup: ReplyKeyboard?
-    ) = client.sendPoll(
-        chatId,
-        question,
-        options,
-        anonymous,
-        type,
-        allowsMultipleAnswers,
-        correctOptionId,
-        closed,
-        disableNotification,
-        replyTo,
-        markup
-    )
+    ): CompletableFuture<Message> {
+        if (openPeriod != null && closeDate != null) {
+            throw IllegalArgumentException("openPeriod and closeDate can't be used together")
+        }
+
+        return client.sendPoll(
+            chatId,
+            question,
+            options,
+            anonymous,
+            type,
+            allowsMultipleAnswers,
+            correctOptionId,
+            explanation,
+            explanationParseMode,
+            openPeriod,
+            closeDate,
+            closed,
+            disableNotification,
+            replyTo,
+            markup
+        )
+    }
 
     override fun stopPoll(chatId: Any, messageId: Int, markup: InlineKeyboardMarkup?): CompletableFuture<Poll> =
         client.stopPoll(chatId, messageId, markup)
@@ -840,10 +854,11 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
 
     override fun sendDice(
         chatId: Any,
+        emoji: String?,
         disableNotification: Boolean?,
         replyTo: Int?,
         markup: ReplyKeyboard?
-    ): CompletableFuture<Message> = client.sendDice(chatId, disableNotification, replyTo, markup)
+    ): CompletableFuture<Message> = client.sendDice(chatId, emoji, disableNotification, replyTo, markup)
     /*
                 /\
                /  \

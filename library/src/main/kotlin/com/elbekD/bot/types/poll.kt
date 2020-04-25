@@ -9,7 +9,11 @@ data class Poll(
     val is_anonymous: Boolean,
     val type: String,
     val allows_multiple_answers: Boolean,
-    val correct_option_id: Int?
+    val correct_option_id: Int?,
+    val explanation: String?,
+    val explanation_entities: List<MessageEntity>?,
+    val open_period: Int?,
+    val close_date: Long?
 )
 
 data class PollOption(val text: String, val voter_count: Int)

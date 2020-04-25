@@ -143,6 +143,7 @@ internal object ApiConstants {
     const val NAME = "name"
     const val PNG_STICKER = "png_sticker"
     const val TGS_STICKER = "tgs_sticker"
+    const val EMOJI = "emoji"
     const val EMOJIS = "emojis"
     const val CONTAINS_MASKS = "contains_masks"
     const val MASK_POSITION = "mask_position"
@@ -177,6 +178,10 @@ internal object ApiConstants {
     const val TYPE = "type"
     const val ALLOWS_MULTIPLE_ANSWERS = "allows_multiple_answers"
     const val CORRECT_OPTION_ID = "correct_option_id"
+    const val EXPLANATION = "explanation"
+    const val EXPLANATION_PARSE_MODE = "explanation_parse_mode"
+    const val OPEN_PERIOD = "open_period"
+    const val CLOSE_DATE = "close_date"
     const val IS_CLOSED = "is_closed"
     const val COMMANDS = "commands"
 }
