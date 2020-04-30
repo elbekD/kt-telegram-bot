@@ -7,7 +7,7 @@ Method names are the same as in [API](https://core.telegram.org/bots/api#availab
 
 ## Changelog
 #### Version 1.3.1
-- Apply suggestion from issue #22
+- Apply suggestion from issue #24
 
 #### Version 1.3.0
 - Updated API to 4.8
