@@ -400,10 +400,10 @@ internal class TelegramBotTest {
             val sticker = bot.uploadStickerFile(config.userId, file(createStickerFilename)).get()
 
             val stickerSetName = "v${Math.random().toString().substring(2, 10)}$name"
-            bot.createNewStickerSet(userId, stickerSetName, title, sticker.file_id, emojisCreate).get()
+            bot.createNewStickerSet(userId, stickerSetName, title, sticker.file_id, emojis = emojisCreate).get()
 
             val addedStickerFile = bot.uploadStickerFile(config.userId, file(addStickerFilename)).get()
-            bot.addStickerToSet(userId, stickerSetName, addedStickerFile.file_id, emojisAdd).get()
+            bot.addStickerToSet(userId, stickerSetName, addedStickerFile.file_id, emojis = emojisAdd).get()
 
             val stickers = bot.getStickerSet(stickerSetName).get().stickers
             bot.setStickerPositionInSet(stickers.last().file_id, 0).get()
