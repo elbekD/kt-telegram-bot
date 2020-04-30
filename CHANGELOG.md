@@ -1,7 +1,7 @@
 # Changelog
 
 ## Version 1.3.1
-- Apply suggestion from issue #22
+- Apply suggestion from issue #24
 
 ## Version 1.3.0
 - Updated API to 4.8
