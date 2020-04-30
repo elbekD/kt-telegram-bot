@@ -232,12 +232,12 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         chatId: Any,
         text: String,
         parseMode: String?,
-        preview: Boolean?,
+        disableWebPreview: Boolean?,
         disableNotification: Boolean?,
         replyTo: Int?,
         markup: ReplyKeyboard?
     ) =
-        client.sendMessage(chatId, text, parseMode, preview, disableNotification, replyTo, markup)
+        client.sendMessage(chatId, text, parseMode, disableWebPreview, disableNotification, replyTo, markup)
 
     override fun forwardMessage(
         chatId: Any,

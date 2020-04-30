@@ -60,7 +60,7 @@ interface TelegramApi {
         chatId: Any,
         text: String,
         parseMode: String? = null,
-        preview: Boolean? = null,
+        disableWebPreview: Boolean? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
         markup: ReplyKeyboard? = null

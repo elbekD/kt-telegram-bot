@@ -178,15 +178,20 @@ internal class TelegramClient(token: String) : TelegramApi {
     override fun getMe() = get<User>(ApiConstants.METHOD_GET_ME)
 
     override fun sendMessage(
-        chatId: Any, text: String, parseMode: String?, preview: Boolean?, disableNotification: Boolean?,
-        replyTo: Int?, markup: ReplyKeyboard?
+        chatId: Any,
+        text: String,
+        parseMode: String?,
+        disableWebPreview: Boolean?,
+        disableNotification: Boolean?,
+        replyTo: Int?,
+        markup: ReplyKeyboard?
     ): CompletableFuture<Message> {
         val body = toBody(
             mapOf(
                 ApiConstants.CHAT_ID to id(chatId),
                 ApiConstants.TEXT to text,
                 ApiConstants.PARSE_MODE to parseMode,
-                ApiConstants.DISABLE_WEB_PAGE_PREVIEW to preview,
+                ApiConstants.DISABLE_WEB_PAGE_PREVIEW to disableWebPreview,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup
