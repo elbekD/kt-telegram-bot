@@ -60,7 +60,7 @@ interface TelegramApi {
         chatId: Any,
         text: String,
         parseMode: String? = null,
-        disableWebPreview: Boolean? = null,
+        disableWebPagePreview: Boolean? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
         markup: ReplyKeyboard? = null
@@ -525,7 +525,7 @@ interface TelegramApi {
         inlineMessageId: String? = null,
         text: String,
         parseMode: String? = null,
-        preview: Boolean? = null,
+        disableWebPagePreview: Boolean? = null,
         markup: InlineKeyboardMarkup? = null
     ): CompletableFuture<Message>
 
@@ -604,9 +604,9 @@ interface TelegramApi {
         userId: Long,
         name: String,
         title: String,
+        emojis: String,
         pngSticker: Any? = null,
         tgsSticker: java.io.File? = null,
-        emojis: String,
         containsMask: Boolean? = null,
         maskPosition: MaskPosition? = null
     ): CompletableFuture<Boolean>
@@ -618,9 +618,9 @@ interface TelegramApi {
     fun addStickerToSet(
         userId: Long,
         name: String,
+        emojis: String,
         pngSticker: Any? = null,
         tgsSticker: java.io.File? = null,
-        emojis: String,
         maskPosition: MaskPosition? = null
     ): CompletableFuture<Boolean>
 

@@ -181,7 +181,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         chatId: Any,
         text: String,
         parseMode: String?,
-        disableWebPreview: Boolean?,
+        disableWebPagePreview: Boolean?,
         disableNotification: Boolean?,
         replyTo: Int?,
         markup: ReplyKeyboard?
@@ -191,7 +191,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.CHAT_ID to id(chatId),
                 ApiConstants.TEXT to text,
                 ApiConstants.PARSE_MODE to parseMode,
-                ApiConstants.DISABLE_WEB_PAGE_PREVIEW to disableWebPreview,
+                ApiConstants.DISABLE_WEB_PAGE_PREVIEW to disableWebPagePreview,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup
@@ -789,7 +789,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         inlineMessageId: String?,
         text: String,
         parseMode: String?,
-        preview: Boolean?,
+        disableWebPagePreview: Boolean?,
         markup: InlineKeyboardMarkup?
     ): CompletableFuture<Message> {
         val body = toBody(
@@ -799,7 +799,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.INLINE_MESSAGE_ID to inlineMessageId,
                 ApiConstants.TEXT to text,
                 ApiConstants.PARSE_MODE to parseMode,
-                ApiConstants.DISABLE_WEB_PAGE_PREVIEW to preview,
+                ApiConstants.DISABLE_WEB_PAGE_PREVIEW to disableWebPagePreview,
                 ApiConstants.REPLY_MARKUP to markup
             )
         )
@@ -918,9 +918,9 @@ internal class TelegramClient(token: String) : TelegramApi {
         userId: Long,
         name: String,
         title: String,
+        emojis: String,
         pngSticker: Any?,
         tgsSticker: File?,
-        emojis: String,
         containsMask: Boolean?,
         maskPosition: MaskPosition?
     ): CompletableFuture<Boolean> {
@@ -955,9 +955,9 @@ internal class TelegramClient(token: String) : TelegramApi {
     override fun addStickerToSet(
         userId: Long,
         name: String,
+        emojis: String,
         pngSticker: Any?,
         tgsSticker: File?,
-        emojis: String,
         maskPosition: MaskPosition?
     ): CompletableFuture<Boolean> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }

@@ -6,14 +6,17 @@ Support for [Telegram Bot API 4.8](https://core.telegram.org/bots/api).
 Method names are the same as in [API](https://core.telegram.org/bots/api#available-methods).
 
 ## Changelog
+
+#### Version 1.3.2
+- Apply suggestion from issue #24 for editTextMessage; changed argument order in createNewStickerSet and addStickerToSet
+
 #### Version 1.3.1
 - Apply suggestion from issue #24
 
 #### Version 1.3.0
 - Updated API to 4.8
 
-#### Version 1.3.0-beta1
-- Updated API to 4.7
+[Changelog history](./CHANGELOG.md)
 
 ## Getting started
 

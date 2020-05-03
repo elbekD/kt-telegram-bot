@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 1.3.2
+- Apply suggestion from issue #24 for editTextMessage; changed argument order in createNewStickerSet and addStickerToSet
+
 ## Version 1.3.1
 - Apply suggestion from issue #24
 

@@ -232,12 +232,12 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         chatId: Any,
         text: String,
         parseMode: String?,
-        disableWebPreview: Boolean?,
+        disableWebPagePreview: Boolean?,
         disableNotification: Boolean?,
         replyTo: Int?,
         markup: ReplyKeyboard?
     ) =
-        client.sendMessage(chatId, text, parseMode, disableWebPreview, disableNotification, replyTo, markup)
+        client.sendMessage(chatId, text, parseMode, disableWebPagePreview, disableNotification, replyTo, markup)
 
     override fun forwardMessage(
         chatId: Any,
@@ -586,11 +586,11 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         inlineMessageId: String?,
         text: String,
         parseMode: String?,
-        preview: Boolean?,
+        disableWebPagePreview: Boolean?,
         markup: InlineKeyboardMarkup?
     ): CompletableFuture<Message> {
         validateIds(chatId, messageId, inlineMessageId)
-        return client.editMessageText(chatId, messageId, inlineMessageId, text, parseMode, preview, markup)
+        return client.editMessageText(chatId, messageId, inlineMessageId, text, parseMode, disableWebPagePreview, markup)
     }
 
     override fun editMessageCaption(
@@ -648,9 +648,9 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         userId: Long,
         name: String,
         title: String,
+        emojis: String,
         pngSticker: Any?,
         tgsSticker: File?,
-        emojis: String,
         containsMask: Boolean?,
         maskPosition: MaskPosition?
     ): CompletableFuture<Boolean> {
@@ -663,9 +663,9 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
             userId,
             name,
             title,
+            emojis,
             pngSticker,
             tgsSticker,
-            emojis,
             containsMask,
             maskPosition
         )
@@ -674,9 +674,9 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
     override fun addStickerToSet(
         userId: Long,
         name: String,
+        emojis: String,
         pngSticker: Any?,
         tgsSticker: File?,
-        emojis: String,
         maskPosition: MaskPosition?
     ): CompletableFuture<Boolean> {
         if (pngSticker != null && tgsSticker != null) {
@@ -684,7 +684,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         }
 
         pngSticker?.let { validateInputFileOrString(it) }
-        return client.addStickerToSet(userId, name, pngSticker, tgsSticker, emojis, maskPosition)
+        return client.addStickerToSet(userId, name, emojis, pngSticker, tgsSticker, maskPosition)
     }
 
     override fun setStickerPositionInSet(
