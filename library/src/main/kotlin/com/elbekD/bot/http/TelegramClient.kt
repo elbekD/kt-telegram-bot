@@ -227,7 +227,10 @@ internal class TelegramClient(token: String) : TelegramApi {
         markup: ReplyKeyboard?
     ): CompletableFuture<Message> {
         return sendFile(
-            ApiConstants.PHOTO, id(chatId), photo, mapOf(
+            ApiConstants.PHOTO,
+            id(chatId),
+            photo,
+            mapOf(
                 ApiConstants.CAPTION to caption,
                 ApiConstants.PARSE_MODE to parseMode,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
@@ -251,7 +254,10 @@ internal class TelegramClient(token: String) : TelegramApi {
         markup: ReplyKeyboard?
     ): CompletableFuture<Message> {
         return sendFile(
-            ApiConstants.AUDIO, id(chatId), audio, mapOf(
+            ApiConstants.AUDIO,
+            id(chatId),
+            audio,
+            mapOf(
                 ApiConstants.CAPTION to caption,
                 ApiConstants.PARSE_MODE to parseMode,
                 ApiConstants.DURATION to duration,
@@ -260,7 +266,8 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup
-            ), thumb
+            ),
+            thumb
         )
     }
 
@@ -275,13 +282,17 @@ internal class TelegramClient(token: String) : TelegramApi {
         markup: ReplyKeyboard?
     ): CompletableFuture<Message> {
         return sendFile(
-            ApiConstants.DOCUMENT, id(chatId), document, mapOf(
+            ApiConstants.DOCUMENT,
+            id(chatId),
+            document,
+            mapOf(
                 ApiConstants.CAPTION to caption,
                 ApiConstants.PARSE_MODE to parseMode,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup
-            ), thumb
+            ),
+            thumb
         )
     }
 
@@ -300,7 +311,10 @@ internal class TelegramClient(token: String) : TelegramApi {
         markup: ReplyKeyboard?
     ): CompletableFuture<Message> {
         return sendFile(
-            ApiConstants.VIDEO, id(chatId), video, mapOf(
+            ApiConstants.VIDEO,
+            id(chatId),
+            video,
+            mapOf(
                 ApiConstants.DURATION to duration,
                 ApiConstants.WIDTH to width,
                 ApiConstants.HEIGHT to height,
@@ -310,7 +324,8 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup
-            ), thumb
+            ),
+            thumb
         )
     }
 
@@ -328,7 +343,10 @@ internal class TelegramClient(token: String) : TelegramApi {
         markup: ReplyKeyboard?
     ): CompletableFuture<Message> {
         return sendFile(
-            ApiConstants.ANIMATION, id(chatId), animation, mapOf(
+            ApiConstants.ANIMATION,
+            id(chatId),
+            animation,
+            mapOf(
                 ApiConstants.DURATION to duration,
                 ApiConstants.WIDTH to width,
                 ApiConstants.HEIGHT to height,
@@ -337,7 +355,8 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup
-            ), thumb
+            ),
+            thumb
         )
     }
 
@@ -352,7 +371,10 @@ internal class TelegramClient(token: String) : TelegramApi {
         markup: ReplyKeyboard?
     ): CompletableFuture<Message> {
         return sendFile(
-            ApiConstants.VOICE, id(chatId), voice, mapOf(
+            ApiConstants.VOICE,
+            id(chatId),
+            voice,
+            mapOf(
                 ApiConstants.CAPTION to caption,
                 ApiConstants.PARSE_MODE to parseMode,
                 ApiConstants.DURATION to duration,
@@ -374,12 +396,17 @@ internal class TelegramClient(token: String) : TelegramApi {
         markup: ReplyKeyboard?
     ): CompletableFuture<Message> {
         return sendFile(
-            ApiConstants.VIDEO_NOTE, id(chatId), note, mapOf(
+            ApiConstants.VIDEO_NOTE,
+            id(chatId),
+            note,
+            mapOf(
                 ApiConstants.DURATION to duration,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup
-            ), thumb, ApiConstants.METHOD_VIDEO_NOTE
+            ),
+            thumb,
+            ApiConstants.METHOD_VIDEO_NOTE
         )
     }
 
