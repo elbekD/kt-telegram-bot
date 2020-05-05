@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 1.3.3
+- Added some extension functions to work with the keyboard. See [sources](/library/src/main/kotlin/com/elbekD/bot/util/keyboard) for details
+
 ## Version 1.3.2
 - Apply suggestion from issue #24 for editTextMessage; changed argument order in createNewStickerSet and addStickerToSet
 

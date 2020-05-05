@@ -7,14 +7,14 @@ Method names are the same as in [API](https://core.telegram.org/bots/api#availab
 
 ## Changelog
 
+#### Version 1.3.3
+- Added some extension functions to work with the keyboard. See [sources](/library/src/main/kotlin/com/elbekD/bot/util/keyboard) for details
+
 #### Version 1.3.2
 - Apply suggestion from issue #24 for editTextMessage; changed argument order in createNewStickerSet and addStickerToSet
 
 #### Version 1.3.1
 - Apply suggestion from issue #24
-
-#### Version 1.3.0
-- Updated API to 4.8
 
 [Changelog history](./CHANGELOG.md)
 
