@@ -1,4 +1,4 @@
-package com.elbekD.bot.feature.factory
+package com.elbekD.bot.util.keyboard
 
 import com.elbekD.bot.types.InlineKeyboardButton
 import com.elbekD.bot.types.KeyboardButton
