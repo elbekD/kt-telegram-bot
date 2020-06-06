@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 1.3.4
+- Support API 4.9 changes
+
 ## Version 1.3.3
 - Added some extension functions to work with the keyboard. See [sources](/library/src/main/kotlin/com/elbekD/bot/util/keyboard) for details
 

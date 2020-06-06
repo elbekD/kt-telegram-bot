@@ -45,10 +45,11 @@ data class InlineQueryResultPhoto(
 data class InlineQueryResultGif(
     val id: String,
     val gif_url: String,
+    val thumb_url: String,
     val gif_width: Int? = null,
     val gif_height: Int? = null,
     val gif_duration: Int? = null,
-    val thumb_url: String? = null,
+    val thumb_mime_type: String? = null,
     val title: String? = null,
     val caption: String? = null,
     val parse_mode: String? = null,
@@ -61,10 +62,11 @@ data class InlineQueryResultGif(
 data class InlineQueryResultMpeg4Gif(
     val id: String,
     val mpeg4_url: String,
+    val thumb_url: String,
     val mpeg4_width: Int? = null,
     val mpeg4_height: Int? = null,
     val mpeg4_duration: Int? = null,
-    val thumb_url: String? = null,
+    val thumb_mime_type: String? = null,
     val caption: String? = null,
     val parse_mode: String? = null,
     val reply_markup: InlineKeyboardMarkup? = null,
@@ -121,10 +123,10 @@ data class InlineQueryResultVoice(
 data class InlineQueryResultDocument(
     val id: String,
     val title: String,
+    val document_url: String,
+    val mime_type: String,
     val caption: String? = null,
     val parse_mode: String? = null,
-    val document_url: String? = null,
-    val mime_type: String? = null,
     val description: String? = null,
     val reply_markup: InlineKeyboardMarkup? = null,
     val input_message_content: InputMessageContent? = null,
@@ -316,7 +318,7 @@ data class InputContactMessageContent(
 data class ChosenInlineResult(
     val result_id: String,
     val from: User,
-    val location: Location,
-    val inline_message_id: String,
+    val location: Location?,
+    val inline_message_id: String?,
     val query: String
 )

@@ -2,19 +2,19 @@
 [![](https://jitpack.io/v/elbekD/kt-telegram-bot.svg)](https://jitpack.io/#elbekD/kt-telegram-bot)
 
 Convenient way to build Telegram bots using powerful Kotlin language.
-Support for [Telegram Bot API 4.8](https://core.telegram.org/bots/api).
+Support for [Telegram Bot API 4.9](https://core.telegram.org/bots/api).
 Method names are the same as in [API](https://core.telegram.org/bots/api#available-methods).
 
 ## Changelog
+
+#### Version 1.3.4
+- Support API 4.9 changes
 
 #### Version 1.3.3
 - Added some extension functions to work with the keyboard. See [sources](/library/src/main/kotlin/com/elbekD/bot/util/keyboard) for details
 
 #### Version 1.3.2
 - Apply suggestion from issue #24 for editTextMessage; changed argument order in createNewStickerSet and addStickerToSet
-
-#### Version 1.3.1
-- Apply suggestion from issue #24
 
 [Changelog history](./CHANGELOG.md)
 

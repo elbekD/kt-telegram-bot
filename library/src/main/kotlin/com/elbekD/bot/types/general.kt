@@ -89,6 +89,7 @@ data class Message(
     val forward_sender_name: String?,
     val forward_date: Int?,
     val reply_to_message: Message?,
+    val via_bot: User?,
     val edit_date: Int?,
     val media_group_id: String?,
     val author_signature: String?,
