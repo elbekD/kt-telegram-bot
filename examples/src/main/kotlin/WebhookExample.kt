@@ -9,7 +9,7 @@ fun main() {
         // below is optional parameters
         // certificate = Paths.get("<PATH TO CERTIFICATE>").toFile()
         // maxConnections = 20
-        // allowedUpdates = listOf(AllowedUpdates.Message)
+        // allowedUpdates = listOf(AllowedUpdate.Message)
         // setWebhookAutomatically = true
 
         /*

@@ -7,7 +7,7 @@ fun main() {
         // below is optional parameters
         // limit = 50
         // timeout = 30
-        // allowedUpdates = listOf(AllowedUpdates.Message)
+        // allowedUpdates = listOf(AllowedUpdate.Message)
         // removeWebhookAutomatically = true
         // period = 1000
     }
