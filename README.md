@@ -71,7 +71,7 @@ Use [ShadowJar](https://github.com/johnrengelman/shadow) plugin or any other way
 and [nginx configuration file](/examples/bot.conf)
 
 ## Bot methods
-See details in [source code](/library/src/main/kotlin/com/github/elbekD/bot/Bot.kt).
+See details in [source code](./library/src/main/kotlin/com/github/elbekD/bot/Bot.kt).
 
 ### Overview
 Common methods
