@@ -128,9 +128,10 @@ internal class TelegramClient(token: String) : TelegramApi {
         addOptsToForm(form, opts)
 
         when (file) {
+            is ByteArray -> form.addFormDataPart(type, "content", RequestBody.create(null, file))
             is File -> form.addFormDataPart(type, file.name, RequestBody.create(null, file))
             is String -> form.addFormDataPart(type, file)
-            else -> throw IllegalArgumentException("Neither file nor string")
+            else -> throw IllegalArgumentException("Unsupported file object. Supported types: ByteArray, File, String.")
         }
 
         thumb?.let {

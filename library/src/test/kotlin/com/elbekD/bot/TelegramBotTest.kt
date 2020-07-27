@@ -61,6 +61,14 @@ internal class TelegramBotTest {
         val fileId = msg1.photo?.get(0)?.file_id!!
         val msg2 = bot.sendPhoto(msg1.chat.id, fileId).get()
         assertNotNull(msg2.photo)
+
+        val byteArray = file.readBytes()
+        val msg3 = bot.sendPhoto(config.userId, byteArray).get()
+        assertNotNull(msg3.photo)
+
+        val byteArrayId = msg1.photo?.get(0)?.file_id!!
+        val msg4 = bot.sendPhoto(msg3.chat.id, byteArrayId).get()
+        assertNotNull(msg4.photo)
     }
 
     @Test
