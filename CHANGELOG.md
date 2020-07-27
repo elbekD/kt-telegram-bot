@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 1.3.5
+- Support ByteArray type for file sending
+
 ## Version 1.3.4
 - Support API 4.9 changes
 
