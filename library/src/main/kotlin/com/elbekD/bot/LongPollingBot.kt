@@ -11,7 +11,6 @@ internal class LongPollingBot(
     private var timer: Timer? = null
 
     private companion object {
-        @JvmStatic
         @Volatile
         private var polling = false
     }

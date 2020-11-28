@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 1.3.6
+- Migrate to Kotlin 1.4.20
+
 ## Version 1.3.5
 - Support ByteArray type for file sending
 

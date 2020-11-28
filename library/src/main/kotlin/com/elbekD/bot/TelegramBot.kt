@@ -25,6 +25,7 @@ import com.elbekD.bot.types.ReplyKeyboard
 import com.elbekD.bot.types.ShippingOption
 import com.elbekD.bot.types.ShippingQuery
 import com.elbekD.bot.types.Update
+import com.elbekD.bot.types.User
 import com.elbekD.bot.util.Action
 import com.elbekD.bot.util.AllowedUpdate
 import java.io.File
@@ -208,13 +209,15 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
                     \  /
                      \/
     */
-    override fun getMe() = client.getMe()
+    override fun getMe(): CompletableFuture<out User> = client.getMe()
 
-    override fun getUpdates(options: Map<String, Any?>) = client.getUpdates(options)
+    override fun getUpdates(options: Map<String, Any?>): CompletableFuture<out List<Update>> =
+        client.getUpdates(options)
 
-    override fun getMyCommands(): CompletableFuture<List<BotCommand>> = client.getMyCommands()
+    override fun getMyCommands(): CompletableFuture<out List<BotCommand>> = client.getMyCommands()
 
-    override fun setMyCommands(commands: List<BotCommand>): CompletableFuture<Boolean> = client.setMyCommands(commands)
+    override fun setMyCommands(commands: List<BotCommand>): CompletableFuture<out Boolean> =
+        client.setMyCommands(commands)
 
     override fun setWebhook(
         url: String,
@@ -382,7 +385,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         media: List<InputMedia>,
         disableNotification: Boolean?,
         replyTo: Int?
-    ): CompletableFuture<ArrayList<Message>> {
+    ): CompletableFuture<out ArrayList<Message>> {
         if (media.size < 2) throw IllegalArgumentException("List must include 2-10 items")
         return client.sendMediaGroup(chatId, media, disableNotification, replyTo)
     }
@@ -405,7 +408,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         messageId: Int?,
         inlineMessageId: String?,
         markup: InlineKeyboardMarkup?
-    ): CompletableFuture<Message> {
+    ): CompletableFuture<out Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.editMessageLiveLocation(latitude, longitude, chatId, messageId, inlineMessageId, markup)
     }
@@ -415,7 +418,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         messageId: Int?,
         inlineMessageId: String?,
         markup: InlineKeyboardMarkup?
-    ): CompletableFuture<Message> {
+    ): CompletableFuture<out Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.stopMessageLiveLocation(chatId, messageId, inlineMessageId, markup)
     }
@@ -588,9 +591,17 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         parseMode: String?,
         disableWebPagePreview: Boolean?,
         markup: InlineKeyboardMarkup?
-    ): CompletableFuture<Message> {
+    ): CompletableFuture<out Message> {
         validateIds(chatId, messageId, inlineMessageId)
-        return client.editMessageText(chatId, messageId, inlineMessageId, text, parseMode, disableWebPagePreview, markup)
+        return client.editMessageText(
+            chatId,
+            messageId,
+            inlineMessageId,
+            text,
+            parseMode,
+            disableWebPagePreview,
+            markup
+        )
     }
 
     override fun editMessageCaption(
@@ -600,7 +611,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         caption: String?,
         parseMode: String?,
         markup: InlineKeyboardMarkup?
-    ): CompletableFuture<Message> {
+    ): CompletableFuture<out Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.editMessageCaption(chatId, messageId, inlineMessageId, caption, parseMode, markup)
     }
@@ -611,7 +622,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         inlineMessageId: String?,
         media: InputMedia,
         markup: InlineKeyboardMarkup?
-    ): CompletableFuture<Message> {
+    ): CompletableFuture<out Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.editMessageMedia(chatId, messageId, inlineMessageId, media, markup)
     }
@@ -621,7 +632,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         messageId: Int?,
         inlineMessageId: String?,
         markup: InlineKeyboardMarkup?
-    ): CompletableFuture<Message> {
+    ): CompletableFuture<out Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.editMessageReplyMarkup(chatId, messageId, inlineMessageId, markup)
     }
@@ -632,7 +643,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         disableNotification: Boolean?,
         replyTo: Int?,
         markup: ReplyKeyboard?
-    ): CompletableFuture<Message> {
+    ): CompletableFuture<out Message> {
         validateInputFileOrString(sticker)
         return client.sendSticker(chatId, sticker, disableNotification, replyTo, markup)
     }
@@ -653,7 +664,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         tgsSticker: File?,
         containsMask: Boolean?,
         maskPosition: MaskPosition?
-    ): CompletableFuture<Boolean> {
+    ): CompletableFuture<out Boolean> {
         if (pngSticker != null && tgsSticker != null) {
             throw IllegalArgumentException("Use exactly one of the fields pngSticker or tgsSticker")
         }
@@ -678,7 +689,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         pngSticker: Any?,
         tgsSticker: File?,
         maskPosition: MaskPosition?
-    ): CompletableFuture<Boolean> {
+    ): CompletableFuture<out Boolean> {
         if (pngSticker != null && tgsSticker != null) {
             throw IllegalArgumentException("Use exactly one of the fields pngSticker or tgsSticker")
         }
@@ -694,7 +705,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
 
     override fun deleteStickerFromSet(sticker: String) = client.deleteStickerFromSet(sticker)
 
-    override fun setStickerSetThumb(name: String, userId: Long, thumb: Any?): CompletableFuture<Boolean> {
+    override fun setStickerSetThumb(name: String, userId: Long, thumb: Any?): CompletableFuture<out Boolean> {
         if (thumb !is File || thumb !is String) {
             throw IllegalArgumentException("Neither file nor string")
         }
@@ -717,7 +728,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         disableEditMessage: Boolean?,
         chatId: Long?,
         messageId: Int?, inlineMessageId: String?
-    ): CompletableFuture<Message> {
+    ): CompletableFuture<out Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.setGameScore(userId, score, force, disableEditMessage, chatId, messageId, inlineMessageId)
     }
@@ -727,7 +738,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         chatId: Long?,
         messageId: Int?,
         inlineMessageId: String?
-    ): CompletableFuture<List<GameHighScore>> {
+    ): CompletableFuture<out List<GameHighScore>> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.getGameHighScores(userId, chatId, messageId, inlineMessageId)
     }
@@ -816,7 +827,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         disableNotification: Boolean?,
         replyTo: Int?,
         markup: ReplyKeyboard?
-    ): CompletableFuture<Message> {
+    ): CompletableFuture<out Message> {
         if (openPeriod != null && closeDate != null) {
             throw IllegalArgumentException("openPeriod and closeDate can't be used together")
         }
@@ -840,7 +851,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         )
     }
 
-    override fun stopPoll(chatId: Any, messageId: Int, markup: InlineKeyboardMarkup?): CompletableFuture<Poll> =
+    override fun stopPoll(chatId: Any, messageId: Int, markup: InlineKeyboardMarkup?): CompletableFuture<out Poll> =
         client.stopPoll(chatId, messageId, markup)
 
     override fun setChatPermissions(chatId: Any, permissions: ChatPermissions) =
@@ -849,7 +860,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
     override fun setChatAdministratorCustomTitle(chatId: Any, userId: Long, customTitle: String) =
         client.setChatAdministratorCustomTitle(chatId, userId, customTitle)
 
-    override fun deleteMessage(chatId: Any, messageId: Int): CompletableFuture<Boolean> =
+    override fun deleteMessage(chatId: Any, messageId: Int): CompletableFuture<out Boolean> =
         client.deleteMessage(chatId, messageId)
 
     override fun sendDice(
@@ -858,7 +869,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         disableNotification: Boolean?,
         replyTo: Int?,
         markup: ReplyKeyboard?
-    ): CompletableFuture<Message> = client.sendDice(chatId, emoji, disableNotification, replyTo, markup)
+    ): CompletableFuture<out Message> = client.sendDice(chatId, emoji, disableNotification, replyTo, markup)
     /*
                 /\
                /  \
