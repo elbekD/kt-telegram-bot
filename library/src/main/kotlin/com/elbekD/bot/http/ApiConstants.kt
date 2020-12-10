@@ -95,6 +95,8 @@ internal object ApiConstants {
     const val SUPPORTS_STREAMING = "supports_streaming"
     const val URL = "url"
     const val CERTIFICATE = "certificate"
+    const val IP_ADDRESS = "ip_address"
+    const val DROP_PENDING_UPDATES = "drop_pending_updates"
     const val MAX_CONNECTIONS = "max_connections"
     const val ALLOWED_UPDATES = "allowed_updates"
     const val DISABLE_WEB_PAGE_PREVIEW = "disable_web_page_preview"

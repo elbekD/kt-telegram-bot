@@ -226,12 +226,13 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
     override fun setWebhook(
         url: String,
         certificate: File?,
+        ipAddress: String?,
         maxConnections: Int?,
-        allowedUpdates: List<AllowedUpdate>?
-    ) =
-        client.setWebhook(url, certificate, maxConnections, allowedUpdates)
+        allowedUpdates: List<AllowedUpdate>?,
+        dropPendingUpdates: Boolean?
+    ) = client.setWebhook(url, certificate, ipAddress, maxConnections, allowedUpdates, dropPendingUpdates)
 
-    override fun deleteWebhook() = client.deleteWebhook()
+    override fun deleteWebhook(dropPendingUpdates: Boolean?) = client.deleteWebhook(dropPendingUpdates)
 
     override fun getWebhookInfo() = client.getWebhookInfo()
 

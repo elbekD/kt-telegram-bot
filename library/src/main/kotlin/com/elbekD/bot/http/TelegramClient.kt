@@ -160,18 +160,25 @@ internal class TelegramClient(token: String) : TelegramApi {
     override fun setWebhook(
         url: String,
         certificate: File?,
+        ipAddress: String?,
         maxConnections: Int?,
-        allowedUpdates: List<AllowedUpdate>?
+        allowedUpdates: List<AllowedUpdate>?,
+        dropPendingUpdates: Boolean?
     ): CompletableFuture<out Boolean> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
         form.addFormDataPart(ApiConstants.URL, url)
         certificate?.let { form.addFormDataPart(ApiConstants.CERTIFICATE, it.name, RequestBody.create(null, it)) }
+        ipAddress?.let { form.addFormDataPart(ApiConstants.IP_ADDRESS, it) }
         maxConnections?.let { form.addFormDataPart(ApiConstants.MAX_CONNECTIONS, it.toString()) }
         allowedUpdates?.let { form.addFormDataPart(ApiConstants.ALLOWED_UPDATES, toJson(it)) }
+        dropPendingUpdates?.let { form.addFormDataPart(ApiConstants.DROP_PENDING_UPDATES, it.toString()) }
         return post(ApiConstants.METHOD_SET_WEBHOOK, form.build())
     }
 
-    override fun deleteWebhook(): CompletableFuture<out Boolean> = get(ApiConstants.METHOD_DELETE_WEBHOOK)
+    override fun deleteWebhook(dropPendingUpdates: Boolean?): CompletableFuture<out Boolean> {
+        val body = toBody(mapOf(ApiConstants.DROP_PENDING_UPDATES to dropPendingUpdates))
+        return post(ApiConstants.METHOD_DELETE_WEBHOOK, body)
+    }
 
     override fun getWebhookInfo(): CompletableFuture<out WebhookInfo> = get(ApiConstants.METHOD_GET_WEBHOOK_INFO)
 

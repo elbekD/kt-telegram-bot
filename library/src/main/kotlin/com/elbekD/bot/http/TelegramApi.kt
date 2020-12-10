@@ -47,11 +47,13 @@ interface TelegramApi {
     fun setWebhook(
         url: String,
         certificate: java.io.File? = null,
+        ipAddress: String? = null,
         maxConnections: Int? = null,
-        allowedUpdates: List<AllowedUpdate>? = null
+        allowedUpdates: List<AllowedUpdate>? = null,
+        dropPendingUpdates: Boolean? = null
     ): CompletableFuture<out Boolean>
 
-    fun deleteWebhook(): CompletableFuture<out Boolean>
+    fun deleteWebhook(dropPendingUpdates: Boolean? = null): CompletableFuture<out Boolean>
 
     fun getWebhookInfo(): CompletableFuture<out WebhookInfo>
 
