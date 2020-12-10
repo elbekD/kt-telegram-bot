@@ -745,9 +745,19 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post(ApiConstants.METHOD_PIN_CHAT_MESSAGE, body)
     }
 
-    override fun unpinChatMessage(chatId: Any): CompletableFuture<out Boolean> {
-        val body = toBody(mapOf(ApiConstants.CHAT_ID to id(chatId)))
+    override fun unpinChatMessage(chatId: Any, messageId: Int?): CompletableFuture<out Boolean> {
+        val body = toBody(
+            mapOf(
+                ApiConstants.CHAT_ID to id(chatId),
+                ApiConstants.MESSAGE_ID to messageId
+            )
+        )
         return post(ApiConstants.METHOD_UNPIN_CHAT_MESSAGE, body)
+    }
+
+    override fun unpinAllChatMessages(chatId: Any): CompletableFuture<out Boolean> {
+        val body = toBody(mapOf(ApiConstants.CHAT_ID to id(chatId)))
+        return post(ApiConstants.METHOD_UNPIN_ALL_CHAT_MESSAGES, body)
     }
 
     override fun leaveChat(chatId: Any): CompletableFuture<out Boolean> {

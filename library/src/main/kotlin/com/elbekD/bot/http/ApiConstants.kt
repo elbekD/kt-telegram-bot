@@ -36,6 +36,7 @@ internal object ApiConstants {
     const val METHOD_SET_CHAT_DESCRIPTION = "setChatDescription"
     const val METHOD_PIN_CHAT_MESSAGE = "pinChatMessage"
     const val METHOD_UNPIN_CHAT_MESSAGE = "unpinChatMessage"
+    const val METHOD_UNPIN_ALL_CHAT_MESSAGES = "unpinAllChatMessages"
     const val METHOD_LEAVE_CHAT = "leaveChat"
     const val METHOD_GET_CHAT = "getChat"
     const val METHOD_GET_CHAT_ADMINISTRATORS = "getChatAdministrators"

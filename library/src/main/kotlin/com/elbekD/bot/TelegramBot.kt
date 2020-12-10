@@ -573,7 +573,9 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         disableNotification: Boolean?
     ) = client.pinChatMessage(chatId, messageId, disableNotification)
 
-    override fun unpinChatMessage(chatId: Any) = client.unpinChatMessage(chatId)
+    override fun unpinChatMessage(chatId: Any, messageId: Int?) = client.unpinChatMessage(chatId, messageId)
+
+    override fun unpinAllChatMessages(chatId: Any): CompletableFuture<out Boolean> = client.unpinAllChatMessages(chatId)
 
     override fun leaveChat(chatId: Any) = client.leaveChat(chatId)
 

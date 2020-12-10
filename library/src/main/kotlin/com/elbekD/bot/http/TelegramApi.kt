@@ -443,7 +443,14 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun unpinChatMessage(chatId: Any): CompletableFuture<out Boolean>
+    fun unpinChatMessage(chatId: Any, messageId: Int? = null): CompletableFuture<out Boolean>
+
+    /**
+     * @param chatId is `Int`, `Long` or `String`
+     * @throws IllegalArgumentException if `chatId` neither integer nor string
+     * @throws TelegramApiError if error returned in response
+     */
+    fun unpinAllChatMessages(chatId: Any): CompletableFuture<out Boolean>
 
     /**
      * @param chatId is `Int`, `Long` or `String`
