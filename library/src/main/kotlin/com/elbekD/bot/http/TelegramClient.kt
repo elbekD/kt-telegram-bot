@@ -179,6 +179,8 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     override fun logOut(): CompletableFuture<out Boolean> = get(ApiConstants.METHOD_LOGOUT)
 
+    override fun close(): CompletableFuture<out Boolean> = get(ApiConstants.METHOD_CLOSE)
+
     override fun sendMessage(
         chatId: Any,
         text: String,
