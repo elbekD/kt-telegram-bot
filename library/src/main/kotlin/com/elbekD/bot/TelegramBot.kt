@@ -211,6 +211,8 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
     */
     override fun getMe(): CompletableFuture<out User> = client.getMe()
 
+    override fun logOut(): CompletableFuture<out Boolean> = client.logOut()
+
     override fun getUpdates(options: Map<String, Any?>): CompletableFuture<out List<Update>> =
         client.getUpdates(options)
 

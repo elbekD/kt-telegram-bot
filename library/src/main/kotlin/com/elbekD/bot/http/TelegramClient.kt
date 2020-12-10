@@ -34,6 +34,7 @@ import okhttp3.Response
 import java.io.File
 import java.lang.reflect.Type
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.Future
 import java.util.concurrent.TimeUnit
 
 // Todo: create general multipart function
@@ -175,6 +176,8 @@ internal class TelegramClient(token: String) : TelegramApi {
     override fun getWebhookInfo(): CompletableFuture<out WebhookInfo> = get(ApiConstants.METHOD_GET_WEBHOOK_INFO)
 
     override fun getMe(): CompletableFuture<out User> = get(ApiConstants.METHOD_GET_ME)
+
+    override fun logOut(): CompletableFuture<out Boolean> = get(ApiConstants.METHOD_LOGOUT)
 
     override fun sendMessage(
         chatId: Any,

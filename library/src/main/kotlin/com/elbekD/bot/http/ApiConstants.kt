@@ -11,6 +11,7 @@ internal object ApiConstants {
     const val METHOD_DELETE_WEBHOOK = "deleteWebhook"
     const val METHOD_GET_WEBHOOK_INFO = "getWebhookInfo"
     const val METHOD_GET_ME = "getMe"
+    const val METHOD_LOGOUT = "logOut"
     const val METHOD_SEND_MESSAGE = "sendMessage"
     const val METHOD_FORWARD_MESSAGE = "forwardMessage"
     const val METHOD_VIDEO_NOTE = "videoNote"

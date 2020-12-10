@@ -28,6 +28,8 @@ import java.util.concurrent.CompletableFuture
 interface TelegramApi {
     fun getMe(): CompletableFuture<out User>
 
+    fun logOut(): CompletableFuture<out Boolean>
+
     fun getUpdates(options: Map<String, Any?>): CompletableFuture<out List<Update>>
 
     /**
