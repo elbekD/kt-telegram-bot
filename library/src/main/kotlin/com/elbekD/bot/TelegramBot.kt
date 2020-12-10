@@ -414,10 +414,17 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         chatId: Any,
         media: List<InputMedia>,
         disableNotification: Boolean?,
-        replyTo: Int?
+        replyTo: Int?,
+        allowSendingWithoutReply: Boolean?
     ): CompletableFuture<out ArrayList<Message>> {
         if (media.size < 2) throw IllegalArgumentException("List must include 2-10 items")
-        return client.sendMediaGroup(chatId, media, disableNotification, replyTo)
+        return client.sendMediaGroup(
+            chatId,
+            media,
+            disableNotification,
+            replyTo,
+            allowSendingWithoutReply
+        )
     }
 
     override fun sendLocation(

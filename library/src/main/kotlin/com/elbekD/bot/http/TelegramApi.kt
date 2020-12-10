@@ -236,7 +236,8 @@ interface TelegramApi {
         chatId: Any,
         media: List<InputMedia>,
         disableNotification: Boolean? = null,
-        replyTo: Int? = null
+        replyTo: Int? = null,
+        allowSendingWithoutReply: Boolean? = null
     ): CompletableFuture<out ArrayList<Message>>
 
     /**

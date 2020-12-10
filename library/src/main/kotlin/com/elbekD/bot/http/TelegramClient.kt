@@ -432,7 +432,8 @@ internal class TelegramClient(token: String) : TelegramApi {
         chatId: Any,
         media: List<InputMedia>,
         disableNotification: Boolean?,
-        replyTo: Int?
+        replyTo: Int?,
+        allowSendingWithoutReply: Boolean?
     ): CompletableFuture<out ArrayList<Message>> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
         form.addFormDataPart(ApiConstants.CHAT_ID, id(chatId))
@@ -462,6 +463,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         form.addFormDataPart(ApiConstants.MEDIA, toJson(media))
         disableNotification?.let { form.addFormDataPart(ApiConstants.DISABLE_NOTIFICATION, it.toString()) }
         replyTo?.let { form.addFormDataPart(ApiConstants.REPLY_TO_MESSAGE_ID, it.toString()) }
+        allowSendingWithoutReply?.let { form.addFormDataPart(ApiConstants.ALLOW_SENDING_WITHOUT_REPLY, it.toString()) }
 
         return post(ApiConstants.METHOD_SEND_MEDIA_GROUP, form.build())
     }
