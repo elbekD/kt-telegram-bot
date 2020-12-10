@@ -58,13 +58,21 @@ data class Chat(
     val first_name: String?,
     val last_name: String?,
     val photo: ChatPhoto?,
+    val bio: String?,
     val description: String?,
     val invite_link: String?,
     val pinned_message: Message?,
     val permissions: ChatPermissions?,
     val slow_mode_delay: Boolean?,
     val sticker_set_name: String?,
-    val can_set_sticker_set: Boolean?
+    val can_set_sticker_set: Boolean?,
+    val linked_chat_id: Int?,
+    val location: ChatLocation?
+)
+
+data class ChatLocation(
+    val location: Location,
+    val address: String
 )
 
 data class ChatPermissions(

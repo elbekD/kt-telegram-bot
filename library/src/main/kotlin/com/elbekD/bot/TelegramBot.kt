@@ -486,8 +486,9 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
 
     override fun unbanChatMember(
         chatId: Any,
-        userId: Long
-    ) = client.unbanChatMember(chatId, userId)
+        userId: Long,
+        onlyIfBanned: Boolean?
+    ) = client.unbanChatMember(chatId, userId, onlyIfBanned)
 
     override fun restrictChatMember(
         chatId: Any,

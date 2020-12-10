@@ -77,6 +77,7 @@ internal object ApiConstants {
     const val TEXT = "text"
     const val MESSAGE_ID = "message_id"
     const val USER_ID = "user_id"
+    const val ONLY_IF_BANNED = "only_if_banned"
     const val INLINE_MESSAGE_ID = "inline_message_id"
     const val REPLY_MARKUP = "reply_markup"
     const val TITLE = "title"

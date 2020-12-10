@@ -615,11 +615,16 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post(ApiConstants.METHOD_KICK_CHAT_MEMBER, body)
     }
 
-    override fun unbanChatMember(chatId: Any, userId: Long): CompletableFuture<out Boolean> {
+    override fun unbanChatMember(
+        chatId: Any,
+        userId: Long,
+        onlyIfBanned: Boolean?
+    ): CompletableFuture<out Boolean> {
         val body = toBody(
             mapOf(
                 ApiConstants.CHAT_ID to id(chatId),
-                ApiConstants.USER_ID to userId
+                ApiConstants.USER_ID to userId,
+                ApiConstants.ONLY_IF_BANNED to onlyIfBanned
             )
         )
         return post(ApiConstants.METHOD_UNBAN_CHAT_MEMBER, body)

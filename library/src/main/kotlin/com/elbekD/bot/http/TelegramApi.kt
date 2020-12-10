@@ -344,7 +344,8 @@ interface TelegramApi {
      */
     fun unbanChatMember(
         chatId: Any,
-        userId: Long
+        userId: Long,
+        onlyIfBanned: Boolean? = null
     ): CompletableFuture<out Boolean>
 
     /**
