@@ -12,15 +12,15 @@ import com.elbekD.bot.types.ShippingQuery
 import com.elbekD.bot.types.Update
 import java.io.File
 
-interface Bot : TelegramApi {
-    companion object {
+public interface Bot : TelegramApi {
+    public companion object {
         /**
          * @param username bot's username without leading @-symbol
          * @param token your bot token
          * @param pollingOptions options used to configure [LongPollingBot]
          */
         @JvmStatic
-        fun createPolling(
+        public fun createPolling(
             username: String,
             token: String,
             pollingOptions: PollingOptions.() -> Unit = { PollingOptions() }
@@ -35,7 +35,7 @@ interface Bot : TelegramApi {
          * @param webhookOptions options used to configure server and webhook params for [setWebhook] method
          */
         @JvmStatic
-        fun createWebhook(
+        public fun createWebhook(
             username: String,
             token: String,
             webhookOptions: WebhookOptions.() -> Unit = { WebhookOptions() }
@@ -58,102 +58,102 @@ interface Bot : TelegramApi {
     /**
      * Start the bot
      */
-    fun start()
+    public fun start()
 
     /**
      * Stop the bot. Manual start needed
      */
-    fun stop()
+    public fun stop()
 
     /**
      * @param action called on [Message] update
      */
-    fun onMessage(action: suspend (Message) -> Unit)
+    public fun onMessage(action: suspend (Message) -> Unit)
 
     /**
      * Removes [Message] update action
      */
-    fun removeMessageAction()
+    public fun removeMessageAction()
 
     /**
      * @param action called if [Message] has been edited
      */
-    fun onEditedMessage(action: suspend (Message) -> Unit)
+    public fun onEditedMessage(action: suspend (Message) -> Unit)
 
     /**
      * Removes edited [Message] update action
      */
-    fun removeEditedMessageAction()
+    public fun removeEditedMessageAction()
 
     /**
      * @param action called on [channel post][Message] update
      */
-    fun onChannelPost(action: suspend (Message) -> Unit)
+    public fun onChannelPost(action: suspend (Message) -> Unit)
 
     /**
      * Removes [channel post][Message] update action
      */
-    fun removeChannelPostAction()
+    public fun removeChannelPostAction()
 
     /**
      * @param action called if [channel post][Message] has been edited
      */
-    fun onEditedChannelPost(action: suspend (Message) -> Unit)
+    public fun onEditedChannelPost(action: suspend (Message) -> Unit)
 
     /**
      * Removes [edited channel post][Message] update action
      */
-    fun removeEditedChannelPostAction()
+    public fun removeEditedChannelPostAction()
 
     /**
      * @param action called on [InlineQuery] update
      */
-    fun onInlineQuery(action: suspend (InlineQuery) -> Unit)
+    public fun onInlineQuery(action: suspend (InlineQuery) -> Unit)
 
     /**
      * Removes [InlineQuery] update action
      */
-    fun removeInlineQueryAction()
+    public fun removeInlineQueryAction()
 
     /**
      * @param action called on [chosen inline query][ChosenInlineResult] update
      */
-    fun onChosenInlineQuery(action: suspend (ChosenInlineResult) -> Unit)
+    public fun onChosenInlineQuery(action: suspend (ChosenInlineResult) -> Unit)
 
     /**
      * Removes [chosen inline query][ChosenInlineResult] update action
      */
-    fun removeChosenInlineQueryAction()
+    public fun removeChosenInlineQueryAction()
 
     /**
      * @param action called on [CallbackQuery] update
      */
-    fun onCallbackQuery(action: suspend (CallbackQuery) -> Unit)
+    public fun onCallbackQuery(action: suspend (CallbackQuery) -> Unit)
 
     /**
      * Removes [CallbackQuery] update action
      */
-    fun removeCallbackQueryAction()
+    public fun removeCallbackQueryAction()
 
     /**
      * @param action called on [ShippingQuery] update
      */
-    fun onShippingQuery(action: suspend (ShippingQuery) -> Unit)
+    public fun onShippingQuery(action: suspend (ShippingQuery) -> Unit)
 
     /**
      * Removes [ShippingQuery] update action
      */
-    fun removeShippingQueryAction()
+    public fun removeShippingQueryAction()
 
     /**
      * @param action called on [PreCheckoutQuery] update
      */
-    fun onPreCheckoutQuery(action: suspend (PreCheckoutQuery) -> Unit)
+    public fun onPreCheckoutQuery(action: suspend (PreCheckoutQuery) -> Unit)
 
     /**
      * Removes [PreCheckoutQuery] update action
      */
-    fun removePreCheckoutQueryAction()
+    public fun removePreCheckoutQueryAction()
 
     /**
      * @param command bot command which starts with `/`
@@ -163,7 +163,7 @@ interface Bot : TelegramApi {
      * @throws [IllegalArgumentException] if [command] exceeds constraints.
      * Check [Telegram Bot Commands](https://core.telegram.org/bots#commands)
      */
-    fun onCommand(command: String, action: suspend (Message, String?) -> Unit)
+    public fun onCommand(command: String, action: suspend (Message, String?) -> Unit)
 
     /**
      * @param data trigger provided via `callback_data` field of [InlineKeyboardButton][com.elbekD.bot.types.InlineKeyboardButton]
@@ -171,7 +171,7 @@ interface Bot : TelegramApi {
      *
      * @throws [IllegalArgumentException] if [data] length not in `[1, 64]` range
      */
-    fun onCallbackQuery(data: String, action: suspend (CallbackQuery) -> Unit)
+    public fun onCallbackQuery(data: String, action: suspend (CallbackQuery) -> Unit)
 
     /**
      * @param query trigger provided via `query` field of [InlineQuery]
@@ -179,18 +179,18 @@ interface Bot : TelegramApi {
      *
      * @throws [IllegalArgumentException] if [query] length not in `[0, 512]` range
      */
-    fun onInlineQuery(query: String, action: suspend (InlineQuery) -> Unit)
+    public fun onInlineQuery(query: String, action: suspend (InlineQuery) -> Unit)
 
     /**
      * Triggered if no matching update handler found.
      */
-    fun onAnyUpdate(action: suspend (Update) -> Unit)
+    public fun onAnyUpdate(action: suspend (Update) -> Unit)
 
     /**
      * Helper method to create photo media object
      * @param media file_id, url or file_attach_name
      */
-    fun mediaPhoto(
+    public fun mediaPhoto(
         media: String,
         attachment: File? = null,
         caption: String? = null,
@@ -201,7 +201,7 @@ interface Bot : TelegramApi {
      * Helper method to create video media object
      * @param media file_id, url or file_attach_name
      */
-    fun mediaVideo(
+    public fun mediaVideo(
         media: String,
         attachment: File? = null,
         thumb: File? = null,
@@ -217,7 +217,7 @@ interface Bot : TelegramApi {
      * Helper method to create animation media object
      * @param media file_id, url or file_attach_name
      */
-    fun mediaAnimation(
+    public fun mediaAnimation(
         media: String,
         attachment: File? = null,
         thumb: File? = null,
@@ -232,7 +232,7 @@ interface Bot : TelegramApi {
      * Helper method to create audio media object
      * @param media file_id, url or file_attach_name
      */
-    fun mediaAudio(
+    public fun mediaAudio(
         media: String,
         attachment: File? = null,
         thumb: File? = null,
@@ -247,7 +247,7 @@ interface Bot : TelegramApi {
      * Helper method to create document media object
      * @param media file_id, url or file_attach_name
      */
-    fun mediaDocument(
+    public fun mediaDocument(
         media: String,
         attachment: File? = null,
         thumb: File? = null,

@@ -5,14 +5,14 @@ package com.elbekD.bot.types
 import com.elbekD.bot.util.AllowedUpdate
 import java.io.File
 
-data class TelegramObject<out T>(
+public data class TelegramObject<out T>(
     val ok: Boolean,
     val result: T?,
     val error_code: Int?,
     val description: String?
 )
 
-data class Update(
+public data class Update(
     val update_id: Int,
     val message: Message?,
     val edited_message: Message?,
@@ -27,7 +27,7 @@ data class Update(
     val poll_answer: PollAnswer?
 )
 
-data class WebhookInfo(
+public data class WebhookInfo(
     val url: String,
     val has_custom_certificate: Boolean,
     val pending_update_count: Int,
@@ -38,7 +38,7 @@ data class WebhookInfo(
     val allowed_updates: List<AllowedUpdate>?
 )
 
-data class User(
+public data class User(
     val id: Int,
     val is_bot: Boolean,
     val first_name: String,
@@ -50,7 +50,7 @@ data class User(
     val supports_inline_queries: Boolean?
 )
 
-data class Chat(
+public data class Chat(
     val id: Long,
     val type: String,
     val title: String?,
@@ -70,12 +70,12 @@ data class Chat(
     val location: ChatLocation?
 )
 
-data class ChatLocation(
+public data class ChatLocation(
     val location: Location,
     val address: String
 )
 
-data class ChatPermissions(
+public data class ChatPermissions(
     val can_send_messages: Boolean? = null,
     val can_send_media_messages: Boolean? = null,
     val can_send_polls: Boolean? = null,
@@ -86,7 +86,7 @@ data class ChatPermissions(
     val can_pin_messages: Boolean? = null
 )
 
-data class Message(
+public data class Message(
     val message_id: Int,
     val from: User?,
     val date: Int,
@@ -138,7 +138,7 @@ data class Message(
     val reply_markup: InlineKeyboardMarkup?
 )
 
-data class CallbackQuery(
+public data class CallbackQuery(
     val id: String,
     val from: User,
     val message: Message?,
@@ -148,7 +148,7 @@ data class CallbackQuery(
     val game_short_name: String?
 )
 
-data class MessageEntity(
+public data class MessageEntity(
     val type: String,
     val offset: Int,
     val length: Int,
@@ -157,7 +157,7 @@ data class MessageEntity(
     val language: String? = null
 ) {
 
-    enum class Types(@Transient @Suppress("unused") val type: String) {
+    public enum class Types(@Transient @Suppress("unused") public val type: String) {
         MENTION("mention"),
         HASHTAG("hashtag"),
         CASHTAG("cashtag"),
@@ -176,14 +176,14 @@ data class MessageEntity(
     }
 }
 
-data class PhotoSize(
+public data class PhotoSize(
     val file_id: String,
     val width: Int,
     val height: Int,
     val file_size: Int
 )
 
-data class Audio(
+public data class Audio(
     val file_id: String,
     val file_unique_id: String,
     val duration: Int,
@@ -195,7 +195,7 @@ data class Audio(
     val thumb: PhotoSize?
 )
 
-data class Document(
+public data class Document(
     val file_id: String,
     val file_unique_id: String,
     val thumb: PhotoSize?,
@@ -204,7 +204,7 @@ data class Document(
     val file_size: Int
 )
 
-data class Video(
+public data class Video(
     val file_id: String,
     val file_unique_id: String,
     val width: Int,
@@ -216,7 +216,7 @@ data class Video(
     val file_size: Int
 )
 
-data class Animation(
+public data class Animation(
     val file_id: String,
     val file_unique_id: String,
     val width: Int,
@@ -228,7 +228,7 @@ data class Animation(
     val file_size: Int?
 )
 
-data class Voice(
+public data class Voice(
     val file_id: String,
     val file_unique_id: String,
     val duration: Int,
@@ -236,7 +236,7 @@ data class Voice(
     val file_size: Int
 )
 
-data class VideoNote(
+public data class VideoNote(
     val file_id: String,
     val file_unique_id: String,
     val length: Int,
@@ -245,7 +245,7 @@ data class VideoNote(
     val file_size: Int
 )
 
-data class Contact(
+public data class Contact(
     val phone_number: String,
     val first_name: String,
     val last_name: String?,
@@ -253,9 +253,9 @@ data class Contact(
     val vcard: String?
 )
 
-data class Location(val longitude: Float, val latitude: Float)
+public data class Location(val longitude: Float, val latitude: Float)
 
-data class Venue(
+public data class Venue(
     val location: Location?,
     val title: String,
     val address: String,
@@ -263,23 +263,23 @@ data class Venue(
     val foursquare_type: String?
 )
 
-data class UserProfilePhotos(val total_count: Int, val photos: List<List<PhotoSize>>?)
+public data class UserProfilePhotos(val total_count: Int, val photos: List<List<PhotoSize>>?)
 
-data class File(
+public data class File(
     val file_id: String,
     val file_unique_id: String,
     val file_size: Int,
     val file_path: String
 )
 
-data class ChatPhoto(
+public data class ChatPhoto(
     val small_file_id: String,
     val small_file_unique_id: String,
     val big_file_id: String,
     val big_file_unique_id: String
 )
 
-data class ChatMember(
+public data class ChatMember(
     val user: User,
     val status: String,
     val custom_title: String?,
@@ -301,16 +301,16 @@ data class ChatMember(
     val can_add_web_page_previews: Boolean?
 )
 
-data class ResponseParameters(val migrate_to_chat_id: Long, val retry_after: Int)
+public data class ResponseParameters(val migrate_to_chat_id: Long, val retry_after: Int)
 
-data class Dice(val emoji: String, val value: Int)
+public data class Dice(val emoji: String, val value: Int)
 
-data class BotCommand(val command: String, val description: String)
+public data class BotCommand(val command: String, val description: String)
 
-interface InputMedia {
-    fun media(): String
-    fun file(): File?
-    fun thumb(): Any?
+public interface InputMedia {
+    public fun media(): String
+    public fun file(): File?
+    public fun thumb(): Any?
 }
 
 internal data class InputMediaPhoto(

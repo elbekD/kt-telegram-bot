@@ -1,6 +1,6 @@
 package com.elbekD.bot.types
 
-data class Game(
+public data class Game(
     val title: String,
     val description: String,
     val photo: List<PhotoSize>,
@@ -9,6 +9,6 @@ data class Game(
     val animation: Animation
 )
 
-data class GameHighScore(val position: Int, val user: User, val score: Int)
+public data class GameHighScore(val position: Int, val user: User, val score: Int)
 
-open class CallbackGame
+public open class CallbackGame

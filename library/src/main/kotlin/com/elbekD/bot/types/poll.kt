@@ -1,6 +1,6 @@
 package com.elbekD.bot.types
 
-data class Poll(
+public data class Poll(
     val id: String,
     val question: String,
     val options: List<PollOption>,
@@ -16,6 +16,6 @@ data class Poll(
     val close_date: Long?
 )
 
-data class PollOption(val text: String, val voter_count: Int)
+public data class PollOption(val text: String, val voter_count: Int)
 
-data class PollAnswer(val poll_id: String, val user: User, val option_ids: List<Int>)
+public data class PollAnswer(val poll_id: String, val user: User, val option_ids: List<Int>)

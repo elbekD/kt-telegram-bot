@@ -76,8 +76,10 @@ internal class WebhookBot(
                         setWebhook(
                             webhookOptions.url,
                             webhookOptions.certificate,
+                            webhookOptions.ipAddress,
                             webhookOptions.maxConnections,
-                            webhookOptions.allowedUpdates
+                            webhookOptions.allowedUpdates,
+                            webhookOptions.dropPendingUpdates
                         )
                     }.join()
             }

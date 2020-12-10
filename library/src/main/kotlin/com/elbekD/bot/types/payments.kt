@@ -1,8 +1,8 @@
 package com.elbekD.bot.types
 
-data class LabeledPrice(val label: String, val amount: Int)
+public data class LabeledPrice(val label: String, val amount: Int)
 
-data class Invoice(
+public data class Invoice(
     val title: String,
     val description: String,
     val start_parameter: String,
@@ -10,7 +10,7 @@ data class Invoice(
     val total_amount: Int
 )
 
-data class ShippingAddress(
+public data class ShippingAddress(
     val country_code: String,
     val state: String,
     val city: String,
@@ -19,16 +19,16 @@ data class ShippingAddress(
     val post_code: String
 )
 
-data class OrderInfo(
+public data class OrderInfo(
     val name: String,
     val phone_number: String,
     val email: String,
     val shipping_address: ShippingAddress
 )
 
-data class ShippingOption(val id: String, val title: String, val prices: List<LabeledPrice>)
+public data class ShippingOption(val id: String, val title: String, val prices: List<LabeledPrice>)
 
-data class SuccessfulPayment(
+public data class SuccessfulPayment(
     val currency: String,
     val total_amount: Int,
     val invoice_payload: String,
@@ -38,14 +38,14 @@ data class SuccessfulPayment(
     val provider_payment_charge_id: String
 )
 
-data class ShippingQuery(
+public data class ShippingQuery(
     val id: String,
     val from: User,
     val invoice_payload: String,
     val shipping_address: ShippingAddress
 )
 
-data class PreCheckoutQuery(
+public data class PreCheckoutQuery(
     val id: String,
     val from: User,
     val currency: String,

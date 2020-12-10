@@ -1,6 +1,6 @@
 package com.elbekD.bot.util
 
-enum class AllowedUpdate(val value: String) {
+public enum class AllowedUpdate(public val value: String) {
     Message("message"),
     EditedMessage("edited_message"),
     ChannelPost("channel_post"),
@@ -11,10 +11,10 @@ enum class AllowedUpdate(val value: String) {
     ShippingQuery("shipping_query"),
     PreCheckoutQuery("pre_checkout_query");
 
-    override fun toString() = value
+    override fun toString(): String = value
 }
 
-enum class Action(val value: String) {
+public enum class Action(public val value: String) {
     Typing("typing"),
     UploadPhoto("upload_photo"),
     RecordVideo("record_video"),
@@ -26,5 +26,5 @@ enum class Action(val value: String) {
     RecordVideoNote("record_video_note"),
     UploadVideoNote("upload_video_note ");
 
-    override fun toString() = value
+    override fun toString(): String = value
 }

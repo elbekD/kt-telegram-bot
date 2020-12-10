@@ -2,7 +2,7 @@ package com.elbekD.bot.feature.chain
 
 import com.elbekD.bot.types.Message
 
-data class Chain internal constructor(
+public data class Chain internal constructor(
     private val label: String,
     private val predicate: (Message) -> Boolean,
     private val chainList: List<Node>

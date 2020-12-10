@@ -8,8 +8,8 @@ import java.util.Timer
  * @param removeWebhookAutomatically if `true` calls [TelegramBot.deleteWebhook] before switching to long polling.
  * Default is `true`.
  */
-class PollingOptions(var removeWebhookAutomatically: Boolean = true) {
-    var limit: Int? = null
+public class PollingOptions(public var removeWebhookAutomatically: Boolean = true) {
+    public var limit: Int? = null
         set(value) {
             if (value == null)
                 throw NullPointerException()
@@ -18,7 +18,7 @@ class PollingOptions(var removeWebhookAutomatically: Boolean = true) {
             field = value
         }
 
-    var timeout: Int? = null
+    public var timeout: Int? = null
         set(value) {
             if (value == null)
                 throw NullPointerException()
@@ -27,7 +27,7 @@ class PollingOptions(var removeWebhookAutomatically: Boolean = true) {
             field = value
         }
 
-    var allowedUpdates: List<AllowedUpdate>? = null
+    public var allowedUpdates: List<AllowedUpdate>? = null
         set(value) {
             if (value == null)
                 throw NullPointerException()
@@ -37,7 +37,7 @@ class PollingOptions(var removeWebhookAutomatically: Boolean = true) {
     /**
      * period for [Timer]
      */
-    var period: Long = 1000L
+    public var period: Long = 1000L
         set(value) {
             if (value > 1000L) field = value
         }
@@ -54,18 +54,18 @@ class PollingOptions(var removeWebhookAutomatically: Boolean = true) {
 }
 
 @DslMarker
-annotation class OptionsMarker
+public annotation class OptionsMarker
 
 /**
  * @param setWebhookAutomatically if true then calls `setWebhook()` method when server is started.
  * Else call `setWebhook()` method manually. Default is `true`
  */
 @OptionsMarker
-class WebhookOptions(
-    var setWebhookAutomatically: Boolean = true,
+public class WebhookOptions(
+    public var setWebhookAutomatically: Boolean = true,
     internal var serverOptions: ServerOptions = ServerOptions()
 ) {
-    var url: String = ""
+    public var url: String = ""
         set(value) {
             if (!value.matches("^https://.+$".toRegex()))
                 throw IllegalArgumentException("$value is invalid. Check and try again")
@@ -77,14 +77,21 @@ class WebhookOptions(
             return field
         }
 
-    var certificate: File? = null
+    public var certificate: File? = null
         set(value) {
             if (value == null)
                 throw NullPointerException()
             field = value
         }
 
-    var maxConnections: Int? = null
+    public var ipAddress: String? = null
+        set(value) {
+            if (value == null)
+                throw NullPointerException()
+            field = value
+        }
+
+    public var maxConnections: Int? = null
         set(value) {
             if (value == null)
                 throw NullPointerException()
@@ -93,7 +100,14 @@ class WebhookOptions(
             field = value
         }
 
-    var allowedUpdates: List<AllowedUpdate>? = null
+    public var allowedUpdates: List<AllowedUpdate>? = null
+        set(value) {
+            if (value == null)
+                throw NullPointerException()
+            field = value
+        }
+
+    public var dropPendingUpdates: Boolean? = null
         set(value) {
             if (value == null)
                 throw NullPointerException()
@@ -104,7 +118,7 @@ class WebhookOptions(
      * Set to false if you use proxy engines like nginx.
      * If set to true than request path must contain /token path spec.
      */
-    var useTokenBasedPathSpec: Boolean = false
+    public var useTokenBasedPathSpec: Boolean = false
 
     override fun toString(): String {
         return """
@@ -118,39 +132,39 @@ class WebhookOptions(
     }
 }
 
-fun WebhookOptions.server(block: ServerOptions.() -> Unit) {
+public fun WebhookOptions.server(block: ServerOptions.() -> Unit) {
     serverOptions = ServerOptions().apply(block)
 }
 
 @OptionsMarker
-class TLSOptions {
+public class TLSOptions {
     private companion object {
         @JvmField
         val supportedPorts = listOf(80, 88, 443, 8443)
     }
 
-    var port = 8443
+    public var port: Int = 8443
         set(value) {
             if (value !in supportedPorts)
                 throw IllegalArgumentException("<$value> not in $supportedPorts. Change and try again")
             field = value
         }
 
-    var keyStorePath: String? = null
+    public var keyStorePath: String? = null
         set(value) {
             if (value == null)
                 throw NullPointerException()
             field = value
         }
 
-    var keyStorePassword: String? = null
+    public var keyStorePassword: String? = null
         set(value) {
             if (value == null)
                 throw NullPointerException()
             field = value
         }
 
-    var keyManagerPassword: String? = null
+    public var keyManagerPassword: String? = null
         set(value) {
             if (value == null)
                 throw NullPointerException()
@@ -169,9 +183,9 @@ class TLSOptions {
 }
 
 @OptionsMarker
-class ServerOptions(
-    var host: String = "127.0.0.1",
-    var port: Int = 8080,
+public class ServerOptions(
+    public var host: String = "127.0.0.1",
+    public var port: Int = 8080,
     internal var tlsOptions: TLSOptions? = null
 ) {
     override fun toString(): String {
@@ -184,6 +198,6 @@ class ServerOptions(
     }
 }
 
-fun ServerOptions.tls(block: TLSOptions.() -> Unit) {
+public fun ServerOptions.tls(block: TLSOptions.() -> Unit) {
     tlsOptions = TLSOptions().apply(block)
 }

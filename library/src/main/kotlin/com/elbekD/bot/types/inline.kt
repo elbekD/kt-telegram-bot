@@ -1,9 +1,9 @@
 package com.elbekD.bot.types
 
-interface InlineQueryResult
-interface InputMessageContent
+public interface InlineQueryResult
+public interface InputMessageContent
 
-data class InlineQuery(
+public data class InlineQuery(
     val id: String,
     val from: User,
     val location: Location?,
@@ -11,7 +11,7 @@ data class InlineQuery(
     val offset: String
 )
 
-data class InlineQueryResultArticle(
+public data class InlineQueryResultArticle(
     val id: String,
     val title: String,
     val input_message_content: InputMessageContent,
@@ -26,7 +26,7 @@ data class InlineQueryResultArticle(
     val type: String = "article"
 }
 
-data class InlineQueryResultPhoto(
+public data class InlineQueryResultPhoto(
     val id: String,
     val photo_url: String,
     val thumb_url: String,
@@ -42,7 +42,7 @@ data class InlineQueryResultPhoto(
     val type: String = "photo"
 }
 
-data class InlineQueryResultGif(
+public data class InlineQueryResultGif(
     val id: String,
     val gif_url: String,
     val thumb_url: String,
@@ -59,7 +59,7 @@ data class InlineQueryResultGif(
     val type: String = "gif"
 }
 
-data class InlineQueryResultMpeg4Gif(
+public data class InlineQueryResultMpeg4Gif(
     val id: String,
     val mpeg4_url: String,
     val thumb_url: String,
@@ -75,7 +75,7 @@ data class InlineQueryResultMpeg4Gif(
     val type: String = "mpeg4_gif"
 }
 
-data class InlineQueryResultVideo(
+public data class InlineQueryResultVideo(
     val id: String,
     val video_url: String,
     val mime_type: String,
@@ -93,7 +93,7 @@ data class InlineQueryResultVideo(
     val type: String = "video"
 }
 
-data class InlineQueryResultAudio(
+public data class InlineQueryResultAudio(
     val id: String,
     val audio_url: String,
     val title: String,
@@ -107,7 +107,7 @@ data class InlineQueryResultAudio(
     val type: String = "audio"
 }
 
-data class InlineQueryResultVoice(
+public data class InlineQueryResultVoice(
     val id: String,
     val voice_url: String,
     val title: String,
@@ -120,7 +120,7 @@ data class InlineQueryResultVoice(
     val type: String = "voice"
 }
 
-data class InlineQueryResultDocument(
+public data class InlineQueryResultDocument(
     val id: String,
     val title: String,
     val document_url: String,
@@ -137,7 +137,7 @@ data class InlineQueryResultDocument(
     val type: String = "document"
 }
 
-data class InlineQueryResultLocation(
+public data class InlineQueryResultLocation(
     val id: String,
     val latitude: Float,
     val longitude: Float,
@@ -152,7 +152,7 @@ data class InlineQueryResultLocation(
     val type: String = "location"
 }
 
-data class InlineQueryResultVenue(
+public data class InlineQueryResultVenue(
     val id: String,
     val latitude: Float,
     val longitude: Float,
@@ -169,7 +169,7 @@ data class InlineQueryResultVenue(
     val type: String = "venue"
 }
 
-data class InlineQueryResultContact(
+public data class InlineQueryResultContact(
     val id: String,
     val phone_number: String,
     val first_name: String,
@@ -184,7 +184,7 @@ data class InlineQueryResultContact(
     val type: String = "contact"
 }
 
-data class InlineQueryResultGame(
+public data class InlineQueryResultGame(
     val id: String,
     val game_short_name: String,
     val reply_markup: InlineKeyboardMarkup? = null
@@ -192,7 +192,7 @@ data class InlineQueryResultGame(
     val type: String = "game"
 }
 
-data class InlineQueryResultCachedPhoto(
+public data class InlineQueryResultCachedPhoto(
     val id: String,
     val photo_file_id: String,
     val title: String? = null,
@@ -205,7 +205,7 @@ data class InlineQueryResultCachedPhoto(
     val type: String = "photo"
 }
 
-data class InlineQueryResultCachedGif(
+public data class InlineQueryResultCachedGif(
     val id: String,
     val gif_file_id: String,
     val title: String? = null,
@@ -217,7 +217,7 @@ data class InlineQueryResultCachedGif(
     val type: String = "gif"
 }
 
-data class InlineQueryResultCachedMpeg4Gif(
+public data class InlineQueryResultCachedMpeg4Gif(
     val id: String,
     val mpeg4_file_id: String,
     val title: String? = null,
@@ -229,7 +229,7 @@ data class InlineQueryResultCachedMpeg4Gif(
     val type: String = "mpeg4_gif"
 }
 
-data class InlineQueryResultCachedSticker(
+public data class InlineQueryResultCachedSticker(
     val id: String,
     val sticker_file_id: String,
     val reply_markup: InlineKeyboardMarkup? = null,
@@ -238,7 +238,7 @@ data class InlineQueryResultCachedSticker(
     val type: String = "sticker"
 }
 
-data class InlineQueryResultCachedDocument(
+public data class InlineQueryResultCachedDocument(
     val id: String,
     val title: String,
     val document_file_id: String,
@@ -251,7 +251,7 @@ data class InlineQueryResultCachedDocument(
     val type: String = "document"
 }
 
-data class InlineQueryResultCachedVideo(
+public data class InlineQueryResultCachedVideo(
     val id: String,
     val video_file_id: String,
     val title: String,
@@ -264,7 +264,7 @@ data class InlineQueryResultCachedVideo(
     val type: String = "video"
 }
 
-data class InlineQueryResultCachedVoice(
+public data class InlineQueryResultCachedVoice(
     val id: String,
     val voice_file_id: String,
     val description: String? = null,
@@ -276,7 +276,7 @@ data class InlineQueryResultCachedVoice(
     val type: String = "voice"
 }
 
-data class InlineQueryResultCachedAudio(
+public data class InlineQueryResultCachedAudio(
     val id: String,
     val audio_file_id: String,
     val caption: String? = null,
@@ -287,19 +287,19 @@ data class InlineQueryResultCachedAudio(
     val type: String = "audio"
 }
 
-data class InputTextMessageContent(
+public data class InputTextMessageContent(
     val message_text: String,
     val parse_mode: String? = null,
     val disable_web_page_preview: Boolean? = null
 ) : InputMessageContent
 
-data class InputLocationMessageContent(
+public data class InputLocationMessageContent(
     val latitude: Float,
     val longitude: Float,
     val live_period: Int? = null
 ) : InputMessageContent
 
-data class InputVenueMessageContent(
+public data class InputVenueMessageContent(
     val latitude: Float,
     val longitude: Float,
     val title: String,
@@ -308,14 +308,14 @@ data class InputVenueMessageContent(
     val foursquare_type: String? = null
 ) : InputMessageContent
 
-data class InputContactMessageContent(
+public data class InputContactMessageContent(
     val phone_number: String,
     val first_name: String,
     val last_name: String? = null,
     val vcard: String? = null
 ) : InputMessageContent
 
-data class ChosenInlineResult(
+public data class ChosenInlineResult(
     val result_id: String,
     val from: User,
     val location: Location?,

@@ -5,48 +5,48 @@ import com.elbekD.bot.types.Update
 
 private const val COMMAND_FORMAT = "^/([\\w]{1,32}(@%s)?)$"
 
-fun String.isCommand(username: String) = matches(COMMAND_FORMAT.format(username).toRegex())
+public fun String.isCommand(username: String): Boolean = matches(COMMAND_FORMAT.format(username).toRegex())
 
-fun Update.isCommand(username: String): Boolean {
+public fun Update.isCommand(username: String): Boolean {
     return isMessage() && message!!.isCommand(username)
 }
 
-fun Update.isMessage(): Boolean {
+public fun Update.isMessage(): Boolean {
     return message != null
 }
 
-fun Update.isEditedMessage(): Boolean {
+public fun Update.isEditedMessage(): Boolean {
     return edited_message != null
 }
 
-fun Update.isChannelPost(): Boolean {
+public fun Update.isChannelPost(): Boolean {
     return channel_post != null
 }
 
-fun Update.isEditedChannelPost(): Boolean {
+public fun Update.isEditedChannelPost(): Boolean {
     return edited_channel_post != null
 }
 
-fun Update.isInlineQuery(): Boolean {
+public fun Update.isInlineQuery(): Boolean {
     return inline_query != null
 }
 
-fun Update.isChosenInlineQuery(): Boolean {
+public fun Update.isChosenInlineQuery(): Boolean {
     return chosen_inline_result != null
 }
 
-fun Update.isCallbackQuery(): Boolean {
+public fun Update.isCallbackQuery(): Boolean {
     return callback_query != null
 }
 
-fun Update.isShippingQuery(): Boolean {
+public fun Update.isShippingQuery(): Boolean {
     return shipping_query != null
 }
 
-fun Update.isPreCheckoutQuery(): Boolean {
+public fun Update.isPreCheckoutQuery(): Boolean {
     return pre_checkout_query != null
 }
 
-fun Message.isCommand(username: String): Boolean {
+public fun Message.isCommand(username: String): Boolean {
     return text != null && text.split(' ')[0].isCommand(username)
 }

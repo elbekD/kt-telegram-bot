@@ -26,26 +26,26 @@ import com.elbekD.bot.util.Action
 import com.elbekD.bot.util.AllowedUpdate
 import java.util.concurrent.CompletableFuture
 
-interface TelegramApi {
-    fun getMe(): CompletableFuture<out User>
+public interface TelegramApi {
+    public fun getMe(): CompletableFuture<out User>
 
-    fun logOut(): CompletableFuture<out Boolean>
+    public fun logOut(): CompletableFuture<out Boolean>
 
-    fun close(): CompletableFuture<out Boolean>
+    public fun close(): CompletableFuture<out Boolean>
 
-    fun getUpdates(options: Map<String, Any?>): CompletableFuture<out List<Update>>
-
-    /**
-     * @throws TelegramApiError if error returned in response
-     */
-    fun getMyCommands(): CompletableFuture<out List<BotCommand>>
+    public fun getUpdates(options: Map<String, Any?>): CompletableFuture<out List<Update>>
 
     /**
      * @throws TelegramApiError if error returned in response
      */
-    fun setMyCommands(commands: List<BotCommand>): CompletableFuture<out Boolean>
+    public fun getMyCommands(): CompletableFuture<out List<BotCommand>>
 
-    fun setWebhook(
+    /**
+     * @throws TelegramApiError if error returned in response
+     */
+    public fun setMyCommands(commands: List<BotCommand>): CompletableFuture<out Boolean>
+
+    public fun setWebhook(
         url: String,
         certificate: java.io.File? = null,
         ipAddress: String? = null,
@@ -54,16 +54,16 @@ interface TelegramApi {
         dropPendingUpdates: Boolean? = null
     ): CompletableFuture<out Boolean>
 
-    fun deleteWebhook(dropPendingUpdates: Boolean? = null): CompletableFuture<out Boolean>
+    public fun deleteWebhook(dropPendingUpdates: Boolean? = null): CompletableFuture<out Boolean>
 
-    fun getWebhookInfo(): CompletableFuture<out WebhookInfo>
+    public fun getWebhookInfo(): CompletableFuture<out WebhookInfo>
 
     /**
      * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun sendMessage(
+    public fun sendMessage(
         chatId: Any,
         text: String,
         parseMode: String? = null,
@@ -79,7 +79,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun forwardMessage(
+    public fun forwardMessage(
         chatId: Any,
         fromId: Any,
         msgId: Int,
@@ -93,7 +93,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `photo` neither [java.io.File] nor `String`
      * @throws TelegramApiError if error returned in response
      */
-    fun sendPhoto(
+    public fun sendPhoto(
         chatId: Any,
         photo: Any,
         caption: String? = null,
@@ -110,7 +110,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `audio` neither [java.io.File] nor `String`
      * @throws TelegramApiError if error returned in response
      */
-    fun sendAudio(
+    public fun sendAudio(
         chatId: Any,
         audio: Any,
         caption: String? = null,
@@ -132,7 +132,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `document` neither [java.io.File] nor `String`
      * @throws TelegramApiError if error returned in response
      */
-    fun sendDocument(
+    public fun sendDocument(
         chatId: Any,
         document: Any,
         thumb: java.io.File? = null,
@@ -153,7 +153,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `video` neither [java.io.File] nor `String`
      * @throws TelegramApiError if error returned in response
      */
-    fun sendVideo(
+    public fun sendVideo(
         chatId: Any,
         video: Any,
         duration: Int? = null,
@@ -177,7 +177,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `thumb` neither [java.io.File] nor `String`
      * @throws TelegramApiError if error returned in response
      */
-    fun sendAnimation(
+    public fun sendAnimation(
         chatId: Any,
         animation: Any,
         duration: Int? = null,
@@ -198,7 +198,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `voice` neither [java.io.File] nor `String`
      * @throws TelegramApiError if error returned in response
      */
-    fun sendVoice(
+    public fun sendVoice(
         chatId: Any,
         voice: Any,
         caption: String? = null,
@@ -216,7 +216,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `note` neither [java.io.File] nor `String`
      * @throws TelegramApiError if error returned in response
      */
-    fun sendVideoNote(
+    public fun sendVideoNote(
         chatId: Any,
         note: Any,
         duration: Int? = null,
@@ -232,7 +232,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun sendMediaGroup(
+    public fun sendMediaGroup(
         chatId: Any,
         media: List<InputMedia>,
         disableNotification: Boolean? = null,
@@ -245,7 +245,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun sendLocation(
+    public fun sendLocation(
         chatId: Any,
         latitude: Double,
         longitude: Double,
@@ -259,7 +259,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if not provided `inlineMessageId` or `chatId` and `messageId`
      * @throws TelegramApiError if error returned in response
      */
-    fun editMessageLiveLocation(
+    public fun editMessageLiveLocation(
         latitude: Double,
         longitude: Double,
         chatId: Any? = null,
@@ -273,7 +273,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if not provided `inlineMessageId` or `chatId` and `messageId`
      * @throws TelegramApiError if error returned in response
      */
-    fun stopMessageLiveLocation(
+    public fun stopMessageLiveLocation(
         chatId: Any? = null,
         messageId: Int? = null,
         inlineMessageId: String? = null,
@@ -285,7 +285,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun sendVenue(
+    public fun sendVenue(
         chatId: Any, latitude: Double,
         longitude: Double,
         title: String,
@@ -302,7 +302,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun sendContact(
+    public fun sendContact(
         chatId: Any,
         phone: String,
         firstName: String,
@@ -318,25 +318,25 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun sendChatAction(
+    public fun sendChatAction(
         chatId: Any,
         action: Action
     ): CompletableFuture<out Boolean>
 
-    fun getUserProfilePhotos(
+    public fun getUserProfilePhotos(
         userId: Long,
         offset: Int? = null,
         limit: Int? = null
     ): CompletableFuture<out UserProfilePhotos>
 
-    fun getFile(fileId: String): CompletableFuture<out File>
+    public fun getFile(fileId: String): CompletableFuture<out File>
 
     /**
      * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun kickChatMember(
+    public fun kickChatMember(
         chatId: Any,
         userId: Long,
         untilDate: Int? = null
@@ -347,7 +347,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun unbanChatMember(
+    public fun unbanChatMember(
         chatId: Any,
         userId: Long,
         onlyIfBanned: Boolean? = null
@@ -358,7 +358,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun restrictChatMember(
+    public fun restrictChatMember(
         chatId: Any,
         userId: Long,
         permissions: ChatPermissions,
@@ -370,7 +370,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun promoteChatMember(
+    public fun promoteChatMember(
         chatId: Any,
         userId: Long,
         canChangeInfo: Boolean? = null,
@@ -388,7 +388,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun exportChatInviteLink(chatId: Any): CompletableFuture<out String>
+    public fun exportChatInviteLink(chatId: Any): CompletableFuture<out String>
 
     /**
      * @param chatId is `Int`, `Long` or `String`
@@ -396,7 +396,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun setChatPhoto(
+    public fun setChatPhoto(
         chatId: Any,
         photo: Any
     ): CompletableFuture<out Boolean>
@@ -406,14 +406,14 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun deleteChatPhoto(chatId: Any): CompletableFuture<out Boolean>
+    public fun deleteChatPhoto(chatId: Any): CompletableFuture<out Boolean>
 
     /**
      * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun setChatTitle(
+    public fun setChatTitle(
         chatId: Any,
         title: String
     ): CompletableFuture<out Boolean>
@@ -423,7 +423,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun setChatDescription(
+    public fun setChatDescription(
         chatId: Any,
         description: String
     ): CompletableFuture<out Boolean>
@@ -433,7 +433,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun pinChatMessage(
+    public fun pinChatMessage(
         chatId: Any,
         messageId: Int,
         disableNotification: Boolean? = null
@@ -444,49 +444,49 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun unpinChatMessage(chatId: Any, messageId: Int? = null): CompletableFuture<out Boolean>
+    public fun unpinChatMessage(chatId: Any, messageId: Int? = null): CompletableFuture<out Boolean>
 
     /**
      * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun unpinAllChatMessages(chatId: Any): CompletableFuture<out Boolean>
+    public fun unpinAllChatMessages(chatId: Any): CompletableFuture<out Boolean>
 
     /**
      * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun leaveChat(chatId: Any): CompletableFuture<out Boolean>
+    public fun leaveChat(chatId: Any): CompletableFuture<out Boolean>
 
     /**
      * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun getChat(chatId: Any): CompletableFuture<out Chat>
+    public fun getChat(chatId: Any): CompletableFuture<out Chat>
 
     /**
      * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun getChatAdministrators(chatId: Any): CompletableFuture<out ArrayList<ChatMember>>
+    public fun getChatAdministrators(chatId: Any): CompletableFuture<out ArrayList<ChatMember>>
 
     /**
      * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun getChatMembersCount(chatId: Any): CompletableFuture<out Int>
+    public fun getChatMembersCount(chatId: Any): CompletableFuture<out Int>
 
     /**
      * @param chatId is `Int`, `Long` or `String`
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun getChatMember(
+    public fun getChatMember(
         chatId: Any,
         userId: Long
     ): CompletableFuture<out ChatMember>
@@ -496,7 +496,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun setChatStickerSet(
+    public fun setChatStickerSet(
         chatId: Any,
         stickerSetName: String
     ): CompletableFuture<out Boolean>
@@ -506,12 +506,12 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `chatId` neither integer nor string
      * @throws TelegramApiError if error returned in response
      */
-    fun deleteChatStickerSet(chatId: Any): CompletableFuture<out Boolean>
+    public fun deleteChatStickerSet(chatId: Any): CompletableFuture<out Boolean>
 
     /**
      * @throws TelegramApiError if error returned in response
      */
-    fun answerCallbackQuery(
+    public fun answerCallbackQuery(
         id: String,
         text: String? = null,
         alert: Boolean? = null,
@@ -523,7 +523,7 @@ interface TelegramApi {
     /**
      * @throws TelegramApiError if error returned in response
      */
-    fun answerInlineQuery(
+    public fun answerInlineQuery(
         queryId: String,
         results: List<InlineQueryResult>,
         cacheTime: Int? = null,
@@ -538,7 +538,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if not provided `inlineMessageId` or `chatId` and `messageId`
      * @throws TelegramApiError if error returned in response
      */
-    fun editMessageText(
+    public fun editMessageText(
         chatId: Any? = null,
         messageId: Int? = null,
         inlineMessageId: String? = null,
@@ -553,7 +553,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if not provided `inlineMessageId` or `chatId` and `messageId`
      * @throws TelegramApiError if error returned in response
      */
-    fun editMessageCaption(
+    public fun editMessageCaption(
         chatId: Any? = null,
         messageId: Int? = null,
         inlineMessageId: String? = null,
@@ -567,7 +567,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if not provided `inlineMessageId` or `chatId` and `messageId`
      * @throws TelegramApiError if error returned in response
      */
-    fun editMessageMedia(
+    public fun editMessageMedia(
         chatId: Any? = null,
         messageId: Int? = null,
         inlineMessageId: String? = null,
@@ -580,7 +580,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if not provided `inlineMessageId` or `chatId` and `messageId`
      * @throws TelegramApiError if error returned in response
      */
-    fun editMessageReplyMarkup(
+    public fun editMessageReplyMarkup(
         chatId: Any? = null,
         messageId: Int? = null,
         inlineMessageId: String? = null,
@@ -594,7 +594,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if `sticker` neither [java.io.File] nor `String`
      * @throws TelegramApiError if error returned in response
      */
-    fun sendSticker(
+    public fun sendSticker(
         chatId: Any,
         sticker: Any,
         disableNotification: Boolean? = null,
@@ -605,12 +605,12 @@ interface TelegramApi {
     /**
      * @throws TelegramApiError if error returned in response
      */
-    fun getStickerSet(name: String): CompletableFuture<out StickerSet>
+    public fun getStickerSet(name: String): CompletableFuture<out StickerSet>
 
     /**
      * @throws TelegramApiError if error returned in response
      */
-    fun uploadStickerFile(
+    public fun uploadStickerFile(
         userId: Long,
         pngSticker: java.io.File
     ): CompletableFuture<out File>
@@ -619,7 +619,7 @@ interface TelegramApi {
      * @param pngSticker is [java.io.File] or `String`
      * @throws TelegramApiError if error returned in response
      */
-    fun createNewStickerSet(
+    public fun createNewStickerSet(
         userId: Long,
         name: String,
         title: String,
@@ -634,7 +634,7 @@ interface TelegramApi {
      * @param pngSticker is [java.io.File] or `String`
      * @throws TelegramApiError if error returned in response
      */
-    fun addStickerToSet(
+    public fun addStickerToSet(
         userId: Long,
         name: String,
         emojis: String,
@@ -646,7 +646,7 @@ interface TelegramApi {
     /**
      * @throws TelegramApiError if error returned in response
      */
-    fun setStickerPositionInSet(
+    public fun setStickerPositionInSet(
         sticker: String,
         position: Int
     ): CompletableFuture<out Boolean>
@@ -654,17 +654,17 @@ interface TelegramApi {
     /**
      * @throws TelegramApiError if error returned in response
      */
-    fun deleteStickerFromSet(sticker: String): CompletableFuture<out Boolean>
+    public fun deleteStickerFromSet(sticker: String): CompletableFuture<out Boolean>
 
     /**
      * @throws TelegramApiError if error returned in response
      */
-    fun setStickerSetThumb(name: String, userId: Long, thumb: Any? = null): CompletableFuture<out Boolean>
+    public fun setStickerSetThumb(name: String, userId: Long, thumb: Any? = null): CompletableFuture<out Boolean>
 
     /**
      * @throws TelegramApiError if error returned in response
      */
-    fun sendGame(
+    public fun sendGame(
         chatId: Long,
         gameShortName: String,
         disableNotification: Boolean? = null,
@@ -676,7 +676,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if not provided `inlineMessageId` or `chatId` and `messageId`
      * @throws TelegramApiError if error returned in response
      */
-    fun setGameScore(
+    public fun setGameScore(
         userId: Long,
         score: Int,
         force: Boolean? = null,
@@ -690,7 +690,7 @@ interface TelegramApi {
      * @throws IllegalArgumentException if not provided `inlineMessageId` or `chatId` and `messageId`
      * @throws TelegramApiError if error returned in response
      */
-    fun getGameHighScores(
+    public fun getGameHighScores(
         userId: Long,
         chatId: Long? = null,
         messageId: Int? = null,
@@ -700,7 +700,7 @@ interface TelegramApi {
     /**
      * @throws TelegramApiError if error returned in response
      */
-    fun sendInvoice(
+    public fun sendInvoice(
         chatId: Long,
         title: String,
         description: String,
@@ -729,7 +729,7 @@ interface TelegramApi {
     /**
      * @throws TelegramApiError if error returned in response
      */
-    fun answerShippingQuery(
+    public fun answerShippingQuery(
         shippingQueryId: String,
         ok: Boolean,
         shippingOptions: List<ShippingOption>? = null,
@@ -739,7 +739,7 @@ interface TelegramApi {
     /**
      * @throws TelegramApiError if error returned in response
      */
-    fun answerPreCheckoutQuery(
+    public fun answerPreCheckoutQuery(
         preCheckoutQueryId: String,
         ok: Boolean,
         errorMessage: String? = null
@@ -748,7 +748,7 @@ interface TelegramApi {
     /**
      * @throws TelegramApiError if error returned in response
      */
-    fun setPassportDataErrors(
+    public fun setPassportDataErrors(
         userId: Long,
         errors: List<PassportElementError>
     ): CompletableFuture<out Boolean>
@@ -756,7 +756,7 @@ interface TelegramApi {
     /**
      * @throws TelegramApiError if error returned in response
      */
-    fun sendPoll(
+    public fun sendPoll(
         chatId: Any,
         question: String,
         options: List<String>,
@@ -777,7 +777,7 @@ interface TelegramApi {
     /**
      * @throws TelegramApiError if error returned in response
      */
-    fun stopPoll(
+    public fun stopPoll(
         chatId: Any,
         messageId: Int,
         markup: InlineKeyboardMarkup? = null
@@ -786,22 +786,26 @@ interface TelegramApi {
     /**
      * @throws TelegramApiError if error returned in response
      */
-    fun setChatPermissions(chatId: Any, permissions: ChatPermissions): CompletableFuture<out Boolean>
+    public fun setChatPermissions(chatId: Any, permissions: ChatPermissions): CompletableFuture<out Boolean>
 
     /**
      * @throws TelegramApiError if error returned in response
      */
-    fun setChatAdministratorCustomTitle(chatId: Any, userId: Long, customTitle: String): CompletableFuture<out Boolean>
+    public fun setChatAdministratorCustomTitle(
+        chatId: Any,
+        userId: Long,
+        customTitle: String
+    ): CompletableFuture<out Boolean>
 
     /**
      * @throws TelegramApiError if error returned in response
      */
-    fun deleteMessage(chatId: Any, messageId: Int): CompletableFuture<out Boolean>
+    public fun deleteMessage(chatId: Any, messageId: Int): CompletableFuture<out Boolean>
 
     /**
      * @throws TelegramApiError if error returned in response
      */
-    fun sendDice(
+    public fun sendDice(
         chatId: Any,
         emoji: String? = null,
         disableNotification: Boolean? = null,

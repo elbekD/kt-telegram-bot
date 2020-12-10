@@ -3,7 +3,7 @@ package com.elbekD.bot.feature.chain
 import com.elbekD.bot.types.Message
 import java.util.LinkedList
 
-class ChainBuilder private constructor(
+public class ChainBuilder private constructor(
     private val label: String,
     private val predicate: (Message) -> Boolean,
     private val action: (Message) -> Unit
@@ -29,11 +29,11 @@ class ChainBuilder private constructor(
      * @param action an action for the current step
      * @return [ChainBuilder]
      */
-    fun then(
+    public fun then(
         label: String? = null,
         isTerminal: Boolean = false,
         action: (Message) -> Unit
-    ) = apply {
+    ): ChainBuilder = apply {
         val nodeLabel = label ?: createNextLabel()
         val node = Chain.Node(nodeLabel, isTerminal, action)
         chainList.last().next = node
@@ -44,7 +44,7 @@ class ChainBuilder private constructor(
      * Builds the [Chain].
      * @return [Chain]
      */
-    fun build(): Chain {
+    public fun build(): Chain {
         val chain = Chain(label, predicate, chainList)
         ChainController.registerChain(chain)
         return chain

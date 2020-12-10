@@ -1,6 +1,6 @@
 package com.elbekD.bot.types
 
-data class Sticker(
+public data class Sticker(
     val file_id: String,
     val file_unique_id: String,
     val width: Int,
@@ -13,7 +13,7 @@ data class Sticker(
     val file_size: Int
 )
 
-data class StickerSet(
+public data class StickerSet(
     val name: String,
     val title: String,
     val is_animated: Boolean,
@@ -22,7 +22,7 @@ data class StickerSet(
     val thumb: PhotoSize?
 )
 
-data class MaskPosition(
+public data class MaskPosition(
     val point: String,
     val x_shift: Float,
     val y_shift: Float,

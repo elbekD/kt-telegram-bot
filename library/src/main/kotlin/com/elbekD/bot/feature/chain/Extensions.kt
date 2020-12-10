@@ -12,7 +12,7 @@ import com.elbekD.bot.types.Message
  * @param action an action that is called when [Chain] is triggered
  * @return [ChainBuilder]
  */
-fun Bot.chain(trigger: String, action: (Message) -> Unit): ChainBuilder {
+public fun Bot.chain(trigger: String, action: (Message) -> Unit): ChainBuilder {
     return ChainBuilder.with(trigger, action)
 }
 
@@ -26,7 +26,7 @@ fun Bot.chain(trigger: String, action: (Message) -> Unit): ChainBuilder {
  * @param action an action that will be called when the chain is fired
  * @return [ChainBuilder]
  */
-fun Bot.chain(label: String, predicate: (Message) -> Boolean, action: (Message) -> Unit): ChainBuilder {
+public fun Bot.chain(label: String, predicate: (Message) -> Boolean, action: (Message) -> Unit): ChainBuilder {
     return ChainBuilder.with(label, predicate, action)
 }
 
@@ -36,7 +36,7 @@ fun Bot.chain(label: String, predicate: (Message) -> Boolean, action: (Message) 
  * @param label label of the step to jump to
  * @param message incoming [Message]
  */
-fun Bot.jumpTo(label: String, message: Message) {
+public fun Bot.jumpTo(label: String, message: Message) {
     ChainController.jumpTo(label, message)
 }
 
@@ -46,7 +46,7 @@ fun Bot.jumpTo(label: String, message: Message) {
  * @param label label of the step to jump to
  * @param message incoming [Message]
  */
-fun Bot.jumpToAndFire(label: String, message: Message) {
+public fun Bot.jumpToAndFire(label: String, message: Message) {
     ChainController.jumpToAndFire(label, message)
 }
 
@@ -54,6 +54,6 @@ fun Bot.jumpToAndFire(label: String, message: Message) {
  * Helper method that terminates chain on the current step.
  * @param chatId id of the chat to stop the chain for
  */
-fun Bot.terminateChain(chatId: Long) {
+public fun Bot.terminateChain(chatId: Long) {
     ChainController.terminateChain(chatId)
 }

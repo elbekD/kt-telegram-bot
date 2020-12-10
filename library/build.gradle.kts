@@ -23,6 +23,10 @@ dependencies {
     testImplementation("junit:junit:4.12")
 }
 
+kotlin {
+    explicitApi()
+}
+
 tasks.withType<Jar> {
     buildDir = rootProject.buildDir
 }
