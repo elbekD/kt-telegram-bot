@@ -152,9 +152,9 @@ data class MessageEntity(
     val type: String,
     val offset: Int,
     val length: Int,
-    val url: String?,
-    val user: User?,
-    val language: String?
+    val url: String? = null,
+    val user: User? = null,
+    val language: String? = null
 ) {
 
     enum class Types(@Transient @Suppress("unused") val type: String) {
@@ -189,6 +189,7 @@ data class Audio(
     val duration: Int,
     val performer: String?,
     val title: String?,
+    val file_name: String?,
     val mime_type: String?,
     val file_size: Int?,
     val thumb: PhotoSize?
@@ -210,6 +211,7 @@ data class Video(
     val height: Int,
     val duration: Int,
     val thumb: PhotoSize?,
+    val file_name: String?,
     val mime_type: String?,
     val file_size: Int
 )
@@ -378,6 +380,8 @@ internal data class InputMediaDocument(
     @Transient private val thumb: Any?,
     val caption: String?,
     val parse_mode: String?,
+    val caption_entities: List<MessageEntity>?,
+    val disable_content_type_detection: Boolean?,
     val type: String = "document"
 ) : InputMedia {
     override fun media() = media

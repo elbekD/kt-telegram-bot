@@ -6,6 +6,7 @@ import com.elbekD.bot.types.ChosenInlineResult
 import com.elbekD.bot.types.InlineQuery
 import com.elbekD.bot.types.InputMedia
 import com.elbekD.bot.types.Message
+import com.elbekD.bot.types.MessageEntity
 import com.elbekD.bot.types.PreCheckoutQuery
 import com.elbekD.bot.types.ShippingQuery
 import com.elbekD.bot.types.Update
@@ -165,7 +166,7 @@ interface Bot : TelegramApi {
     fun onCommand(command: String, action: suspend (Message, String?) -> Unit)
 
     /**
-     * @param data trigger provided via `callback_data` field of [InlineKeyboardButton][com.github.elbekD.bot.types.InlineKeyboardButton]
+     * @param data trigger provided via `callback_data` field of [InlineKeyboardButton][com.elbekD.bot.types.InlineKeyboardButton]
      * @param action callback for the given `data` with [CallbackQuery] parameter
      *
      * @throws [IllegalArgumentException] if [data] length not in `[1, 64]` range
@@ -251,6 +252,8 @@ interface Bot : TelegramApi {
         attachment: File? = null,
         thumb: File? = null,
         caption: String? = null,
-        parseMode: String? = null
+        parseMode: String? = null,
+        captionEntities: List<MessageEntity>? = null,
+        disableContentTypeDetection: Boolean? = null
     ): InputMedia
 }

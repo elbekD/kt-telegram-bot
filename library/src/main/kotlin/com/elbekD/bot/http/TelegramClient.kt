@@ -11,6 +11,7 @@ import com.elbekD.bot.types.InputMedia
 import com.elbekD.bot.types.LabeledPrice
 import com.elbekD.bot.types.MaskPosition
 import com.elbekD.bot.types.Message
+import com.elbekD.bot.types.MessageEntity
 import com.elbekD.bot.types.PassportElementError
 import com.elbekD.bot.types.Poll
 import com.elbekD.bot.types.ReplyKeyboard
@@ -288,8 +289,11 @@ internal class TelegramClient(token: String) : TelegramApi {
         thumb: File?,
         caption: String?,
         parseMode: String?,
+        captionEntities: List<MessageEntity>?,
+        disableContentTypeDetection: Boolean?,
         disableNotification: Boolean?,
         replyTo: Int?,
+        allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
         return sendFile(
@@ -299,8 +303,11 @@ internal class TelegramClient(token: String) : TelegramApi {
             mapOf(
                 ApiConstants.CAPTION to caption,
                 ApiConstants.PARSE_MODE to parseMode,
+                ApiConstants.CAPTION_ENTITIES to captionEntities,
+                ApiConstants.DISABLE_CONTENT_TYPE_DETECTION to disableContentTypeDetection,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
                 ApiConstants.REPLY_MARKUP to markup
             ),
             thumb

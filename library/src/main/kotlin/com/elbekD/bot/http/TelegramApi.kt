@@ -12,6 +12,7 @@ import com.elbekD.bot.types.InputMedia
 import com.elbekD.bot.types.LabeledPrice
 import com.elbekD.bot.types.MaskPosition
 import com.elbekD.bot.types.Message
+import com.elbekD.bot.types.MessageEntity
 import com.elbekD.bot.types.PassportElementError
 import com.elbekD.bot.types.Poll
 import com.elbekD.bot.types.ReplyKeyboard
@@ -137,8 +138,11 @@ interface TelegramApi {
         thumb: java.io.File? = null,
         caption: String? = null,
         parseMode: String? = null,
+        captionEntities: List<MessageEntity>? = null,
+        disableContentTypeDetection: Boolean? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
+        allowSendingWithoutReply: Boolean? = null,
         markup: ReplyKeyboard? = null
     ): CompletableFuture<out Message>
 

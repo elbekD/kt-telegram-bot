@@ -18,6 +18,7 @@ import com.elbekD.bot.types.InputMediaVideo
 import com.elbekD.bot.types.LabeledPrice
 import com.elbekD.bot.types.MaskPosition
 import com.elbekD.bot.types.Message
+import com.elbekD.bot.types.MessageEntity
 import com.elbekD.bot.types.PassportElementError
 import com.elbekD.bot.types.Poll
 import com.elbekD.bot.types.PreCheckoutQuery
@@ -195,9 +196,19 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         attachment: File?,
         thumb: File?,
         caption: String?,
-        parseMode: String?
+        parseMode: String?,
+        captionEntities: List<MessageEntity>?,
+        disableContentTypeDetection: Boolean?
     ): InputMedia =
-        InputMediaDocument(media, attachment, thumb, caption, parseMode)
+        InputMediaDocument(
+            media,
+            attachment,
+            thumb,
+            caption,
+            parseMode,
+            captionEntities,
+            disableContentTypeDetection
+        )
 
     /*
               Telegram methods
@@ -299,11 +310,25 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         thumb: File?,
         caption: String?,
         parseMode: String?,
+        captionEntities: List<MessageEntity>?,
+        disableContentTypeDetection: Boolean?,
         disableNotification: Boolean?,
         replyTo: Int?,
+        allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
-    ) =
-        client.sendDocument(chatId, document, thumb, caption, parseMode, disableNotification, replyTo, markup)
+    ) = client.sendDocument(
+        chatId,
+        document,
+        thumb,
+        caption,
+        parseMode,
+        captionEntities,
+        disableContentTypeDetection,
+        disableNotification,
+        replyTo,
+        allowSendingWithoutReply,
+        markup
+    )
 
     override fun sendVideo(
         chatId: Any,
