@@ -197,6 +197,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         disableWebPagePreview: Boolean?,
         disableNotification: Boolean?,
         replyTo: Int?,
+        allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
         val body = toBody(
@@ -208,6 +209,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.DISABLE_WEB_PAGE_PREVIEW to disableWebPagePreview,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
                 ApiConstants.REPLY_MARKUP to markup
             )
         )
@@ -268,6 +270,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         captionEntities: List<MessageEntity>?,
         disableNotification: Boolean?,
         replyTo: Int?,
+        allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
         return sendFile(
@@ -280,6 +283,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.CAPTION_ENTITIES to captionEntities,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
                 ApiConstants.REPLY_MARKUP to markup
             )
         )
@@ -297,6 +301,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         thumb: File?,
         disableNotification: Boolean?,
         replyTo: Int?,
+        allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
         return sendFile(
@@ -312,6 +317,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.TITLE to title,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
                 ApiConstants.REPLY_MARKUP to markup
             ),
             thumb
@@ -362,6 +368,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         streaming: Boolean?,
         disableNotification: Boolean?,
         replyTo: Int?,
+        allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
         return sendFile(
@@ -378,6 +385,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.SUPPORTS_STREAMING to streaming,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
                 ApiConstants.REPLY_MARKUP to markup
             ),
             thumb
@@ -396,6 +404,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         captionEntities: List<MessageEntity>?,
         disableNotification: Boolean?,
         replyTo: Int?,
+        allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
         return sendFile(
@@ -411,6 +420,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.CAPTION_ENTITIES to captionEntities,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
                 ApiConstants.REPLY_MARKUP to markup
             ),
             thumb
@@ -426,6 +436,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         duration: Int?,
         disableNotification: Boolean?,
         replyTo: Int?,
+        allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
         return sendFile(
@@ -439,6 +450,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.DURATION to duration,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
                 ApiConstants.REPLY_MARKUP to markup
             )
         )
@@ -452,6 +464,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         thumb: File?,
         disableNotification: Boolean?,
         replyTo: Int?,
+        allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
         return sendFile(
@@ -462,6 +475,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.DURATION to duration,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
                 ApiConstants.REPLY_MARKUP to markup
             ),
             thumb,
@@ -596,6 +610,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         googlePlaceType: String?,
         disableNotification: Boolean?,
         replyTo: Int?,
+        allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
         val body = toBody(
@@ -611,6 +626,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.GOOGLE_PLACE_TYPE to googlePlaceType,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
                 ApiConstants.REPLY_MARKUP to markup
             )
         )
@@ -625,6 +641,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         vcard: String?,
         disableNotification: Boolean?,
         replyTo: Int?,
+        allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
         val body = toBody(
@@ -636,6 +653,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.VCARD to vcard,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
                 ApiConstants.REPLY_MARKUP to markup
             )
         )
@@ -1015,6 +1033,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         sticker: Any,
         disableNotification: Boolean?,
         replyTo: Int?,
+        allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
@@ -1029,7 +1048,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         disableNotification?.let { form.addFormDataPart(ApiConstants.DISABLE_NOTIFICATION, it.toString()) }
         replyTo?.let { form.addFormDataPart(ApiConstants.REPLY_TO_MESSAGE_ID, it.toString()) }
         markup?.let { form.addFormDataPart(ApiConstants.REPLY_MARKUP, toJson(it)) }
-
+        allowSendingWithoutReply?.let { form.addFormDataPart(ApiConstants.ALLOW_SENDING_WITHOUT_REPLY, it.toString()) }
         return post(ApiConstants.METHOD_SEND_STICKER, form.build())
     }
 
@@ -1151,6 +1170,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         gameShortName: String,
         disableNotification: Boolean?,
         replyTo: Int?,
+        allowSendingWithoutReply: Boolean?,
         markup: InlineKeyboardMarkup?
     ): CompletableFuture<out Message> {
         val body = toBody(
@@ -1159,6 +1179,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.GAME_SHORT_NAME to gameShortName,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
                 ApiConstants.REPLY_MARKUP to markup
             )
         )
@@ -1228,6 +1249,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         isFlexible: Boolean?,
         disableNotification: Boolean?,
         replyTo: Int?,
+        allowSendingWithoutReply: Boolean?,
         markup: InlineKeyboardMarkup?
     ): CompletableFuture<out Message> {
         val body = toBody(
@@ -1254,6 +1276,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.IS_FLEXIBLE to isFlexible,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
                 ApiConstants.REPLY_MARKUP to markup
             )
         )
@@ -1321,6 +1344,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         closed: Boolean?,
         disableNotification: Boolean?,
         replyTo: Int?,
+        allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
         val body = toBody(
@@ -1340,6 +1364,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.IS_CLOSED to closed,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
                 ApiConstants.REPLY_MARKUP to markup
             )
         )
@@ -1397,6 +1422,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         emoji: String?,
         disableNotification: Boolean?,
         replyTo: Int?,
+        allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
         val body = toBody(
@@ -1405,6 +1431,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.EMOJI to emoji,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
                 ApiConstants.REPLY_MARKUP to markup
             )
         )

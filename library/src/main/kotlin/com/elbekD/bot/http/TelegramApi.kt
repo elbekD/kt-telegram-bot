@@ -72,6 +72,7 @@ public interface TelegramApi {
         disableWebPagePreview: Boolean? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
+        allowSendingWithoutReply: Boolean? = null,
         markup: ReplyKeyboard? = null
     ): CompletableFuture<out Message>
 
@@ -116,6 +117,7 @@ public interface TelegramApi {
         captionEntities: List<MessageEntity>? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
+        allowSendingWithoutReply: Boolean? = null,
         markup: ReplyKeyboard? = null
     ): CompletableFuture<out Message>
 
@@ -138,6 +140,7 @@ public interface TelegramApi {
         thumb: java.io.File? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
+        allowSendingWithoutReply: Boolean? = null,
         markup: ReplyKeyboard? = null
     ): CompletableFuture<out Message>
 
@@ -182,6 +185,7 @@ public interface TelegramApi {
         streaming: Boolean? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
+        allowSendingWithoutReply: Boolean? = null,
         markup: ReplyKeyboard? = null
     ): CompletableFuture<out Message>
 
@@ -206,6 +210,7 @@ public interface TelegramApi {
         captionEntities: List<MessageEntity>? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
+        allowSendingWithoutReply: Boolean? = null,
         markup: ReplyKeyboard? = null
     ): CompletableFuture<out Message>
 
@@ -225,6 +230,7 @@ public interface TelegramApi {
         duration: Int? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
+        allowSendingWithoutReply: Boolean? = null,
         markup: ReplyKeyboard? = null
     ): CompletableFuture<out Message>
 
@@ -243,6 +249,7 @@ public interface TelegramApi {
         thumb: java.io.File? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
+        allowSendingWithoutReply: Boolean? = null,
         markup: ReplyKeyboard? = null
     ): CompletableFuture<out Message>
 
@@ -322,6 +329,7 @@ public interface TelegramApi {
         googlePlaceType: String? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
+        allowSendingWithoutReply: Boolean? = null,
         markup: ReplyKeyboard? = null
     ): CompletableFuture<out Message>
 
@@ -338,6 +346,7 @@ public interface TelegramApi {
         vcard: String? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
+        allowSendingWithoutReply: Boolean? = null,
         markup: ReplyKeyboard? = null
     ): CompletableFuture<out Message>
 
@@ -630,6 +639,7 @@ public interface TelegramApi {
         sticker: Any,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
+        allowSendingWithoutReply: Boolean? = null,
         markup: ReplyKeyboard? = null
     ): CompletableFuture<out Message>
 
@@ -700,6 +710,7 @@ public interface TelegramApi {
         gameShortName: String,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
+        allowSendingWithoutReply: Boolean? = null,
         markup: InlineKeyboardMarkup? = null
     ): CompletableFuture<out Message>
 
@@ -754,6 +765,7 @@ public interface TelegramApi {
         isFlexible: Boolean? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
+        allowSendingWithoutReply: Boolean? = null,
         markup: InlineKeyboardMarkup? = null
     ): CompletableFuture<out Message>
 
@@ -803,6 +815,7 @@ public interface TelegramApi {
         closed: Boolean? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
+        allowSendingWithoutReply: Boolean? = null,
         markup: ReplyKeyboard? = null
     ): CompletableFuture<out Message>
 
@@ -842,6 +855,7 @@ public interface TelegramApi {
         emoji: String? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
+        allowSendingWithoutReply: Boolean? = null,
         markup: ReplyKeyboard? = null
     ): CompletableFuture<out Message>
 }
