@@ -36,6 +36,7 @@ public data class InlineQueryResultPhoto(
     val description: String? = null,
     val caption: String? = null,
     val parse_mode: String? = null,
+    val caption_entities: List<MessageEntity>? = null,
     val reply_markup: InlineKeyboardMarkup? = null,
     val input_message_content: InputMessageContent? = null
 ) : InlineQueryResult {
@@ -53,6 +54,7 @@ public data class InlineQueryResultGif(
     val title: String? = null,
     val caption: String? = null,
     val parse_mode: String? = null,
+    val caption_entities: List<MessageEntity>? = null,
     val reply_markup: InlineKeyboardMarkup? = null,
     val input_message_content: InputMessageContent? = null
 ) : InlineQueryResult {
@@ -69,6 +71,7 @@ public data class InlineQueryResultMpeg4Gif(
     val thumb_mime_type: String? = null,
     val caption: String? = null,
     val parse_mode: String? = null,
+    val caption_entities: List<MessageEntity>? = null,
     val reply_markup: InlineKeyboardMarkup? = null,
     val input_message_content: InputMessageContent? = null
 ) : InlineQueryResult {
@@ -83,6 +86,7 @@ public data class InlineQueryResultVideo(
     val title: String,
     val caption: String? = null,
     val parse_mode: String? = null,
+    val caption_entities: List<MessageEntity>? = null,
     val video_width: Int? = null,
     val video_height: Int? = null,
     val video_duration: Int? = null,
@@ -99,6 +103,7 @@ public data class InlineQueryResultAudio(
     val title: String,
     val caption: String? = null,
     val parse_mode: String? = null,
+    val caption_entities: List<MessageEntity>? = null,
     val performer: String? = null,
     val audio_duration: Int? = null,
     val reply_markup: InlineKeyboardMarkup? = null,
@@ -113,6 +118,7 @@ public data class InlineQueryResultVoice(
     val title: String,
     val caption: String? = null,
     val parse_mode: String? = null,
+    val caption_entities: List<MessageEntity>? = null,
     val voice_duration: Int? = null,
     val reply_markup: InlineKeyboardMarkup? = null,
     val input_message_content: InputMessageContent? = null
@@ -127,6 +133,7 @@ public data class InlineQueryResultDocument(
     val mime_type: String,
     val caption: String? = null,
     val parse_mode: String? = null,
+    val caption_entities: List<MessageEntity>? = null,
     val description: String? = null,
     val reply_markup: InlineKeyboardMarkup? = null,
     val input_message_content: InputMessageContent? = null,
@@ -202,6 +209,7 @@ public data class InlineQueryResultCachedPhoto(
     val description: String? = null,
     val caption: String? = null,
     val parse_mode: String? = null,
+    val caption_entities: List<MessageEntity>? = null,
     val reply_markup: InlineKeyboardMarkup? = null,
     val input_message_content: InputMessageContent? = null
 ) : InlineQueryResult {
@@ -214,6 +222,7 @@ public data class InlineQueryResultCachedGif(
     val title: String? = null,
     val caption: String? = null,
     val parse_mode: String? = null,
+    val caption_entities: List<MessageEntity>? = null,
     val reply_markup: InlineKeyboardMarkup? = null,
     val input_message_content: InputMessageContent? = null
 ) : InlineQueryResult {
@@ -226,6 +235,7 @@ public data class InlineQueryResultCachedMpeg4Gif(
     val title: String? = null,
     val caption: String? = null,
     val parse_mode: String? = null,
+    val caption_entities: List<MessageEntity>? = null,
     val reply_markup: InlineKeyboardMarkup? = null,
     val input_message_content: InputMessageContent? = null
 ) : InlineQueryResult {
@@ -248,6 +258,7 @@ public data class InlineQueryResultCachedDocument(
     val description: String? = null,
     val caption: String? = null,
     val parse_mode: String? = null,
+    val caption_entities: List<MessageEntity>? = null,
     val reply_markup: InlineKeyboardMarkup? = null,
     val input_message_content: InputMessageContent? = null
 ) : InlineQueryResult {
@@ -261,6 +272,7 @@ public data class InlineQueryResultCachedVideo(
     val description: String? = null,
     val caption: String? = null,
     val parse_mode: String? = null,
+    val caption_entities: List<MessageEntity>? = null,
     val reply_markup: InlineKeyboardMarkup? = null,
     val input_message_content: InputMessageContent? = null
 ) : InlineQueryResult {
@@ -273,6 +285,7 @@ public data class InlineQueryResultCachedVoice(
     val description: String? = null,
     val caption: String? = null,
     val parse_mode: String? = null,
+    val caption_entities: List<MessageEntity>? = null,
     val reply_markup: InlineKeyboardMarkup? = null,
     val input_message_content: InputMessageContent? = null
 ) : InlineQueryResult {
@@ -284,6 +297,7 @@ public data class InlineQueryResultCachedAudio(
     val audio_file_id: String,
     val caption: String? = null,
     val parse_mode: String? = null,
+    val caption_entities: List<MessageEntity>? = null,
     val reply_markup: InlineKeyboardMarkup? = null,
     val input_message_content: InputMessageContent? = null
 ) : InlineQueryResult {
@@ -293,6 +307,7 @@ public data class InlineQueryResultCachedAudio(
 public data class InputTextMessageContent(
     val message_text: String,
     val parse_mode: String? = null,
+    val caption_entities: List<MessageEntity>? = null,
     val disable_web_page_preview: Boolean? = null
 ) : InputMessageContent
 

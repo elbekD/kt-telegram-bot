@@ -193,6 +193,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         chatId: Any,
         text: String,
         parseMode: String?,
+        entities: List<MessageEntity>?,
         disableWebPagePreview: Boolean?,
         disableNotification: Boolean?,
         replyTo: Int?,
@@ -203,6 +204,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.CHAT_ID to id(chatId),
                 ApiConstants.TEXT to text,
                 ApiConstants.PARSE_MODE to parseMode,
+                ApiConstants.ENTITIES to entities,
                 ApiConstants.DISABLE_WEB_PAGE_PREVIEW to disableWebPagePreview,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
@@ -263,6 +265,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         photo: Any,
         caption: String?,
         parseMode: String?,
+        captionEntities: List<MessageEntity>?,
         disableNotification: Boolean?,
         replyTo: Int?,
         markup: ReplyKeyboard?
@@ -274,6 +277,7 @@ internal class TelegramClient(token: String) : TelegramApi {
             mapOf(
                 ApiConstants.CAPTION to caption,
                 ApiConstants.PARSE_MODE to parseMode,
+                ApiConstants.CAPTION_ENTITIES to captionEntities,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup
@@ -286,6 +290,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         audio: Any,
         caption: String?,
         parseMode: String?,
+        captionEntities: List<MessageEntity>?,
         duration: Int?,
         performer: String?,
         title: String?,
@@ -301,6 +306,7 @@ internal class TelegramClient(token: String) : TelegramApi {
             mapOf(
                 ApiConstants.CAPTION to caption,
                 ApiConstants.PARSE_MODE to parseMode,
+                ApiConstants.CAPTION_ENTITIES to captionEntities,
                 ApiConstants.DURATION to duration,
                 ApiConstants.PERFORMER to performer,
                 ApiConstants.TITLE to title,
@@ -352,6 +358,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         thumb: File?,
         caption: String?,
         parseMode: String?,
+        captionEntities: List<MessageEntity>?,
         streaming: Boolean?,
         disableNotification: Boolean?,
         replyTo: Int?,
@@ -367,6 +374,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.HEIGHT to height,
                 ApiConstants.CAPTION to caption,
                 ApiConstants.PARSE_MODE to parseMode,
+                ApiConstants.CAPTION_ENTITIES to captionEntities,
                 ApiConstants.SUPPORTS_STREAMING to streaming,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
@@ -385,6 +393,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         thumb: File?,
         caption: String?,
         parseMode: String?,
+        captionEntities: List<MessageEntity>?,
         disableNotification: Boolean?,
         replyTo: Int?,
         markup: ReplyKeyboard?
@@ -399,6 +408,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.HEIGHT to height,
                 ApiConstants.CAPTION to caption,
                 ApiConstants.PARSE_MODE to parseMode,
+                ApiConstants.CAPTION_ENTITIES to captionEntities,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup
@@ -412,6 +422,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         voice: Any,
         caption: String?,
         parseMode: String?,
+        captionEntities: List<MessageEntity>?,
         duration: Int?,
         disableNotification: Boolean?,
         replyTo: Int?,
@@ -424,6 +435,7 @@ internal class TelegramClient(token: String) : TelegramApi {
             mapOf(
                 ApiConstants.CAPTION to caption,
                 ApiConstants.PARSE_MODE to parseMode,
+                ApiConstants.CAPTION_ENTITIES to captionEntities,
                 ApiConstants.DURATION to duration,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
@@ -900,6 +912,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         inlineMessageId: String?,
         text: String,
         parseMode: String?,
+        entities: List<MessageEntity>?,
         disableWebPagePreview: Boolean?,
         markup: InlineKeyboardMarkup?
     ): CompletableFuture<out Message> {
@@ -910,6 +923,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.INLINE_MESSAGE_ID to inlineMessageId,
                 ApiConstants.TEXT to text,
                 ApiConstants.PARSE_MODE to parseMode,
+                ApiConstants.ENTITIES to entities,
                 ApiConstants.DISABLE_WEB_PAGE_PREVIEW to disableWebPagePreview,
                 ApiConstants.REPLY_MARKUP to markup
             )
@@ -923,6 +937,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         inlineMessageId: String?,
         caption: String?,
         parseMode: String?,
+        captionEntities: List<MessageEntity>?,
         markup: InlineKeyboardMarkup?
     ): CompletableFuture<out Message> {
         val body = toBody(
@@ -932,6 +947,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.INLINE_MESSAGE_ID to inlineMessageId,
                 ApiConstants.CAPTION to caption,
                 ApiConstants.PARSE_MODE to parseMode,
+                ApiConstants.CAPTION_ENTITIES to captionEntities,
                 ApiConstants.REPLY_MARKUP to markup
             )
         )
@@ -1295,6 +1311,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         correctOptionId: Int?,
         explanation: String?,
         explanationParseMode: String?,
+        explanationEntities: List<MessageEntity>?,
         openPeriod: Int?,
         closeDate: Long?,
         closed: Boolean?,
@@ -1313,6 +1330,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.CORRECT_OPTION_ID to correctOptionId,
                 ApiConstants.EXPLANATION to explanation,
                 ApiConstants.EXPLANATION_PARSE_MODE to explanationParseMode,
+                ApiConstants.EXPLANATION_ENTITIES to explanationEntities,
                 ApiConstants.OPEN_PERIOD to explanationParseMode,
                 ApiConstants.CLOSE_DATE to explanationParseMode,
                 ApiConstants.IS_CLOSED to closed,

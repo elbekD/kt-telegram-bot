@@ -194,7 +194,8 @@ public interface Bot : TelegramApi {
         media: String,
         attachment: File? = null,
         caption: String? = null,
-        parseMode: String? = null
+        parseMode: String? = null,
+        captionEntities: List<MessageEntity>? = null,
     ): InputMedia
 
     /**
@@ -207,6 +208,7 @@ public interface Bot : TelegramApi {
         thumb: File? = null,
         caption: String? = null,
         parseMode: String? = null,
+        captionEntities: List<MessageEntity>? = null,
         width: Int? = null,
         height: Int? = null,
         duration: Int? = null,
@@ -223,6 +225,7 @@ public interface Bot : TelegramApi {
         thumb: File? = null,
         caption: String? = null,
         parseMode: String? = null,
+        captionEntities: List<MessageEntity>? = null,
         width: Int? = null,
         height: Int? = null,
         duration: Int? = null
@@ -238,6 +241,7 @@ public interface Bot : TelegramApi {
         thumb: File? = null,
         caption: String? = null,
         parseMode: String? = null,
+        captionEntities: List<MessageEntity>? = null,
         duration: Int? = null,
         performer: String? = null,
         title: String? = null

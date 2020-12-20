@@ -150,9 +150,15 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         media: String,
         attachment: File?,
         caption: String?,
-        parseMode: String?
-    ): InputMedia =
-        InputMediaPhoto(media, attachment, caption, parseMode)
+        parseMode: String?,
+        captionEntities: List<MessageEntity>?
+    ): InputMedia = InputMediaPhoto(
+        media = media,
+        attachment = attachment,
+        caption = caption,
+        parse_mode = parseMode,
+        caption_entities = captionEntities
+    )
 
     override fun mediaVideo(
         media: String,
@@ -160,12 +166,23 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         thumb: File?,
         caption: String?,
         parseMode: String?,
+        captionEntities: List<MessageEntity>?,
         width: Int?,
         height: Int?,
         duration: Int?,
         supportsStreaming: Boolean?
-    ): InputMedia =
-        InputMediaVideo(media, attachment, thumb, caption, parseMode, width, height, duration, supportsStreaming)
+    ): InputMedia = InputMediaVideo(
+        media = media,
+        attachment = attachment,
+        thumb = thumb,
+        caption = caption,
+        parse_mode = parseMode,
+        caption_entities = captionEntities,
+        width = width,
+        height = height,
+        duration = duration,
+        supports_streaming = supportsStreaming
+    )
 
     override fun mediaAnimation(
         media: String,
@@ -173,11 +190,21 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         thumb: File?,
         caption: String?,
         parseMode: String?,
+        captionEntities: List<MessageEntity>?,
         width: Int?,
         height: Int?,
         duration: Int?
-    ): InputMedia =
-        InputMediaAnimation(media, attachment, thumb, caption, parseMode, width, height, duration)
+    ): InputMedia = InputMediaAnimation(
+        media = media,
+        attachment = attachment,
+        thumb = thumb,
+        caption = caption,
+        parse_mode = parseMode,
+        caption_entities = captionEntities,
+        width = width,
+        height = height,
+        duration = duration
+    )
 
     override fun mediaAudio(
         media: String,
@@ -185,11 +212,21 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         thumb: File?,
         caption: String?,
         parseMode: String?,
+        captionEntities: List<MessageEntity>?,
         duration: Int?,
         performer: String?,
         title: String?
-    ): InputMedia =
-        InputMediaAudio(media, attachment, thumb, caption, parseMode, duration, performer, title)
+    ): InputMedia = InputMediaAudio(
+        media = media,
+        attachment = attachment,
+        thumb = thumb,
+        caption = caption,
+        parse_mode = parseMode,
+        caption_entities = captionEntities,
+        duration = duration,
+        performer = performer,
+        title = title
+    )
 
     override fun mediaDocument(
         media: String,
@@ -199,16 +236,15 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         parseMode: String?,
         captionEntities: List<MessageEntity>?,
         disableContentTypeDetection: Boolean?
-    ): InputMedia =
-        InputMediaDocument(
-            media,
-            attachment,
-            thumb,
-            caption,
-            parseMode,
-            captionEntities,
-            disableContentTypeDetection
-        )
+    ): InputMedia = InputMediaDocument(
+        media = media,
+        attachment = attachment,
+        thumb = thumb,
+        caption = caption,
+        parse_mode = parseMode,
+        caption_entities = captionEntities,
+        disable_content_type_detection = disableContentTypeDetection
+    )
 
     /*
               Telegram methods
@@ -251,6 +287,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         chatId: Any,
         text: String,
         parseMode: String?,
+        entities: List<MessageEntity>?,
         disableWebPagePreview: Boolean?,
         disableNotification: Boolean?,
         replyTo: Int?,
@@ -259,6 +296,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         chatId = chatId,
         text = text,
         parseMode = parseMode,
+        entities = entities,
         disableWebPagePreview = disableWebPagePreview,
         disableNotification = disableNotification,
         replyTo = replyTo,
@@ -306,17 +344,27 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         photo: Any,
         caption: String?,
         parseMode: String?,
+        captionEntities: List<MessageEntity>?,
         disableNotification: Boolean?,
         replyTo: Int?,
         markup: ReplyKeyboard?
-    ) =
-        client.sendPhoto(chatId, photo, caption, parseMode, disableNotification, replyTo, markup)
+    ) = client.sendPhoto(
+        chatId = chatId,
+        photo = photo,
+        caption = caption,
+        parseMode = parseMode,
+        captionEntities = captionEntities,
+        disableNotification = disableNotification,
+        replyTo = replyTo,
+        markup = markup
+    )
 
     override fun sendAudio(
         chatId: Any,
         audio: Any,
         caption: String?,
         parseMode: String?,
+        captionEntities: List<MessageEntity>?,
         duration: Int?,
         performer: String?,
         title: String?,
@@ -324,20 +372,20 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         disableNotification: Boolean?,
         replyTo: Int?,
         markup: ReplyKeyboard?
-    ) =
-        client.sendAudio(
-            chatId,
-            audio,
-            caption,
-            parseMode,
-            duration,
-            performer,
-            title,
-            thumb,
-            disableNotification,
-            replyTo,
-            markup
-        )
+    ) = client.sendAudio(
+        chatId = chatId,
+        audio = audio,
+        caption = caption,
+        parseMode = parseMode,
+        captionEntities = captionEntities,
+        duration = duration,
+        performer = performer,
+        title = title,
+        thumb = thumb,
+        disableNotification = disableNotification,
+        replyTo = replyTo,
+        markup = markup
+    )
 
     override fun sendDocument(
         chatId: Any,
@@ -374,25 +422,26 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         thumb: File?,
         caption: String?,
         parseMode: String?,
+        captionEntities: List<MessageEntity>?,
         streaming: Boolean?,
         disableNotification: Boolean?,
         replyTo: Int?,
         markup: ReplyKeyboard?
-    ) =
-        client.sendVideo(
-            chatId,
-            video,
-            duration,
-            width,
-            height,
-            thumb,
-            caption,
-            parseMode,
-            streaming,
-            disableNotification,
-            replyTo,
-            markup
-        )
+    ) = client.sendVideo(
+        chatId = chatId,
+        video = video,
+        duration = duration,
+        width = width,
+        height = height,
+        thumb = thumb,
+        caption = caption,
+        parseMode = parseMode,
+        captionEntities = captionEntities,
+        streaming = streaming,
+        disableNotification = disableNotification,
+        replyTo = replyTo,
+        markup = markup
+    )
 
     override fun sendAnimation(
         chatId: Any,
@@ -403,35 +452,46 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         thumb: File?,
         caption: String?,
         parseMode: String?,
+        captionEntities: List<MessageEntity>?,
         disableNotification: Boolean?,
         replyTo: Int?,
         markup: ReplyKeyboard?
-    ) =
-        client.sendAnimation(
-            chatId,
-            animation,
-            duration,
-            width,
-            height,
-            thumb,
-            caption,
-            parseMode,
-            disableNotification,
-            replyTo,
-            markup
-        )
+    ) = client.sendAnimation(
+        chatId = chatId,
+        animation = animation,
+        duration = duration,
+        width = width,
+        height = height,
+        thumb = thumb,
+        caption = caption,
+        parseMode = parseMode,
+        captionEntities = captionEntities,
+        disableNotification = disableNotification,
+        replyTo = replyTo,
+        markup = markup
+    )
 
     override fun sendVoice(
         chatId: Any,
         voice: Any,
         caption: String?,
         parseMode: String?,
+        captionEntities: List<MessageEntity>?,
         duration: Int?,
         disableNotification: Boolean?,
         replyTo: Int?,
         markup: ReplyKeyboard?
-    ) =
-        client.sendVoice(chatId, voice, caption, parseMode, duration, disableNotification, replyTo, markup)
+    ) = client.sendVoice(
+        chatId = chatId,
+        voice = voice,
+        caption = caption,
+        parseMode = parseMode,
+        captionEntities = captionEntities,
+        duration = duration,
+        disableNotification = disableNotification,
+        replyTo = replyTo,
+        markup = markup
+    )
 
     override fun sendVideoNote(
         chatId: Any,
@@ -442,8 +502,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         disableNotification: Boolean?,
         replyTo: Int?,
         markup: ReplyKeyboard?
-    ) =
-        client.sendVideoNote(chatId, note, duration, length, thumb, disableNotification, replyTo, markup)
+    ) = client.sendVideoNote(chatId, note, duration, length, thumb, disableNotification, replyTo, markup)
 
     override fun sendMediaGroup(
         chatId: Any,
@@ -693,18 +752,20 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         inlineMessageId: String?,
         text: String,
         parseMode: String?,
+        entities: List<MessageEntity>?,
         disableWebPagePreview: Boolean?,
         markup: InlineKeyboardMarkup?
     ): CompletableFuture<out Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.editMessageText(
-            chatId,
-            messageId,
-            inlineMessageId,
-            text,
-            parseMode,
-            disableWebPagePreview,
-            markup
+            chatId = chatId,
+            messageId = messageId,
+            inlineMessageId = inlineMessageId,
+            text = text,
+            parseMode = parseMode,
+            entities = entities,
+            disableWebPagePreview = disableWebPagePreview,
+            markup = markup
         )
     }
 
@@ -714,10 +775,19 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         inlineMessageId: String?,
         caption: String?,
         parseMode: String?,
+        captionEntities: List<MessageEntity>?,
         markup: InlineKeyboardMarkup?
     ): CompletableFuture<out Message> {
         validateIds(chatId, messageId, inlineMessageId)
-        return client.editMessageCaption(chatId, messageId, inlineMessageId, caption, parseMode, markup)
+        return client.editMessageCaption(
+            chatId = chatId,
+            messageId = messageId,
+            inlineMessageId = inlineMessageId,
+            caption = caption,
+            parseMode = parseMode,
+            captionEntities = captionEntities,
+            markup = markup
+        )
     }
 
     override fun editMessageMedia(
@@ -925,6 +995,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         correctOptionId: Int?,
         explanation: String?,
         explanationParseMode: String?,
+        explanationEntities: List<MessageEntity>?,
         openPeriod: Int?,
         closeDate: Long?,
         closed: Boolean?,
@@ -937,21 +1008,22 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         }
 
         return client.sendPoll(
-            chatId,
-            question,
-            options,
-            anonymous,
-            type,
-            allowsMultipleAnswers,
-            correctOptionId,
-            explanation,
-            explanationParseMode,
-            openPeriod,
-            closeDate,
-            closed,
-            disableNotification,
-            replyTo,
-            markup
+            chatId = chatId,
+            question = question,
+            options = options,
+            anonymous = anonymous,
+            type = type,
+            allowsMultipleAnswers = allowsMultipleAnswers,
+            correctOptionId = correctOptionId,
+            explanation = explanation,
+            explanationParseMode = explanationParseMode,
+            explanationEntities = explanationEntities,
+            openPeriod = openPeriod,
+            closeDate = closeDate,
+            closed = closed,
+            disableNotification = disableNotification,
+            replyTo = replyTo,
+            markup = markup
         )
     }
 

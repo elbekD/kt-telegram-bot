@@ -68,6 +68,7 @@ public interface TelegramApi {
         chatId: Any,
         text: String,
         parseMode: String? = null,
+        entities: List<MessageEntity>? = null,
         disableWebPagePreview: Boolean? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
@@ -112,6 +113,7 @@ public interface TelegramApi {
         photo: Any,
         caption: String? = null,
         parseMode: String? = null,
+        captionEntities: List<MessageEntity>? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
         markup: ReplyKeyboard? = null
@@ -129,6 +131,7 @@ public interface TelegramApi {
         audio: Any,
         caption: String? = null,
         parseMode: String? = null,
+        captionEntities: List<MessageEntity>? = null,
         duration: Int? = null,
         performer: String? = null,
         title: String? = null,
@@ -136,8 +139,7 @@ public interface TelegramApi {
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
         markup: ReplyKeyboard? = null
-    ):
-            CompletableFuture<out Message>
+    ): CompletableFuture<out Message>
 
     /**
      * @param chatId is `Int`, `Long` or `String`
@@ -176,6 +178,7 @@ public interface TelegramApi {
         thumb: java.io.File? = null,
         caption: String? = null,
         parseMode: String? = null,
+        captionEntities: List<MessageEntity>? = null,
         streaming: Boolean? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
@@ -200,6 +203,7 @@ public interface TelegramApi {
         thumb: java.io.File? = null,
         caption: String? = null,
         parseMode: String? = null,
+        captionEntities: List<MessageEntity>? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
         markup: ReplyKeyboard? = null
@@ -217,6 +221,7 @@ public interface TelegramApi {
         voice: Any,
         caption: String? = null,
         parseMode: String? = null,
+        captionEntities: List<MessageEntity>? = null,
         duration: Int? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
@@ -566,6 +571,7 @@ public interface TelegramApi {
         inlineMessageId: String? = null,
         text: String,
         parseMode: String? = null,
+        entities: List<MessageEntity>? = null,
         disableWebPagePreview: Boolean? = null,
         markup: InlineKeyboardMarkup? = null
     ): CompletableFuture<out Message>
@@ -581,6 +587,7 @@ public interface TelegramApi {
         inlineMessageId: String? = null,
         caption: String? = null,
         parseMode: String? = null,
+        captionEntities: List<MessageEntity>? = null,
         markup: InlineKeyboardMarkup? = null
     ): CompletableFuture<out Message>
 
@@ -788,6 +795,7 @@ public interface TelegramApi {
         correctOptionId: Int? = null,
         explanation: String? = null,
         explanationParseMode: String? = null,
+        explanationEntities: List<MessageEntity>? = null,
         openPeriod: Int? = null,
         closeDate: Long? = null,
         closed: Boolean? = null,

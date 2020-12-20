@@ -338,6 +338,7 @@ internal data class InputMediaPhoto(
     @Transient private val attachment: File?,
     val caption: String?,
     val parse_mode: String?,
+    val caption_entities: List<MessageEntity>?,
     val type: String = "photo"
 ) : InputMedia {
     override fun media() = media
@@ -351,6 +352,7 @@ internal data class InputMediaVideo(
     @Transient private val thumb: Any?,
     val caption: String?,
     val parse_mode: String?,
+    val caption_entities: List<MessageEntity>?,
     val width: Int?,
     val height: Int?,
     val duration: Int?,
@@ -368,6 +370,7 @@ internal data class InputMediaAnimation(
     @Transient private val thumb: Any?,
     val caption: String?,
     val parse_mode: String?,
+    val caption_entities: List<MessageEntity>?,
     val width: Int?,
     val height: Int?,
     val duration: Int?,
@@ -384,6 +387,7 @@ internal data class InputMediaAudio(
     @Transient private val thumb: Any?,
     val caption: String?,
     val parse_mode: String?,
+    val caption_entities: List<MessageEntity>?,
     val duration: Int?,
     val performer: String?,
     val title: String?,
