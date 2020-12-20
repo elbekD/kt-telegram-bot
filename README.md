@@ -7,14 +7,14 @@ Method names are the same as in [API](https://core.telegram.org/bots/api#availab
 
 ## Changelog
 
+#### Version 1.3.7
+- Update Bot API to 5.0
+
 #### Version 1.3.6
 - Migrate to Kotlin 1.4.20
 
 #### Version 1.3.5
 - Support ByteArray type for file sending
-
-#### Version 1.3.4
-- Support API 4.9 changes
 
 [Changelog history](./CHANGELOG.md)
 

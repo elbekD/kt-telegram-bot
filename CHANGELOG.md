@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 1.3.7
+- Update Bot API to 5.0
+
 ## Version 1.3.6
 - Migrate to Kotlin 1.4.20
 

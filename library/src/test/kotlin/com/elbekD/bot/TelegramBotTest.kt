@@ -75,7 +75,13 @@ internal class TelegramBotTest {
     fun sendAudio() {
         val file = file(config.audio)
         val msg = bot.sendAudio(
-            config.userId, file, "*this is audio file*", "markdown", 4, "Test performer", "Test title"
+            config.userId,
+            file,
+            caption = "*this is audio file*",
+            parseMode = "markdown",
+            duration = 4,
+            performer = "Test performer",
+            title = "Test title"
         ).get()
         assertNotNull(msg.audio)
         assertNotNull(msg.audio?.file_id)
@@ -139,7 +145,12 @@ internal class TelegramBotTest {
     fun sendLocation() {
         val lat = config.location.latitude
         val lng = config.location.longitude
-        val msg = bot.sendLocation(config.userId, lat, lng, 60).get()
+        val msg = bot.sendLocation(
+            chatId = config.userId,
+            latitude = lat,
+            longitude = lng,
+            period = 60
+        ).get()
         assertNotNull(msg.location)
     }
 
@@ -147,7 +158,12 @@ internal class TelegramBotTest {
     fun editMessageLiveLocation() {
         val lat = config.location.latitude
         val lng = config.location.longitude
-        val msg1 = bot.sendLocation(config.userId, lat, lng, 60).get()
+        val msg1 = bot.sendLocation(
+            chatId = config.userId,
+            latitude = lat,
+            longitude = lng,
+            period = 60
+        ).get()
 
         assertNotNull(msg1.location)
 
@@ -158,7 +174,12 @@ internal class TelegramBotTest {
 
         TimeUnit.SECONDS.sleep(3)
 
-        val msg2 = bot.editMessageLiveLocation(newLat, newLng, id, msgId).get()
+        val msg2 = bot.editMessageLiveLocation(
+            latitude = newLat,
+            longitude = newLng,
+            chatId = id,
+            messageId = msgId
+        ).get()
         assertNotNull(msg2.location)
     }
 
@@ -166,7 +187,12 @@ internal class TelegramBotTest {
     fun stopMessageLiveLocation() {
         val lat = config.location.latitude
         val lng = config.location.longitude
-        val msg = bot.sendLocation(config.userId, lat, lng, 60).get()
+        val msg = bot.sendLocation(
+            chatId = config.userId,
+            latitude = lat,
+            longitude = lng,
+            period = 60
+        ).get()
 
         assertNotNull(msg.location)
 
