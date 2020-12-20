@@ -380,6 +380,7 @@ public interface TelegramApi {
     public fun promoteChatMember(
         chatId: Any,
         userId: Long,
+        isAnonymous: Boolean? = null,
         canChangeInfo: Boolean? = null,
         canPostMessages: Boolean? = null,
         canEditMessages: Boolean? = null,

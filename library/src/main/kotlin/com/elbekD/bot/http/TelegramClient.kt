@@ -672,6 +672,7 @@ internal class TelegramClient(token: String) : TelegramApi {
     override fun promoteChatMember(
         chatId: Any,
         userId: Long,
+        isAnonymous: Boolean?,
         canChangeInfo: Boolean?,
         canPostMessages: Boolean?,
         canEditMessages: Boolean?,
@@ -685,6 +686,7 @@ internal class TelegramClient(token: String) : TelegramApi {
             mapOf(
                 ApiConstants.CHAT_ID to id(chatId),
                 ApiConstants.USER_ID to userId,
+                ApiConstants.IS_ANONYMOUS to isAnonymous,
                 ApiConstants.CAN_CHANGE_INFO to canChangeInfo,
                 ApiConstants.CAN_POST_MESSAGES to canPostMessages,
                 ApiConstants.CAN_EDIT_MESSAGES to canEditMessages,

@@ -561,6 +561,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
     override fun promoteChatMember(
         chatId: Any,
         userId: Long,
+        isAnonymous: Boolean?,
         canChangeInfo: Boolean?,
         canPostMessages: Boolean?,
         canEditMessages: Boolean?,
@@ -569,19 +570,19 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         canRestrictMembers: Boolean?,
         canPinMessages: Boolean?,
         canPromoteMembers: Boolean?
-    ) =
-        client.promoteChatMember(
-            chatId,
-            userId,
-            canChangeInfo,
-            canPostMessages,
-            canEditMessages,
-            canDeleteMessages,
-            canInviteUsers,
-            canRestrictMembers,
-            canPinMessages,
-            canPromoteMembers
-        )
+    ) = client.promoteChatMember(
+        chatId = chatId,
+        userId = userId,
+        isAnonymous = isAnonymous,
+        canChangeInfo = canChangeInfo,
+        canPostMessages = canPostMessages,
+        canEditMessages = canEditMessages,
+        canDeleteMessages = canDeleteMessages,
+        canInviteUsers = canInviteUsers,
+        canRestrictMembers = canRestrictMembers,
+        canPinMessages = canPinMessages,
+        canPromoteMembers = canPromoteMembers
+    )
 
     override fun exportChatInviteLink(chatId: Any) = client.exportChatInviteLink(chatId)
 

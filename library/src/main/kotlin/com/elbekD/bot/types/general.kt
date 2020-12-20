@@ -298,7 +298,7 @@ public data class ChatMember(
     val user: User,
     val status: String,
     val custom_title: String?,
-    val until_date: Int?,
+    val is_anonymous: Boolean?,
     val can_be_edited: Boolean?,
     val can_post_messages: Boolean?,
     val can_edit_messages: Boolean?,
@@ -313,7 +313,8 @@ public data class ChatMember(
     val can_send_media_messages: Boolean?,
     val can_send_polls: Boolean?,
     val can_send_other_messages: Boolean?,
-    val can_add_web_page_previews: Boolean?
+    val can_add_web_page_previews: Boolean?,
+    val until_date: Int?
 )
 
 public data class ResponseParameters(val migrate_to_chat_id: Long, val retry_after: Int)
