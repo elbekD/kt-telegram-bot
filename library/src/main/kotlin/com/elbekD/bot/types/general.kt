@@ -273,7 +273,9 @@ public data class Venue(
     val title: String,
     val address: String,
     val foursquare_id: String?,
-    val foursquare_type: String?
+    val foursquare_type: String?,
+    val google_place_id: String?,
+    val google_place_type: String?
 )
 
 public data class ProximityAlertTriggered(

@@ -590,22 +590,25 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         address: String,
         foursquareId: String?,
         foursquareType: String?,
+        googlePlaceId: String?,
+        googlePlaceType: String?,
         disableNotification: Boolean?,
         replyTo: Int?,
         markup: ReplyKeyboard?
-    ) =
-        client.sendVenue(
-            chatId,
-            latitude,
-            longitude,
-            title,
-            address,
-            foursquareId,
-            foursquareType,
-            disableNotification,
-            replyTo,
-            markup
-        )
+    ) = client.sendVenue(
+        chatId = chatId,
+        latitude = latitude,
+        longitude = longitude,
+        title = title,
+        address = address,
+        foursquareId = foursquareId,
+        foursquareType = foursquareType,
+        googlePlaceId = googlePlaceId,
+        googlePlaceType = googlePlaceType,
+        disableNotification = disableNotification,
+        replyTo = replyTo,
+        markup = markup
+    )
 
     override fun sendContact(
         chatId: Any,

@@ -126,6 +126,8 @@ internal object ApiConstants {
     const val ADDRESS = "address"
     const val FOURSQUARE_ID = "foursquare_id"
     const val FOURSQUARE_TYPE = "foursquare_type"
+    const val GOOGLE_PLACE_ID = "google_place_id"
+    const val GOOGLE_PLACE_TYPE = "google_place_type"
     const val PHONE_NUMBER = "phone_number"
     const val FIRST_NAME = "first_name"
     const val LAST_NAME = "last_name"

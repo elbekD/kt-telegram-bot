@@ -592,6 +592,8 @@ internal class TelegramClient(token: String) : TelegramApi {
         address: String,
         foursquareId: String?,
         foursquareType: String?,
+        googlePlaceId: String?,
+        googlePlaceType: String?,
         disableNotification: Boolean?,
         replyTo: Int?,
         markup: ReplyKeyboard?
@@ -605,6 +607,8 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.ADDRESS to address,
                 ApiConstants.FOURSQUARE_ID to foursquareId,
                 ApiConstants.FOURSQUARE_TYPE to foursquareType,
+                ApiConstants.GOOGLE_PLACE_ID to googlePlaceId,
+                ApiConstants.GOOGLE_PLACE_TYPE to googlePlaceType,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
                 ApiConstants.REPLY_MARKUP to markup

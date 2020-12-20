@@ -318,6 +318,8 @@ public interface TelegramApi {
         address: String,
         foursquareId: String? = null,
         foursquareType: String? = null,
+        googlePlaceId: String? = null,
+        googlePlaceType: String? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
         markup: ReplyKeyboard? = null

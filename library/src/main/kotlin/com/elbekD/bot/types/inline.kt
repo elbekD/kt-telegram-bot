@@ -170,6 +170,8 @@ public data class InlineQueryResultVenue(
     val address: String,
     val foursquare_id: String? = null,
     val foursquare_type: String? = null,
+    val google_place_id: String? = null,
+    val google_place_type: String? = null,
     val reply_markup: InlineKeyboardMarkup? = null,
     val input_message_content: InputMessageContent? = null,
     val thumb_url: String? = null,
@@ -326,7 +328,9 @@ public data class InputVenueMessageContent(
     val title: String,
     val address: String,
     val foursquare_id: String? = null,
-    val foursquare_type: String? = null
+    val foursquare_type: String? = null,
+    val google_place_id: String? = null,
+    val google_place_type: String? = null
 ) : InputMessageContent
 
 public data class InputContactMessageContent(
