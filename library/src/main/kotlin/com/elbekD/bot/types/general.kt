@@ -140,6 +140,10 @@ public data class Message(
     val reply_markup: InlineKeyboardMarkup?
 )
 
+public data class MessageId(
+    val message_id: Int
+)
+
 public data class CallbackQuery(
     val id: String,
     val from: User,

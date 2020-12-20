@@ -255,16 +255,51 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         disableNotification: Boolean?,
         replyTo: Int?,
         markup: ReplyKeyboard?
-    ) =
-        client.sendMessage(chatId, text, parseMode, disableWebPagePreview, disableNotification, replyTo, markup)
+    ) = client.sendMessage(
+        chatId = chatId,
+        text = text,
+        parseMode = parseMode,
+        disableWebPagePreview = disableWebPagePreview,
+        disableNotification = disableNotification,
+        replyTo = replyTo,
+        markup = markup
+    )
 
     override fun forwardMessage(
         chatId: Any,
         fromId: Any,
         msgId: Int,
         disableNotification: Boolean?
-    ) =
-        client.forwardMessage(chatId, fromId, msgId, disableNotification)
+    ) = client.forwardMessage(
+        chatId = chatId,
+        fromId = fromId,
+        msgId = msgId,
+        disableNotification = disableNotification
+    )
+
+    override fun copyMessage(
+        chatId: Any,
+        fromChatId: Any,
+        messageId: Int,
+        caption: String?,
+        parseMode: String?,
+        captionEntities: List<MessageEntity>?,
+        disableNotification: Boolean?,
+        replyToMessageId: Int?,
+        allowSendingWithoutReply: Boolean?,
+        markup: ReplyKeyboard?
+    ) = client.copyMessage(
+        chatId = chatId,
+        fromChatId = fromChatId,
+        messageId = messageId,
+        caption = caption,
+        parseMode = parseMode,
+        captionEntities = captionEntities,
+        disableNotification = disableNotification,
+        replyToMessageId = replyToMessageId,
+        allowSendingWithoutReply = allowSendingWithoutReply,
+        markup = markup
+    )
 
     override fun sendPhoto(
         chatId: Any,

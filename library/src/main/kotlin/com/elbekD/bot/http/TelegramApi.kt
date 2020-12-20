@@ -13,6 +13,7 @@ import com.elbekD.bot.types.LabeledPrice
 import com.elbekD.bot.types.MaskPosition
 import com.elbekD.bot.types.Message
 import com.elbekD.bot.types.MessageEntity
+import com.elbekD.bot.types.MessageId
 import com.elbekD.bot.types.PassportElementError
 import com.elbekD.bot.types.Poll
 import com.elbekD.bot.types.ReplyKeyboard
@@ -85,6 +86,19 @@ public interface TelegramApi {
         msgId: Int,
         disableNotification: Boolean? = null
     ): CompletableFuture<out Message>
+
+    public fun copyMessage(
+        chatId: Any,
+        fromChatId: Any,
+        messageId: Int,
+        caption: String? = null,
+        parseMode: String? = null,
+        captionEntities: List<MessageEntity>? = null,
+        disableNotification: Boolean? = null,
+        replyToMessageId: Int? = null,
+        allowSendingWithoutReply: Boolean? = null,
+        markup: ReplyKeyboard? = null
+    ): CompletableFuture<out MessageId>
 
     /**
      * @param chatId is `Int`, `Long` or `String`

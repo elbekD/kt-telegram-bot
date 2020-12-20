@@ -15,6 +15,7 @@ internal object ApiConstants {
     const val METHOD_CLOSE = "close"
     const val METHOD_SEND_MESSAGE = "sendMessage"
     const val METHOD_FORWARD_MESSAGE = "forwardMessage"
+    const val METHOD_COPY_MESSAGE = "copyMessage"
     const val METHOD_VIDEO_NOTE = "videoNote"
     const val METHOD_SEND_MEDIA_GROUP = "sendMediaGroup"
     const val METHOD_SEND_LOCATION = "sendLocation"

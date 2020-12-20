@@ -12,6 +12,7 @@ import com.elbekD.bot.types.LabeledPrice
 import com.elbekD.bot.types.MaskPosition
 import com.elbekD.bot.types.Message
 import com.elbekD.bot.types.MessageEntity
+import com.elbekD.bot.types.MessageId
 import com.elbekD.bot.types.PassportElementError
 import com.elbekD.bot.types.Poll
 import com.elbekD.bot.types.ReplyKeyboard
@@ -226,6 +227,35 @@ internal class TelegramClient(token: String) : TelegramApi {
             )
         )
         return post(ApiConstants.METHOD_FORWARD_MESSAGE, body)
+    }
+
+    override fun copyMessage(
+        chatId: Any,
+        fromChatId: Any,
+        messageId: Int,
+        caption: String?,
+        parseMode: String?,
+        captionEntities: List<MessageEntity>?,
+        disableNotification: Boolean?,
+        replyToMessageId: Int?,
+        allowSendingWithoutReply: Boolean?,
+        markup: ReplyKeyboard?
+    ): CompletableFuture<out MessageId> {
+        val body = toBody(
+            mapOf(
+                ApiConstants.CHAT_ID to id(chatId),
+                ApiConstants.FROM_CHAT_ID to id(fromChatId),
+                ApiConstants.MESSAGE_ID to messageId,
+                ApiConstants.CAPTION to caption,
+                ApiConstants.PARSE_MODE to parseMode,
+                ApiConstants.CAPTION_ENTITIES to captionEntities,
+                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
+                ApiConstants.REPLY_TO_MESSAGE_ID to replyToMessageId,
+                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
+                ApiConstants.REPLY_MARKUP to markup
+            )
+        )
+        return post(ApiConstants.METHOD_COPY_MESSAGE, body)
     }
 
     override fun sendPhoto(
