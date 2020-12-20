@@ -249,9 +249,13 @@ public interface TelegramApi {
         chatId: Any,
         latitude: Double,
         longitude: Double,
+        horizontalAccuracy: Float? = null,
         period: Int? = null,
+        heading: Int? = null,
+        proximityAlertRadius: Int? = null,
         disableNotification: Boolean? = null,
         replyTo: Int? = null,
+        allowSendingWithoutReply: Boolean? = false,
         markup: ReplyKeyboard? = null
     ): CompletableFuture<out Message>
 
@@ -262,6 +266,9 @@ public interface TelegramApi {
     public fun editMessageLiveLocation(
         latitude: Double,
         longitude: Double,
+        horizontalAccuracy: Float? = null,
+        heading: Int? = null,
+        proximityAlertRadius: Int? = null,
         chatId: Any? = null,
         messageId: Int? = null,
         inlineMessageId: String? = null,

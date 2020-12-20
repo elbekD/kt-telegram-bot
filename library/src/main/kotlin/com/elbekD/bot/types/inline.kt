@@ -142,7 +142,10 @@ public data class InlineQueryResultLocation(
     val latitude: Float,
     val longitude: Float,
     val title: String,
+    val horizontal_accuracy: Float? = null,
     val live_period: Int? = null,
+    val heading: Int? = null,
+    val proximity_alert_radius: Int? = null,
     val reply_markup: InlineKeyboardMarkup? = null,
     val input_message_content: InputMessageContent? = null,
     val thumb_url: String? = null,
@@ -296,7 +299,10 @@ public data class InputTextMessageContent(
 public data class InputLocationMessageContent(
     val latitude: Float,
     val longitude: Float,
-    val live_period: Int? = null
+    val horizontal_accuracy: Float? = null,
+    val live_period: Int? = null,
+    val heading: Int? = null,
+    val proximity_alert_radius: Int? = null
 ) : InputMessageContent
 
 public data class InputVenueMessageContent(

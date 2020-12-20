@@ -431,23 +431,51 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         chatId: Any,
         latitude: Double,
         longitude: Double,
+        horizontalAccuracy: Float?,
         period: Int?,
+        heading: Int?,
+        proximityAlertRadius: Int?,
         disableNotification: Boolean?,
         replyTo: Int?,
+        allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
-    ) =
-        client.sendLocation(chatId, latitude, longitude, period, disableNotification, replyTo, markup)
+    ) = client.sendLocation(
+        chatId = chatId,
+        latitude = latitude,
+        longitude = longitude,
+        horizontalAccuracy = horizontalAccuracy,
+        period = period,
+        heading = heading,
+        proximityAlertRadius = proximityAlertRadius,
+        disableNotification = disableNotification,
+        replyTo = replyTo,
+        allowSendingWithoutReply = allowSendingWithoutReply,
+        markup = markup
+    )
 
     override fun editMessageLiveLocation(
         latitude: Double,
         longitude: Double,
+        horizontalAccuracy: Float?,
+        heading: Int?,
+        proximityAlertRadius: Int?,
         chatId: Any?,
         messageId: Int?,
         inlineMessageId: String?,
         markup: InlineKeyboardMarkup?
     ): CompletableFuture<out Message> {
         validateIds(chatId, messageId, inlineMessageId)
-        return client.editMessageLiveLocation(latitude, longitude, chatId, messageId, inlineMessageId, markup)
+        return client.editMessageLiveLocation(
+            latitude = latitude,
+            longitude = longitude,
+            horizontalAccuracy = horizontalAccuracy,
+            heading = heading,
+            proximityAlertRadius = proximityAlertRadius,
+            chatId = chatId,
+            messageId = messageId,
+            inlineMessageId = inlineMessageId,
+            markup = markup
+        )
     }
 
     override fun stopMessageLiveLocation(

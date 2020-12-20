@@ -89,6 +89,7 @@ public data class ChatPermissions(
 public data class Message(
     val message_id: Int,
     val from: User?,
+    val sender_chat: Chat?,
     val date: Int,
     val chat: Chat,
     val forward_from: User?,
@@ -104,22 +105,22 @@ public data class Message(
     val author_signature: String?,
     val text: String?,
     val entities: List<MessageEntity>?,
-    val caption_entities: List<MessageEntity>?,
+    val animation: Animation?,
     val audio: Audio?,
     val document: Document?,
-    val animation: Animation?,
-    val game: Game?,
     val photo: List<PhotoSize>?,
     val sticker: Sticker?,
     val video: Video?,
-    val voice: Voice?,
     val video_note: VideoNote?,
+    val voice: Voice?,
     val caption: String?,
+    val caption_entities: List<MessageEntity>?,
     val contact: Contact?,
-    val location: Location?,
-    val venue: Venue?,
-    val poll: Poll?,
     val dice: Dice?,
+    val game: Game?,
+    val poll: Poll?,
+    val venue: Venue?,
+    val location: Location?,
     val new_chat_members: List<User>?,
     val left_chat_member: User?,
     val new_chat_title: String?,
@@ -135,6 +136,7 @@ public data class Message(
     val successful_payment: SuccessfulPayment?,
     val connected_website: String?,
     val passport_data: PassportData?,
+    val proximity_alert_triggered: ProximityAlertTriggered?,
     val reply_markup: InlineKeyboardMarkup?
 )
 
@@ -253,7 +255,14 @@ public data class Contact(
     val vcard: String?
 )
 
-public data class Location(val longitude: Float, val latitude: Float)
+public data class Location(
+    val longitude: Float,
+    val latitude: Float,
+    val horizontal_accuracy: Float?,
+    val live_period: Int?,
+    val heading: Int?,
+    val proximity_alert_radius: Int?
+)
 
 public data class Venue(
     val location: Location?,
@@ -261,6 +270,12 @@ public data class Venue(
     val address: String,
     val foursquare_id: String?,
     val foursquare_type: String?
+)
+
+public data class ProximityAlertTriggered(
+    val traveler: User,
+    val watcher: User,
+    val distance: Int
 )
 
 public data class UserProfilePhotos(val total_count: Int, val photos: List<List<PhotoSize>>?)

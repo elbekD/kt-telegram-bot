@@ -35,7 +35,6 @@ import okhttp3.Response
 import java.io.File
 import java.lang.reflect.Type
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.Future
 import java.util.concurrent.TimeUnit
 
 // Todo: create general multipart function
@@ -472,9 +471,13 @@ internal class TelegramClient(token: String) : TelegramApi {
         chatId: Any,
         latitude: Double,
         longitude: Double,
+        horizontalAccuracy: Float?,
         period: Int?,
+        heading: Int?,
+        proximityAlertRadius: Int?,
         disableNotification: Boolean?,
         replyTo: Int?,
+        allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
         val body = toBody(
@@ -482,9 +485,13 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.CHAT_ID to chatId,
                 ApiConstants.LATITUDE to latitude,
                 ApiConstants.LONGITUDE to longitude,
+                ApiConstants.HORIZONTAL_ACCURACY to horizontalAccuracy,
                 ApiConstants.LIVE_PERIOD to period,
+                ApiConstants.HEADING to heading,
+                ApiConstants.PROXIMITY_ALERT_RADIUS to proximityAlertRadius,
                 ApiConstants.DISABLE_NOTIFICATION to disableNotification,
                 ApiConstants.REPLY_TO_MESSAGE_ID to replyTo,
+                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
                 ApiConstants.REPLY_MARKUP to markup
             )
         )
@@ -494,6 +501,9 @@ internal class TelegramClient(token: String) : TelegramApi {
     override fun editMessageLiveLocation(
         latitude: Double,
         longitude: Double,
+        horizontalAccuracy: Float?,
+        heading: Int?,
+        proximityAlertRadius: Int?,
         chatId: Any?,
         messageId: Int?,
         inlineMessageId: String?,
@@ -506,6 +516,9 @@ internal class TelegramClient(token: String) : TelegramApi {
                 ApiConstants.INLINE_MESSAGE_ID to inlineMessageId,
                 ApiConstants.LATITUDE to latitude,
                 ApiConstants.LONGITUDE to longitude,
+                ApiConstants.HORIZONTAL_ACCURACY to horizontalAccuracy,
+                ApiConstants.HEADING to heading,
+                ApiConstants.PROXIMITY_ALERT_RADIUS to proximityAlertRadius,
                 ApiConstants.REPLY_MARKUP to markup
             )
         )
