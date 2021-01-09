@@ -47,6 +47,22 @@ dependencies {
     compile("com.github.elbekD:kt-telegram-bot:${version}")
 }
 ```
+Maven
+
+```xml
+<repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+</repository>
+```
+
+```xml
+<dependency>
+    <groupId>com.github.elbekD</groupId>
+    <artifactId>kt-telegram-bot</artifactId>
+    <version>{version}</version>
+</dependency>
+```
 
 ## Quick start
 ```kotlin
