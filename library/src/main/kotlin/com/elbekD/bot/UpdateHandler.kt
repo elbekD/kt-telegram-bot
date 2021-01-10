@@ -79,6 +79,7 @@ internal class UpdateHandler(private val username: String) {
     }
 
     internal fun handle(update: Update) {
+        GlobalScope.launch { onAnyUpdate?.invoke(update) }
         when {
             update.isMessage() -> {
                 when {
