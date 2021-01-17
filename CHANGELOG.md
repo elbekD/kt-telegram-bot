@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 1.3.8
+- Fix [issue](https://github.com/elbekD/kt-telegram-bot/issues/35)
+
 ## Version 1.3.7
 - Update Bot API to 5.0
 
