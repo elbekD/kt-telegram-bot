@@ -39,7 +39,7 @@ public data class WebhookInfo(
 )
 
 public data class User(
-    val id: Int,
+    val id: Long,
     val is_bot: Boolean,
     val first_name: String,
     val last_name: String?,

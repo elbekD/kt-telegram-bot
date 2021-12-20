@@ -1,6 +1,6 @@
 import org.jetbrains.dokka.gradle.DokkaTask
 
-version = "1.3.8"
+version = "1.3.9"
 
 plugins {
     id("com.github.johnrengelman.shadow") version "5.2.0"
