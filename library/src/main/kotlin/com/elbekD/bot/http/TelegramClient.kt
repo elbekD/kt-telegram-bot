@@ -53,7 +53,6 @@ internal class TelegramClient(token: String) : TelegramApi {
         private val MEDIA_TYPE_OCTET_STREAM = MediaType.parse("application/octet-stream")
 
         private fun id(id: Any) = when (id) {
-            is Int -> id.toString()
             is Long -> id.toString()
             is String -> id
             else -> throw IllegalArgumentException("$id neither string nor integer")
@@ -196,7 +195,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         entities: List<MessageEntity>?,
         disableWebPagePreview: Boolean?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
@@ -219,7 +218,7 @@ internal class TelegramClient(token: String) : TelegramApi {
     override fun forwardMessage(
         chatId: Any,
         fromId: Any,
-        msgId: Int,
+        msgId: Long,
         disableNotification: Boolean?
     ): CompletableFuture<out Message> {
         val body = toBody(
@@ -236,12 +235,12 @@ internal class TelegramClient(token: String) : TelegramApi {
     override fun copyMessage(
         chatId: Any,
         fromChatId: Any,
-        messageId: Int,
+        messageId: Long,
         caption: String?,
         parseMode: String?,
         captionEntities: List<MessageEntity>?,
         disableNotification: Boolean?,
-        replyToMessageId: Int?,
+        replyToMessageId: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out MessageId> {
@@ -269,7 +268,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         parseMode: String?,
         captionEntities: List<MessageEntity>?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
@@ -300,7 +299,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         title: String?,
         thumb: File?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
@@ -333,7 +332,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         captionEntities: List<MessageEntity>?,
         disableContentTypeDetection: Boolean?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
@@ -367,7 +366,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         captionEntities: List<MessageEntity>?,
         streaming: Boolean?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
@@ -403,7 +402,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         parseMode: String?,
         captionEntities: List<MessageEntity>?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
@@ -435,7 +434,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         captionEntities: List<MessageEntity>?,
         duration: Int?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
@@ -463,7 +462,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         length: Int?,
         thumb: File?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
@@ -487,7 +486,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         chatId: Any,
         media: List<InputMedia>,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?
     ): CompletableFuture<out ArrayList<Message>> {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
@@ -532,7 +531,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         heading: Int?,
         proximityAlertRadius: Int?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
@@ -561,7 +560,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         heading: Int?,
         proximityAlertRadius: Int?,
         chatId: Any?,
-        messageId: Int?,
+        messageId: Long?,
         inlineMessageId: String?,
         markup: InlineKeyboardMarkup?
     ): CompletableFuture<out Message> {
@@ -583,7 +582,7 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     override fun stopMessageLiveLocation(
         chatId: Any?,
-        messageId: Int?,
+        messageId: Long?,
         inlineMessageId: String?,
         markup: InlineKeyboardMarkup?
     ): CompletableFuture<out Message> {
@@ -609,7 +608,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         googlePlaceId: String?,
         googlePlaceType: String?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
@@ -640,7 +639,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         lastName: String?,
         vcard: String?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
@@ -813,7 +812,7 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     override fun pinChatMessage(
         chatId: Any,
-        messageId: Int,
+        messageId: Long,
         disableNotification: Boolean?
     ): CompletableFuture<out Boolean> {
         val body = toBody(
@@ -826,7 +825,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post(ApiConstants.METHOD_PIN_CHAT_MESSAGE, body)
     }
 
-    override fun unpinChatMessage(chatId: Any, messageId: Int?): CompletableFuture<out Boolean> {
+    override fun unpinChatMessage(chatId: Any, messageId: Long?): CompletableFuture<out Boolean> {
         val body = toBody(
             mapOf(
                 ApiConstants.CHAT_ID to id(chatId),
@@ -930,7 +929,7 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     override fun editMessageText(
         chatId: Any?,
-        messageId: Int?,
+        messageId: Long?,
         inlineMessageId: String?,
         text: String,
         parseMode: String?,
@@ -955,7 +954,7 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     override fun editMessageCaption(
         chatId: Any?,
-        messageId: Int?,
+        messageId: Long?,
         inlineMessageId: String?,
         caption: String?,
         parseMode: String?,
@@ -978,7 +977,7 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     override fun editMessageMedia(
         chatId: Any?,
-        messageId: Int?,
+        messageId: Long?,
         inlineMessageId: String?,
         media: InputMedia,
         markup: InlineKeyboardMarkup?
@@ -1013,7 +1012,7 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     override fun editMessageReplyMarkup(
         chatId: Any?,
-        messageId: Int?,
+        messageId: Long?,
         inlineMessageId: String?,
         markup: InlineKeyboardMarkup?
     ): CompletableFuture<out Message> {
@@ -1032,7 +1031,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         chatId: Any,
         sticker: Any,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
@@ -1169,7 +1168,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         chatId: Long,
         gameShortName: String,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: InlineKeyboardMarkup?
     ): CompletableFuture<out Message> {
@@ -1192,7 +1191,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         force: Boolean?,
         disableEditMessage: Boolean?,
         chatId: Long?,
-        messageId: Int?,
+        messageId: Long?,
         inlineMessageId: String?
     ): CompletableFuture<out Message> {
         val body = toBody(
@@ -1212,7 +1211,7 @@ internal class TelegramClient(token: String) : TelegramApi {
     override fun getGameHighScores(
         userId: Long,
         chatId: Long?,
-        messageId: Int?,
+        messageId: Long?,
         inlineMessageId: String?
     ): CompletableFuture<out List<GameHighScore>> {
         val body = toBody(
@@ -1248,7 +1247,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         sendEmailToProvider: Boolean?,
         isFlexible: Boolean?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: InlineKeyboardMarkup?
     ): CompletableFuture<out Message> {
@@ -1343,7 +1342,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         closeDate: Long?,
         closed: Boolean?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
@@ -1371,7 +1370,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post(ApiConstants.METHOD_SEND_POLL, body)
     }
 
-    override fun stopPoll(chatId: Any, messageId: Int, markup: InlineKeyboardMarkup?): CompletableFuture<out Poll> {
+    override fun stopPoll(chatId: Any, messageId: Long, markup: InlineKeyboardMarkup?): CompletableFuture<out Poll> {
         val body = toBody(
             mapOf(
                 ApiConstants.CHAT_ID to id(chatId),
@@ -1407,7 +1406,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post(ApiConstants.METHOD_SET_CHAT_ADMINISTRATOR_CUSTOM_TITLE, body)
     }
 
-    override fun deleteMessage(chatId: Any, messageId: Int): CompletableFuture<out Boolean> {
+    override fun deleteMessage(chatId: Any, messageId: Long): CompletableFuture<out Boolean> {
         val body = toBody(
             mapOf(
                 ApiConstants.CHAT_ID to id(chatId),
@@ -1421,7 +1420,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         chatId: Any,
         emoji: String?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {

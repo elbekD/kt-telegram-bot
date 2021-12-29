@@ -42,7 +42,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
                 throw IllegalArgumentException("$obj is neither file nor string")
         }
 
-        private fun validateIds(chatId: Any?, messageId: Int?, inlineMessageId: String?) {
+        private fun validateIds(chatId: Any?, messageId: Long?, inlineMessageId: String?) {
             if (
                 inlineMessageId != null && (chatId != null || messageId != null)
                 || inlineMessageId == null && (chatId == null || messageId == null)
@@ -290,7 +290,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         entities: List<MessageEntity>?,
         disableWebPagePreview: Boolean?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ) = client.sendMessage(
@@ -308,7 +308,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
     override fun forwardMessage(
         chatId: Any,
         fromId: Any,
-        msgId: Int,
+        msgId: Long,
         disableNotification: Boolean?
     ) = client.forwardMessage(
         chatId = chatId,
@@ -320,12 +320,12 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
     override fun copyMessage(
         chatId: Any,
         fromChatId: Any,
-        messageId: Int,
+        messageId: Long,
         caption: String?,
         parseMode: String?,
         captionEntities: List<MessageEntity>?,
         disableNotification: Boolean?,
-        replyToMessageId: Int?,
+        replyToMessageId: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ) = client.copyMessage(
@@ -348,7 +348,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         parseMode: String?,
         captionEntities: List<MessageEntity>?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ) = client.sendPhoto(
@@ -374,7 +374,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         title: String?,
         thumb: File?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ) = client.sendAudio(
@@ -402,7 +402,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         captionEntities: List<MessageEntity>?,
         disableContentTypeDetection: Boolean?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ) = client.sendDocument(
@@ -431,7 +431,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         captionEntities: List<MessageEntity>?,
         streaming: Boolean?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ) = client.sendVideo(
@@ -462,7 +462,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         parseMode: String?,
         captionEntities: List<MessageEntity>?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ) = client.sendAnimation(
@@ -489,7 +489,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         captionEntities: List<MessageEntity>?,
         duration: Int?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ) = client.sendVoice(
@@ -512,7 +512,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         length: Int?,
         thumb: File?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ) = client.sendVideoNote(
@@ -531,7 +531,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         chatId: Any,
         media: List<InputMedia>,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?
     ): CompletableFuture<out ArrayList<Message>> {
         if (media.size < 2) throw IllegalArgumentException("List must include 2-10 items")
@@ -553,7 +553,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         heading: Int?,
         proximityAlertRadius: Int?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ) = client.sendLocation(
@@ -577,7 +577,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         heading: Int?,
         proximityAlertRadius: Int?,
         chatId: Any?,
-        messageId: Int?,
+        messageId: Long?,
         inlineMessageId: String?,
         markup: InlineKeyboardMarkup?
     ): CompletableFuture<out Message> {
@@ -597,7 +597,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
 
     override fun stopMessageLiveLocation(
         chatId: Any?,
-        messageId: Int?,
+        messageId: Long?,
         inlineMessageId: String?,
         markup: InlineKeyboardMarkup?
     ): CompletableFuture<out Message> {
@@ -616,7 +616,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         googlePlaceId: String?,
         googlePlaceType: String?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ) = client.sendVenue(
@@ -642,7 +642,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         lastName: String?,
         vcard: String?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ) = client.sendContact(
@@ -737,11 +737,11 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
 
     override fun pinChatMessage(
         chatId: Any,
-        messageId: Int,
+        messageId: Long,
         disableNotification: Boolean?
     ) = client.pinChatMessage(chatId, messageId, disableNotification)
 
-    override fun unpinChatMessage(chatId: Any, messageId: Int?) = client.unpinChatMessage(chatId, messageId)
+    override fun unpinChatMessage(chatId: Any, messageId: Long?) = client.unpinChatMessage(chatId, messageId)
 
     override fun unpinAllChatMessages(chatId: Any): CompletableFuture<out Boolean> = client.unpinAllChatMessages(chatId)
 
@@ -786,7 +786,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
 
     override fun editMessageText(
         chatId: Any?,
-        messageId: Int?,
+        messageId: Long?,
         inlineMessageId: String?,
         text: String,
         parseMode: String?,
@@ -809,7 +809,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
 
     override fun editMessageCaption(
         chatId: Any?,
-        messageId: Int?,
+        messageId: Long?,
         inlineMessageId: String?,
         caption: String?,
         parseMode: String?,
@@ -830,7 +830,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
 
     override fun editMessageMedia(
         chatId: Any?,
-        messageId: Int?,
+        messageId: Long?,
         inlineMessageId: String?,
         media: InputMedia,
         markup: InlineKeyboardMarkup?
@@ -841,7 +841,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
 
     override fun editMessageReplyMarkup(
         chatId: Any?,
-        messageId: Int?,
+        messageId: Long?,
         inlineMessageId: String?,
         markup: InlineKeyboardMarkup?
     ): CompletableFuture<out Message> {
@@ -853,7 +853,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         chatId: Any,
         sticker: Any,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
@@ -937,7 +937,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         chatId: Long,
         gameShortName: String,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: InlineKeyboardMarkup?
     ) = client.sendGame(
@@ -955,7 +955,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         force: Boolean?,
         disableEditMessage: Boolean?,
         chatId: Long?,
-        messageId: Int?, inlineMessageId: String?
+        messageId: Long?, inlineMessageId: String?
     ): CompletableFuture<out Message> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.setGameScore(userId, score, force, disableEditMessage, chatId, messageId, inlineMessageId)
@@ -964,7 +964,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
     override fun getGameHighScores(
         userId: Long,
         chatId: Long?,
-        messageId: Int?,
+        messageId: Long?,
         inlineMessageId: String?
     ): CompletableFuture<out List<GameHighScore>> {
         validateIds(chatId, messageId, inlineMessageId)
@@ -993,7 +993,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         sendEmailToProvider: Boolean?,
         isFlexible: Boolean?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: InlineKeyboardMarkup?
     ) = client.sendInvoice(
@@ -1056,7 +1056,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         closeDate: Long?,
         closed: Boolean?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ): CompletableFuture<out Message> {
@@ -1085,7 +1085,7 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
         )
     }
 
-    override fun stopPoll(chatId: Any, messageId: Int, markup: InlineKeyboardMarkup?): CompletableFuture<out Poll> =
+    override fun stopPoll(chatId: Any, messageId: Long, markup: InlineKeyboardMarkup?): CompletableFuture<out Poll> =
         client.stopPoll(chatId, messageId, markup)
 
     override fun setChatPermissions(chatId: Any, permissions: ChatPermissions) =
@@ -1094,14 +1094,14 @@ internal abstract class TelegramBot protected constructor(username: String, tk: 
     override fun setChatAdministratorCustomTitle(chatId: Any, userId: Long, customTitle: String) =
         client.setChatAdministratorCustomTitle(chatId, userId, customTitle)
 
-    override fun deleteMessage(chatId: Any, messageId: Int): CompletableFuture<out Boolean> =
+    override fun deleteMessage(chatId: Any, messageId: Long): CompletableFuture<out Boolean> =
         client.deleteMessage(chatId, messageId)
 
     override fun sendDice(
         chatId: Any,
         emoji: String?,
         disableNotification: Boolean?,
-        replyTo: Int?,
+        replyTo: Long?,
         allowSendingWithoutReply: Boolean?,
         markup: ReplyKeyboard?
     ) = client.sendDice(

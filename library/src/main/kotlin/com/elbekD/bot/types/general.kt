@@ -13,7 +13,7 @@ public data class TelegramObject<out T>(
 )
 
 public data class Update(
-    val update_id: Int,
+    val update_id: Long,
     val message: Message?,
     val edited_message: Message?,
     val channel_post: Message?,
@@ -39,7 +39,7 @@ public data class WebhookInfo(
 )
 
 public data class User(
-    val id: Int,
+    val id: Long,
     val is_bot: Boolean,
     val first_name: String,
     val last_name: String?,
@@ -66,7 +66,7 @@ public data class Chat(
     val slow_mode_delay: Boolean?,
     val sticker_set_name: String?,
     val can_set_sticker_set: Boolean?,
-    val linked_chat_id: Int?,
+    val linked_chat_id: Long?,
     val location: ChatLocation?
 )
 
@@ -87,14 +87,14 @@ public data class ChatPermissions(
 )
 
 public data class Message(
-    val message_id: Int,
+    val message_id: Long,
     val from: User?,
     val sender_chat: Chat?,
     val date: Int,
     val chat: Chat,
     val forward_from: User?,
     val forward_from_chat: Chat?,
-    val forward_from_message_id: Int?,
+    val forward_from_message_id: Long?,
     val forward_signature: String?,
     val forward_sender_name: String?,
     val forward_date: Int?,
@@ -141,7 +141,7 @@ public data class Message(
 )
 
 public data class MessageId(
-    val message_id: Int
+    val message_id: Long
 )
 
 public data class CallbackQuery(
@@ -255,7 +255,7 @@ public data class Contact(
     val phone_number: String,
     val first_name: String,
     val last_name: String?,
-    val user_id: Int?,
+    val user_id: Long?,
     val vcard: String?
 )
 

@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 1.4.0
+- Update ids from Int to Long
+
 ## Version 1.3.8
 - Fix [issue](https://github.com/elbekD/kt-telegram-bot/issues/35)
 

@@ -20,7 +20,7 @@ internal class LongPollingBot(
             deleteWebhook().join()
 
         if (!polling) {
-            var lastUpdateId = -1
+            var lastUpdateId = -1L
             timer = timer("LongPollingBot", period = options.period) {
                 try {
                     getUpdates(
