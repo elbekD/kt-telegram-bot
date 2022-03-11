@@ -1,7 +1,8 @@
-import com.elbekD.bot.Bot
-import com.elbekD.bot.server
+import com.elbekd.bot.Bot
+import com.elbekd.bot.model.toChatId
+import com.elbekd.bot.server
 
-fun main() {
+suspend fun main() {
     val token = "<TOKEN>"
     val username = "<BOT USERNAME>"
     val bot = Bot.createWebhook(username, token) {
@@ -33,12 +34,12 @@ fun main() {
         }
     }
 
-    bot.onCommand("/start") { msg, _ ->
-        bot.sendMessage(msg.chat.id, "Hello World!")
+    bot.onCommand("/start") { (msg, _) ->
+        bot.sendMessage(msg.chat.id.toChatId(), "Hello World!")
     }
 
-    bot.onCommand("/echo") { msg, opts ->
-        bot.sendMessage(msg.chat.id, "${msg.text} ${opts ?: ""}")
+    bot.onCommand("/echo") { (msg, opts) ->
+        bot.sendMessage(msg.chat.id.toChatId(), "${msg.text} ${opts ?: ""}")
     }
 
     bot.start()

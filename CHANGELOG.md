@@ -1,5 +1,15 @@
 # Changelog
 
+## Version 2.0.0
+- Update Bot API to 6.0
+- Brings major changes like
+    - moving from `future` pattern to Kotlin Coroutines
+    - package changed from com.elbek**D**.* to com.elbek**d**.*
+    - added `ChatId` sealed class and extension methods 
+  for `String` and `Int` object to convert them to `ChatId` instance
+    - added separate interfaces for some standalone APIs.
+  `TelegramApi` extends them all
+
 ## Version 1.3.8
 - Fix [issue](https://github.com/elbekD/kt-telegram-bot/issues/35)
 
@@ -16,7 +26,7 @@
 - Support API 4.9 changes
 
 ## Version 1.3.3
-- Added some extension functions to work with the keyboard. See [sources](/library/src/main/kotlin/com/elbekD/bot/util/keyboard) for details
+- Added some extension functions to work with the keyboard. See [sources](/library/src/main/kotlin/com/elbekd/bot/util/keyboard) for details
 
 ## Version 1.3.2
 - Apply suggestion from issue #24 for editTextMessage; changed argument order in createNewStickerSet and addStickerToSet

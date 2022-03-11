@@ -2,19 +2,26 @@
 [![](https://jitpack.io/v/elbekD/kt-telegram-bot.svg)](https://jitpack.io/#elbekD/kt-telegram-bot)
 
 Convenient way to build Telegram bots using powerful Kotlin language.
-Support for [Telegram Bot API 5.0](https://core.telegram.org/bots/api).
+Support for [Telegram Bot API 5.7](https://core.telegram.org/bots/api).
 Method names are the same as in [API](https://core.telegram.org/bots/api#available-methods).
 
 ## Changelog
+
+#### Version 2.0.0
+- Update Bot API to 6.0
+- Brings major changes like
+  - moving from `future` pattern to Kotlin Coroutines
+  - package changed from com.elbek**D**.* to com.elbek**d**.*
+  - added `ChatId` sealed class and extension methods
+    for `String` and `Int` object to convert them to `ChatId` instance
+  - added separate interfaces for some standalone APIs.
+    `TelegramApi` extends them all
 
 #### Version 1.3.8
 - Fix [issue](https://github.com/elbekD/kt-telegram-bot/issues/35)
 
 #### Version 1.3.7
 - Update Bot API to 5.0
-
-#### Version 1.3.6
-- Migrate to Kotlin 1.4.20
 
 [Changelog history](./CHANGELOG.md)
 
@@ -34,7 +41,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.github.elbekD:kt-telegram-bot:$version"
+    implementation "com.elbekd:kt-telegram-bot:$version"
 }
 ```
 Or Gradle Kotlin DSL
@@ -44,7 +51,7 @@ repositories {
 }
 
 dependencies {
-    compile("com.github.elbekD:kt-telegram-bot:${version}")
+    compile("com.elbekd:kt-telegram-bot:${version}")
 }
 ```
 Maven
@@ -54,11 +61,9 @@ Maven
     <id>jitpack.io</id>
     <url>https://jitpack.io</url>
 </repository>
-```
 
-```xml
 <dependency>
-    <groupId>com.github.elbekD</groupId>
+    <groupId>com.elbekd</groupId>
     <artifactId>kt-telegram-bot</artifactId>
     <version>{version}</version>
 </dependency>
@@ -75,8 +80,6 @@ fun main(args: Array<String>) {
     bot.start()
 }
 ```
-Return type of bot's API methods is `CompletableFuture<T>`.
-Also it has extension suspend function `await()`.
 
 #### Chain
 It is common case when you need to ask the user several questions sequentially and process user errors. Now you can create such chains easily. Sea the example below. Do not forget to call `build()` method at the end.
@@ -132,41 +135,7 @@ Use [ShadowJar](https://github.com/johnrengelman/shadow) plugin or any other way
 and [nginx configuration file](/examples/bot.conf)
 
 ## Bot methods
-See details in [source code](/library/src/main/kotlin/com/elbekD/bot/Bot.kt).
-
-### Overview
-Common methods
-- `start()`
-- `stop()`
-
-Event handlers
-- `onMessage` -- called on any message
-- `removeMessageAction`
-- `onEditedMessage` -- called on any edited message
-- `removeEditedMessageAction`
-- `onChannelPost` -- called on any channel post
-- `removeChannelPostAction`
-- `onEditedChannelPost` -- called on any edited channel post
-- `removeEditedChannelPostAction`
-- `onInlineQuery` -- called on any inline query or on specific `query` provided in [`InlineQuery`](/library/src/main/kotlin/com/github/elbekD/bot/types/inline.kt)
-- `removeInlineQueryAction`
-- `onChosenInlineQuery` -- called on chosen inline query event
-- `removeChosenInlineQueryAction`
-- `onCallbackQuery` -- called on any callback query or on specific `callback_data` provided in [`InlineKeyboardButton`](/library/src/main/kotlin/com/github/elbekD/bot/types/inline.kt)
-- `removeCallbackQueryAction`
-- `onShippingQuery` -- called on any shipping query
-- `removeShippingQueryAction`
-- `onPreCheckoutQuery` -- called on any pre checkout query
-- `removePreCheckoutQueryAction`
-- `onCommand` -- called on specific command
-- `onAnyUpdate` -- called on any update
-
-Helper methods
-- `mediaPhoto`
-- `mediaVideo`
-- `mediaAnimation`
-- `mediaAudio`
-- `mediaDocument`
+See details in [source code](/library/src/main/kotlin/com/elbekd/bot/Bot.kt).
 
 # License
 [MIT License](./LICENSE.md)
