@@ -41,7 +41,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.elbekd:kt-telegram-bot:$version"
+    implementation "com.elbekD:kt-telegram-bot:$version"
 }
 ```
 Or Gradle Kotlin DSL
@@ -51,7 +51,7 @@ repositories {
 }
 
 dependencies {
-    compile("com.elbekd:kt-telegram-bot:${version}")
+    compile("com.elbekD:kt-telegram-bot:${version}")
 }
 ```
 Maven
@@ -63,7 +63,7 @@ Maven
 </repository>
 
 <dependency>
-    <groupId>com.elbekd</groupId>
+    <groupId>com.elbekD</groupId>
     <artifactId>kt-telegram-bot</artifactId>
     <version>{version}</version>
 </dependency>
