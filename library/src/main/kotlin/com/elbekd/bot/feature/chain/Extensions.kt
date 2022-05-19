@@ -12,7 +12,7 @@ import com.elbekd.bot.types.Message
  * @param action an action that is called when [Chain] is triggered
  * @return [ChainBuilder]
  */
-public fun Bot.chain(trigger: String, action: (Message) -> Unit): ChainBuilder {
+public fun Bot.chain(trigger: String, action: suspend (Message) -> Unit): ChainBuilder {
     return ChainBuilder.with(trigger, action)
 }
 
@@ -26,7 +26,7 @@ public fun Bot.chain(trigger: String, action: (Message) -> Unit): ChainBuilder {
  * @param action an action that will be called when the chain is fired
  * @return [ChainBuilder]
  */
-public fun Bot.chain(label: String, predicate: (Message) -> Boolean, action: (Message) -> Unit): ChainBuilder {
+public fun Bot.chain(label: String, predicate: suspend (Message) -> Boolean, action: suspend (Message) -> Unit): ChainBuilder {
     return ChainBuilder.with(label, predicate, action)
 }
 
@@ -46,7 +46,7 @@ public fun Bot.jumpTo(label: String, message: Message) {
  * @param label label of the step to jump to
  * @param message incoming [Message]
  */
-public fun Bot.jumpToAndFire(label: String, message: Message) {
+public suspend fun Bot.jumpToAndFire(label: String, message: Message) {
     ChainController.jumpToAndFire(label, message)
 }
 
