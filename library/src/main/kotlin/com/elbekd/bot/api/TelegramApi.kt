@@ -3,6 +3,7 @@ package com.elbekd.bot.api
 import com.elbekd.bot.model.ChatId
 import com.elbekd.bot.types.*
 import com.elbekd.bot.util.Action
+import com.elbekd.bot.util.SendingDocument
 
 public interface TelegramApi :
     TelegramInlineModeApi,
@@ -73,7 +74,7 @@ public interface TelegramApi :
 
     public suspend fun sendPhoto(
         chatId: ChatId,
-        photo: Any,
+        photo: SendingDocument,
         caption: String? = null,
         parseMode: ParseMode? = null,
         captionEntities: List<MessageEntity>? = null,
@@ -86,7 +87,7 @@ public interface TelegramApi :
 
     public suspend fun sendAudio(
         chatId: ChatId,
-        audio: Any,
+        audio: SendingDocument,
         caption: String? = null,
         parseMode: ParseMode? = null,
         captionEntities: List<MessageEntity>? = null,
@@ -103,7 +104,7 @@ public interface TelegramApi :
 
     public suspend fun sendDocument(
         chatId: ChatId,
-        document: Any,
+        document: SendingDocument,
         thumb: java.io.File? = null,
         caption: String? = null,
         parseMode: ParseMode? = null,
@@ -118,7 +119,7 @@ public interface TelegramApi :
 
     public suspend fun sendVideo(
         chatId: ChatId,
-        video: Any,
+        video: SendingDocument,
         duration: Long? = null,
         width: Long? = null,
         height: Long? = null,
@@ -136,7 +137,7 @@ public interface TelegramApi :
 
     public suspend fun sendAnimation(
         chatId: ChatId,
-        animation: Any,
+        animation: SendingDocument,
         duration: Long? = null,
         width: Long? = null,
         height: Long? = null,
@@ -153,7 +154,7 @@ public interface TelegramApi :
 
     public suspend fun sendVoice(
         chatId: ChatId,
-        voice: Any,
+        voice: SendingDocument,
         caption: String? = null,
         parseMode: ParseMode? = null,
         captionEntities: List<MessageEntity>? = null,
@@ -167,7 +168,7 @@ public interface TelegramApi :
 
     public suspend fun sendVideoNote(
         chatId: ChatId,
-        note: Any,
+        note: SendingDocument,
         duration: Long? = null,
         length: Long? = null,
         thumb: java.io.File? = null,
