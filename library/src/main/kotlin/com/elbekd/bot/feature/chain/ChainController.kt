@@ -17,12 +17,12 @@ internal object ChainController {
         activeChain.jumpTo(label)
     }
 
-    fun jumpToAndFire(label: String, message: Message) {
+    suspend fun jumpToAndFire(label: String, message: Message) {
         jumpTo(label, message)
         handle(message)
     }
 
-    fun canHandle(message: Message): Boolean {
+    suspend fun canHandle(message: Message): Boolean {
         val chatId = message.chat.id
         val activeChain = activeChains[chatId]
 
@@ -33,7 +33,7 @@ internal object ChainController {
         return registeredChains.any { chain -> chain.canFire(message) }
     }
 
-    fun handle(message: Message) {
+    suspend fun handle(message: Message) {
         val chatId = message.chat.id
         val activeChain = activeChains[chatId]
 

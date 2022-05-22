@@ -5,11 +5,11 @@ import java.util.LinkedList
 
 public class ChainBuilder private constructor(
     private val label: String,
-    private val predicate: (Message) -> Boolean,
-    private val action: (Message) -> Unit
+    private val predicate: suspend (Message) -> Boolean,
+    private val action: suspend (Message) -> Unit
 ) {
 
-    private constructor(trigger: String, triggerAction: (Message) -> Unit) : this(
+    private constructor(trigger: String, triggerAction: suspend (Message) -> Unit) : this(
         trigger,
         predicate = { msg: Message -> msg.text == trigger },
         action = triggerAction
@@ -32,7 +32,7 @@ public class ChainBuilder private constructor(
     public fun then(
         label: String? = null,
         isTerminal: Boolean = false,
-        action: (Message) -> Unit
+        action: suspend (Message) -> Unit
     ): ChainBuilder = apply {
         val nodeLabel = label ?: createNextLabel()
         val node = Chain.Node(nodeLabel, isTerminal, action)
@@ -53,9 +53,9 @@ public class ChainBuilder private constructor(
     private fun createNextLabel() = "$label-${chainList.size}"
 
     internal companion object {
-        fun with(trigger: String, action: (Message) -> Unit) = ChainBuilder(trigger, action)
+        fun with(trigger: String, action: suspend (Message) -> Unit) = ChainBuilder(trigger, action)
 
-        fun with(label: String, predicate: (Message) -> Boolean, action: (Message) -> Unit) =
+        fun with(label: String, predicate: suspend (Message) -> Boolean, action: suspend (Message) -> Unit) =
             ChainBuilder(label, predicate, action)
     }
 }
