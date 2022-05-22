@@ -52,118 +52,85 @@ public interface Bot : TelegramApi {
     public fun stop()
 
     /**
-     * @param action called on [Message] update
+     * @param action called on [Message] update.
+     * Pass `null` to remove handler
      */
-    public fun onMessage(action: suspend (Message) -> Unit)
-
-    /**
-     * Removes [Message] update action
-     */
-    public fun removeMessageAction()
+    public fun onMessage(action: (suspend (Message) -> Unit)?)
 
     /**
      * @param action called if [Message] has been edited
+     * Pass `null` to remove handler
      */
-    public fun onEditedMessage(action: suspend (Message) -> Unit)
-
-    /**
-     * Removes edited [Message] update action
-     */
-    public fun removeEditedMessageAction()
+    public fun onEditedMessage(action: (suspend (Message) -> Unit)?)
 
     /**
      * @param action called on [channel post][Message] update
+     * Pass `null` to remove handler
      */
-    public fun onChannelPost(action: suspend (Message) -> Unit)
-
-    /**
-     * Removes [channel post][Message] update action
-     */
-    public fun removeChannelPostAction()
+    public fun onChannelPost(action: (suspend (Message) -> Unit)?)
 
     /**
      * @param action called if [channel post][Message] has been edited
+     * Pass `null` to remove handler
      */
-    public fun onEditedChannelPost(action: suspend (Message) -> Unit)
-
-    /**
-     * Removes [edited channel post][Message] update action
-     */
-    public fun removeEditedChannelPostAction()
+    public fun onEditedChannelPost(action: (suspend (Message) -> Unit)?)
 
     /**
      * @param action called on [InlineQuery] update
+     * Pass `null` to remove handler
      */
-    public fun onInlineQuery(action: suspend (InlineQuery) -> Unit)
-
-    /**
-     * Removes [InlineQuery] update action
-     */
-    public fun removeInlineQueryAction()
+    public fun onInlineQuery(action: (suspend (InlineQuery) -> Unit)?)
 
     /**
      * @param action called on [chosen inline query][ChosenInlineResult] update
+     * Pass `null` to remove handler
      */
-    public fun onChosenInlineQuery(action: suspend (ChosenInlineResult) -> Unit)
-
-    /**
-     * Removes [chosen inline query][ChosenInlineResult] update action
-     */
-    public fun removeChosenInlineQueryAction()
+    public fun onChosenInlineQuery(action: (suspend (ChosenInlineResult) -> Unit)?)
 
     /**
      * @param action called on [CallbackQuery] update
+     * Pass `null` to remove handler
      */
-    public fun onCallbackQuery(action: suspend (CallbackQuery) -> Unit)
-
-    /**
-     * Removes [CallbackQuery] update action
-     */
-    public fun removeCallbackQueryAction()
+    public fun onCallbackQuery(action: (suspend (CallbackQuery) -> Unit)?)
 
     /**
      * @param action called on [ShippingQuery] update
+     * Pass `null` to remove handler
      */
-    public fun onShippingQuery(action: suspend (ShippingQuery) -> Unit)
-
-    /**
-     * Removes [ShippingQuery] update action
-     */
-    public fun removeShippingQueryAction()
+    public fun onShippingQuery(action: (suspend (ShippingQuery) -> Unit)?)
 
     /**
      * @param action called on [PreCheckoutQuery] update
+     * Pass `null` to remove handler
      */
-    public fun onPreCheckoutQuery(action: suspend (PreCheckoutQuery) -> Unit)
-
-    /**
-     * Removes [PreCheckoutQuery] update action
-     */
-    public fun removePreCheckoutQueryAction()
+    public fun onPreCheckoutQuery(action: (suspend (PreCheckoutQuery) -> Unit)?)
 
     /**
      * @param command bot command which starts with `/`
      * @param action callback for the given `command` with [Message] parameter
-     * and optional `argument` parameter
+     * and optional `argument` parameter. Pass `null` to remove handler
      *
      * Check [Telegram Bot Commands](https://core.telegram.org/bots#commands)
      */
-    public fun onCommand(command: String, action: suspend (Pair<Message, String?>) -> Unit)
+    public fun onCommand(command: String, action: (suspend (Pair<Message, String?>) -> Unit)?)
 
     /**
-     * @param data trigger provided via `callback_data` field of [InlineKeyboardButton][com.github.elbekd.bot.types.InlineKeyboardButton]
-     * @param action callback for the given `data` with [CallbackQuery] parameter
+     * @param data trigger provided via `callback_data` field of [InlineKeyboardButton][com.elbekd.bot.types.InlineKeyboardButton]
+     * @param action callback for the given `data` with [CallbackQuery] parameter.
+     * Pass `null` to remove handler
      */
-    public fun onCallbackQuery(data: String, action: suspend (CallbackQuery) -> Unit)
+    public fun onCallbackQuery(data: String, action: (suspend (CallbackQuery) -> Unit)?)
 
     /**
      * @param query trigger provided via `query` field of [InlineQuery]
-     * @param action callback for the given `query` with [InlineQuery] parameter
+     * @param action callback for the given `query` with [InlineQuery] parameter.
+     * Pass `null` to remove handler
      */
-    public fun onInlineQuery(query: String, action: suspend (InlineQuery) -> Unit)
+    public fun onInlineQuery(query: String, action: (suspend (InlineQuery) -> Unit)?)
 
     /**
      * Triggered if no matching update handler found.
+     * Pass `null` to remove handler
      */
-    public fun onAnyUpdate(action: suspend (Update) -> Unit)
+    public fun onAnyUpdate(action: (suspend (Update) -> Unit)?)
 }

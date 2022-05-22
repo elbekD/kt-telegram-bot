@@ -16,7 +16,7 @@ public interface TelegramUpdatesApi {
         url: String,
         certificate: java.io.File? = null,
         ipAddress: String? = null,
-        maxConnections: Long? = null,
+        maxConnections: Int? = null,
         allowedUpdates: List<AllowedUpdate>? = null,
         dropPendingUpdates: Boolean? = null
     ): Boolean

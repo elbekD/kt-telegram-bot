@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 2.1.1
+- added `SendingDocument` abstraction
+- chain methods marked as `suspend`
+
 ## Version 2.0.0
 - Update Bot API to 6.0
 - Brings major changes like
