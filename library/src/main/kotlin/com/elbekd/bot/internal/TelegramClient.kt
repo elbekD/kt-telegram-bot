@@ -7,6 +7,10 @@ import com.elbekd.bot.model.internal.*
 import com.elbekd.bot.types.*
 import com.elbekd.bot.util.Action
 import com.elbekd.bot.util.AllowedUpdate
+import com.elbekd.bot.util.SendingByteArray
+import com.elbekd.bot.util.SendingDocument
+import com.elbekd.bot.util.SendingFile
+import com.elbekd.bot.util.SendingString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
@@ -98,7 +102,7 @@ internal class TelegramClient(token: String) : TelegramApi {
     private suspend fun sendFile(
         type: String,
         chatId: ChatId,
-        file: Any,
+        file: SendingDocument,
         opts: Map<String, Any?>,
         thumb: File? = null,
         method: String = type
@@ -107,12 +111,12 @@ internal class TelegramClient(token: String) : TelegramApi {
         form.addFormDataPart(ApiConstants.CHAT_ID, chatId.toString())
         addOptsToForm(form, opts)
 
-        when (file) {
-            is ByteArray -> form.addFormDataPart(type, "content", file.toRequestBody(null))
-            is File -> form.addFormDataPart(type, file.name, file.asRequestBody(null))
-            is String -> form.addFormDataPart(type, file)
-            else -> throw IllegalArgumentException("Unsupported file object. Supported types: ByteArray, File, String.")
+        val content = when (file) {
+            is SendingByteArray -> file.content.toRequestBody(null)
+            is SendingString -> file.content.toRequestBody(null)
+            is SendingFile -> file.file.asRequestBody(null)
         }
+        form.addFormDataPart(type, file.fileName, content)
 
         thumb?.let {
             form.addFormDataPart("attach://${it.name}", it.name, it.asRequestBody(null))
@@ -363,7 +367,7 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     override suspend fun sendPhoto(
         chatId: ChatId,
-        photo: Any,
+        photo: SendingDocument,
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
@@ -392,7 +396,7 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     override suspend fun sendAudio(
         chatId: ChatId,
-        audio: Any,
+        audio: SendingDocument,
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
@@ -429,7 +433,7 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     override suspend fun sendDocument(
         chatId: ChatId,
-        document: Any,
+        document: SendingDocument,
         thumb: File?,
         caption: String?,
         parseMode: ParseMode?,
@@ -462,7 +466,7 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     override suspend fun sendVideo(
         chatId: ChatId,
-        video: Any,
+        video: SendingDocument,
         duration: Long?,
         width: Long?,
         height: Long?,
@@ -501,7 +505,7 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     override suspend fun sendAnimation(
         chatId: ChatId,
-        animation: Any,
+        animation: SendingDocument,
         duration: Long?,
         width: Long?,
         height: Long?,
@@ -538,7 +542,7 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     override suspend fun sendVoice(
         chatId: ChatId,
-        voice: Any,
+        voice: SendingDocument,
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
@@ -569,7 +573,7 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     override suspend fun sendVideoNote(
         chatId: ChatId,
-        note: Any,
+        note: SendingDocument,
         duration: Long?,
         length: Long?,
         thumb: File?,

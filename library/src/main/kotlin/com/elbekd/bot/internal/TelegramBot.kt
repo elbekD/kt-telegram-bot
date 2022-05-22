@@ -5,6 +5,7 @@ import com.elbekd.bot.model.ChatId
 import com.elbekd.bot.types.*
 import com.elbekd.bot.util.Action
 import com.elbekd.bot.util.AllowedUpdate
+import com.elbekd.bot.util.SendingDocument
 import java.io.File
 
 internal abstract class TelegramBot protected constructor(username: String?, tk: String) : Bot {
@@ -224,7 +225,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
 
     override suspend fun sendPhoto(
         chatId: ChatId,
-        photo: Any,
+        photo: SendingDocument,
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
@@ -248,7 +249,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
 
     override suspend fun sendAudio(
         chatId: ChatId,
-        audio: Any,
+        audio: SendingDocument,
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
@@ -280,7 +281,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
 
     override suspend fun sendDocument(
         chatId: ChatId,
-        document: Any,
+        document: SendingDocument,
         thumb: File?,
         caption: String?,
         parseMode: ParseMode?,
@@ -308,7 +309,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
 
     override suspend fun sendVideo(
         chatId: ChatId,
-        video: Any,
+        video: SendingDocument,
         duration: Long?,
         width: Long?,
         height: Long?,
@@ -342,7 +343,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
 
     override suspend fun sendAnimation(
         chatId: ChatId,
-        animation: Any,
+        animation: SendingDocument,
         duration: Long?,
         width: Long?,
         height: Long?,
@@ -374,7 +375,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
 
     override suspend fun sendVoice(
         chatId: ChatId,
-        voice: Any,
+        voice: SendingDocument,
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
@@ -400,7 +401,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
 
     override suspend fun sendVideoNote(
         chatId: ChatId,
-        note: Any,
+        note: SendingDocument,
         duration: Long?,
         length: Long?,
         thumb: File?,
