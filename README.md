@@ -7,6 +7,10 @@ Method names are the same as in [API](https://core.telegram.org/bots/api#availab
 
 ## Changelog
 
+#### Version 2.1.0
+- added `SendingDocument` abstraction
+- chain methods marked as `suspend`
+
 #### Version 2.0.0
 - Update Bot API to 6.0
 - Brings major changes like
@@ -16,12 +20,6 @@ Method names are the same as in [API](https://core.telegram.org/bots/api#availab
     for `String` and `Int` object to convert them to `ChatId` instance
   - added separate interfaces for some standalone APIs.
     `TelegramApi` extends them all
-
-#### Version 1.3.8
-- Fix [issue](https://github.com/elbekD/kt-telegram-bot/issues/35)
-
-#### Version 1.3.7
-- Update Bot API to 5.0
 
 [Changelog history](./CHANGELOG.md)
 
