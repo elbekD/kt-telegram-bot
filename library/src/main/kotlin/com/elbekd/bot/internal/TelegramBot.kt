@@ -12,9 +12,9 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     private val updateHandler = UpdateHandler(username)
     private val client = TelegramClient(tk)
 
-    protected fun onUpdate(updates: List<Update>) = updates.forEach { onUpdate(it) }
+    protected suspend fun onUpdate(updates: List<Update>) = updates.forEach { onUpdate(it) }
 
-    protected fun onUpdate(update: Update) {
+    protected suspend fun onUpdate(update: Update) {
         updateHandler.handle(update)
     }
 
@@ -22,91 +22,55 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         client.onStop()
     }
 
-    override fun onMessage(action: suspend (Message) -> Unit) {
+    override fun onMessage(action: (suspend (Message) -> Unit)?) {
         updateHandler.on(AllowedUpdate.Message, action)
     }
 
-    override fun removeMessageAction() {
-        updateHandler.on<Message>(AllowedUpdate.Message, null)
-    }
-
-    override fun onEditedMessage(action: suspend (Message) -> Unit) {
+    override fun onEditedMessage(action: (suspend (Message) -> Unit)?) {
         updateHandler.on(AllowedUpdate.EditedMessage, action)
     }
 
-    override fun removeEditedMessageAction() {
-        updateHandler.on<Message>(AllowedUpdate.EditedMessage, null)
-    }
-
-    override fun onChannelPost(action: suspend (Message) -> Unit) {
+    override fun onChannelPost(action: (suspend (Message) -> Unit)?) {
         updateHandler.on(AllowedUpdate.ChannelPost, action)
     }
 
-    override fun removeChannelPostAction() {
-        updateHandler.on<Message>(AllowedUpdate.ChannelPost, null)
-    }
-
-    override fun onEditedChannelPost(action: suspend (Message) -> Unit) {
+    override fun onEditedChannelPost(action: (suspend (Message) -> Unit)?) {
         updateHandler.on(AllowedUpdate.EditedChannelPost, action)
     }
 
-    override fun removeEditedChannelPostAction() {
-        updateHandler.on<Message>(AllowedUpdate.EditedChannelPost, null)
-    }
-
-    override fun onInlineQuery(action: suspend (InlineQuery) -> Unit) {
+    override fun onInlineQuery(action: (suspend (InlineQuery) -> Unit)?) {
         updateHandler.on(AllowedUpdate.InlineQuery, action)
     }
 
-    override fun removeInlineQueryAction() {
-        updateHandler.on<InlineQuery>(AllowedUpdate.InlineQuery, null)
-    }
-
-    override fun onChosenInlineQuery(action: suspend (ChosenInlineResult) -> Unit) {
+    override fun onChosenInlineQuery(action: (suspend (ChosenInlineResult) -> Unit)?) {
         updateHandler.on(AllowedUpdate.ChosenInlineQuery, action)
     }
 
-    override fun removeChosenInlineQueryAction() {
-        updateHandler.on<ChosenInlineResult>(AllowedUpdate.ChosenInlineQuery, null)
-    }
-
-    override fun onCallbackQuery(action: suspend (CallbackQuery) -> Unit) {
+    override fun onCallbackQuery(action: (suspend (CallbackQuery) -> Unit)?) {
         updateHandler.on(AllowedUpdate.CallbackQuery, action)
     }
 
-    override fun removeCallbackQueryAction() {
-        updateHandler.on<CallbackQuery>(AllowedUpdate.CallbackQuery, null)
-    }
-
-    override fun onShippingQuery(action: suspend (ShippingQuery) -> Unit) {
+    override fun onShippingQuery(action: (suspend (ShippingQuery) -> Unit)?) {
         updateHandler.on(AllowedUpdate.ShippingQuery, action)
     }
 
-    override fun removeShippingQueryAction() {
-        updateHandler.on<ShippingQuery>(AllowedUpdate.ShippingQuery, null)
-    }
-
-    override fun onPreCheckoutQuery(action: suspend (PreCheckoutQuery) -> Unit) {
+    override fun onPreCheckoutQuery(action: (suspend (PreCheckoutQuery) -> Unit)?) {
         updateHandler.on(AllowedUpdate.PreCheckoutQuery, action)
     }
 
-    override fun removePreCheckoutQueryAction() {
-        updateHandler.on<PreCheckoutQuery>(AllowedUpdate.PreCheckoutQuery, null)
-    }
-
-    override fun onCommand(command: String, action: suspend (Pair<Message, String?>) -> Unit) {
+    override fun onCommand(command: String, action: (suspend (Pair<Message, String?>) -> Unit)?) {
         updateHandler.onCommand(command, action)
     }
 
-    override fun onCallbackQuery(data: String, action: suspend (CallbackQuery) -> Unit) {
+    override fun onCallbackQuery(data: String, action: (suspend (CallbackQuery) -> Unit)?) {
         updateHandler.onCallbackQuery(data, action)
     }
 
-    override fun onInlineQuery(query: String, action: suspend (InlineQuery) -> Unit) {
+    override fun onInlineQuery(query: String, action: (suspend (InlineQuery) -> Unit)?) {
         updateHandler.onInlineQuery(query, action)
     }
 
-    override fun onAnyUpdate(action: suspend (Update) -> Unit) {
+    override fun onAnyUpdate(action: (suspend (Update) -> Unit)?) {
         updateHandler.onAnyUpdate(action)
     }
 
@@ -150,7 +114,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         url: String,
         certificate: File?,
         ipAddress: String?,
-        maxConnections: Long?,
+        maxConnections: Int?,
         allowedUpdates: List<AllowedUpdate>?,
         dropPendingUpdates: Boolean?
     ) = client.setWebhook(url, certificate, ipAddress, maxConnections, allowedUpdates, dropPendingUpdates)

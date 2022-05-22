@@ -5,19 +5,19 @@ import com.elbekd.bot.types.Update
 import jakarta.servlet.http.HttpServlet
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import org.eclipse.jetty.server.HttpConfiguration
-import org.eclipse.jetty.server.HttpConnectionFactory
-import org.eclipse.jetty.server.SecureRequestCustomizer
-import org.eclipse.jetty.server.Server
-import org.eclipse.jetty.server.ServerConnector
-import org.eclipse.jetty.server.SslConnectionFactory
+import org.eclipse.jetty.server.*
 import org.eclipse.jetty.server.handler.DefaultHandler
 import org.eclipse.jetty.server.handler.HandlerCollection
 import org.eclipse.jetty.servlet.ServletContextHandler
 import org.eclipse.jetty.servlet.ServletHolder
 import org.eclipse.jetty.util.ssl.SslContextFactory
+import kotlin.coroutines.CoroutineContext
 
 internal class WebhookBot(
     username: String?,
@@ -26,6 +26,10 @@ internal class WebhookBot(
 ) : TelegramBot(username, token) {
 
     private val server: Server = Server()
+    private val scope = object : CoroutineScope {
+        override val coroutineContext: CoroutineContext
+            get() = Job()
+    }
 
     init {
         webhookOptions.serverOptions.tlsOptions?.let { tls ->
@@ -69,21 +73,24 @@ internal class WebhookBot(
     }
 
     override fun start() {
-//        server.start()
-//        deleteWebhook(webhookOptions.dropPendingUpdates)
-//        setWebhook(
-//            webhookOptions.url,
-//            webhookOptions.certificate,
-//            webhookOptions.ipAddress,
-//            webhookOptions.maxConnections,
-//            webhookOptions.allowedUpdates,
-//            webhookOptions.dropPendingUpdates
-//        )
-//        server.join()
+        server.start()
+        scope.launch {
+            deleteWebhook(webhookOptions.dropPendingUpdates)
+            setWebhook(
+                webhookOptions.url,
+                webhookOptions.certificate,
+                webhookOptions.ipAddress,
+                webhookOptions.maxConnections,
+                webhookOptions.allowedUpdates,
+                webhookOptions.dropPendingUpdates
+            )
+        }
+        server.join()
     }
 
     override fun stop() {
         server.stop()
+        scope.cancel()
     }
 
     private fun createServletHolder() = ServletHolder("Webhook bot servlet", createServlet())
@@ -92,7 +99,7 @@ internal class WebhookBot(
         override fun doPost(req: HttpServletRequest, resp: HttpServletResponse) {
             val content = req.inputStream?.bufferedReader()?.readText() ?: return
             val updates = Json.decodeFromString<Update>(content)
-            onUpdate(updates)
+            scope.launch { onUpdate(updates) }
         }
     }
 }

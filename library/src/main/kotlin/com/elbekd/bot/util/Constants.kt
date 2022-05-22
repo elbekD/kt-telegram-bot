@@ -30,7 +30,22 @@ public enum class AllowedUpdate {
     ShippingQuery,
 
     @SerialName("pre_checkout_query")
-    PreCheckoutQuery
+    PreCheckoutQuery,
+
+    @SerialName("poll")
+    Poll,
+
+    @SerialName("poll_answer")
+    PollAnswer,
+
+    @SerialName("my_chat_member")
+    MyChatMember,
+
+    @SerialName("chat_member")
+    ChatMember,
+
+    @SerialName("chat_join_request")
+    ChatJoinRequest,
 }
 
 @Serializable
@@ -66,5 +81,5 @@ public enum class Action {
     RecordVideoNote,
 
     @SerialName("upload_video_note")
-    UploadVideoNote
+    UploadVideoNote,
 }

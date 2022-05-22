@@ -1,4 +1,5 @@
 # kt-telegram-bot
+
 [![](https://jitpack.io/v/elbekD/kt-telegram-bot.svg)](https://jitpack.io/#elbekD/kt-telegram-bot)
 
 Convenient way to build Telegram bots using powerful Kotlin language.
@@ -6,6 +7,10 @@ Support for [Telegram Bot API 5.7](https://core.telegram.org/bots/api).
 Method names are the same as in [API](https://core.telegram.org/bots/api#available-methods).
 
 ## Changelog
+
+#### Version 2.1.0
+- added `SendingDocument` abstraction
+- chain methods marked as `suspend`
 
 #### Version 2.0.0
 - Update Bot API to 6.0
@@ -16,12 +21,6 @@ Method names are the same as in [API](https://core.telegram.org/bots/api#availab
     for `String` and `Int` object to convert them to `ChatId` instance
   - added separate interfaces for some standalone APIs.
     `TelegramApi` extends them all
-
-#### Version 1.3.8
-- Fix [issue](https://github.com/elbekD/kt-telegram-bot/issues/35)
-
-#### Version 1.3.7
-- Update Bot API to 5.0
 
 [Changelog history](./CHANGELOG.md)
 
@@ -34,7 +33,9 @@ Method names are the same as in [API](https://core.telegram.org/bots/api#availab
 - IDE (*optionally*)
 
 ### Installation
+
 Gradle
+
 ```groovy
 repositories {
     maven { url "https://jitpack.io" }
@@ -44,7 +45,9 @@ dependencies {
     implementation "com.elbekD:kt-telegram-bot:$version"
 }
 ```
+
 Or Gradle Kotlin DSL
+
 ```kotlin
 repositories {
     maven("https://jitpack.io")
@@ -54,8 +57,8 @@ dependencies {
     compile("com.elbekD:kt-telegram-bot:${version}")
 }
 ```
-Maven
 
+Maven
 ```xml
 <repository>
     <id>jitpack.io</id>
@@ -70,6 +73,7 @@ Maven
 ```
 
 ## Quick start
+
 ```kotlin
 fun main(args: Array<String>) {
     val token = "<TOKEN>"
@@ -82,7 +86,8 @@ fun main(args: Array<String>) {
 ```
 
 #### Chain
-It is common case when you need to ask the user several questions sequentially and process user errors. Now you can create such chains easily. Sea the example below. Do not forget to call `build()` method at the end.
+It is common case when you need to ask the user several questions sequentially and process user errors. Now you can
+create such chains easily. Sea the example below. Do not forget to call `build()` method at the end.
 
 ```kotlin
 fun main() {
@@ -90,9 +95,9 @@ fun main() {
     val username = "<BOT USERNAME>"
     val bot = Bot.createPolling(username, token)
 
-    bot.chain("/start") { msg -> bot.sendMessage(msg.chat.id, "Hi! What is your name?") }
-        .then { msg -> bot.sendMessage(msg.chat.id, "Nice to meet you, ${msg.text}! Send something to me") }
-        .then { msg -> bot.sendMessage(msg.chat.id, "Fine! See you soon") }
+    bot.chain("/start") { msg -> bot.sendMessage(msg.chat.id.toChatId(), "Hi! What is your name?") }
+        .then { msg -> bot.sendMessage(msg.chat.id.toChatId(), "Nice to meet you, ${msg.text}! Send something to me") }
+        .then { msg -> bot.sendMessage(msg.chat.id.toChatId(), "Fine! See you soon") }
         .build()
 
     bot.chain(
@@ -100,8 +105,8 @@ fun main() {
         predicate = { msg -> msg.location != null },
         action = { msg ->
             bot.sendMessage(
-                msg.chat.id,
-                "Fine, u've sent me a location. Is this where you want to order a taxi?(yes|no)"
+                msg.chat.id.toChatId(),
+                "Fine, you've sent me a location. Confirm the order?(yes|no)"
             )
         })
         .then("answer_choice") { msg ->
@@ -109,16 +114,16 @@ fun main() {
                 "yes" -> bot.jumpToAndFire("order_taxi", msg)
                 "no" -> bot.jumpToAndFire("cancel_ordering", msg)
                 else -> {
-                    bot.sendMessage(msg.chat.id, "Oops, I don't understand you. Just answer yes or no?")
+                    bot.sendMessage(msg.chat.id.toChatId(), "Oops, I don't understand you. Just answer yes or no?")
                     bot.jumpTo("answer_choice", msg)
                 }
             }
         }
-        .then("order_taxi", isTerminal = true) { msg -> 
-            bot.sendMessage(msg.chat.id, "Fine! Taxi is coming") 
+        .then("order_taxi", isTerminal = true) { msg ->
+            bot.sendMessage(msg.chat.id.toChatId(), "Fine! Taxi is coming")
         }
-        .then("cancel_ordering", isTerminal = true) { msg -> 
-            bot.sendMessage(msg.chat.id, "Ok! See you next time") 
+        .then("cancel_ordering", isTerminal = true) { msg ->
+            bot.sendMessage(msg.chat.id.toChatId(), "Ok! See you next time")
         }
         .build()
 
@@ -127,12 +132,12 @@ fun main() {
 ```
 
 ## Deployment
-Use [ShadowJar](https://github.com/johnrengelman/shadow) plugin or any other way you like. 
+Use [ShadowJar](https://github.com/johnrengelman/shadow) plugin or any other way you like.
 
 ## [Examples](/examples/src/main/kotlin)
 - [Long polling bot](/examples/src/main/kotlin/LongPollingExample.kt)
 - [Webhook bot](/examples/src/main/kotlin/WebhookExample.kt)
-and [nginx configuration file](/examples/bot.conf)
+  and [nginx configuration file](/examples/bot.conf)
 
 ## Bot methods
 See details in [source code](/library/src/main/kotlin/com/elbekd/bot/Bot.kt).

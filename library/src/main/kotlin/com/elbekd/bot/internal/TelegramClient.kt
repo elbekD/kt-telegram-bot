@@ -265,7 +265,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         url: String,
         certificate: File?,
         ipAddress: String?,
-        maxConnections: Long?,
+        maxConnections: Int?,
         allowedUpdates: List<AllowedUpdate>?,
         dropPendingUpdates: Boolean?
     ): Boolean {
