@@ -8,6 +8,10 @@ Method names are the same as in [API](https://core.telegram.org/bots/api#availab
 
 ## Changelog
 
+#### Version 2.1.2
+- fixed `PassportElementError` serialization
+- fixed `ChatMember` serialization
+
 #### Version 2.1.1
 - added `SendingDocument` abstraction
 - chain methods marked as `suspend`

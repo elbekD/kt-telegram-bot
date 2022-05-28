@@ -2,6 +2,7 @@ package com.elbekd.bot.types
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonClassDiscriminator
 
 @Serializable
 public data class PassportData(
@@ -39,12 +40,14 @@ public data class EncryptedCredentials(
 )
 
 @Serializable
+@JsonClassDiscriminator("source")
 public sealed class PassportElementError(
     @SerialName("source") public val source: String
 )
 
 @Serializable
-public class PassportElementErrorDataField(
+@SerialName("data")
+public data class PassportElementErrorDataField(
     @SerialName("type") public val type: String,
     @SerialName("message") public val message: String,
     @SerialName("field_name") public val field_name: String,
@@ -52,56 +55,64 @@ public class PassportElementErrorDataField(
 ) : PassportElementError(source = "data")
 
 @Serializable
-public class PassportElementErrorFrontSide(
+@SerialName("front_side")
+public data class PassportElementErrorFrontSide(
     @SerialName("type") public val type: String,
     @SerialName("message") public val message: String,
     @SerialName("file_hash") public val file_hash: String
 ) : PassportElementError(source = "front_side")
 
 @Serializable
-public class PassportElementErrorReverseSide(
+@SerialName("reverse_side")
+public data class PassportElementErrorReverseSide(
     @SerialName("type") public val type: String,
     @SerialName("message") public val message: String,
     @SerialName("file_hash") public val file_hash: String
 ) : PassportElementError(source = "reverse_side")
 
 @Serializable
-public class PassportElementErrorSelfie(
+@SerialName("selfie")
+public data class PassportElementErrorSelfie(
     @SerialName("type") public val type: String,
     @SerialName("message") public val message: String,
     @SerialName("file_hash") public val file_hash: String
 ) : PassportElementError(source = "selfie")
 
 @Serializable
-public class PassportElementErrorFile(
+@SerialName("file")
+public data class PassportElementErrorFile(
     @SerialName("type") public val type: String,
     @SerialName("message") public val message: String,
     @SerialName("file_hash") public val file_hash: String
 ) : PassportElementError(source = "file")
 
 @Serializable
-public class PassportElementErrorFiles(
+@SerialName("files")
+public data class PassportElementErrorFiles(
     @SerialName("type") public val type: String,
     @SerialName("message") public val message: String,
     @SerialName("file_hashes") public val file_hashes: List<String>
 ) : PassportElementError(source = "files")
 
 @Serializable
-public class PassportElementErrorTranslationFile(
+@SerialName("translation_file")
+public data class PassportElementErrorTranslationFile(
     @SerialName("type") public val type: String,
     @SerialName("message") public val message: String,
     @SerialName("file_hash") public val file_hash: String
 ) : PassportElementError(source = "translation_file")
 
 @Serializable
-public class PassportElementErrorTranslationFiles(
+@SerialName("translation_files")
+public data class PassportElementErrorTranslationFiles(
     @SerialName("type") public val type: String,
     @SerialName("message") public val message: String,
     @SerialName("file_hashes") public val file_hashes: List<String>
 ) : PassportElementError(source = "translation_files")
 
 @Serializable
-public class PassportElementErrorUnspecified(
+@SerialName("unspecified")
+public data class PassportElementErrorUnspecified(
     @SerialName("type") public val type: String,
     @SerialName("message") public val message: String,
     @SerialName("element_hash") public val element_hash: String
@@ -146,5 +157,5 @@ public enum class ElementType {
     PHONE_NUMBER,
 
     @SerialName("email")
-    EMAIL
+    EMAIL,
 }
