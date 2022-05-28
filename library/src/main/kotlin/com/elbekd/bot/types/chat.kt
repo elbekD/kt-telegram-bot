@@ -2,6 +2,7 @@ package com.elbekd.bot.types
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonClassDiscriminator
 
 @Serializable
 public data class Chat(
@@ -55,7 +56,9 @@ public data class ChatPhoto(
 )
 
 @Serializable
+@JsonClassDiscriminator("status")
 public sealed class ChatMember {
+    @SerialName("creator")
     public data class Owner(
         @SerialName("status") val status: String,
         @SerialName("user") val user: User,
@@ -63,6 +66,7 @@ public sealed class ChatMember {
         @SerialName("custom_title") val customTitle: String? = null
     ) : ChatMember()
 
+    @SerialName("administrator")
     public data class Administrator(
         @SerialName("status") val status: String,
         @SerialName("user") val user: User,
@@ -82,12 +86,14 @@ public sealed class ChatMember {
     ) : ChatMember()
 
     @Serializable
+    @SerialName("member")
     public data class Member(
         @SerialName("status") val status: String,
         @SerialName("user") val user: User
     ) : ChatMember()
 
     @Serializable
+    @SerialName("restricted")
     public data class Restricted(
         @SerialName("status") val status: String,
         @SerialName("user") val user: User,
@@ -104,12 +110,14 @@ public sealed class ChatMember {
     ) : ChatMember()
 
     @Serializable
+    @SerialName("left")
     public data class Left(
         @SerialName("status") val status: String,
         @SerialName("user") val user: User
     ) : ChatMember()
 
     @Serializable
+    @SerialName("kicked")
     public data class Banned(
         @SerialName("status") val status: String,
         @SerialName("user") val user: User,
