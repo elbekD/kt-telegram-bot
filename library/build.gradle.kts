@@ -35,6 +35,7 @@ tasks.withType<Jar> {
 
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi"
+    kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlinx.serialization.InternalSerializationApi"
 }
 
 tasks {
