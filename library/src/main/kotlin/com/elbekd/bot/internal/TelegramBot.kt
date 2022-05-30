@@ -766,7 +766,6 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         inlineMessageId: String?,
         replyMarkup: InlineKeyboardMarkup?
     ): Message {
-        validateIds(chatId, messageId, inlineMessageId)
         return client.editMessageReplyMarkup(chatId, messageId, inlineMessageId, replyMarkup)
     }
 

@@ -8,6 +8,9 @@ Method names are the same as in [API](https://core.telegram.org/bots/api#availab
 
 ## Changelog
 
+#### Version 2.1.3
+- fixed `ChatId` serialization
+
 #### Version 2.1.2
 - fixed `PassportElementError` serialization
 - fixed `ChatMember` serialization
@@ -15,16 +18,6 @@ Method names are the same as in [API](https://core.telegram.org/bots/api#availab
 #### Version 2.1.1
 - added `SendingDocument` abstraction
 - chain methods marked as `suspend`
-
-#### Version 2.0.0
-- Update Bot API to 6.0
-- Brings major changes like
-  - moving from `future` pattern to Kotlin Coroutines
-  - package changed from com.elbek**D**.* to com.elbek**d**.*
-  - added `ChatId` sealed class and extension methods
-    for `String` and `Int` object to convert them to `ChatId` instance
-  - added separate interfaces for some standalone APIs.
-    `TelegramApi` extends them all
 
 [Changelog history](./CHANGELOG.md)
 

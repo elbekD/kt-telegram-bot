@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 2.1.3
+- fixed `ChatId` serialization
+
 ## Version 2.1.2
 - fixed `PassportElementError` serialization
 - fixed `ChatMember` serialization

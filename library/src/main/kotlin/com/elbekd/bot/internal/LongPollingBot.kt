@@ -27,10 +27,9 @@ internal class LongPollingBot(
         super.onStop()
     }
 
-    private suspend fun poll() {
+    private tailrec suspend fun poll() {
         if (pollingThread.isShutdown) return
 
-//        while (pollingThread.isShutdown.not()) {
         try {
             val id = lastUpdateId
             val offset = if (id != Int.MIN_VALUE) id + 1 else null
@@ -47,10 +46,9 @@ internal class LongPollingBot(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-        } finally {
-            poll()
         }
-//        }
+
+        poll()
     }
 
     private companion object {

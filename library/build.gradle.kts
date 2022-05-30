@@ -53,7 +53,7 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "com.elbekd"
             artifactId = "kt-telegram-bot"
-            version = "2.1.2"
+            version = "2.1.3"
 
             from(components["java"])
         }

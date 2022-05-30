@@ -50,7 +50,7 @@ public data class ReplyKeyboardRemove(
 
 @Serializable
 public data class InlineKeyboardMarkup(
-    @SerialName("inline_keyboard") val inline_keyboard: List<List<InlineKeyboardButton>>
+    @SerialName("inline_keyboard") val inlineKeyboard: List<List<InlineKeyboardButton>>
 ) : ReplyKeyboard()
 
 @Serializable
