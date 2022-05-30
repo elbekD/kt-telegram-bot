@@ -2,15 +2,14 @@ package com.elbekd.bot.model.internal
 
 import com.elbekd.bot.model.ChatId
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.PolymorphicKind
+import kotlinx.serialization.descriptors.buildSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 internal class ChatIdSerializer : KSerializer<ChatId> {
-    private val strategy by lazy { ChatId.serializer() }
 
-    override val descriptor: SerialDescriptor
-        get() = strategy.descriptor
+    override val descriptor = buildSerialDescriptor("ChatIdSerializer", PolymorphicKind.SEALED)
 
     override fun deserialize(decoder: Decoder): ChatId {
         try {
