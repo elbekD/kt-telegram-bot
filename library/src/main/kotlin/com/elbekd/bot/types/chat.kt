@@ -58,18 +58,27 @@ public data class ChatPhoto(
 @Serializable
 @JsonClassDiscriminator("status")
 public sealed class ChatMember {
+
+    @SerialName("status")
+    public abstract val status: String
+
+    @SerialName("user")
+    public abstract val user: User
+
+    @Serializable
     @SerialName("creator")
     public data class Owner(
-        @SerialName("status") val status: String,
-        @SerialName("user") val user: User,
+        override val status: String,
+        override val user: User,
         @SerialName("is_anonymous") val isAnonymous: Boolean? = null,
         @SerialName("custom_title") val customTitle: String? = null
     ) : ChatMember()
 
+    @Serializable
     @SerialName("administrator")
     public data class Administrator(
-        @SerialName("status") val status: String,
-        @SerialName("user") val user: User,
+        override val status: String,
+        override val user: User,
         @SerialName("can_be_edited") val canBeEdited: Boolean,
         @SerialName("is_anonymous") val isAnonymous: Boolean,
         @SerialName("can_manage_chat") val canManageChat: Boolean,
@@ -88,15 +97,15 @@ public sealed class ChatMember {
     @Serializable
     @SerialName("member")
     public data class Member(
-        @SerialName("status") val status: String,
-        @SerialName("user") val user: User
+        override val status: String,
+        override val user: User
     ) : ChatMember()
 
     @Serializable
     @SerialName("restricted")
     public data class Restricted(
-        @SerialName("status") val status: String,
-        @SerialName("user") val user: User,
+        override val status: String,
+        override val user: User,
         @SerialName("is_member") val isMember: Boolean,
         @SerialName("can_change_info") val canChangeInfo: Boolean,
         @SerialName("can_invite_users") val canInviteUsers: Boolean,
@@ -112,15 +121,15 @@ public sealed class ChatMember {
     @Serializable
     @SerialName("left")
     public data class Left(
-        @SerialName("status") val status: String,
-        @SerialName("user") val user: User
+        override val status: String,
+        override val user: User
     ) : ChatMember()
 
     @Serializable
     @SerialName("kicked")
     public data class Banned(
-        @SerialName("status") val status: String,
-        @SerialName("user") val user: User,
+        override val status: String,
+        override val user: User,
         @SerialName("until_date") val untilDate: Int
     ) : ChatMember()
 }
