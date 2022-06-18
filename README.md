@@ -8,6 +8,10 @@ Method names are the same as in [API](https://core.telegram.org/bots/api#availab
 
 ## Changelog
 
+#### Version 2.1.4
+- Common `ChatMember` `status` and `user` fields
+- fixed `Owner` and `Administrator` serialization
+
 #### Version 2.1.3
 - fixed `ChatId` serialization
 
