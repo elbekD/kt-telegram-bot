@@ -40,6 +40,30 @@ internal class SendInvoice(
 )
 
 @Serializable
+internal class CreateInvoiceLink(
+    @SerialName(ApiConstants.TITLE) val title: String,
+    @SerialName(ApiConstants.DESCRIPTION) val description: String,
+    @SerialName(ApiConstants.PAYLOAD) val payload: String,
+    @SerialName(ApiConstants.PROVIDER_TOKEN) val providerToken: String,
+    @SerialName(ApiConstants.CURRENCY) val currency: String,
+    @SerialName(ApiConstants.PRICES) val prices: List<LabeledPrice>,
+    @SerialName(ApiConstants.MAX_TIP_AMOUNT) val maxTipAmount: Int? = null,
+    @SerialName(ApiConstants.SUGGESTED_TIP_AMOUNTS) val suggestedTipAmount: List<Int>? = null,
+    @SerialName(ApiConstants.PROVIDER_DATA) val providerData: String? = null,
+    @SerialName(ApiConstants.PHOTO_URL) val photoUrl: String? = null,
+    @SerialName(ApiConstants.PHOTO_SIZE) val photoSize: Int? = null,
+    @SerialName(ApiConstants.PHOTO_WIDTH) val photoWidth: Int? = null,
+    @SerialName(ApiConstants.PHOTO_HEIGHT) val photoHeight: Int? = null,
+    @SerialName(ApiConstants.NEED_NAME) val needName: Boolean? = null,
+    @SerialName(ApiConstants.NEED_PHONE_NUMBER) val needPhoneNumber: Boolean? = null,
+    @SerialName(ApiConstants.NEED_EMAIL) val needEmail: Boolean? = null,
+    @SerialName(ApiConstants.NEED_SHIPPING_ADDRESS) val needShippingAddress: Boolean? = null,
+    @SerialName(ApiConstants.SEND_PHONE_NUMBER_TO_PROVIDER) val sendPhoneNumberToProvider: Boolean? = null,
+    @SerialName(ApiConstants.SEND_EMAIL_TO_PROVIDER) val sendEmailToProvider: Boolean? = null,
+    @SerialName(ApiConstants.IS_FLEXIBLE) val isFlexible: Boolean? = null
+)
+
+@Serializable
 internal class AnswerShippingQuery(
     @SerialName(ApiConstants.SHIPPING_QUERY_ID) val shippingQueryId: String,
     @SerialName(ApiConstants.OK) val ok: Boolean,

@@ -2,7 +2,33 @@ package com.elbekd.bot.internal
 
 import com.elbekd.bot.Bot
 import com.elbekd.bot.model.ChatId
-import com.elbekd.bot.types.*
+import com.elbekd.bot.types.BotCommand
+import com.elbekd.bot.types.BotCommandScope
+import com.elbekd.bot.types.CallbackQuery
+import com.elbekd.bot.types.ChatAdministratorRights
+import com.elbekd.bot.types.ChatInviteLink
+import com.elbekd.bot.types.ChatPermissions
+import com.elbekd.bot.types.ChosenInlineResult
+import com.elbekd.bot.types.GameHighScore
+import com.elbekd.bot.types.InlineKeyboardMarkup
+import com.elbekd.bot.types.InlineQuery
+import com.elbekd.bot.types.InlineQueryResult
+import com.elbekd.bot.types.InputMedia
+import com.elbekd.bot.types.LabeledPrice
+import com.elbekd.bot.types.MaskPosition
+import com.elbekd.bot.types.MenuButton
+import com.elbekd.bot.types.Message
+import com.elbekd.bot.types.MessageEntity
+import com.elbekd.bot.types.ParseMode
+import com.elbekd.bot.types.PassportElementError
+import com.elbekd.bot.types.Poll
+import com.elbekd.bot.types.PreCheckoutQuery
+import com.elbekd.bot.types.ReplyKeyboard
+import com.elbekd.bot.types.ShippingOption
+import com.elbekd.bot.types.ShippingQuery
+import com.elbekd.bot.types.Update
+import com.elbekd.bot.types.UpdateResponse
+import com.elbekd.bot.types.User
 import com.elbekd.bot.util.Action
 import com.elbekd.bot.util.AllowedUpdate
 import com.elbekd.bot.util.SendingDocument
@@ -12,9 +38,9 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     private val updateHandler = UpdateHandler(username)
     private val client = TelegramClient(tk)
 
-    protected suspend fun onUpdate(updates: List<Update>) = updates.forEach { onUpdate(it) }
+    protected suspend fun onUpdate(updates: List<Update>) = updates.forEach { updateHandler.handle(it) }
 
-    protected suspend fun onUpdate(update: Update) {
+    protected suspend fun onUpdate(update: UpdateResponse) {
         updateHandler.handle(update)
     }
 
@@ -116,8 +142,9 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         ipAddress: String?,
         maxConnections: Int?,
         allowedUpdates: List<AllowedUpdate>?,
-        dropPendingUpdates: Boolean?
-    ) = client.setWebhook(url, certificate, ipAddress, maxConnections, allowedUpdates, dropPendingUpdates)
+        dropPendingUpdates: Boolean?,
+        secretToken: String?,
+    ) = client.setWebhook(url, certificate, ipAddress, maxConnections, allowedUpdates, dropPendingUpdates, secretToken)
 
     override suspend fun deleteWebhook(dropPendingUpdates: Boolean?) = client.deleteWebhook(dropPendingUpdates)
 
@@ -964,6 +991,50 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         protectContent = protectContent,
         disableNotification = disableNotification,
         replyToMessageId = replyToMessageId
+    )
+
+    override suspend fun createInvoiceLink(
+        title: String,
+        description: String,
+        payload: String,
+        providerToken: String,
+        currency: String,
+        prices: List<LabeledPrice>,
+        maxTipAmount: Int?,
+        suggestedTipAmount: List<Int>?,
+        providerData: String?,
+        photoUrl: String?,
+        photoSize: Int?,
+        photoWidth: Int?,
+        photoHeight: Int?,
+        needName: Boolean?,
+        needPhoneNumber: Boolean?,
+        needEmail: Boolean?,
+        needShippingAddress: Boolean?,
+        sendPhoneNumberToProvider: Boolean?,
+        sendEmailToProvider: Boolean?,
+        isFlexible: Boolean?
+    ): String = client.createInvoiceLink(
+        title = title,
+        description = description,
+        payload = payload,
+        providerToken = providerToken,
+        currency = currency,
+        prices = prices,
+        maxTipAmount = maxTipAmount,
+        suggestedTipAmount = suggestedTipAmount,
+        providerData = providerData,
+        photoUrl = photoUrl,
+        photoSize = photoSize,
+        photoWidth = photoWidth,
+        photoHeight = photoHeight,
+        needName = needName,
+        needPhoneNumber = needPhoneNumber,
+        needEmail = needEmail,
+        needShippingAddress = needShippingAddress,
+        sendPhoneNumberToProvider = sendPhoneNumberToProvider,
+        sendEmailToProvider = sendEmailToProvider,
+        isFlexible = isFlexible
     )
 
     override suspend fun answerShippingQuery(

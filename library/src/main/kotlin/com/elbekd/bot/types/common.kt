@@ -28,9 +28,11 @@ public data class User(
     @SerialName("last_name") val lastName: String? = null,
     @SerialName("username") val username: String? = null,
     @SerialName("language_code") val languageCode: String? = null,
+    @SerialName("is_premium") val isPremium: Boolean? = null,
+    @SerialName("added_to_attachment_menu") val added_to_attachment_menu: Boolean? = null,
     @SerialName("can_join_groups") val canJoinGroups: Boolean? = null,
     @SerialName("can_read_all_group_messages") val canReadAllGroupMessages: Boolean? = null,
-    @SerialName("supports_inline_queries") val supportsInlineQueries: Boolean? = null
+    @SerialName("supports_inline_queries") val supportsInlineQueries: Boolean? = null,
 )
 
 @Serializable
@@ -192,7 +194,7 @@ public data class Audio(
     @SerialName("title") val title: String? = null,
     @SerialName("file_name") val fileName: String? = null,
     @SerialName("mime_type") val mimeType: String? = null,
-    @SerialName("file_size") val fileSize: Int? = null,
+    @SerialName("file_size") val fileSize: Long? = null,
     @SerialName("thumb") val thumb: PhotoSize? = null
 )
 
@@ -203,7 +205,7 @@ public data class Document(
     @SerialName("thumb") val thumb: PhotoSize? = null,
     @SerialName("file_name") val fileName: String? = null,
     @SerialName("mime_type") val mimeType: String? = null,
-    @SerialName("file_size") val fileSize: Int
+    @SerialName("file_size") val fileSize: Long? = null,
 )
 
 @Serializable
@@ -216,7 +218,7 @@ public data class Video(
     @SerialName("thumb") val thumb: PhotoSize? = null,
     @SerialName("file_name") val fileName: String? = null,
     @SerialName("mime_type") val mimeType: String? = null,
-    @SerialName("file_size") val fileSize: Int
+    @SerialName("file_size") val fileSize: Long? = null,
 )
 
 @Serializable
@@ -229,7 +231,7 @@ public data class Animation(
     @SerialName("thumb") val thumb: PhotoSize? = null,
     @SerialName("file_name") val fileName: String? = null,
     @SerialName("mime_type") val mimeType: String? = null,
-    @SerialName("fil_size") val fileSize: Int? = null
+    @SerialName("fil_size") val fileSize: Long? = null
 )
 
 @Serializable
@@ -237,8 +239,8 @@ public data class Voice(
     @SerialName("file_id") val file_id: String,
     @SerialName("file_unique_id") val file_unique_id: String,
     @SerialName("duration") val duration: Int,
-    @SerialName("mim_type") val mimeType: String,
-    @SerialName("file_size") val fileSize: Int
+    @SerialName("mim_type") val mimeType: String? = null,
+    @SerialName("file_size") val fileSize: Long? = null,
 )
 
 @Serializable
@@ -248,7 +250,7 @@ public data class VideoNote(
     @SerialName("length") val length: Int,
     @SerialName("duration") val duration: Int,
     @SerialName("thumb") val thumb: PhotoSize? = null,
-    @SerialName("file_size") val fileSize: Int
+    @SerialName("file_size") val fileSize: Int? = null,
 )
 
 @Serializable
@@ -298,8 +300,8 @@ public data class UserProfilePhotos(
 public data class File(
     @SerialName("file_id") val fileId: String,
     @SerialName("file_unique_id") val fileUniqueId: String,
-    @SerialName("file_size") val fileSize: Int,
-    @SerialName("file_path") val filePath: String
+    @SerialName("file_size") val fileSize: Long? = null,
+    @SerialName("file_path") val filePath: String? = null,
 )
 
 @Serializable

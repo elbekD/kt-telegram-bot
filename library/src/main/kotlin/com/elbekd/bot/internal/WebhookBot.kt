@@ -1,7 +1,7 @@
 package com.elbekd.bot.internal
 
 import com.elbekd.bot.WebhookOptions
-import com.elbekd.bot.types.Update
+import com.elbekd.bot.types.UpdateResponse
 import jakarta.servlet.http.HttpServlet
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -25,6 +25,7 @@ internal class WebhookBot(
     private val webhookOptions: WebhookOptions
 ) : TelegramBot(username, token) {
 
+    private val json = Json { ignoreUnknownKeys = true }
     private val server: Server = Server()
     private val scope = object : CoroutineScope {
         override val coroutineContext: CoroutineContext
@@ -98,7 +99,7 @@ internal class WebhookBot(
     private fun createServlet() = object : HttpServlet() {
         override fun doPost(req: HttpServletRequest, resp: HttpServletResponse) {
             val content = req.inputStream?.bufferedReader()?.readText() ?: return
-            val updates = Json.decodeFromString<Update>(content)
+            val updates = json.decodeFromString<UpdateResponse>(content)
             scope.launch { onUpdate(updates) }
         }
     }

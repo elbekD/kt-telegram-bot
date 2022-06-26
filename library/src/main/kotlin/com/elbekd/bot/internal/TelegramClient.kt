@@ -3,8 +3,102 @@ package com.elbekd.bot.internal
 import com.elbekd.bot.api.TelegramApi
 import com.elbekd.bot.model.ChatId
 import com.elbekd.bot.model.TelegramApiError
-import com.elbekd.bot.model.internal.*
-import com.elbekd.bot.types.*
+import com.elbekd.bot.model.internal.AnswerCallbackQuery
+import com.elbekd.bot.model.internal.AnswerInlineQuery
+import com.elbekd.bot.model.internal.AnswerPreCheckoutQuery
+import com.elbekd.bot.model.internal.AnswerShippingQuery
+import com.elbekd.bot.model.internal.AnswerWebAppQuery
+import com.elbekd.bot.model.internal.ApproveChatJoinRequest
+import com.elbekd.bot.model.internal.BanChatMember
+import com.elbekd.bot.model.internal.BanChatSenderChat
+import com.elbekd.bot.model.internal.CopyMessage
+import com.elbekd.bot.model.internal.CreateChatInviteLink
+import com.elbekd.bot.model.internal.CreateInvoiceLink
+import com.elbekd.bot.model.internal.DeclineChatJoinRequest
+import com.elbekd.bot.model.internal.DeleteChatPhoto
+import com.elbekd.bot.model.internal.DeleteChatStickerSet
+import com.elbekd.bot.model.internal.DeleteMessage
+import com.elbekd.bot.model.internal.DeleteMyCommands
+import com.elbekd.bot.model.internal.DeleteStickerFromSet
+import com.elbekd.bot.model.internal.EditChatInviteLink
+import com.elbekd.bot.model.internal.EditMessageCaption
+import com.elbekd.bot.model.internal.EditMessageLiveLocation
+import com.elbekd.bot.model.internal.EditMessageReplyMarkup
+import com.elbekd.bot.model.internal.EditMessageText
+import com.elbekd.bot.model.internal.ExportChatInviteLink
+import com.elbekd.bot.model.internal.ForwardMessage
+import com.elbekd.bot.model.internal.GetChat
+import com.elbekd.bot.model.internal.GetChatAdministrators
+import com.elbekd.bot.model.internal.GetChatMember
+import com.elbekd.bot.model.internal.GetChatMembersCount
+import com.elbekd.bot.model.internal.GetChatMenuButton
+import com.elbekd.bot.model.internal.GetFile
+import com.elbekd.bot.model.internal.GetGameHighScores
+import com.elbekd.bot.model.internal.GetMyCommands
+import com.elbekd.bot.model.internal.GetMyDefaultAdministratorRights
+import com.elbekd.bot.model.internal.GetStickerSet
+import com.elbekd.bot.model.internal.GetUserProfilePhotos
+import com.elbekd.bot.model.internal.LeaveChat
+import com.elbekd.bot.model.internal.PinChatMessage
+import com.elbekd.bot.model.internal.PromoteChatMember
+import com.elbekd.bot.model.internal.RestrictChatMember
+import com.elbekd.bot.model.internal.RevokeChatInviteLink
+import com.elbekd.bot.model.internal.SendChatAction
+import com.elbekd.bot.model.internal.SendContact
+import com.elbekd.bot.model.internal.SendDice
+import com.elbekd.bot.model.internal.SendGame
+import com.elbekd.bot.model.internal.SendInvoice
+import com.elbekd.bot.model.internal.SendLocation
+import com.elbekd.bot.model.internal.SendMessage
+import com.elbekd.bot.model.internal.SendPoll
+import com.elbekd.bot.model.internal.SendVenue
+import com.elbekd.bot.model.internal.SetChatAdministratorCustomTitle
+import com.elbekd.bot.model.internal.SetChatDescription
+import com.elbekd.bot.model.internal.SetChatMenuButton
+import com.elbekd.bot.model.internal.SetChatPermissions
+import com.elbekd.bot.model.internal.SetChatStickerSet
+import com.elbekd.bot.model.internal.SetChatTitle
+import com.elbekd.bot.model.internal.SetGameScore
+import com.elbekd.bot.model.internal.SetMyCommands
+import com.elbekd.bot.model.internal.SetMyDefaultAdministratorRights
+import com.elbekd.bot.model.internal.SetPassportDataErrors
+import com.elbekd.bot.model.internal.SetStickerPositionInSet
+import com.elbekd.bot.model.internal.StopMessageLiveLocation
+import com.elbekd.bot.model.internal.StopPoll
+import com.elbekd.bot.model.internal.UnbanChatMember
+import com.elbekd.bot.model.internal.UnbanChatSenderChat
+import com.elbekd.bot.model.internal.UnpinAllChatMessages
+import com.elbekd.bot.model.internal.UnpinChatMessage
+import com.elbekd.bot.model.internal.UpdateRequest
+import com.elbekd.bot.types.BotCommand
+import com.elbekd.bot.types.BotCommandScope
+import com.elbekd.bot.types.Chat
+import com.elbekd.bot.types.ChatAdministratorRights
+import com.elbekd.bot.types.ChatInviteLink
+import com.elbekd.bot.types.ChatMember
+import com.elbekd.bot.types.ChatPermissions
+import com.elbekd.bot.types.GameHighScore
+import com.elbekd.bot.types.InlineKeyboardMarkup
+import com.elbekd.bot.types.InlineQueryResult
+import com.elbekd.bot.types.InputMedia
+import com.elbekd.bot.types.LabeledPrice
+import com.elbekd.bot.types.MaskPosition
+import com.elbekd.bot.types.MenuButton
+import com.elbekd.bot.types.Message
+import com.elbekd.bot.types.MessageEntity
+import com.elbekd.bot.types.MessageId
+import com.elbekd.bot.types.ParseMode
+import com.elbekd.bot.types.PassportElementError
+import com.elbekd.bot.types.Poll
+import com.elbekd.bot.types.ReplyKeyboard
+import com.elbekd.bot.types.SentWebAppMessage
+import com.elbekd.bot.types.ShippingOption
+import com.elbekd.bot.types.StickerSet
+import com.elbekd.bot.types.Update
+import com.elbekd.bot.types.UpdateResponse
+import com.elbekd.bot.types.User
+import com.elbekd.bot.types.UserProfilePhotos
+import com.elbekd.bot.types.WebhookInfo
 import com.elbekd.bot.util.Action
 import com.elbekd.bot.util.AllowedUpdate
 import com.elbekd.bot.util.SendingByteArray
@@ -18,10 +112,14 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -34,7 +132,7 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     private val url = ApiConstants.API_URL_FORMAT.format(token)
 
-    private val json: Json = Json
+    private val json: Json = Json { ignoreUnknownKeys = true }
 
     @Serializable
     private class TelegramObject<out T>(
@@ -147,83 +245,7 @@ internal class TelegramClient(token: String) : TelegramApi {
             allowedUpdates = allowedUpdates
         ).body()
 
-        return post<List<UpdateResponse>>(ApiConstants.METHOD_GET_UPDATES, body)
-            .mapNotNull { response ->
-                val id = response.updateId
-                when {
-                    response.message != null -> UpdateMessage(
-                        updateId = id,
-                        message = response.message
-                    )
-
-                    response.editedMessage != null -> UpdateEditedMessage(
-                        updateId = id,
-                        editedMessage = response.editedMessage
-                    )
-
-                    response.channelPost != null -> UpdateChannelPost(
-                        updateId = id,
-                        channelPost = response.channelPost
-                    )
-
-                    response.editedChannelPost != null -> UpdateEditedChannelPost(
-                        updateId = id,
-                        editedChannelPost = response.editedChannelPost
-                    )
-
-                    response.inlineQuery != null -> UpdateInlineQuery(
-                        updateId = id,
-                        inlineQuery = response.inlineQuery
-                    )
-
-                    response.chosenInlineResult != null -> UpdateChosenInlineResult(
-                        updateId = id,
-                        chosenInlineResult = response.chosenInlineResult
-                    )
-
-                    response.callbackQuery != null -> UpdateCallbackQuery(
-                        updateId = id,
-                        callbackQuery = response.callbackQuery
-                    )
-
-                    response.shippingQuery != null -> UpdateShippingQuery(
-                        updateId = id,
-                        shippingQuery = response.shippingQuery
-                    )
-
-                    response.preCheckoutQuery != null -> UpdatePreCheckoutQuery(
-                        updateId = id,
-                        preCheckoutQuery = response.preCheckoutQuery
-                    )
-
-                    response.poll != null -> UpdatePoll(
-                        updateId = id,
-                        poll = response.poll
-                    )
-
-                    response.pollAnswer != null -> UpdatePollAnswer(
-                        updateId = id,
-                        pollAnswer = response.pollAnswer
-                    )
-
-                    response.myChatMember != null -> UpdateMyChatMember(
-                        updateId = id,
-                        myChatMember = response.myChatMember
-                    )
-
-                    response.chatMember != null -> UpdateChatMember(
-                        updateId = id,
-                        chatMember = response.chatMember
-                    )
-
-                    response.chatJoinRequest != null -> UpdateChatJoinRequest(
-                        updateId = id,
-                        chatJoinRequest = response.chatJoinRequest
-                    )
-
-                    else -> null
-                }
-            }
+        return UpdateResponseMapper.map(post<List<UpdateResponse>>(ApiConstants.METHOD_GET_UPDATES, body))
     }
 
     override suspend fun setMyCommands(
@@ -267,7 +289,8 @@ internal class TelegramClient(token: String) : TelegramApi {
         ipAddress: String?,
         maxConnections: Int?,
         allowedUpdates: List<AllowedUpdate>?,
-        dropPendingUpdates: Boolean?
+        dropPendingUpdates: Boolean?,
+        secretToken: String?,
     ): Boolean {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
         form.addFormDataPart(ApiConstants.URL, url)
@@ -276,6 +299,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         maxConnections?.let { form.addFormDataPart(ApiConstants.MAX_CONNECTIONS, it.toString()) }
         allowedUpdates?.let { form.addFormDataPart(ApiConstants.ALLOWED_UPDATES, toJson(it)) }
         dropPendingUpdates?.let { form.addFormDataPart(ApiConstants.DROP_PENDING_UPDATES, it.toString()) }
+        secretToken?.let { form.addFormDataPart(ApiConstants.SECRET_TOKEN, it) }
         return post(ApiConstants.METHOD_SET_WEBHOOK, form.build())
     }
 
@@ -1553,6 +1577,53 @@ internal class TelegramClient(token: String) : TelegramApi {
             replyMarkup = replyMarkup
         ).body()
         return post(ApiConstants.METHOD_SEND_INVOICE, body)
+    }
+
+    override suspend fun createInvoiceLink(
+        title: String,
+        description: String,
+        payload: String,
+        providerToken: String,
+        currency: String,
+        prices: List<LabeledPrice>,
+        maxTipAmount: Int?,
+        suggestedTipAmount: List<Int>?,
+        providerData: String?,
+        photoUrl: String?,
+        photoSize: Int?,
+        photoWidth: Int?,
+        photoHeight: Int?,
+        needName: Boolean?,
+        needPhoneNumber: Boolean?,
+        needEmail: Boolean?,
+        needShippingAddress: Boolean?,
+        sendPhoneNumberToProvider: Boolean?,
+        sendEmailToProvider: Boolean?,
+        isFlexible: Boolean?,
+    ): String {
+        val body = CreateInvoiceLink(
+            title = title,
+            description = description,
+            payload = payload,
+            providerToken = providerToken,
+            currency = currency,
+            prices = prices,
+            maxTipAmount = maxTipAmount,
+            suggestedTipAmount = suggestedTipAmount,
+            providerData = providerData,
+            photoUrl = photoUrl,
+            photoSize = photoSize,
+            photoWidth = photoWidth,
+            photoHeight = photoHeight,
+            needName = needName,
+            needPhoneNumber = needPhoneNumber,
+            needEmail = needEmail,
+            needShippingAddress = needShippingAddress,
+            sendPhoneNumberToProvider = sendPhoneNumberToProvider,
+            sendEmailToProvider = sendEmailToProvider,
+            isFlexible = isFlexible,
+        ).body()
+        return post(ApiConstants.METHOD_CREATE_INVOICE_LINK, body)
     }
 
     override suspend fun answerShippingQuery(

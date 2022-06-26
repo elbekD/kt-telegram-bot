@@ -37,6 +37,29 @@ public interface TelegramPaymentApi {
         replyMarkup: InlineKeyboardMarkup? = null
     ): Message
 
+    public suspend fun createInvoiceLink(
+        title: String,
+        description: String,
+        payload: String,
+        providerToken: String,
+        currency: String,
+        prices: List<LabeledPrice>,
+        maxTipAmount: Int? = null,
+        suggestedTipAmount: List<Int>? = null,
+        providerData: String? = null,
+        photoUrl: String? = null,
+        photoSize: Int? = null,
+        photoWidth: Int? = null,
+        photoHeight: Int? = null,
+        needName: Boolean? = null,
+        needPhoneNumber: Boolean? = null,
+        needEmail: Boolean? = null,
+        needShippingAddress: Boolean? = null,
+        sendPhoneNumberToProvider: Boolean? = null,
+        sendEmailToProvider: Boolean? = null,
+        isFlexible: Boolean? = null,
+    ): String
+
     public suspend fun answerShippingQuery(
         shippingQueryId: String,
         ok: Boolean,

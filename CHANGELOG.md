@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 2.1.5
+- Update Bot API to 6.1
+
 ## Version 2.1.4
 - Common `ChatMember` `status` and `user` fields
 - fixed `Owner` and `Administrator` serialization

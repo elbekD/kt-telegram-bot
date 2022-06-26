@@ -3,10 +3,13 @@
 [![](https://jitpack.io/v/elbekD/kt-telegram-bot.svg)](https://jitpack.io/#elbekD/kt-telegram-bot)
 
 Convenient way to build Telegram bots using powerful Kotlin language.
-Support for [Telegram Bot API 5.7](https://core.telegram.org/bots/api).
+Support for [Telegram Bot API 6.1](https://core.telegram.org/bots/api).
 Method names are the same as in [API](https://core.telegram.org/bots/api#available-methods).
 
 ## Changelog
+
+### Version 2.1.5
+- Update Bot API to 6.1
 
 #### Version 2.1.4
 - Common `ChatMember` `status` and `user` fields
@@ -14,14 +17,6 @@ Method names are the same as in [API](https://core.telegram.org/bots/api#availab
 
 #### Version 2.1.3
 - fixed `ChatId` serialization
-
-#### Version 2.1.2
-- fixed `PassportElementError` serialization
-- fixed `ChatMember` serialization
-
-#### Version 2.1.1
-- added `SendingDocument` abstraction
-- chain methods marked as `suspend`
 
 [Changelog history](./CHANGELOG.md)
 

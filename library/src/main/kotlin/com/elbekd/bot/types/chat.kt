@@ -15,6 +15,8 @@ public data class Chat(
     @SerialName("photo") val photo: ChatPhoto? = null,
     @SerialName("bio") val bio: String? = null,
     @SerialName("has_private_forwards") val hasPrivateForwards: Boolean? = null,
+    @SerialName("join_to_send_messages") val joinToSendMessages: Boolean? = null,
+    @SerialName("join_by_request") val joinByRequest: Boolean? = null,
     @SerialName("description") val description: String? = null,
     @SerialName("invite_link") val inviteLink: String? = null,
     @SerialName("pinned_message") val pinnedMessage: Message? = null,

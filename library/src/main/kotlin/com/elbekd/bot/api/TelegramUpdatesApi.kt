@@ -18,7 +18,8 @@ public interface TelegramUpdatesApi {
         ipAddress: String? = null,
         maxConnections: Int? = null,
         allowedUpdates: List<AllowedUpdate>? = null,
-        dropPendingUpdates: Boolean? = null
+        dropPendingUpdates: Boolean? = null,
+        secretToken: String? = null,
     ): Boolean
 
     public suspend fun deleteWebhook(dropPendingUpdates: Boolean? = null): Boolean

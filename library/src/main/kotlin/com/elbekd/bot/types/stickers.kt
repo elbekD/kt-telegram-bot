@@ -14,6 +14,7 @@ public data class Sticker(
     @SerialName("thumb") val thumb: PhotoSize? = null,
     @SerialName("emoji") val emoji: String? = null,
     @SerialName("set_name") val setName: String? = null,
+    @SerialName("premium_animation") val premiumAnimation: File? = null,
     @SerialName("mask_position") val maskPosition: MaskPosition? = null,
     @SerialName("file_size") val fileSize: Int
 )

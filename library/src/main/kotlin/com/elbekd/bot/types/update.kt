@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal class UpdateResponse(
+internal data class UpdateResponse(
     @SerialName("update_id") val updateId: Int,
     @SerialName("message") val message: Message? = null,
     @SerialName("edited_message") val editedMessage: Message? = null,
