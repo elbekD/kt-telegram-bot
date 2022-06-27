@@ -1,5 +1,8 @@
 package com.elbekd.bot.types
 
+import com.elbekd.bot.model.internal.InlineQueryResultSerializer
+import com.elbekd.bot.model.internal.InputMessageContentSerializer
+import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -13,13 +16,13 @@ public data class InlineQuery(
     @SerialName("location") val location: Location? = null
 )
 
-@Serializable
-public sealed class InlineQueryResult(
-    @SerialName("type") public val type: String
-)
+@Serializable(with = InlineQueryResultSerializer::class)
+public sealed class InlineQueryResult {
+    @SerialName("type")
+    public abstract val type: String
+}
 
 @Serializable
-@SerialName("article")
 public data class InlineQueryResultArticle(
     @SerialName("id") val id: String,
     @SerialName("title") val title: String,
@@ -30,11 +33,14 @@ public data class InlineQueryResultArticle(
     @SerialName("description") val description: String? = null,
     @SerialName("thumb_url") val thumbUrl: String? = null,
     @SerialName("thumb_width") val thumbWidth: Int? = null,
-    @SerialName("thumb_height") val thumbHeight: Int? = null
-) : InlineQueryResult(type = "article")
+    @SerialName("thumb_height") val thumbHeight: Int? = null,
+) : InlineQueryResult() {
+    @EncodeDefault
+    @SerialName("type")
+    override val type: String = "article"
+}
 
 @Serializable
-@SerialName("photo")
 public data class InlineQueryResultPhoto(
     @SerialName("id") val id: String,
     @SerialName("photo_url") val photoUrl: String,
@@ -48,10 +54,13 @@ public data class InlineQueryResultPhoto(
     @SerialName("caption_entities") val captionEntities: List<MessageEntity>? = null,
     @SerialName("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
     @SerialName("input_message_content") val inputMessageContent: InputMessageContent? = null
-) : InlineQueryResult(type = "photo")
+) : InlineQueryResult() {
+    @EncodeDefault
+    @SerialName("type")
+    override val type: String = "photo"
+}
 
 @Serializable
-@SerialName("gif")
 public data class InlineQueryResultGif(
     @SerialName("id") val id: String,
     @SerialName("gif_url") val gifUrl: String,
@@ -66,10 +75,13 @@ public data class InlineQueryResultGif(
     @SerialName("caption_entities") val captionEntities: List<MessageEntity>? = null,
     @SerialName("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
     @SerialName("input_message_content") val inputMessageContent: InputMessageContent? = null
-) : InlineQueryResult(type = "gif")
+) : InlineQueryResult() {
+    @EncodeDefault
+    @SerialName("type")
+    override val type: String = "gif"
+}
 
 @Serializable
-@SerialName("mpeg4_gif")
 public data class InlineQueryResultMpeg4Gif(
     @SerialName("id") val id: String,
     @SerialName("mpeg4_url") val mpeg4Url: String,
@@ -83,10 +95,13 @@ public data class InlineQueryResultMpeg4Gif(
     @SerialName("caption_entities") val captionEntities: List<MessageEntity>? = null,
     @SerialName("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
     @SerialName("input_message_content") val inputMessageContent: InputMessageContent? = null
-) : InlineQueryResult(type = "mpeg4_gif")
+) : InlineQueryResult() {
+    @EncodeDefault
+    @SerialName("type")
+    override val type: String = "mpeg4_gif"
+}
 
 @Serializable
-@SerialName("video")
 public data class InlineQueryResultVideo(
     @SerialName("id") val id: String,
     @SerialName("video_url") val videoUrl: String,
@@ -102,10 +117,13 @@ public data class InlineQueryResultVideo(
     @SerialName("description") val description: String? = null,
     @SerialName("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
     @SerialName("input_message_content") val inputMessageContent: InputMessageContent? = null
-) : InlineQueryResult(type = "video")
+) : InlineQueryResult() {
+    @EncodeDefault
+    @SerialName("type")
+    override val type: String = "video"
+}
 
 @Serializable
-@SerialName("audio")
 public data class InlineQueryResultAudio(
     @SerialName("id") val id: String,
     @SerialName("audio_url") val audioUrl: String,
@@ -117,10 +135,13 @@ public data class InlineQueryResultAudio(
     @SerialName("audio_duration") val audioDuration: Int? = null,
     @SerialName("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
     @SerialName("input_message_content") val inputMessageContent: InputMessageContent? = null
-) : InlineQueryResult(type = "audio")
+) : InlineQueryResult() {
+    @EncodeDefault
+    @SerialName("type")
+    override val type: String = "audio"
+}
 
 @Serializable
-@SerialName("voice")
 public data class InlineQueryResultVoice(
     @SerialName("id") val id: String,
     @SerialName("voice_url") val voiceUrl: String,
@@ -131,10 +152,13 @@ public data class InlineQueryResultVoice(
     @SerialName("voice_duration") val voiceDuration: Int? = null,
     @SerialName("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
     @SerialName("input_message_content") val inputMessageContent: InputMessageContent? = null
-) : InlineQueryResult(type = "voice")
+) : InlineQueryResult() {
+    @EncodeDefault
+    @SerialName("type")
+    override val type: String = "voice"
+}
 
 @Serializable
-@SerialName("document")
 public data class InlineQueryResultDocument(
     @SerialName("id") val id: String,
     @SerialName("title") val title: String,
@@ -149,10 +173,13 @@ public data class InlineQueryResultDocument(
     @SerialName("thumb_url") val thumbUrl: String? = null,
     @SerialName("thumb_width") val thumbWidth: Int? = null,
     @SerialName("thumb_height") val thumbHeight: Int? = null
-) : InlineQueryResult(type = "document")
+) : InlineQueryResult() {
+    @EncodeDefault
+    @SerialName("type")
+    override val type: String = "document"
+}
 
 @Serializable
-@SerialName("location")
 public data class InlineQueryResultLocation(
     @SerialName("id") val id: String,
     @SerialName("latitude") val latitude: Float,
@@ -167,10 +194,13 @@ public data class InlineQueryResultLocation(
     @SerialName("thumb_url") val thumbUrl: String? = null,
     @SerialName("thumb_width") val thumbWidth: Int? = null,
     @SerialName("thumb_height") val thumbHeight: Int? = null
-) : InlineQueryResult(type = "location")
+) : InlineQueryResult() {
+    @EncodeDefault
+    @SerialName("type")
+    override val type: String = "location"
+}
 
 @Serializable
-@SerialName("venue")
 public data class InlineQueryResultVenue(
     @SerialName("id") val id: String,
     @SerialName("latitude") val latitude: Float,
@@ -186,10 +216,13 @@ public data class InlineQueryResultVenue(
     @SerialName("thumb_url") val thumbUrl: String? = null,
     @SerialName("thumb_width") val thumbWidth: Int? = null,
     @SerialName("thumb_height") val thumbHeight: Int? = null
-) : InlineQueryResult(type = "venue")
+) : InlineQueryResult() {
+    @EncodeDefault
+    @SerialName("type")
+    override val type: String = "venue"
+}
 
 @Serializable
-@SerialName("contact")
 public data class InlineQueryResultContact(
     @SerialName("id") val id: String,
     @SerialName("phone_number") val phoneNumber: String,
@@ -201,18 +234,24 @@ public data class InlineQueryResultContact(
     @SerialName("thumb_url") val thumbUrl: String? = null,
     @SerialName("thumb_width") val thumbWidth: Int? = null,
     @SerialName("thumb_height") val thumbHeight: Int? = null
-) : InlineQueryResult(type = "contact")
+) : InlineQueryResult() {
+    @EncodeDefault
+    @SerialName("type")
+    override val type: String = "contact"
+}
 
 @Serializable
-@SerialName("game")
 public data class InlineQueryResultGame(
     @SerialName("id") val id: String,
     @SerialName("game_short_name") val gameShortName: String,
     @SerialName("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null
-) : InlineQueryResult(type = "game")
+) : InlineQueryResult() {
+    @EncodeDefault
+    @SerialName("type")
+    override val type: String = "game"
+}
 
 @Serializable
-@SerialName("photo")
 public data class InlineQueryResultCachedPhoto(
     @SerialName("id") val id: String,
     @SerialName("photo_file_id") val photoFileId: String,
@@ -223,10 +262,13 @@ public data class InlineQueryResultCachedPhoto(
     @SerialName("caption_entities") val captionEntities: List<MessageEntity>? = null,
     @SerialName("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
     @SerialName("input_message_content") val inputMessageContent: InputMessageContent? = null
-) : InlineQueryResult(type = "photo")
+) : InlineQueryResult() {
+    @EncodeDefault
+    @SerialName("type")
+    override val type: String = "photo"
+}
 
 @Serializable
-@SerialName("gif")
 public data class InlineQueryResultCachedGif(
     @SerialName("id") val id: String,
     @SerialName("gif_file_id") val gifFileId: String,
@@ -236,10 +278,13 @@ public data class InlineQueryResultCachedGif(
     @SerialName("caption_entities") val captionEntities: List<MessageEntity>? = null,
     @SerialName("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
     @SerialName("input_message_content") val inputMessageContent: InputMessageContent? = null
-) : InlineQueryResult(type = "gif")
+) : InlineQueryResult() {
+    @EncodeDefault
+    @SerialName("type")
+    override val type: String = "gif"
+}
 
 @Serializable
-@SerialName("mpeg4_gif")
 public data class InlineQueryResultCachedMpeg4Gif(
     @SerialName("id") val id: String,
     @SerialName("mpeg4_file_id") val mpeg4FileId: String,
@@ -249,19 +294,25 @@ public data class InlineQueryResultCachedMpeg4Gif(
     @SerialName("caption_entities") val captionEntities: List<MessageEntity>? = null,
     @SerialName("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
     @SerialName("input_message_content") val inputMessageContent: InputMessageContent? = null
-) : InlineQueryResult(type = "mpeg4_gif")
+) : InlineQueryResult() {
+    @EncodeDefault
+    @SerialName("type")
+    override val type: String = "mpeg4_gif"
+}
 
 @Serializable
-@SerialName("sticker")
 public data class InlineQueryResultCachedSticker(
     @SerialName("id") val id: String,
     @SerialName("sticker_file_id") val stickerFileId: String,
     @SerialName("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
     @SerialName("input_message_content") val inputMessageContent: InputMessageContent? = null
-) : InlineQueryResult(type = "sticker")
+) : InlineQueryResult() {
+    @EncodeDefault
+    @SerialName("type")
+    override val type: String = "sticker"
+}
 
 @Serializable
-@SerialName("document")
 public data class InlineQueryResultCachedDocument(
     @SerialName("id") val id: String,
     @SerialName("title") val title: String,
@@ -272,10 +323,13 @@ public data class InlineQueryResultCachedDocument(
     @SerialName("caption_entities") val captionEntities: List<MessageEntity>? = null,
     @SerialName("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
     @SerialName("input_message_content") val inputMessageContent: InputMessageContent? = null
-) : InlineQueryResult(type = "document")
+) : InlineQueryResult() {
+    @EncodeDefault
+    @SerialName("type")
+    override val type: String = "document"
+}
 
 @Serializable
-@SerialName("video")
 public data class InlineQueryResultCachedVideo(
     @SerialName("id") val id: String,
     @SerialName("video_file_id") val videoFileId: String,
@@ -286,10 +340,13 @@ public data class InlineQueryResultCachedVideo(
     @SerialName("caption_entities") val captionEntities: List<MessageEntity>? = null,
     @SerialName("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
     @SerialName("input_message_content") val inputMessageContent: InputMessageContent? = null
-) : InlineQueryResult(type = "video")
+) : InlineQueryResult() {
+    @EncodeDefault
+    @SerialName("type")
+    override val type: String = "video"
+}
 
 @Serializable
-@SerialName("voice")
 public data class InlineQueryResultCachedVoice(
     @SerialName("id") val id: String,
     @SerialName("voice_file_id") val voiceFileId: String,
@@ -299,10 +356,13 @@ public data class InlineQueryResultCachedVoice(
     @SerialName("caption_entities") val captionEntities: List<MessageEntity>? = null,
     @SerialName("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
     @SerialName("input_message_content") val inputMessageContent: InputMessageContent? = null
-) : InlineQueryResult(type = "voice")
+) : InlineQueryResult() {
+    @EncodeDefault
+    @SerialName("type")
+    override val type: String = "voice"
+}
 
 @Serializable
-@SerialName("audio")
 public data class InlineQueryResultCachedAudio(
     @SerialName("id") val id: String,
     @SerialName("audio_file_id") val audioFileId: String,
@@ -311,9 +371,13 @@ public data class InlineQueryResultCachedAudio(
     @SerialName("caption_entities") val captionEntities: List<MessageEntity>? = null,
     @SerialName("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
     @SerialName("input_message_content") val inputMessageContent: InputMessageContent? = null
-) : InlineQueryResult(type = "audio")
+) : InlineQueryResult() {
+    @EncodeDefault
+    @SerialName("type")
+    override val type: String = "audio"
+}
 
-@Serializable
+@Serializable(with = InputMessageContentSerializer::class)
 public sealed class InputMessageContent
 
 @Serializable

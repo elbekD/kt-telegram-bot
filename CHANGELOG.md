@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 2.1.6
+- `InlineQueryResult` serialization fix
+
 ## Version 2.1.5
 - Update Bot API to 6.1
 
