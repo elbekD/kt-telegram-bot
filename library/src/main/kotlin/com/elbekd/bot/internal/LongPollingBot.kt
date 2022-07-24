@@ -32,7 +32,14 @@ internal class LongPollingBot(
 
         try {
             val id = lastUpdateId
-            val offset = if (id != Int.MIN_VALUE) id + 1 else null
+            val offset = if (id != Int.MIN_VALUE) {
+                id + 1
+            } else {
+                when (options.autoOffset) {
+                    PollingOptions.AutoOffset.EARLIEST -> null
+                    PollingOptions.AutoOffset.LATEST -> -1
+                }
+            }
             val updates = getUpdates(
                 offset = offset,
                 allowedUpdates = options.allowedUpdates,
