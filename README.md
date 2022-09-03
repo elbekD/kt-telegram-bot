@@ -50,7 +50,7 @@ repositories {
 }
 
 dependencies {
-    compile("com.elbekD:kt-telegram-bot:${version}")
+    implementation("com.github.elbekD:kt-telegram-bot:${version}")
 }
 ```
 
@@ -62,7 +62,7 @@ Maven
 </repository>
 
 <dependency>
-    <groupId>com.elbekD</groupId>
+    <groupId>com.github.elbekD</groupId>
     <artifactId>kt-telegram-bot</artifactId>
     <version>{version}</version>
 </dependency>
