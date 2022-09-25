@@ -3,9 +3,11 @@ package com.elbekd.bot.types
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kotlinx.serialization.json.JsonClassDiscriminator
 import java.io.File
 
 @Serializable
+@JsonClassDiscriminator("message_type")
 public sealed class InputMedia(
     @SerialName("type")
     public val type: String
