@@ -32,6 +32,7 @@ import com.elbekd.bot.model.internal.GetChatAdministrators
 import com.elbekd.bot.model.internal.GetChatMember
 import com.elbekd.bot.model.internal.GetChatMembersCount
 import com.elbekd.bot.model.internal.GetChatMenuButton
+import com.elbekd.bot.model.internal.GetCustomEmojiStickers
 import com.elbekd.bot.model.internal.GetFile
 import com.elbekd.bot.model.internal.GetGameHighScores
 import com.elbekd.bot.model.internal.GetMyCommands
@@ -93,6 +94,7 @@ import com.elbekd.bot.types.Poll
 import com.elbekd.bot.types.ReplyKeyboard
 import com.elbekd.bot.types.SentWebAppMessage
 import com.elbekd.bot.types.ShippingOption
+import com.elbekd.bot.types.Sticker
 import com.elbekd.bot.types.StickerSet
 import com.elbekd.bot.types.Update
 import com.elbekd.bot.types.UpdateResponse
@@ -651,6 +653,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                         it.name,
                         it.asRequestBody(MEDIA_TYPE_OCTET_STREAM)
                     )
+
                     is String -> form.addFormDataPart(ApiConstants.THUMB, it)
                     else -> throw IllegalArgumentException("Neither file nor string")
                 }
@@ -1412,6 +1415,11 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post(ApiConstants.METHOD_GET_STICKER_SET, body)
     }
 
+    override suspend fun getCustomEmojiStickers(customEmojiIds: List<String>): List<Sticker> {
+        val body = GetCustomEmojiStickers(customEmojiIds).body()
+        return post(ApiConstants.METHOD_GET_CUSTOM_EMOJI_STICKERS, body)
+    }
+
     override suspend fun uploadStickerFile(userId: Long, pngSticker: File): com.elbekd.bot.types.File {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
         form.addFormDataPart(ApiConstants.USER_ID, userId.toString())
@@ -1427,6 +1435,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         pngSticker: Any?,
         tgsSticker: File?,
         webmSticker: File?,
+        stickerType: String?,
         containsMask: Boolean?,
         maskPosition: MaskPosition?
     ): Boolean {
@@ -1444,6 +1453,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                     pngSticker.name,
                     pngSticker.asRequestBody(null)
                 )
+
                 is String -> addFormDataPart(ApiConstants.PNG_STICKER, pngSticker)
                 else -> throw IllegalArgumentException()
             }
@@ -1479,6 +1489,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                     pngSticker.name,
                     pngSticker.asRequestBody(null)
                 )
+
                 is String -> addFormDataPart(ApiConstants.PNG_STICKER, pngSticker)
                 else -> throw IllegalArgumentException()
             }

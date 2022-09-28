@@ -10,6 +10,11 @@ internal class GetStickerSet(
 )
 
 @Serializable
+internal class GetCustomEmojiStickers(
+    @SerialName(ApiConstants.CUSTOM_EMOJI_IDS) val customEmojiIds: List<String>
+)
+
+@Serializable
 internal class SetStickerPositionInSet(
     @SerialName(ApiConstants.STICKER) val sticker: String,
     @SerialName(ApiConstants.POSITION) val position: Int

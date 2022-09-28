@@ -121,7 +121,8 @@ public data class MessageEntity(
     @SerialName("length") val length: Int,
     @SerialName("url") val url: String? = null,
     @SerialName("user") val user: User? = null,
-    @SerialName("language") val language: String? = null
+    @SerialName("language") val language: String? = null,
+    @SerialName("custom_emoji_id") val customEmojiId: String? = null,
 ) {
 
     @Serializable
@@ -173,6 +174,9 @@ public data class MessageEntity(
 
         @SerialName("text_mention")
         TEXT_MENTION,
+
+        @SerialName("custom_emoji")
+        CUSTOM_EMOJI,
     }
 }
 
@@ -306,20 +310,17 @@ public data class File(
 
 @Serializable
 public data class ResponseParameters(
-    @SerialName("migrate_to_chat_id") val migrateToChatId: Long,
-    @SerialName("retry_after") val retryAfter: Int
+    @SerialName("migrate_to_chat_id") val migrateToChatId: Long, @SerialName("retry_after") val retryAfter: Int
 )
 
 @Serializable
 public data class Dice(
-    @SerialName("emoji") val emoji: String,
-    @SerialName("value") val value: Int
+    @SerialName("emoji") val emoji: String, @SerialName("value") val value: Int
 )
 
 @Serializable
 public data class BotCommand(
-    @SerialName("command") val command: String,
-    @SerialName("description") val description: String
+    @SerialName("command") val command: String, @SerialName("description") val description: String
 )
 
 @Serializable
@@ -346,42 +347,40 @@ public data class VoiceChatParticipantsInvited(
 )
 
 @Serializable
-public sealed class BotCommandScope(
-    @SerialName("type") public val type: String
-) {
+public sealed class BotCommandScope {
     @Serializable
     @SerialName("default")
-    public object BotCommandScopeDefault : BotCommandScope(type = "default")
+    public object BotCommandScopeDefault : BotCommandScope()
 
     @Serializable
     @SerialName("all_private_chats")
-    public object BotCommandScopeAllPrivateChats : BotCommandScope(type = "all_private_chats")
+    public object BotCommandScopeAllPrivateChats : BotCommandScope()
 
     @Serializable
     @SerialName("all_group_chats")
-    public object BotCommandScopeAllGroupChats : BotCommandScope(type = "all_group_chats")
+    public object BotCommandScopeAllGroupChats : BotCommandScope()
 
     @Serializable
     @SerialName("all_chat_administrators")
-    public object BotCommandScopeAllChatAdministrators : BotCommandScope(type = "all_chat_administrators")
+    public object BotCommandScopeAllChatAdministrators : BotCommandScope()
 
     @Serializable
     @SerialName("chat")
     public data class BotCommandScopeChat(
         @SerialName("chat_id") val chatId: ChatId
-    ) : BotCommandScope(type = "chat")
+    ) : BotCommandScope()
 
     @Serializable
     @SerialName("chat_administrators")
     public data class BotCommandScopeChatAdministrators(
         @SerialName("chat_id") val chatId: ChatId
-    ) : BotCommandScope(type = "chat_administrators")
+    ) : BotCommandScope()
 
     @Serializable
     @SerialName("chat_member")
     public data class BotCommandScopeChatMember(
         @SerialName("chat_id") val chatId: ChatId
-    ) : BotCommandScope(type = "chat_member")
+    ) : BotCommandScope()
 }
 
 @Serializable

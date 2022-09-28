@@ -819,6 +819,9 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
 
     override suspend fun getStickerSet(name: String) = client.getStickerSet(name)
 
+    override suspend fun getCustomEmojiStickers(customEmojiIds: List<String>) =
+        client.getCustomEmojiStickers(customEmojiIds)
+
     override suspend fun uploadStickerFile(
         userId: Long,
         pngSticker: File
@@ -832,6 +835,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         pngSticker: Any?,
         tgsSticker: File?,
         webmSticker: File?,
+        stickerType: String?,
         containsMask: Boolean?,
         maskPosition: MaskPosition?
     ): Boolean {
@@ -843,15 +847,16 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
 
         pngSticker?.let { validateInputFileOrString(it) }
         return client.createNewStickerSet(
-            userId,
-            name,
-            title,
-            emojis,
-            pngSticker,
-            tgsSticker,
-            webmSticker,
-            containsMask,
-            maskPosition
+            userId = userId,
+            name = name,
+            title = title,
+            emojis = emojis,
+            pngSticker = pngSticker,
+            tgsSticker = tgsSticker,
+            webmSticker = webmSticker,
+            stickerType = stickerType,
+            containsMask = containsMask,
+            maskPosition = maskPosition,
         )
     }
 
@@ -872,13 +877,13 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
 
         pngSticker?.let { validateInputFileOrString(it) }
         return client.addStickerToSet(
-            userId,
-            name,
-            emojis,
-            pngSticker,
-            tgsSticker,
-            webmSticker,
-            maskPosition
+            userId = userId,
+            name = name,
+            emojis = emojis,
+            pngSticker = pngSticker,
+            tgsSticker = tgsSticker,
+            webmSticker = webmSticker,
+            maskPosition = maskPosition,
         )
     }
 

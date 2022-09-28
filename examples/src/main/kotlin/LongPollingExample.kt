@@ -1,10 +1,14 @@
 import com.elbekd.bot.Bot
 import com.elbekd.bot.model.toChatId
-import com.elbekd.bot.types.*
+import com.elbekd.bot.types.BotCommand
+import com.elbekd.bot.types.BotCommandScope
+import com.elbekd.bot.types.KeyboardButton
+import com.elbekd.bot.types.KeyboardButtonPollType
+import com.elbekd.bot.types.ParseMode
+import com.elbekd.bot.types.ReplyKeyboardMarkup
 
 fun main() {
-    val token = "439178594:AAF0Fn2psM2SNuKATQlGVXPEP1mGVcAs15s"
-
+    val token = "<TOKEN>"
     val bot = Bot.createPolling(token)
 
     bot.onCommand("/start") { (msg, _) ->

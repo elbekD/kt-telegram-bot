@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 2.1.7
+- Update Bot API to 6.2
+- fix InputMedia(#54) and BotCommandScope (de)serialization
+
 ## Version 2.1.6
 - `InlineQueryResult` serialization fix
 

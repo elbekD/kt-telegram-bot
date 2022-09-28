@@ -16,15 +16,18 @@ public data class Sticker(
     @SerialName("set_name") val setName: String? = null,
     @SerialName("premium_animation") val premiumAnimation: File? = null,
     @SerialName("mask_position") val maskPosition: MaskPosition? = null,
-    @SerialName("file_size") val fileSize: Int
+    @SerialName("custom_emoji_id") val customEmojiId: String? = null,
+    @SerialName("file_size") val fileSize: Int? = null,
 )
 
 @Serializable
 public data class StickerSet(
     @SerialName("name") val name: String,
     @SerialName("title") val title: String,
+    @SerialName("sticker_type") val stickerType: String,
     @SerialName("is_animated") val isAnimated: Boolean,
     @SerialName("is_video") val isVideo: Boolean,
+    @Deprecated("Use sticker_type instead")
     @SerialName("contains_mask") val containsMask: Boolean,
     @SerialName("stickers") val stickers: List<Sticker>,
     @SerialName("thumb") val thumb: PhotoSize? = null

@@ -5,6 +5,7 @@ import com.elbekd.bot.types.File
 import com.elbekd.bot.types.MaskPosition
 import com.elbekd.bot.types.Message
 import com.elbekd.bot.types.ReplyKeyboard
+import com.elbekd.bot.types.Sticker
 import com.elbekd.bot.types.StickerSet
 
 public interface TelegramStickerApi {
@@ -20,11 +21,16 @@ public interface TelegramStickerApi {
 
     public suspend fun getStickerSet(name: String): StickerSet
 
+    public suspend fun getCustomEmojiStickers(customEmojiIds: List<String>): List<Sticker>
+
     public suspend fun uploadStickerFile(
         userId: Long,
         pngSticker: java.io.File
     ): File
 
+    /**
+     * @param containsMask is deprecated. Use [stickerType] instead
+     */
     public suspend fun createNewStickerSet(
         userId: Long,
         name: String,
@@ -33,6 +39,7 @@ public interface TelegramStickerApi {
         pngSticker: Any? = null,
         tgsSticker: java.io.File? = null,
         webmSticker: java.io.File? = null,
+        stickerType: String? = null,
         containsMask: Boolean? = null,
         maskPosition: MaskPosition? = null
     ): Boolean
