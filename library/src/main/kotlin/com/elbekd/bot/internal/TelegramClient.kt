@@ -150,7 +150,7 @@ internal class TelegramClient(token: String) : TelegramApi {
     }
 
     private val anyToString = { a: Any -> a.toString(); }
-    private val markupToString = { a: Any -> toJson(a) }
+    private val markupToString = { a: ReplyKeyboard -> toJson(a) }
 
     private val sendFileOpts = mapOf(
         ApiConstants.CAPTION to anyToString,
