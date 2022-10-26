@@ -149,23 +149,6 @@ internal class TelegramClient(token: String) : TelegramApi {
         private val MEDIA_TYPE_OCTET_STREAM = "application/octet-stream".toMediaType()
     }
 
-    private val anyToString = { a: Any -> a.toString(); }
-    private val markupToString = { a: Any -> toJson(a) }
-
-    private val sendFileOpts = mapOf(
-        ApiConstants.CAPTION to anyToString,
-        ApiConstants.PARSE_MODE to anyToString,
-        ApiConstants.DISABLE_NOTIFICATION to anyToString,
-        ApiConstants.REPLY_TO_MESSAGE_ID to anyToString,
-        ApiConstants.REPLY_MARKUP to markupToString,
-        ApiConstants.DURATION to anyToString,
-        ApiConstants.PERFORMER to anyToString,
-        ApiConstants.TITLE to anyToString,
-        ApiConstants.WIDTH to anyToString,
-        ApiConstants.HEIGHT to anyToString,
-        ApiConstants.SUPPORTS_STREAMING to anyToString
-    )
-
     private suspend inline fun <reified T> get(method: String): T = withContext(Dispatchers.IO) {
         val request = Request.Builder().url(url(method)).build()
         val response = httpClient.newCall(request).execute()
@@ -203,13 +186,13 @@ internal class TelegramClient(token: String) : TelegramApi {
         type: String,
         chatId: ChatId,
         file: SendingDocument,
-        opts: Map<String, Any?>,
+        optionals: Map<String, String>,
         thumb: File? = null,
         method: String = type
     ): Message {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
         form.addFormDataPart(ApiConstants.CHAT_ID, chatId.toString())
-        addOptsToForm(form, opts)
+        optionals.forEach { (k, v) -> form.addFormDataPart(k, v) }
 
         val content = when (file) {
             is SendingByteArray -> file.content.toRequestBody(null)
@@ -224,11 +207,6 @@ internal class TelegramClient(token: String) : TelegramApi {
 
         return post("send${method.replaceFirstChar { it.uppercase() }}", form.build())
     }
-
-    private fun addOptsToForm(form: MultipartBody.Builder, opts: Map<String, Any?>) =
-        sendFileOpts
-            .filterKeys { opts[it] != null }
-            .forEach { form.addFormDataPart(it.key, it.value(opts[it.key] ?: return@forEach)) }
 
     fun onStop() {
         httpClient.dispatcher.cancelAll()
@@ -403,20 +381,21 @@ internal class TelegramClient(token: String) : TelegramApi {
         allowSendingWithoutReply: Boolean?,
         replyMarkup: ReplyKeyboard?
     ): Message {
+        val optionals = mutableMapOf<String, String>()
+        caption?.let { optionals += ApiConstants.CAPTION to it }
+        parseMode?.let { optionals += ApiConstants.PARSE_MODE to toJson(it) }
+        captionEntities?.let { optionals += ApiConstants.CAPTION_ENTITIES to toJson(it) }
+        disableNotification?.let { optionals += ApiConstants.DISABLE_NOTIFICATION to toJson(it) }
+        protectContent?.let { optionals += ApiConstants.PROTECT_CONTENT to toJson(it) }
+        replyToMessageId?.let { optionals += ApiConstants.REPLY_TO_MESSAGE_ID to toJson(it) }
+        allowSendingWithoutReply?.let { optionals += ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to toJson(it) }
+        replyMarkup?.let { optionals += ApiConstants.REPLY_MARKUP to toJson(it) }
+
         return sendFile(
             ApiConstants.PHOTO,
             chatId,
             photo,
-            mapOf(
-                ApiConstants.CAPTION to caption,
-                ApiConstants.PARSE_MODE to parseMode,
-                ApiConstants.CAPTION_ENTITIES to captionEntities,
-                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
-                ApiConstants.PROTECT_CONTENT to protectContent,
-                ApiConstants.REPLY_TO_MESSAGE_ID to replyToMessageId,
-                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
-                ApiConstants.REPLY_MARKUP to replyMarkup
-            )
+            optionals
         )
     }
 
@@ -436,23 +415,24 @@ internal class TelegramClient(token: String) : TelegramApi {
         allowSendingWithoutReply: Boolean?,
         replyMarkup: ReplyKeyboard?
     ): Message {
+        val optionals = mutableMapOf<String, String>()
+        caption?.let { optionals += ApiConstants.CAPTION to toJson(caption) }
+        parseMode?.let { optionals += ApiConstants.PARSE_MODE to toJson(parseMode) }
+        captionEntities?.let { optionals += ApiConstants.CAPTION_ENTITIES to toJson(captionEntities) }
+        duration?.let { optionals += ApiConstants.DURATION to toJson(duration) }
+        performer?.let { optionals += ApiConstants.PERFORMER to toJson(performer) }
+        title?.let { optionals += ApiConstants.TITLE to toJson(title) }
+        disableNotification?.let { optionals += ApiConstants.DISABLE_NOTIFICATION to toJson(thumb) }
+        protectContent?.let { optionals += ApiConstants.PROTECT_CONTENT to toJson(disableNotification) }
+        replyToMessageId?.let { optionals += ApiConstants.REPLY_TO_MESSAGE_ID to toJson(protectContent) }
+        allowSendingWithoutReply?.let { optionals += ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to toJson(replyToMessageId) }
+        replyMarkup?.let { optionals += ApiConstants.REPLY_MARKUP to toJson(allowSendingWithoutReply) }
+
         return sendFile(
             ApiConstants.AUDIO,
             chatId,
             audio,
-            mapOf(
-                ApiConstants.CAPTION to caption,
-                ApiConstants.PARSE_MODE to parseMode,
-                ApiConstants.CAPTION_ENTITIES to captionEntities,
-                ApiConstants.DURATION to duration,
-                ApiConstants.PERFORMER to performer,
-                ApiConstants.TITLE to title,
-                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
-                ApiConstants.PROTECT_CONTENT to protectContent,
-                ApiConstants.REPLY_TO_MESSAGE_ID to replyToMessageId,
-                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
-                ApiConstants.REPLY_MARKUP to replyMarkup
-            ),
+            optionals,
             thumb
         )
     }
@@ -471,21 +451,22 @@ internal class TelegramClient(token: String) : TelegramApi {
         allowSendingWithoutReply: Boolean?,
         replyMarkup: ReplyKeyboard?
     ): Message {
+        val optionals = mutableMapOf<String, String>()
+        caption?.let { optionals += ApiConstants.CAPTION to toJson(it) }
+        parseMode?.let { optionals += ApiConstants.PARSE_MODE to toJson(it) }
+        captionEntities?.let { optionals += ApiConstants.CAPTION_ENTITIES to toJson(it) }
+        disableContentTypeDetection?.let { optionals += ApiConstants.DISABLE_CONTENT_TYPE_DETECTION to toJson(it) }
+        disableNotification?.let { optionals += ApiConstants.DISABLE_NOTIFICATION to toJson(it) }
+        protectContent?.let { optionals += ApiConstants.PROTECT_CONTENT to toJson(it) }
+        replyToMessageId?.let { optionals += ApiConstants.REPLY_TO_MESSAGE_ID to toJson(it) }
+        allowSendingWithoutReply?.let { optionals += ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to toJson(it) }
+        replyMarkup?.let { optionals += ApiConstants.REPLY_MARKUP to toJson(it) }
+
         return sendFile(
             ApiConstants.DOCUMENT,
             chatId,
             document,
-            mapOf(
-                ApiConstants.CAPTION to caption,
-                ApiConstants.PARSE_MODE to parseMode,
-                ApiConstants.CAPTION_ENTITIES to captionEntities,
-                ApiConstants.DISABLE_CONTENT_TYPE_DETECTION to disableContentTypeDetection,
-                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
-                ApiConstants.PROTECT_CONTENT to protectContent,
-                ApiConstants.REPLY_TO_MESSAGE_ID to replyToMessageId,
-                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
-                ApiConstants.REPLY_MARKUP to replyMarkup
-            ),
+            optionals,
             thumb
         )
     }
@@ -507,24 +488,25 @@ internal class TelegramClient(token: String) : TelegramApi {
         allowSendingWithoutReply: Boolean?,
         replyMarkup: ReplyKeyboard?
     ): Message {
+        val optionals = mutableMapOf<String, String>()
+        duration?.let { ApiConstants.DURATION to toJson(it) }
+        width?.let { ApiConstants.WIDTH to toJson(it) }
+        height?.let { ApiConstants.HEIGHT to toJson(it) }
+        caption?.let { ApiConstants.CAPTION to toJson(it) }
+        parseMode?.let { ApiConstants.PARSE_MODE to toJson(it) }
+        captionEntities?.let { ApiConstants.CAPTION_ENTITIES to toJson(it) }
+        streaming?.let { ApiConstants.SUPPORTS_STREAMING to toJson(it) }
+        disableNotification?.let { ApiConstants.DISABLE_NOTIFICATION to toJson(it) }
+        protectContent?.let { ApiConstants.PROTECT_CONTENT to toJson(it) }
+        replyToMessageId?.let { ApiConstants.REPLY_TO_MESSAGE_ID to toJson(it) }
+        allowSendingWithoutReply?.let { ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to toJson(it) }
+        replyMarkup?.let { ApiConstants.REPLY_MARKUP to toJson(it) }
+
         return sendFile(
             ApiConstants.VIDEO,
             chatId,
             video,
-            mapOf(
-                ApiConstants.DURATION to duration,
-                ApiConstants.WIDTH to width,
-                ApiConstants.HEIGHT to height,
-                ApiConstants.CAPTION to caption,
-                ApiConstants.PARSE_MODE to parseMode,
-                ApiConstants.CAPTION_ENTITIES to captionEntities,
-                ApiConstants.SUPPORTS_STREAMING to streaming,
-                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
-                ApiConstants.PROTECT_CONTENT to protectContent,
-                ApiConstants.REPLY_TO_MESSAGE_ID to replyToMessageId,
-                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
-                ApiConstants.REPLY_MARKUP to replyMarkup
-            ),
+            optionals,
             thumb
         )
     }
@@ -545,23 +527,24 @@ internal class TelegramClient(token: String) : TelegramApi {
         allowSendingWithoutReply: Boolean?,
         replyMarkup: ReplyKeyboard?
     ): Message {
+        val optionals = mutableMapOf<String, String>()
+        duration?.let { ApiConstants.DURATION to toJson(it) }
+        width?.let { ApiConstants.WIDTH to toJson(it) }
+        height?.let { ApiConstants.HEIGHT to toJson(it) }
+        caption?.let { ApiConstants.CAPTION to toJson(it) }
+        parseMode?.let { ApiConstants.PARSE_MODE to toJson(it) }
+        captionEntities?.let { ApiConstants.CAPTION_ENTITIES to toJson(it) }
+        disableNotification?.let { ApiConstants.DISABLE_NOTIFICATION to toJson(it) }
+        protectContent?.let { ApiConstants.PROTECT_CONTENT to toJson(it) }
+        replyToMessageId?.let { ApiConstants.REPLY_TO_MESSAGE_ID to toJson(it) }
+        allowSendingWithoutReply?.let { ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to toJson(it) }
+        replyMarkup?.let { ApiConstants.REPLY_MARKUP to toJson(it) }
+
         return sendFile(
             ApiConstants.ANIMATION,
             chatId,
             animation,
-            mapOf(
-                ApiConstants.DURATION to duration,
-                ApiConstants.WIDTH to width,
-                ApiConstants.HEIGHT to height,
-                ApiConstants.CAPTION to caption,
-                ApiConstants.PARSE_MODE to parseMode,
-                ApiConstants.CAPTION_ENTITIES to captionEntities,
-                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
-                ApiConstants.PROTECT_CONTENT to protectContent,
-                ApiConstants.REPLY_TO_MESSAGE_ID to replyToMessageId,
-                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
-                ApiConstants.REPLY_MARKUP to replyMarkup
-            ),
+            optionals,
             thumb
         )
     }
@@ -579,21 +562,22 @@ internal class TelegramClient(token: String) : TelegramApi {
         allowSendingWithoutReply: Boolean?,
         replyMarkup: ReplyKeyboard?
     ): Message {
+        val optionals = mutableMapOf<String, String>()
+        caption?.let { ApiConstants.CAPTION to toJson(it) }
+        parseMode?.let { ApiConstants.PARSE_MODE to toJson(it) }
+        captionEntities?.let { ApiConstants.CAPTION_ENTITIES to toJson(it) }
+        duration?.let { ApiConstants.DURATION to toJson(it) }
+        disableNotification?.let { ApiConstants.DISABLE_NOTIFICATION to toJson(it) }
+        protectContent?.let { ApiConstants.PROTECT_CONTENT to toJson(it) }
+        replyToMessageId?.let { ApiConstants.REPLY_TO_MESSAGE_ID to toJson(it) }
+        allowSendingWithoutReply?.let { ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to toJson(it) }
+        replyMarkup?.let { ApiConstants.REPLY_MARKUP to toJson(it) }
+
         return sendFile(
             ApiConstants.VOICE,
             chatId,
             voice,
-            mapOf(
-                ApiConstants.CAPTION to caption,
-                ApiConstants.PARSE_MODE to parseMode,
-                ApiConstants.CAPTION_ENTITIES to captionEntities,
-                ApiConstants.DURATION to duration,
-                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
-                ApiConstants.PROTECT_CONTENT to protectContent,
-                ApiConstants.REPLY_TO_MESSAGE_ID to replyToMessageId,
-                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
-                ApiConstants.REPLY_MARKUP to replyMarkup
-            )
+            optionals
         )
     }
 
@@ -609,18 +593,19 @@ internal class TelegramClient(token: String) : TelegramApi {
         allowSendingWithoutReply: Boolean?,
         replyMarkup: ReplyKeyboard?
     ): Message {
+        val optionals = mutableMapOf<String, String>()
+        duration?.let { ApiConstants.DURATION to toJson(it) }
+        disableNotification?.let { ApiConstants.DISABLE_NOTIFICATION to toJson(it) }
+        protectContent?.let { ApiConstants.PROTECT_CONTENT to toJson(it) }
+        replyToMessageId?.let { ApiConstants.REPLY_TO_MESSAGE_ID to toJson(it) }
+        allowSendingWithoutReply?.let { ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to toJson(it) }
+        replyMarkup?.let { ApiConstants.REPLY_MARKUP to toJson(it) }
+
         return sendFile(
             ApiConstants.VIDEO_NOTE,
             chatId,
             note,
-            mapOf(
-                ApiConstants.DURATION to duration,
-                ApiConstants.DISABLE_NOTIFICATION to disableNotification,
-                ApiConstants.PROTECT_CONTENT to protectContent,
-                ApiConstants.REPLY_TO_MESSAGE_ID to replyToMessageId,
-                ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to allowSendingWithoutReply,
-                ApiConstants.REPLY_MARKUP to replyMarkup
-            ),
+            optionals,
             thumb,
             ApiConstants.METHOD_VIDEO_NOTE
         )
