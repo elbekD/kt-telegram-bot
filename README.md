@@ -8,15 +8,15 @@ Method names are the same as in [API](https://core.telegram.org/bots/api#availab
 
 ## Changelog
 
-## Version 2.1.7
+### Version 2.1.8
+- fix issue #56
+
+### Version 2.1.7
 - Update Bot API to 6.2
 - fix InputMedia(#54) and BotCommandScope (de)serialization
 
-## Version 2.1.6
+### Version 2.1.6
 - `InlineQueryResult` serialization fix
-
-### Version 2.1.5
-- Update Bot API to 6.1
 
 [Changelog history](./CHANGELOG.md)
 
