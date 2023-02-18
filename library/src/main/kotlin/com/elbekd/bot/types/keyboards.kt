@@ -9,6 +9,7 @@ public sealed class ReplyKeyboard
 @Serializable
 public data class ReplyKeyboardMarkup(
     @SerialName("keyboard") val keyboard: List<List<KeyboardButton>>,
+    @SerialName("is_persistent") val isPersistent: Boolean? = null,
     @SerialName("resize_keyboard") val resizeKeyboard: Boolean? = null,
     @SerialName("one_time_keyboard") val oneTimeKeyboard: Boolean? = null,
     @SerialName("input_field_placeholder") val inputFieldPlaceholder: String? = null,
@@ -18,10 +19,31 @@ public data class ReplyKeyboardMarkup(
 @Serializable
 public data class KeyboardButton(
     @SerialName("text") val text: String,
+    @SerialName("request_user") val requestUser: KeyboardButtonRequestUser? = null,
+    @SerialName("request_chat") val requestChat: KeyboardButtonRequestChat? = null,
     @SerialName("request_contact") val requestContact: Boolean? = null,
     @SerialName("request_location") val requestLocation: Boolean? = null,
     @SerialName("request_poll") val requestPoll: KeyboardButtonPollType? = null,
     @SerialName("web_app") val webApp: WebAppInfo? = null,
+)
+
+@Serializable
+public data class KeyboardButtonRequestUser(
+    @SerialName("request_id") val requestId: Int,
+    @SerialName("user_is_bot") val userIsBot: Boolean? = null,
+    @SerialName("user_is_premium") val userIsPremium: Boolean? = null,
+)
+
+@Serializable
+public data class KeyboardButtonRequestChat(
+    @SerialName("request_id") val requestId: Int,
+    @SerialName("chat_is_channel") val chatIsChannel: Boolean,
+    @SerialName("chat_is_forum") val chatIsForum: Boolean? = null,
+    @SerialName("chat_has_username") val chatHasUsername: Boolean? = null,
+    @SerialName("chat_is_created") val chatIsCreated: Boolean? = null,
+    @SerialName("user_administrator_rights") val userAdministratorRights: ChatAdministratorRights? = null,
+    @SerialName("bot_administrator_rights") val botAdministratorRights: ChatAdministratorRights? = null,
+    @SerialName("bot_is_member") val botIsMember: Boolean? = null,
 )
 
 @Serializable

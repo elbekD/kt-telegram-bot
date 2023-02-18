@@ -38,6 +38,7 @@ public data class User(
 @Serializable
 public data class Message(
     @SerialName("message_id") val messageId: Long,
+    @SerialName("message_thread_id") val messageThreadId: Long? = null,
     @SerialName("from") val from: User? = null,
     @SerialName("sender_chat") val senderChat: Chat? = null,
     @SerialName("date") val date: Long,
@@ -48,6 +49,7 @@ public data class Message(
     @SerialName("forward_signature") val forwardSignature: String? = null,
     @SerialName("forward_sender_name") val forwardSenderName: String? = null,
     @SerialName("forward_date") val forwardDate: Long? = null,
+    @SerialName("is_topic_message") val isTopicMessage: Boolean? = null,
     @SerialName("is_automatic_forward") val isAutomaticForward: Boolean? = null,
     @SerialName("reply_to_message") val replyToMessage: Message? = null,
     @SerialName("via_bot") val viaBot: User? = null,
@@ -67,6 +69,7 @@ public data class Message(
     @SerialName("voice") val voice: Voice? = null,
     @SerialName("caption") val caption: String? = null,
     @SerialName("caption_entities") val captionEntities: List<MessageEntity> = emptyList(),
+    @SerialName("has_media_spoiler") val hasMediaSpoiler: Boolean? = null,
     @SerialName("contact") val contact: Contact? = null,
     @SerialName("dice") val dice: Dice? = null,
     @SerialName("game") val game: Game? = null,
@@ -87,9 +90,18 @@ public data class Message(
     @SerialName("pinned_message") val pinnedMessage: Message? = null,
     @SerialName("invoice") val invoice: Invoice? = null,
     @SerialName("successful_payment") val successfulPayment: SuccessfulPayment? = null,
+    @SerialName("user_shared") val userShared: UserShared? = null,
+    @SerialName("chat_shared") val chatShared: ChatShared? = null,
     @SerialName("connected_website") val connectedWebsite: String? = null,
+    @SerialName("write_access_allowed") val writeAccessAllowed: WriteAccessAllowed? = null,
     @SerialName("passport_data") val passportData: PassportData? = null,
     @SerialName("proximity_alert_triggered") val proximityAlertTriggered: ProximityAlertTriggered? = null,
+    @SerialName("forum_topic_created") val forumTopicCreated: ForumTopicCreated? = null,
+    @SerialName("forum_topic_edited") val forumTopicEdited: ForumTopicEdited? = null,
+    @SerialName("forum_topic_closed") val forumTopicClosed: ForumTopicClosed? = null,
+    @SerialName("forum_topic_reopened") val forumTopicReopened: ForumTopicReopened? = null,
+    @SerialName("general_forum_topic_hidden") val generalForumTopicHidden: GeneralForumTopicHidden? = null,
+    @SerialName("general_forum_topic_unhidden") val generalForumTopicUnhidden: GeneralForumTopicUnhidden? = null,
     @SerialName("video_chat_scheduled") val videoChatScheduled: VideoChatScheduled? = null,
     @SerialName("video_chat_started") val videoChatStarted: VideoChatStarted? = null,
     @SerialName("video_chat_ended") val videoChatEnded: VideoChatEnded? = null,
@@ -329,6 +341,19 @@ public data class MessageAutoDeleteTimerChanged(
 )
 
 @Serializable
+public data class ForumTopicCreated(
+    @SerialName("name") val name: String,
+    @SerialName("icon_color") val iconColor: Int,
+    @SerialName("icon_custom_emoji_id") val iconCustomEmojiId: Int?,
+)
+
+@Serializable
+public class ForumTopicClosed
+
+@Serializable
+public class ForumTopicReopened
+
+@Serializable
 public data class VideoChatScheduled(
     @SerialName("startDate") val start_date: Long
 )
@@ -403,3 +428,15 @@ public enum class ParseMode {
     @SerialName("MarkdownV2")
     MarkdownV2
 }
+
+@Serializable
+public data class UserShared(
+    @SerialName("request_id") val requestId: Long,
+    @SerialName("user_id") val userId: Long,
+)
+
+@Serializable
+public data class ChatShared(
+    @SerialName("request_id") val requestId: Long,
+    @SerialName("chat_id") val chatId: Long,
+)

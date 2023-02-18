@@ -11,16 +11,22 @@ import com.elbekd.bot.model.internal.AnswerWebAppQuery
 import com.elbekd.bot.model.internal.ApproveChatJoinRequest
 import com.elbekd.bot.model.internal.BanChatMember
 import com.elbekd.bot.model.internal.BanChatSenderChat
+import com.elbekd.bot.model.internal.CloseForumTopic
+import com.elbekd.bot.model.internal.CloseGeneralForumTopic
 import com.elbekd.bot.model.internal.CopyMessage
 import com.elbekd.bot.model.internal.CreateChatInviteLink
+import com.elbekd.bot.model.internal.CreateForumTopic
 import com.elbekd.bot.model.internal.CreateInvoiceLink
 import com.elbekd.bot.model.internal.DeclineChatJoinRequest
 import com.elbekd.bot.model.internal.DeleteChatPhoto
 import com.elbekd.bot.model.internal.DeleteChatStickerSet
+import com.elbekd.bot.model.internal.DeleteForumTopic
 import com.elbekd.bot.model.internal.DeleteMessage
 import com.elbekd.bot.model.internal.DeleteMyCommands
 import com.elbekd.bot.model.internal.DeleteStickerFromSet
 import com.elbekd.bot.model.internal.EditChatInviteLink
+import com.elbekd.bot.model.internal.EditForumTopic
+import com.elbekd.bot.model.internal.EditGeneralForumTopic
 import com.elbekd.bot.model.internal.EditMessageCaption
 import com.elbekd.bot.model.internal.EditMessageLiveLocation
 import com.elbekd.bot.model.internal.EditMessageReplyMarkup
@@ -39,9 +45,12 @@ import com.elbekd.bot.model.internal.GetMyCommands
 import com.elbekd.bot.model.internal.GetMyDefaultAdministratorRights
 import com.elbekd.bot.model.internal.GetStickerSet
 import com.elbekd.bot.model.internal.GetUserProfilePhotos
+import com.elbekd.bot.model.internal.HideGeneralForumTopic
 import com.elbekd.bot.model.internal.LeaveChat
 import com.elbekd.bot.model.internal.PinChatMessage
 import com.elbekd.bot.model.internal.PromoteChatMember
+import com.elbekd.bot.model.internal.ReopenForumTopic
+import com.elbekd.bot.model.internal.ReopenGeneralForumTopic
 import com.elbekd.bot.model.internal.RestrictChatMember
 import com.elbekd.bot.model.internal.RevokeChatInviteLink
 import com.elbekd.bot.model.internal.SendChatAction
@@ -68,7 +77,9 @@ import com.elbekd.bot.model.internal.StopMessageLiveLocation
 import com.elbekd.bot.model.internal.StopPoll
 import com.elbekd.bot.model.internal.UnbanChatMember
 import com.elbekd.bot.model.internal.UnbanChatSenderChat
+import com.elbekd.bot.model.internal.UnhideGeneralForumTopic
 import com.elbekd.bot.model.internal.UnpinAllChatMessages
+import com.elbekd.bot.model.internal.UnpinAllForumTopicMessages
 import com.elbekd.bot.model.internal.UnpinChatMessage
 import com.elbekd.bot.model.internal.UpdateRequest
 import com.elbekd.bot.types.BotCommand
@@ -78,6 +89,7 @@ import com.elbekd.bot.types.ChatAdministratorRights
 import com.elbekd.bot.types.ChatInviteLink
 import com.elbekd.bot.types.ChatMember
 import com.elbekd.bot.types.ChatPermissions
+import com.elbekd.bot.types.ForumTopic
 import com.elbekd.bot.types.GameHighScore
 import com.elbekd.bot.types.InlineKeyboardMarkup
 import com.elbekd.bot.types.InlineQueryResult
@@ -299,6 +311,7 @@ internal class TelegramClient(token: String) : TelegramApi {
     override suspend fun sendMessage(
         chatId: ChatId,
         text: String,
+        messageThreadId: Long?,
         parseMode: ParseMode?,
         entities: List<MessageEntity>?,
         disableWebPagePreview: Boolean?,
@@ -311,6 +324,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         val body = SendMessage(
             chatId = chatId,
             text = text,
+            messageThreadId = messageThreadId,
             parseMode = parseMode,
             entities = entities,
             disableWebPagePreview = disableWebPagePreview,
@@ -327,6 +341,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         chatId: ChatId,
         fromChatId: ChatId,
         msgId: Long,
+        messageThreadId: Long?,
         disableNotification: Boolean?,
         protectContent: Boolean?,
     ): Message {
@@ -334,6 +349,7 @@ internal class TelegramClient(token: String) : TelegramApi {
             chatId = chatId,
             fromChatId = fromChatId,
             messageId = msgId,
+            messageThreadId = messageThreadId,
             disableNotification = disableNotification,
             protectContent = protectContent,
         ).body()
@@ -344,6 +360,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         chatId: ChatId,
         fromChatId: ChatId,
         messageId: Long,
+        messageThreadId: Long?,
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
@@ -357,6 +374,7 @@ internal class TelegramClient(token: String) : TelegramApi {
             chatId = chatId,
             fromChatId = fromChatId,
             messageId = messageId,
+            messageThreadId = messageThreadId,
             caption = caption,
             parseMode = parseMode,
             captionEntities = captionEntities,
@@ -372,9 +390,11 @@ internal class TelegramClient(token: String) : TelegramApi {
     override suspend fun sendPhoto(
         chatId: ChatId,
         photo: SendingDocument,
+        messageThreadId: Long?,
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
+        hasSpoiler: Boolean?,
         disableNotification: Boolean?,
         protectContent: Boolean?,
         replyToMessageId: Long?,
@@ -383,8 +403,10 @@ internal class TelegramClient(token: String) : TelegramApi {
     ): Message {
         val optionals = mutableMapOf<String, String>()
         caption?.let { optionals += ApiConstants.CAPTION to it }
+        messageThreadId?.let { optionals += ApiConstants.MESSAGE_THREAD_ID to toJson(it) }
         parseMode?.let { optionals += ApiConstants.PARSE_MODE to toJson(it) }
         captionEntities?.let { optionals += ApiConstants.CAPTION_ENTITIES to toJson(it) }
+        hasSpoiler?.let { ApiConstants.HAS_SPOILER to toJson(it) }
         disableNotification?.let { optionals += ApiConstants.DISABLE_NOTIFICATION to toJson(it) }
         protectContent?.let { optionals += ApiConstants.PROTECT_CONTENT to toJson(it) }
         replyToMessageId?.let { optionals += ApiConstants.REPLY_TO_MESSAGE_ID to toJson(it) }
@@ -402,6 +424,7 @@ internal class TelegramClient(token: String) : TelegramApi {
     override suspend fun sendAudio(
         chatId: ChatId,
         audio: SendingDocument,
+        messageThreadId: Long?,
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
@@ -416,6 +439,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         replyMarkup: ReplyKeyboard?
     ): Message {
         val optionals = mutableMapOf<String, String>()
+        messageThreadId?.let { optionals += ApiConstants.MESSAGE_THREAD_ID to toJson(it) }
         caption?.let { optionals += ApiConstants.CAPTION to toJson(caption) }
         parseMode?.let { optionals += ApiConstants.PARSE_MODE to toJson(parseMode) }
         captionEntities?.let { optionals += ApiConstants.CAPTION_ENTITIES to toJson(captionEntities) }
@@ -440,6 +464,7 @@ internal class TelegramClient(token: String) : TelegramApi {
     override suspend fun sendDocument(
         chatId: ChatId,
         document: SendingDocument,
+        messageThreadId: Long?,
         thumb: File?,
         caption: String?,
         parseMode: ParseMode?,
@@ -452,6 +477,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         replyMarkup: ReplyKeyboard?
     ): Message {
         val optionals = mutableMapOf<String, String>()
+        messageThreadId?.let { optionals += ApiConstants.MESSAGE_THREAD_ID to toJson(it) }
         caption?.let { optionals += ApiConstants.CAPTION to toJson(it) }
         parseMode?.let { optionals += ApiConstants.PARSE_MODE to toJson(it) }
         captionEntities?.let { optionals += ApiConstants.CAPTION_ENTITIES to toJson(it) }
@@ -474,6 +500,7 @@ internal class TelegramClient(token: String) : TelegramApi {
     override suspend fun sendVideo(
         chatId: ChatId,
         video: SendingDocument,
+        messageThreadId: Long?,
         duration: Long?,
         width: Long?,
         height: Long?,
@@ -481,6 +508,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
+        hasSpoiler: Boolean?,
         streaming: Boolean?,
         disableNotification: Boolean?,
         protectContent: Boolean?,
@@ -489,12 +517,14 @@ internal class TelegramClient(token: String) : TelegramApi {
         replyMarkup: ReplyKeyboard?
     ): Message {
         val optionals = mutableMapOf<String, String>()
+        messageThreadId?.let { optionals += ApiConstants.MESSAGE_THREAD_ID to toJson(it) }
         duration?.let { ApiConstants.DURATION to toJson(it) }
         width?.let { ApiConstants.WIDTH to toJson(it) }
         height?.let { ApiConstants.HEIGHT to toJson(it) }
         caption?.let { ApiConstants.CAPTION to toJson(it) }
         parseMode?.let { ApiConstants.PARSE_MODE to toJson(it) }
         captionEntities?.let { ApiConstants.CAPTION_ENTITIES to toJson(it) }
+        hasSpoiler?.let { ApiConstants.HAS_SPOILER to toJson(it) }
         streaming?.let { ApiConstants.SUPPORTS_STREAMING to toJson(it) }
         disableNotification?.let { ApiConstants.DISABLE_NOTIFICATION to toJson(it) }
         protectContent?.let { ApiConstants.PROTECT_CONTENT to toJson(it) }
@@ -514,6 +544,7 @@ internal class TelegramClient(token: String) : TelegramApi {
     override suspend fun sendAnimation(
         chatId: ChatId,
         animation: SendingDocument,
+        messageThreadId: Long?,
         duration: Long?,
         width: Long?,
         height: Long?,
@@ -521,6 +552,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
+        hasSpoiler: Boolean?,
         disableNotification: Boolean?,
         protectContent: Boolean?,
         replyToMessageId: Long?,
@@ -528,12 +560,14 @@ internal class TelegramClient(token: String) : TelegramApi {
         replyMarkup: ReplyKeyboard?
     ): Message {
         val optionals = mutableMapOf<String, String>()
+        messageThreadId?.let { optionals += ApiConstants.MESSAGE_THREAD_ID to toJson(it) }
         duration?.let { ApiConstants.DURATION to toJson(it) }
         width?.let { ApiConstants.WIDTH to toJson(it) }
         height?.let { ApiConstants.HEIGHT to toJson(it) }
         caption?.let { ApiConstants.CAPTION to toJson(it) }
         parseMode?.let { ApiConstants.PARSE_MODE to toJson(it) }
         captionEntities?.let { ApiConstants.CAPTION_ENTITIES to toJson(it) }
+        hasSpoiler?.let { ApiConstants.HAS_SPOILER to toJson(it) }
         disableNotification?.let { ApiConstants.DISABLE_NOTIFICATION to toJson(it) }
         protectContent?.let { ApiConstants.PROTECT_CONTENT to toJson(it) }
         replyToMessageId?.let { ApiConstants.REPLY_TO_MESSAGE_ID to toJson(it) }
@@ -552,6 +586,7 @@ internal class TelegramClient(token: String) : TelegramApi {
     override suspend fun sendVoice(
         chatId: ChatId,
         voice: SendingDocument,
+        messageThreadId: Long?,
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
@@ -563,6 +598,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         replyMarkup: ReplyKeyboard?
     ): Message {
         val optionals = mutableMapOf<String, String>()
+        messageThreadId?.let { optionals += ApiConstants.MESSAGE_THREAD_ID to toJson(it) }
         caption?.let { ApiConstants.CAPTION to toJson(it) }
         parseMode?.let { ApiConstants.PARSE_MODE to toJson(it) }
         captionEntities?.let { ApiConstants.CAPTION_ENTITIES to toJson(it) }
@@ -584,6 +620,7 @@ internal class TelegramClient(token: String) : TelegramApi {
     override suspend fun sendVideoNote(
         chatId: ChatId,
         note: SendingDocument,
+        messageThreadId: Long?,
         duration: Long?,
         length: Long?,
         thumb: File?,
@@ -594,6 +631,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         replyMarkup: ReplyKeyboard?
     ): Message {
         val optionals = mutableMapOf<String, String>()
+        messageThreadId?.let { optionals += ApiConstants.MESSAGE_THREAD_ID to toJson(it) }
         duration?.let { ApiConstants.DURATION to toJson(it) }
         disableNotification?.let { ApiConstants.DISABLE_NOTIFICATION to toJson(it) }
         protectContent?.let { ApiConstants.PROTECT_CONTENT to toJson(it) }
@@ -614,6 +652,7 @@ internal class TelegramClient(token: String) : TelegramApi {
     override suspend fun sendMediaGroup(
         chatId: ChatId,
         media: List<InputMedia>,
+        messageThreadId: Long?,
         disableNotification: Boolean?,
         protectContent: Boolean?,
         replyToMessageId: Long?,
@@ -646,6 +685,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         }
 
         form.addFormDataPart(ApiConstants.MEDIA, toJson(media))
+        messageThreadId?.let { form.addFormDataPart(ApiConstants.MESSAGE_THREAD_ID, it.toString()) }
         disableNotification?.let { form.addFormDataPart(ApiConstants.DISABLE_NOTIFICATION, it.toString()) }
         protectContent?.let { form.addFormDataPart(ApiConstants.PROTECT_CONTENT, it.toString()) }
         replyToMessageId?.let { form.addFormDataPart(ApiConstants.REPLY_TO_MESSAGE_ID, it.toString()) }
@@ -658,6 +698,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         chatId: ChatId,
         latitude: Float,
         longitude: Float,
+        messageThreadId: Long?,
         horizontalAccuracy: Float?,
         livePeriod: Long?,
         heading: Long?,
@@ -672,6 +713,7 @@ internal class TelegramClient(token: String) : TelegramApi {
             chatId = chatId,
             latitude = latitude,
             longitude = longitude,
+            messageThreadId = messageThreadId,
             horizontalAccuracy = horizontalAccuracy,
             livePeriod = livePeriod,
             heading = heading,
@@ -731,6 +773,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         longitude: Float,
         title: String,
         address: String,
+        messageThreadId: Long?,
         foursquareId: String?,
         foursquareType: String?,
         googlePlaceId: String?,
@@ -747,6 +790,7 @@ internal class TelegramClient(token: String) : TelegramApi {
             longitude = longitude,
             title = title,
             address = address,
+            messageThreadId = messageThreadId,
             foursquareId = foursquareId,
             foursquareType = foursquareType,
             googlePlaceId = googlePlaceId,
@@ -764,6 +808,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         chatId: ChatId,
         phoneNumber: String,
         firstName: String,
+        messageThreadId: Long?,
         lastName: String?,
         vcard: String?,
         disableNotification: Boolean?,
@@ -776,6 +821,7 @@ internal class TelegramClient(token: String) : TelegramApi {
             chatId = chatId,
             phone = phoneNumber,
             firstName = firstName,
+            messageThreadId = messageThreadId,
             lastName = lastName,
             vcard = vcard,
             disableNotification = disableNotification,
@@ -791,6 +837,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         chatId: ChatId,
         question: String,
         options: List<String>,
+        messageThreadId: Long?,
         isAnonymous: Boolean?,
         type: String?,
         allowsMultipleAnswers: Boolean?,
@@ -810,6 +857,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         val body = SendPoll(
             chatId = chatId,
             question = question,
+            messageThreadId = messageThreadId,
             options = options,
             isAnonymous = isAnonymous,
             type = type,
@@ -830,6 +878,7 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     override suspend fun sendDice(
         chatId: ChatId,
+        messageThreadId: Long?,
         emoji: String?,
         disableNotification: Boolean?,
         protectContent: Boolean?,
@@ -839,6 +888,7 @@ internal class TelegramClient(token: String) : TelegramApi {
     ): Message {
         val body = SendDice(
             chatId = chatId,
+            messageThreadId = messageThreadId,
             emoji = emoji,
             disableNotification = disableNotification,
             protectContent = protectContent,
@@ -851,11 +901,13 @@ internal class TelegramClient(token: String) : TelegramApi {
 
     override suspend fun sendChatAction(
         chatId: ChatId,
-        action: Action
+        action: Action,
+        messageThreadId: Long?,
     ): Boolean {
         val body = SendChatAction(
             chatId = chatId,
-            action = action
+            action = action,
+            messageThreadId = messageThreadId,
         ).body()
         return post(ApiConstants.METHOD_SEND_CHAT_ACTION, body)
     }
@@ -894,6 +946,108 @@ internal class TelegramClient(token: String) : TelegramApi {
             forChannels = forChannels,
         ).body()
         return post("getMyDefaultAdministratorRights", body)
+    }
+
+    override suspend fun getForumTopicIconStickers(): List<Sticker> {
+        return get("getForumTopicIconStickers")
+    }
+
+    override suspend fun createForumTopic(
+        chatId: ChatId,
+        name: String,
+        iconColor: Int?,
+        iconCustomEmojiId: String?,
+    ): ForumTopic {
+        val body = CreateForumTopic(
+            chatId = chatId,
+            name = name,
+            iconColor = iconColor,
+            iconCustomEmojiId = iconCustomEmojiId,
+        ).body()
+        return post("createForumTopic", body)
+    }
+
+    override suspend fun editForumTopic(
+        chatId: ChatId,
+        messageThreadId: Long,
+        name: String?,
+        iconCustomEmojiId: String?,
+    ): Boolean {
+        val body = EditForumTopic(
+            chatId = chatId,
+            messageThreadId = messageThreadId,
+            name = name,
+            iconCustomEmojiId = iconCustomEmojiId,
+        ).body()
+        return post("editForumTopic", body)
+    }
+
+    override suspend fun closeForumTopic(chatId: ChatId, messageThreadId: Long): Boolean {
+        val body = CloseForumTopic(
+            chatId = chatId,
+            messageThreadId = messageThreadId,
+        ).body()
+        return post("closeForumTopic", body)
+    }
+
+    override suspend fun reopenForumTopic(chatId: ChatId, messageThreadId: Long): Boolean {
+        val body = ReopenForumTopic(
+            chatId = chatId,
+            messageThreadId = messageThreadId,
+        ).body()
+        return post("reopenForumTopic", body)
+    }
+
+    override suspend fun deleteForumTopic(chatId: ChatId, messageThreadId: Long): Boolean {
+        val body = DeleteForumTopic(
+            chatId = chatId,
+            messageThreadId = messageThreadId,
+        ).body()
+        return post("deleteForumTopic", body)
+    }
+
+    override suspend fun unpinAllForumTopicMessages(chatId: ChatId, messageThreadId: Long): Boolean {
+        val body = UnpinAllForumTopicMessages(
+            chatId = chatId,
+            messageThreadId = messageThreadId,
+        ).body()
+        return post("unpinAllForumTopicMessages", body)
+    }
+
+    override suspend fun editGeneralForumTopic(chatId: ChatId, name: String): Boolean {
+        val body = EditGeneralForumTopic(
+            chatId = chatId,
+            name = name,
+        ).body()
+        return post("editGeneralForumTopic", body)
+    }
+
+    override suspend fun closeGeneralForumTopic(chatId: ChatId): Boolean {
+        val body = CloseGeneralForumTopic(
+            chatId = chatId,
+        ).body()
+        return post("closeGeneralForumTopic", body)
+    }
+
+    override suspend fun reopenGeneralForumTopic(chatId: ChatId): Boolean {
+        val body = ReopenGeneralForumTopic(
+            chatId = chatId,
+        ).body()
+        return post("reopenGeneralForumTopic", body)
+    }
+
+    override suspend fun hideGeneralForumTopic(chatId: ChatId): Boolean {
+        val body = HideGeneralForumTopic(
+            chatId = chatId,
+        ).body()
+        return post("hideGeneralForumTopic", body)
+    }
+
+    override suspend fun unhideGeneralForumTopic(chatId: ChatId): Boolean {
+        val body = UnhideGeneralForumTopic(
+            chatId = chatId,
+        ).body()
+        return post("unhideGeneralForumTopic", body)
     }
 
     override suspend fun banChatSenderChat(
@@ -968,12 +1122,14 @@ internal class TelegramClient(token: String) : TelegramApi {
         chatId: ChatId,
         userId: Long,
         permissions: ChatPermissions,
-        untilDate: Long?
+        useIndependentChatPermissions: Boolean?,
+        untilDate: Long?,
     ): Boolean {
         val body = RestrictChatMember(
             chatId = chatId,
             userId = userId,
             permissions = permissions,
+            useIndependentChatPermissions = useIndependentChatPermissions,
             untilDate = untilDate
         ).body()
         return post(ApiConstants.METHOD_RESTRICT_CHAT_MEMBER, body)
@@ -992,7 +1148,8 @@ internal class TelegramClient(token: String) : TelegramApi {
         canPromoteMembers: Boolean?,
         canChangeInfo: Boolean?,
         canInviteUsers: Boolean?,
-        canPinMessages: Boolean?
+        canPinMessages: Boolean?,
+        canManageTopics: Boolean?,
     ): Boolean {
         val body = PromoteChatMember(
             chatId = chatId,
@@ -1008,6 +1165,7 @@ internal class TelegramClient(token: String) : TelegramApi {
             canChangeInfo = canChangeInfo,
             canInviteUsers = canInviteUsers,
             canPinMessages = canPinMessages,
+            canManageTopics = canManageTopics,
         ).body()
         return post(ApiConstants.METHOD_PROMOTE_CHAT_MEMBER, body)
     }
@@ -1025,10 +1183,15 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post(ApiConstants.METHOD_SET_CHAT_ADMINISTRATOR_CUSTOM_TITLE, body)
     }
 
-    override suspend fun setChatPermissions(chatId: ChatId, permissions: ChatPermissions): Boolean {
+    override suspend fun setChatPermissions(
+        chatId: ChatId,
+        permissions: ChatPermissions,
+        useIndependentChatPermissions: Boolean?,
+    ): Boolean {
         val body = SetChatPermissions(
             chatId = chatId,
-            permissions = permissions
+            permissions = permissions,
+            useIndependentChatPermissions = useIndependentChatPermissions,
         ).body()
         return post(ApiConstants.METHOD_SET_CHAT_PERMISSIONS, body)
     }
@@ -1372,6 +1535,7 @@ internal class TelegramClient(token: String) : TelegramApi {
     override suspend fun sendSticker(
         chatId: ChatId,
         sticker: Any,
+        messageThreadId: Long?,
         disableNotification: Boolean?,
         protectContent: Boolean?,
         replyToMessageId: Long?,
@@ -1387,6 +1551,7 @@ internal class TelegramClient(token: String) : TelegramApi {
             is String -> form.addFormDataPart(ApiConstants.STICKER, sticker)
         }
 
+        messageThreadId?.let { form.addFormDataPart(ApiConstants.MESSAGE_THREAD_ID, it.toString()) }
         disableNotification?.let { form.addFormDataPart(ApiConstants.DISABLE_NOTIFICATION, it.toString()) }
         protectContent?.let { form.addFormDataPart(ApiConstants.PROTECT_CONTENT, it.toString()) }
         replyToMessageId?.let { form.addFormDataPart(ApiConstants.REPLY_TO_MESSAGE_ID, it.toString()) }
@@ -1524,6 +1689,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         providerToken: String,
         currency: String,
         prices: List<LabeledPrice>,
+        messageThreadId: Long?,
         maxTipAmount: Int?,
         suggestedTipAmount: List<Int>?,
         startParameter: String?,
@@ -1553,6 +1719,9 @@ internal class TelegramClient(token: String) : TelegramApi {
             providerToken = providerToken,
             currency = currency,
             prices = prices,
+            messageThreadId = messageThreadId,
+            maxTipAmount = maxTipAmount,
+            suggestedTipAmount = suggestedTipAmount,
             startParameter = startParameter,
             providerData = providerData,
             photoUrl = photoUrl,
@@ -1664,6 +1833,7 @@ internal class TelegramClient(token: String) : TelegramApi {
     override suspend fun sendGame(
         chatId: Long,
         gameShortName: String,
+        messageThreadId: Long?,
         disableNotification: Boolean?,
         protectContent: Boolean?,
         replyToMessageId: Long?,
@@ -1673,6 +1843,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         val body = SendGame(
             chatId = chatId,
             gameShortName = gameShortName,
+            messageThreadId = messageThreadId,
             disableNotification = disableNotification,
             protectContent = protectContent,
             replyToMessageId = replyToMessageId,

@@ -153,6 +153,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     override suspend fun sendMessage(
         chatId: ChatId,
         text: String,
+        messageThreadId: Long?,
         parseMode: ParseMode?,
         entities: List<MessageEntity>?,
         disableWebPagePreview: Boolean?,
@@ -164,6 +165,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     ) = client.sendMessage(
         chatId = chatId,
         text = text,
+        messageThreadId = messageThreadId,
         parseMode = parseMode,
         entities = entities,
         disableWebPagePreview = disableWebPagePreview,
@@ -178,12 +180,14 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         chatId: ChatId,
         fromChatId: ChatId,
         msgId: Long,
+        messageThreadId: Long?,
         disableNotification: Boolean?,
         protectContent: Boolean?,
     ) = client.forwardMessage(
         chatId = chatId,
         fromChatId = fromChatId,
         msgId = msgId,
+        messageThreadId = messageThreadId,
         disableNotification = disableNotification,
         protectContent = protectContent,
     )
@@ -192,6 +196,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         chatId: ChatId,
         fromChatId: ChatId,
         messageId: Long,
+        messageThreadId: Long?,
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
@@ -204,6 +209,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         chatId = chatId,
         fromChatId = fromChatId,
         messageId = messageId,
+        messageThreadId = messageThreadId,
         caption = caption,
         parseMode = parseMode,
         captionEntities = captionEntities,
@@ -217,9 +223,11 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     override suspend fun sendPhoto(
         chatId: ChatId,
         photo: SendingDocument,
+        messageThreadId: Long?,
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
+        hasSpoiler: Boolean?,
         disableNotification: Boolean?,
         protectContent: Boolean?,
         replyToMessageId: Long?,
@@ -228,9 +236,11 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     ) = client.sendPhoto(
         chatId = chatId,
         photo = photo,
+        messageThreadId = messageThreadId,
         caption = caption,
         parseMode = parseMode,
         captionEntities = captionEntities,
+        hasSpoiler = hasSpoiler,
         disableNotification = disableNotification,
         protectContent = protectContent,
         replyToMessageId = replyToMessageId,
@@ -241,6 +251,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     override suspend fun sendAudio(
         chatId: ChatId,
         audio: SendingDocument,
+        messageThreadId: Long?,
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
@@ -256,6 +267,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     ) = client.sendAudio(
         chatId = chatId,
         audio = audio,
+        messageThreadId = messageThreadId,
         caption = caption,
         parseMode = parseMode,
         captionEntities = captionEntities,
@@ -273,6 +285,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     override suspend fun sendDocument(
         chatId: ChatId,
         document: SendingDocument,
+        messageThreadId: Long?,
         thumb: File?,
         caption: String?,
         parseMode: ParseMode?,
@@ -286,6 +299,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     ) = client.sendDocument(
         chatId = chatId,
         document = document,
+        messageThreadId = messageThreadId,
         thumb = thumb,
         caption = caption,
         parseMode = parseMode,
@@ -301,6 +315,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     override suspend fun sendVideo(
         chatId: ChatId,
         video: SendingDocument,
+        messageThreadId: Long?,
         duration: Long?,
         width: Long?,
         height: Long?,
@@ -308,6 +323,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
+        hasSpoiler: Boolean?,
         streaming: Boolean?,
         disableNotification: Boolean?,
         protectContent: Boolean?,
@@ -317,6 +333,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     ) = client.sendVideo(
         chatId = chatId,
         video = video,
+        messageThreadId = messageThreadId,
         duration = duration,
         width = width,
         height = height,
@@ -324,6 +341,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         caption = caption,
         parseMode = parseMode,
         captionEntities = captionEntities,
+        hasSpoiler = hasSpoiler,
         streaming = streaming,
         disableNotification = disableNotification,
         protectContent = protectContent,
@@ -335,6 +353,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     override suspend fun sendAnimation(
         chatId: ChatId,
         animation: SendingDocument,
+        messageThreadId: Long?,
         duration: Long?,
         width: Long?,
         height: Long?,
@@ -342,6 +361,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
+        hasSpoiler: Boolean?,
         disableNotification: Boolean?,
         protectContent: Boolean?,
         replyToMessageId: Long?,
@@ -350,6 +370,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     ) = client.sendAnimation(
         chatId = chatId,
         animation = animation,
+        messageThreadId = messageThreadId,
         duration = duration,
         width = width,
         height = height,
@@ -357,6 +378,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         caption = caption,
         parseMode = parseMode,
         captionEntities = captionEntities,
+        hasSpoiler = hasSpoiler,
         disableNotification = disableNotification,
         protectContent = protectContent,
         replyToMessageId = replyToMessageId,
@@ -367,6 +389,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     override suspend fun sendVoice(
         chatId: ChatId,
         voice: SendingDocument,
+        messageThreadId: Long?,
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
@@ -379,6 +402,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     ) = client.sendVoice(
         chatId = chatId,
         voice = voice,
+        messageThreadId = messageThreadId,
         caption = caption,
         parseMode = parseMode,
         captionEntities = captionEntities,
@@ -393,6 +417,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     override suspend fun sendVideoNote(
         chatId: ChatId,
         note: SendingDocument,
+        messageThreadId: Long?,
         duration: Long?,
         length: Long?,
         thumb: File?,
@@ -404,6 +429,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     ) = client.sendVideoNote(
         chatId = chatId,
         note = note,
+        messageThreadId = messageThreadId,
         duration = duration,
         length = length,
         thumb = thumb,
@@ -417,6 +443,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     override suspend fun sendMediaGroup(
         chatId: ChatId,
         media: List<InputMedia>,
+        messageThreadId: Long?,
         disableNotification: Boolean?,
         protectContent: Boolean?,
         replyToMessageId: Long?,
@@ -426,6 +453,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         return client.sendMediaGroup(
             chatId = chatId,
             media = media,
+            messageThreadId = messageThreadId,
             disableNotification = disableNotification,
             protectContent = protectContent,
             replyToMessageId = replyToMessageId,
@@ -437,6 +465,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         chatId: ChatId,
         latitude: Float,
         longitude: Float,
+        messageThreadId: Long?,
         horizontalAccuracy: Float?,
         livePeriod: Long?,
         heading: Long?,
@@ -450,6 +479,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         chatId = chatId,
         latitude = latitude,
         longitude = longitude,
+        messageThreadId = messageThreadId,
         horizontalAccuracy = horizontalAccuracy,
         livePeriod = livePeriod,
         heading = heading,
@@ -502,6 +532,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         longitude: Float,
         title: String,
         address: String,
+        messageThreadId: Long?,
         foursquareId: String?,
         foursquareType: String?,
         googlePlaceId: String?,
@@ -517,6 +548,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         longitude = longitude,
         title = title,
         address = address,
+        messageThreadId = messageThreadId,
         foursquareId = foursquareId,
         foursquareType = foursquareType,
         googlePlaceId = googlePlaceId,
@@ -532,6 +564,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         chatId: ChatId,
         phoneNumber: String,
         firstName: String,
+        messageThreadId: Long?,
         lastName: String?,
         vcard: String?,
         disableNotification: Boolean?,
@@ -543,6 +576,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         chatId = chatId,
         phoneNumber = phoneNumber,
         firstName = firstName,
+        messageThreadId = messageThreadId,
         lastName = lastName,
         vcard = vcard,
         disableNotification = disableNotification,
@@ -554,8 +588,13 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
 
     override suspend fun sendChatAction(
         chatId: ChatId,
-        action: Action
-    ) = client.sendChatAction(chatId = chatId, action = action)
+        action: Action,
+        messageThreadId: Long?,
+    ) = client.sendChatAction(
+        chatId = chatId,
+        action = action,
+        messageThreadId = messageThreadId
+    )
 
     override suspend fun setChatMenuButton(chatId: Long?, menuButton: MenuButton?) =
         client.setChatMenuButton(chatId = chatId, menuButton = menuButton)
@@ -571,6 +610,96 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     override suspend fun getMyDefaultAdministratorRights(
         forChannels: Boolean?
     ) = client.getMyDefaultAdministratorRights(forChannels = forChannels)
+
+    override suspend fun getForumTopicIconStickers() = client.getForumTopicIconStickers()
+
+    override suspend fun createForumTopic(
+        chatId: ChatId,
+        name: String,
+        iconColor: Int?,
+        iconCustomEmojiId: String?
+    ) = client.createForumTopic(
+        chatId = chatId,
+        name = name,
+        iconColor = iconColor,
+        iconCustomEmojiId = iconCustomEmojiId,
+    )
+
+    override suspend fun editForumTopic(
+        chatId: ChatId,
+        messageThreadId: Long,
+        name: String?,
+        iconCustomEmojiId: String?
+    ) = client.editForumTopic(
+        chatId = chatId,
+        messageThreadId = messageThreadId,
+        name = name,
+        iconCustomEmojiId = iconCustomEmojiId,
+    )
+
+    override suspend fun closeForumTopic(
+        chatId: ChatId,
+        messageThreadId: Long
+    ) = client.closeForumTopic(
+        chatId = chatId,
+        messageThreadId = messageThreadId,
+    )
+
+    override suspend fun reopenForumTopic(
+        chatId: ChatId,
+        messageThreadId: Long
+    ) = client.reopenForumTopic(
+        chatId = chatId,
+        messageThreadId = messageThreadId,
+    )
+
+    override suspend fun deleteForumTopic(
+        chatId: ChatId,
+        messageThreadId: Long
+    ) = client.deleteForumTopic(
+        chatId = chatId,
+        messageThreadId = messageThreadId,
+    )
+
+    override suspend fun unpinAllForumTopicMessages(
+        chatId: ChatId,
+        messageThreadId: Long
+    ) = client.unpinAllForumTopicMessages(
+        chatId = chatId,
+        messageThreadId = messageThreadId,
+    )
+
+    override suspend fun editGeneralForumTopic(
+        chatId: ChatId,
+        name: String
+    ) = client.editGeneralForumTopic(
+        chatId = chatId,
+        name = name,
+    )
+
+    override suspend fun closeGeneralForumTopic(
+        chatId: ChatId,
+    ) = client.closeGeneralForumTopic(
+        chatId = chatId,
+    )
+
+    override suspend fun reopenGeneralForumTopic(
+        chatId: ChatId,
+    ) = client.reopenGeneralForumTopic(
+        chatId = chatId,
+    )
+
+    override suspend fun hideGeneralForumTopic(
+        chatId: ChatId,
+    ) = client.hideGeneralForumTopic(
+        chatId = chatId,
+    )
+
+    override suspend fun unhideGeneralForumTopic(
+        chatId: ChatId,
+    ) = client.unhideGeneralForumTopic(
+        chatId = chatId,
+    )
 
     override suspend fun getUserProfilePhotos(
         userId: Long,
@@ -611,9 +740,15 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         chatId: ChatId,
         userId: Long,
         permissions: ChatPermissions,
-        untilDate: Long?
-    ) =
-        client.restrictChatMember(chatId, userId, permissions, untilDate)
+        useIndependentChatPermissions: Boolean?,
+        untilDate: Long?,
+    ) = client.restrictChatMember(
+        chatId = chatId,
+        userId = userId,
+        permissions = permissions,
+        useIndependentChatPermissions = useIndependentChatPermissions,
+        untilDate = untilDate,
+    )
 
     override suspend fun promoteChatMember(
         chatId: ChatId,
@@ -628,7 +763,8 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         canPromoteMembers: Boolean?,
         canChangeInfo: Boolean?,
         canInviteUsers: Boolean?,
-        canPinMessages: Boolean?
+        canPinMessages: Boolean?,
+        canManageTopics: Boolean?,
     ): Boolean = client.promoteChatMember(
         chatId = chatId,
         userId = userId,
@@ -642,7 +778,8 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         canPromoteMembers = canPromoteMembers,
         canChangeInfo = canChangeInfo,
         canInviteUsers = canInviteUsers,
-        canPinMessages = canPinMessages
+        canPinMessages = canPinMessages,
+        canManageTopics = canManageTopics,
     )
 
     override suspend fun exportChatInviteLink(chatId: ChatId) = client.exportChatInviteLink(chatId)
@@ -670,7 +807,10 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         disableNotification: Boolean?
     ) = client.pinChatMessage(chatId, messageId, disableNotification)
 
-    override suspend fun unpinChatMessage(chatId: ChatId, messageId: Long?) = client.unpinChatMessage(chatId, messageId)
+    override suspend fun unpinChatMessage(
+        chatId: ChatId,
+        messageId: Long?
+    ) = client.unpinChatMessage(chatId, messageId)
 
     override suspend fun unpinAllChatMessages(chatId: ChatId): Boolean = client.unpinAllChatMessages(chatId)
 
@@ -799,6 +939,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     override suspend fun sendSticker(
         chatId: ChatId,
         sticker: Any,
+        messageThreadId: Long?,
         disableNotification: Boolean?,
         protectContent: Boolean?,
         replyToMessageId: Long?,
@@ -809,6 +950,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         return client.sendSticker(
             chatId = chatId,
             sticker = sticker,
+            messageThreadId = messageThreadId,
             disableNotification = disableNotification,
             protectContent = protectContent,
             replyToMessageId = replyToMessageId,
@@ -905,6 +1047,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     override suspend fun sendGame(
         chatId: Long,
         gameShortName: String,
+        messageThreadId: Long?,
         disableNotification: Boolean?,
         protectContent: Boolean?,
         replyToMessageId: Long?,
@@ -913,6 +1056,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     ) = client.sendGame(
         chatId = chatId,
         gameShortName = gameShortName,
+        messageThreadId = messageThreadId,
         disableNotification = disableNotification,
         protectContent = protectContent,
         replyToMessageId = replyToMessageId,
@@ -950,6 +1094,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         providerToken: String,
         currency: String,
         prices: List<LabeledPrice>,
+        messageThreadId: Long?,
         maxTipAmount: Int?,
         suggestedTipAmount: List<Int>?,
         startParameter: String?,
@@ -978,6 +1123,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         providerToken = providerToken,
         currency = currency,
         prices = prices,
+        messageThreadId = messageThreadId,
         maxTipAmount = maxTipAmount,
         suggestedTipAmount = suggestedTipAmount,
         startParameter = startParameter,
@@ -1064,6 +1210,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         chatId: ChatId,
         question: String,
         options: List<String>,
+        messageThreadId: Long?,
         isAnonymous: Boolean?,
         type: String?,
         allowsMultipleAnswers: Boolean?,
@@ -1088,6 +1235,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
             chatId = chatId,
             question = question,
             options = options,
+            messageThreadId = messageThreadId,
             isAnonymous = isAnonymous,
             type = type,
             allowsMultipleAnswers = allowsMultipleAnswers,
@@ -1109,8 +1257,15 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     override suspend fun stopPoll(chatId: ChatId, messageId: Long, replyMarkup: InlineKeyboardMarkup?): Poll =
         client.stopPoll(chatId, messageId, replyMarkup)
 
-    override suspend fun setChatPermissions(chatId: ChatId, permissions: ChatPermissions) =
-        client.setChatPermissions(chatId, permissions)
+    override suspend fun setChatPermissions(
+        chatId: ChatId,
+        permissions: ChatPermissions,
+        useIndependentChatPermissions: Boolean?,
+    ) = client.setChatPermissions(
+        chatId = chatId,
+        permissions = permissions,
+        useIndependentChatPermissions = useIndependentChatPermissions,
+    )
 
     override suspend fun createChatInviteLink(
         chatId: ChatId,
@@ -1174,6 +1329,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
 
     override suspend fun sendDice(
         chatId: ChatId,
+        messageThreadId: Long?,
         emoji: String?,
         disableNotification: Boolean?,
         protectContent: Boolean?,
@@ -1182,6 +1338,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         replyMarkup: ReplyKeyboard?
     ) = client.sendDice(
         chatId = chatId,
+        messageThreadId = messageThreadId,
         emoji = emoji,
         disableNotification = disableNotification,
         protectContent = protectContent,

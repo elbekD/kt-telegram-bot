@@ -11,6 +11,7 @@ import kotlinx.serialization.Serializable
 internal class SendGame(
     @SerialName(ApiConstants.CHAT_ID) val chatId: Long,
     @SerialName(ApiConstants.GAME_SHORT_NAME) val gameShortName: String,
+    @SerialName(ApiConstants.MESSAGE_THREAD_ID) val messageThreadId: Long? = null,
     @SerialName(ApiConstants.DISABLE_NOTIFICATION) val disableNotification: Boolean? = null,
     @SerialName(ApiConstants.PROTECT_CONTENT) val protectContent: Boolean? = null,
     @SerialName(ApiConstants.REPLY_TO_MESSAGE_ID) val replyToMessageId: Long? = null,

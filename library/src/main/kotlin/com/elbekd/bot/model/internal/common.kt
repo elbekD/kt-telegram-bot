@@ -11,6 +11,7 @@ import kotlinx.serialization.Serializable
 internal class SendMessage(
     @SerialName(ApiConstants.CHAT_ID) val chatId: ChatId,
     @SerialName(ApiConstants.TEXT) val text: String,
+    @SerialName(ApiConstants.MESSAGE_THREAD_ID) val messageThreadId: Long? = null,
     @SerialName(ApiConstants.PARSE_MODE) val parseMode: ParseMode? = null,
     @SerialName(ApiConstants.ENTITIES) val entities: List<MessageEntity>? = null,
     @SerialName(ApiConstants.DISABLE_WEB_PAGE_PREVIEW) val disableWebPagePreview: Boolean? = null,
@@ -26,6 +27,7 @@ internal class ForwardMessage(
     @SerialName(ApiConstants.CHAT_ID) val chatId: ChatId,
     @SerialName(ApiConstants.FROM_CHAT_ID) val fromChatId: ChatId,
     @SerialName(ApiConstants.MESSAGE_ID) val messageId: Long,
+    @SerialName(ApiConstants.MESSAGE_THREAD_ID) val messageThreadId: Long? = null,
     @SerialName(ApiConstants.DISABLE_NOTIFICATION) val disableNotification: Boolean? = null,
     @SerialName(ApiConstants.PROTECT_CONTENT) val protectContent: Boolean? = null,
 )
@@ -35,9 +37,11 @@ internal class CopyMessage(
     @SerialName(ApiConstants.CHAT_ID) val chatId: ChatId,
     @SerialName(ApiConstants.FROM_CHAT_ID) val fromChatId: ChatId,
     @SerialName(ApiConstants.MESSAGE_ID) val messageId: Long,
+    @SerialName(ApiConstants.MESSAGE_THREAD_ID) val messageThreadId: Long? = null,
     @SerialName(ApiConstants.CAPTION) val caption: String? = null,
     @SerialName(ApiConstants.PARSE_MODE) val parseMode: ParseMode? = null,
     @SerialName(ApiConstants.CAPTION_ENTITIES) val captionEntities: List<MessageEntity>? = null,
+    @SerialName(ApiConstants.HAS_SPOILER) val hasSpoiler: Boolean? = null,
     @SerialName(ApiConstants.DISABLE_NOTIFICATION) val disableNotification: Boolean? = null,
     @SerialName(ApiConstants.PROTECT_CONTENT) val protectContent: Boolean? = null,
     @SerialName(ApiConstants.REPLY_TO_MESSAGE_ID) val replyToMessageId: Long? = null,
@@ -50,6 +54,7 @@ internal class SendLocation(
     @SerialName(ApiConstants.CHAT_ID) val chatId: ChatId,
     @SerialName(ApiConstants.LATITUDE) val latitude: Float,
     @SerialName(ApiConstants.LONGITUDE) val longitude: Float,
+    @SerialName(ApiConstants.MESSAGE_THREAD_ID) val messageThreadId: Long? = null,
     @SerialName(ApiConstants.HORIZONTAL_ACCURACY) val horizontalAccuracy: Float? = null,
     @SerialName(ApiConstants.LIVE_PERIOD) val livePeriod: Long? = null,
     @SerialName(ApiConstants.HEADING) val heading: Long? = null,
@@ -119,6 +124,7 @@ internal class SendVenue(
     @SerialName(ApiConstants.LONGITUDE) val longitude: Float,
     @SerialName(ApiConstants.TITLE) val title: String,
     @SerialName(ApiConstants.ADDRESS) val address: String,
+    @SerialName(ApiConstants.MESSAGE_THREAD_ID) val messageThreadId: Long? = null,
     @SerialName(ApiConstants.FOURSQUARE_ID) val foursquareId: String? = null,
     @SerialName(ApiConstants.FOURSQUARE_TYPE) val foursquareType: String? = null,
     @SerialName(ApiConstants.GOOGLE_PLACE_ID) val googlePlaceId: String? = null,
@@ -135,6 +141,7 @@ internal class SendContact(
     @SerialName(ApiConstants.CHAT_ID) val chatId: ChatId,
     @SerialName(ApiConstants.PHONE_NUMBER) val phone: String,
     @SerialName(ApiConstants.FIRST_NAME) val firstName: String,
+    @SerialName(ApiConstants.MESSAGE_THREAD_ID) val messageThreadId: Long? = null,
     @SerialName(ApiConstants.LAST_NAME) val lastName: String? = null,
     @SerialName(ApiConstants.VCARD) val vcard: String? = null,
     @SerialName(ApiConstants.DISABLE_NOTIFICATION) val disableNotification: Boolean? = null,
@@ -147,7 +154,8 @@ internal class SendContact(
 @Serializable
 internal class SendChatAction(
     @SerialName(ApiConstants.CHAT_ID) val chatId: ChatId,
-    @SerialName(ApiConstants.ACTION) val action: Action
+    @SerialName(ApiConstants.ACTION) val action: Action,
+    @SerialName(ApiConstants.MESSAGE_THREAD_ID) val messageThreadId: Long?,
 )
 
 @Serializable
@@ -179,6 +187,7 @@ internal class SendPoll(
     @SerialName(ApiConstants.CHAT_ID) val chatId: ChatId,
     @SerialName(ApiConstants.QUESTION) val question: String,
     @SerialName(ApiConstants.OPTIONS) val options: List<String>,
+    @SerialName(ApiConstants.MESSAGE_THREAD_ID) val messageThreadId: Long? = null,
     @SerialName(ApiConstants.IS_ANONYMOUS) val isAnonymous: Boolean? = null,
     @SerialName(ApiConstants.TYPE) val type: String? = null,
     @SerialName(ApiConstants.ALLOWS_MULTIPLE_ANSWERS) val allowsMultipleAnswers: Boolean? = null,
@@ -205,6 +214,7 @@ internal class SendPoll(
 @Serializable
 internal class SendDice(
     @SerialName(ApiConstants.CHAT_ID) val chatId: ChatId,
+    @SerialName(ApiConstants.MESSAGE_THREAD_ID) val messageThreadId: Long? = null,
     @SerialName(ApiConstants.EMOJI) val emoji: String? = null,
     @SerialName(ApiConstants.DISABLE_NOTIFICATION) val disableNotification: Boolean? = null,
     @SerialName(ApiConstants.PROTECT_CONTENT) val protectContent: Boolean? = null,
@@ -233,7 +243,8 @@ internal class RestrictChatMember(
     @SerialName(ApiConstants.CHAT_ID) val chatId: ChatId,
     @SerialName(ApiConstants.USER_ID) val userId: Long,
     @SerialName(ApiConstants.PERMISSIONS) val permissions: ChatPermissions,
-    @SerialName(ApiConstants.UNTIL_DATE) val untilDate: Long? = null
+    @SerialName(ApiConstants.USE_INDEPENDENT_CHAT_PERMISSIONS) val useIndependentChatPermissions: Boolean? = null,
+    @SerialName(ApiConstants.UNTIL_DATE) val untilDate: Long? = null,
 )
 
 @Serializable
@@ -250,7 +261,8 @@ internal class PromoteChatMember(
     @SerialName(ApiConstants.CAN_PROMOTE_MEMBERS) val canPromoteMembers: Boolean? = null,
     @SerialName(ApiConstants.CAN_CHANGE_INFO) val canChangeInfo: Boolean? = null,
     @SerialName(ApiConstants.CAN_INVITE_USERS) val canInviteUsers: Boolean? = null,
-    @SerialName(ApiConstants.CAN_PIN_MESSAGES) val canPinMessages: Boolean? = null
+    @SerialName(ApiConstants.CAN_PIN_MESSAGES) val canPinMessages: Boolean? = null,
+    @SerialName(ApiConstants.CAN_MANAGE_TOPICS) val canManageTopics: Boolean? = null,
 )
 
 @Serializable
@@ -263,7 +275,8 @@ internal class SetChatAdministratorCustomTitle(
 @Serializable
 internal class SetChatPermissions(
     @SerialName(ApiConstants.CHAT_ID) val chatId: ChatId,
-    @SerialName(ApiConstants.PERMISSIONS) val permissions: ChatPermissions
+    @SerialName(ApiConstants.PERMISSIONS) val permissions: ChatPermissions,
+    @SerialName(ApiConstants.USE_INDEPENDENT_CHAT_PERMISSIONS) val useIndependentChatPermissions: Boolean? = null,
 )
 
 @Serializable

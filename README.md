@@ -3,10 +3,13 @@
 [![](https://jitpack.io/v/elbekD/kt-telegram-bot.svg)](https://jitpack.io/#elbekD/kt-telegram-bot)
 
 Convenient way to build Telegram bots using powerful Kotlin language.
-Support for [Telegram Bot API 6.2](https://core.telegram.org/bots/api).
+Support for [Telegram Bot API 6.5](https://core.telegram.org/bots/api).
 Method names are the same as in [API](https://core.telegram.org/bots/api#available-methods).
 
 ## Changelog
+
+### Version 2.2.0
+- Update Bot API to 6.5
 
 ### Version 2.1.8
 - fix issue #56
@@ -14,9 +17,6 @@ Method names are the same as in [API](https://core.telegram.org/bots/api#availab
 ### Version 2.1.7
 - Update Bot API to 6.2
 - fix InputMedia(#54) and BotCommandScope (de)serialization
-
-### Version 2.1.6
-- `InlineQueryResult` serialization fix
 
 [Changelog history](./CHANGELOG.md)
 

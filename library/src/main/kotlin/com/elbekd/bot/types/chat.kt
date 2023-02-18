@@ -12,7 +12,10 @@ public data class Chat(
     @SerialName("username") val username: String? = null,
     @SerialName("first_name") val firstName: String? = null,
     @SerialName("last_name") val lastName: String? = null,
+    @SerialName("is_forum") val isForum: Boolean? = null,
     @SerialName("photo") val photo: ChatPhoto? = null,
+    @SerialName("active_usernames") val activeUsernames: List<String>? = null,
+    @SerialName("emoji_status_custom_emoji_id") val emojiStatusCustomEmojiId: String? = null,
     @SerialName("bio") val bio: String? = null,
     @SerialName("has_private_forwards") val hasPrivateForwards: Boolean? = null,
     @SerialName("has_restricted_voice_and_video_messages") val hasRestrictedVoiceAndVideoMessages: Boolean? = null,
@@ -24,11 +27,13 @@ public data class Chat(
     @SerialName("permissions") val permissions: ChatPermissions? = null,
     @SerialName("slow_mode_delay") val slowModeDelay: Boolean? = null,
     @SerialName("message_auto_delete_time") val messageAutoDeleteTime: Int? = null,
+    @SerialName("has_aggressive_anti_spam_enabled") val hasAggressiveAntiSpamEnabled: Boolean? = null,
+    @SerialName("has_hidden_members") val hasHiddenMembers: Boolean? = null,
     @SerialName("has_protected_content") val hasProtectedContent: Boolean? = null,
     @SerialName("sticker_set_name") val stickerSetName: String? = null,
     @SerialName("can_set_sticker_set") val canSetStickerSet: Boolean? = null,
     @SerialName("linked_chat_id") val linkedChatId: Int? = null,
-    @SerialName("location") val location: ChatLocation? = null
+    @SerialName("location") val location: ChatLocation? = null,
 )
 
 @Serializable
@@ -40,13 +45,19 @@ public data class ChatLocation(
 @Serializable
 public data class ChatPermissions(
     @SerialName("can_send_messages") val canSendMessages: Boolean? = null,
-    @SerialName("can_send_media_messages") val canSendMediaMessages: Boolean? = null,
+    @SerialName("can_send_audios") val canSendAudios: Boolean? = null,
+    @SerialName("can_send_documents") val canSendDocuments: Boolean? = null,
+    @SerialName("can_send_photos") val canSendPhotos: Boolean? = null,
+    @SerialName("can_send_videos") val canSendVideos: Boolean? = null,
+    @SerialName("can_send_video_notes") val canSendVideoNotes: Boolean? = null,
+    @SerialName("can_send_voice_notes") val canSendVoiceNotes: Boolean? = null,
     @SerialName("can_send_polls") val canSendPolls: Boolean? = null,
     @SerialName("can_send_other_messages") val canSendOtherMessages: Boolean? = null,
     @SerialName("can_add_web_page_previews") val canAddWebPagePreviews: Boolean? = null,
     @SerialName("can_change_info") val canChangeInfo: Boolean? = null,
     @SerialName("can_invite_users") val canInviteUsers: Boolean? = null,
-    @SerialName("can_pin_messages") val canPinMessages: Boolean? = null
+    @SerialName("can_pin_messages") val canPinMessages: Boolean? = null,
+    @SerialName("can_manage_topics") val canManageTopics: Boolean? = null,
 )
 
 
@@ -94,6 +105,7 @@ public sealed class ChatMember {
         @SerialName("can_post_messages") val canPostMessages: Boolean? = null,
         @SerialName("can_edit_messages") val canEditMessages: Boolean? = null,
         @SerialName("can_pin_messages") val canPinMessages: Boolean? = null,
+        @SerialName("can_manage_topics") val canManageTopics: Boolean? = null,
         @SerialName("custom_title") val customTitle: String? = null
     ) : ChatMember()
 
@@ -110,14 +122,20 @@ public sealed class ChatMember {
         override val status: String,
         override val user: User,
         @SerialName("is_member") val isMember: Boolean,
-        @SerialName("can_change_info") val canChangeInfo: Boolean,
-        @SerialName("can_invite_users") val canInviteUsers: Boolean,
-        @SerialName("can_pin_messages") val canPinMessages: Boolean,
         @SerialName("can_send_messages") val canSendMessages: Boolean,
-        @SerialName("can_send_media_messages") val canSendMediaMessages: Boolean,
+        @SerialName("can_send_audios") val canSendAudios: Boolean,
+        @SerialName("can_send_documents") val canSendDocuments: Boolean,
+        @SerialName("can_send_photos") val canSendPhotos: Boolean,
+        @SerialName("can_send_videos") val canSendVideos: Boolean,
+        @SerialName("can_send_video_notes") val canSendVideoNotes: Boolean,
+        @SerialName("can_send_voice_notes") val canSendVoiceNotes: Boolean,
         @SerialName("can_send_polls") val canSendPolls: Boolean,
         @SerialName("can_send_other_messages") val canSendOtherMessages: Boolean,
         @SerialName("can_add_web_page_previews") val canAddWebPagePreviews: Boolean,
+        @SerialName("can_change_info") val canChangeInfo: Boolean,
+        @SerialName("can_invite_users") val canInviteUsers: Boolean,
+        @SerialName("can_pin_messages") val canPinMessages: Boolean,
+        @SerialName("can_manage_topics") val canManageTopics: Boolean,
         @SerialName("until_date") val untilDate: Int
     ) : ChatMember()
 
@@ -164,6 +182,7 @@ public data class ChatInviteLink(
 public data class ChatJoinRequest(
     @SerialName("chat") val chat: Chat,
     @SerialName("from") val from: Chat,
+    @SerialName("user_chat_id") val userChatId: Long,
     @SerialName("date") val date: Long,
     @SerialName("bio") val bio: String? = null,
     @SerialName("invite_link") val inviteLink: ChatInviteLink? = null,
@@ -182,4 +201,28 @@ public data class ChatAdministratorRights(
     @SerialName("can_post_messages") val canPostMessages: Boolean? = null,
     @SerialName("can_edit_messages") val canEditMessages: Boolean? = null,
     @SerialName("can_pin_messages") val canPinMessages: Boolean? = null,
+    @SerialName("can_manage_topics") val canManageTopics: Boolean? = null,
 )
+
+@Serializable
+public data class ForumTopic(
+    @SerialName("message_thread_id") val messageThreadId: Long,
+    @SerialName("name") val name: String,
+    @SerialName("icon_color") val iconColor: Int,
+    @SerialName("icon_custom_emoji_id") val iconCustomEmojiId: String? = null,
+)
+
+@Serializable
+public data class ForumTopicEdited(
+    @SerialName("name") val name: String,
+    @SerialName("icon_custom_emoji_id") val iconCustomEmojiId: String? = null,
+)
+
+@Serializable
+public class GeneralForumTopicHidden
+
+@Serializable
+public class GeneralForumTopicUnhidden
+
+@Serializable
+public class WriteAccessAllowed

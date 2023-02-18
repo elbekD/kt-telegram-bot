@@ -15,6 +15,7 @@ public interface TelegramPaymentApi {
         providerToken: String,
         currency: String,
         prices: List<LabeledPrice>,
+        messageThreadId: Long? = null,
         maxTipAmount: Int? = null,
         suggestedTipAmount: List<Int>? = null,
         startParameter: String? = null,

@@ -9,6 +9,7 @@ public interface TelegramGameApi {
     public suspend fun sendGame(
         chatId: Long,
         gameShortName: String,
+        messageThreadId: Long? = null,
         disableNotification: Boolean? = null,
         protectContent: Boolean? = null,
         replyToMessageId: Long? = null,

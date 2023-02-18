@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 2.2.0
+- Update Bot API to 6.5
+
 ## Version 2.1.8
 - fix issue #56
 

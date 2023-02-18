@@ -17,6 +17,7 @@ internal class SendInvoice(
     @SerialName(ApiConstants.PROVIDER_TOKEN) val providerToken: String,
     @SerialName(ApiConstants.CURRENCY) val currency: String,
     @SerialName(ApiConstants.PRICES) val prices: List<LabeledPrice>,
+    @SerialName(ApiConstants.MESSAGE_THREAD_ID) val messageThreadId: Long? = null,
     @SerialName(ApiConstants.MAX_TIP_AMOUNT) val maxTipAmount: Int? = null,
     @SerialName(ApiConstants.SUGGESTED_TIP_AMOUNTS) val suggestedTipAmount: List<Int>? = null,
     @SerialName(ApiConstants.START_PARAMETER) val startParameter: String? = null,

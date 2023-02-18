@@ -1,7 +1,22 @@
 package com.elbekd.bot.api
 
 import com.elbekd.bot.model.ChatId
-import com.elbekd.bot.types.*
+import com.elbekd.bot.types.BotCommand
+import com.elbekd.bot.types.BotCommandScope
+import com.elbekd.bot.types.Chat
+import com.elbekd.bot.types.ChatInviteLink
+import com.elbekd.bot.types.ChatMember
+import com.elbekd.bot.types.ChatPermissions
+import com.elbekd.bot.types.File
+import com.elbekd.bot.types.InlineKeyboardMarkup
+import com.elbekd.bot.types.InputMedia
+import com.elbekd.bot.types.Message
+import com.elbekd.bot.types.MessageEntity
+import com.elbekd.bot.types.MessageId
+import com.elbekd.bot.types.ParseMode
+import com.elbekd.bot.types.ReplyKeyboard
+import com.elbekd.bot.types.User
+import com.elbekd.bot.types.UserProfilePhotos
 import com.elbekd.bot.util.Action
 import com.elbekd.bot.util.SendingDocument
 
@@ -40,6 +55,7 @@ public interface TelegramApi :
     public suspend fun sendMessage(
         chatId: ChatId,
         text: String,
+        messageThreadId: Long? = null,
         parseMode: ParseMode? = null,
         entities: List<MessageEntity>? = null,
         disableWebPagePreview: Boolean? = null,
@@ -54,6 +70,7 @@ public interface TelegramApi :
         chatId: ChatId,
         fromChatId: ChatId,
         msgId: Long,
+        messageThreadId: Long? = null,
         disableNotification: Boolean? = null,
         protectContent: Boolean? = null,
     ): Message
@@ -62,6 +79,7 @@ public interface TelegramApi :
         chatId: ChatId,
         fromChatId: ChatId,
         messageId: Long,
+        messageThreadId: Long? = null,
         caption: String? = null,
         parseMode: ParseMode? = null,
         captionEntities: List<MessageEntity>? = null,
@@ -75,9 +93,11 @@ public interface TelegramApi :
     public suspend fun sendPhoto(
         chatId: ChatId,
         photo: SendingDocument,
+        messageThreadId: Long? = null,
         caption: String? = null,
         parseMode: ParseMode? = null,
         captionEntities: List<MessageEntity>? = null,
+        hasSpoiler: Boolean? = null,
         disableNotification: Boolean? = null,
         protectContent: Boolean? = null,
         replyToMessageId: Long? = null,
@@ -88,6 +108,7 @@ public interface TelegramApi :
     public suspend fun sendAudio(
         chatId: ChatId,
         audio: SendingDocument,
+        messageThreadId: Long? = null,
         caption: String? = null,
         parseMode: ParseMode? = null,
         captionEntities: List<MessageEntity>? = null,
@@ -105,6 +126,7 @@ public interface TelegramApi :
     public suspend fun sendDocument(
         chatId: ChatId,
         document: SendingDocument,
+        messageThreadId: Long? = null,
         thumb: java.io.File? = null,
         caption: String? = null,
         parseMode: ParseMode? = null,
@@ -120,6 +142,7 @@ public interface TelegramApi :
     public suspend fun sendVideo(
         chatId: ChatId,
         video: SendingDocument,
+        messageThreadId: Long? = null,
         duration: Long? = null,
         width: Long? = null,
         height: Long? = null,
@@ -127,6 +150,7 @@ public interface TelegramApi :
         caption: String? = null,
         parseMode: ParseMode? = null,
         captionEntities: List<MessageEntity>? = null,
+        hasSpoiler: Boolean? = null,
         streaming: Boolean? = null,
         disableNotification: Boolean? = null,
         protectContent: Boolean? = null,
@@ -138,6 +162,7 @@ public interface TelegramApi :
     public suspend fun sendAnimation(
         chatId: ChatId,
         animation: SendingDocument,
+        messageThreadId: Long? = null,
         duration: Long? = null,
         width: Long? = null,
         height: Long? = null,
@@ -145,6 +170,7 @@ public interface TelegramApi :
         caption: String? = null,
         parseMode: ParseMode? = null,
         captionEntities: List<MessageEntity>? = null,
+        hasSpoiler: Boolean? = null,
         disableNotification: Boolean? = null,
         protectContent: Boolean? = null,
         replyToMessageId: Long? = null,
@@ -155,6 +181,7 @@ public interface TelegramApi :
     public suspend fun sendVoice(
         chatId: ChatId,
         voice: SendingDocument,
+        messageThreadId: Long? = null,
         caption: String? = null,
         parseMode: ParseMode? = null,
         captionEntities: List<MessageEntity>? = null,
@@ -169,6 +196,7 @@ public interface TelegramApi :
     public suspend fun sendVideoNote(
         chatId: ChatId,
         note: SendingDocument,
+        messageThreadId: Long? = null,
         duration: Long? = null,
         length: Long? = null,
         thumb: java.io.File? = null,
@@ -182,6 +210,7 @@ public interface TelegramApi :
     public suspend fun sendMediaGroup(
         chatId: ChatId,
         media: List<InputMedia>,
+        messageThreadId: Long? = null,
         disableNotification: Boolean? = null,
         protectContent: Boolean? = null,
         replyToMessageId: Long? = null,
@@ -192,6 +221,7 @@ public interface TelegramApi :
         chatId: ChatId,
         latitude: Float,
         longitude: Float,
+        messageThreadId: Long? = null,
         horizontalAccuracy: Float? = null,
         livePeriod: Long? = null,
         heading: Long? = null,
@@ -228,6 +258,7 @@ public interface TelegramApi :
         longitude: Float,
         title: String,
         address: String,
+        messageThreadId: Long? = null,
         foursquareId: String? = null,
         foursquareType: String? = null,
         googlePlaceId: String? = null,
@@ -243,6 +274,7 @@ public interface TelegramApi :
         chatId: ChatId,
         phoneNumber: String,
         firstName: String,
+        messageThreadId: Long? = null,
         lastName: String? = null,
         vcard: String? = null,
         disableNotification: Boolean? = null,
@@ -256,6 +288,7 @@ public interface TelegramApi :
         chatId: ChatId,
         question: String,
         options: List<String>,
+        messageThreadId: Long? = null,
         isAnonymous: Boolean? = null,
         type: String? = null,
         allowsMultipleAnswers: Boolean? = null,
@@ -275,6 +308,7 @@ public interface TelegramApi :
 
     public suspend fun sendDice(
         chatId: ChatId,
+        messageThreadId: Long? = null,
         emoji: String? = null,
         disableNotification: Boolean? = null,
         protectContent: Boolean? = null,
@@ -285,7 +319,8 @@ public interface TelegramApi :
 
     public suspend fun sendChatAction(
         chatId: ChatId,
-        action: Action
+        action: Action,
+        messageThreadId: Long? = null,
     ): Boolean
 
     public suspend fun banChatSenderChat(
@@ -323,7 +358,8 @@ public interface TelegramApi :
         chatId: ChatId,
         userId: Long,
         permissions: ChatPermissions,
-        untilDate: Long? = null
+        useIndependentChatPermissions: Boolean? = null,
+        untilDate: Long? = null,
     ): Boolean
 
     public suspend fun promoteChatMember(
@@ -339,7 +375,8 @@ public interface TelegramApi :
         canPromoteMembers: Boolean? = null,
         canChangeInfo: Boolean? = null,
         canInviteUsers: Boolean? = null,
-        canPinMessages: Boolean? = null
+        canPinMessages: Boolean? = null,
+        canManageTopics: Boolean? = null,
     ): Boolean
 
     public suspend fun setChatAdministratorCustomTitle(
@@ -350,7 +387,8 @@ public interface TelegramApi :
 
     public suspend fun setChatPermissions(
         chatId: ChatId,
-        permissions: ChatPermissions
+        permissions: ChatPermissions,
+        useIndependentChatPermissions: Boolean? = null,
     ): Boolean
 
     public suspend fun createChatInviteLink(

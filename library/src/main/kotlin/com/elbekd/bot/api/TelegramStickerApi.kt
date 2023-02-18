@@ -12,6 +12,7 @@ public interface TelegramStickerApi {
     public suspend fun sendSticker(
         chatId: ChatId,
         sticker: Any,
+        messageThreadId: Long? = null,
         disableNotification: Boolean? = null,
         protectContent: Boolean? = null,
         replyToMessageId: Long? = null,

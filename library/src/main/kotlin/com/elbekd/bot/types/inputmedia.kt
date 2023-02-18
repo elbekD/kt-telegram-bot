@@ -3,7 +3,6 @@ package com.elbekd.bot.types
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kotlinx.serialization.json.JsonClassDiscriminator
 import java.io.File
 
 @Serializable
@@ -20,7 +19,8 @@ public data class InputMediaPhoto(
     @Transient override val attachment: File? = null,
     @SerialName("caption") val caption: String? = null,
     @SerialName("parse_mode") val parseMode: String? = null,
-    @SerialName("caption_entities") val captionEntities: List<MessageEntity>? = null
+    @SerialName("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @SerialName("has_spoiler") val hasSpoiler: Boolean? = null,
 ) : InputMedia() {
     @Transient
     override val thumb: Any? = null
@@ -38,7 +38,8 @@ public data class InputMediaVideo(
     @SerialName("width") val width: Int? = null,
     @SerialName("height") val height: Int? = null,
     @SerialName("duration") val duration: Int? = null,
-    @SerialName("supports_streaming") val supportsStreaming: Boolean? = null
+    @SerialName("supports_streaming") val supportsStreaming: Boolean? = null,
+    @SerialName("has_spoiler") val hasSpoiler: Boolean? = null,
 ) : InputMedia()
 
 @Serializable
@@ -52,7 +53,8 @@ public data class InputMediaAnimation(
     @SerialName("caption_entities") val captionEntities: List<MessageEntity>? = null,
     @SerialName("width") val width: Int? = null,
     @SerialName("height") val height: Int? = null,
-    @SerialName("duration") val duration: Int? = null
+    @SerialName("duration") val duration: Int? = null,
+    @SerialName("has_spoiler") val hasSpoiler: Boolean? = null,
 ) : InputMedia()
 
 @Serializable
