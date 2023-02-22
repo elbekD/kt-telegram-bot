@@ -20,12 +20,20 @@ public class PollingOptions {
 
     public var allowedUpdates: List<AllowedUpdate>? = null
 
+    public var autoOffset: AutoOffset = AutoOffset.EARLIEST
+
+    public enum class AutoOffset {
+        EARLIEST,
+        LATEST,
+    }
+
     override fun toString(): String {
         return """
             PollingOptions:
               limit: $limit
               timeout: $timeout
               allowedUpdated: $allowedUpdates
+              autoOffset: ${autoOffset.name}
         """.trimIndent()
     }
 }
