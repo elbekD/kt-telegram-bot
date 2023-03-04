@@ -384,7 +384,7 @@ public sealed class InputMessageContent
 public data class InputTextMessageContent(
     @SerialName("message_text") val messageText: String,
     @SerialName("parse_mode") val parseMode: String? = null,
-    @SerialName("caption_entities") val captionEntities: List<MessageEntity>? = null,
+    @SerialName("entities") val entities: List<MessageEntity>? = null,
     @SerialName("disable_web_page_preview") val disableWebPagePreview: Boolean? = null
 ) : InputMessageContent()
 
