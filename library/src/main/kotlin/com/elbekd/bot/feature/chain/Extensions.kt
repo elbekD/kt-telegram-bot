@@ -26,7 +26,11 @@ public fun Bot.chain(trigger: String, action: suspend (Message) -> Unit): ChainB
  * @param action an action that will be called when the chain is fired
  * @return [ChainBuilder]
  */
-public fun Bot.chain(label: String, predicate: suspend (Message) -> Boolean, action: suspend (Message) -> Unit): ChainBuilder {
+public fun Bot.chain(
+    label: String,
+    predicate: suspend (Message) -> Boolean,
+    action: suspend (Message) -> Unit
+): ChainBuilder {
     return ChainBuilder.with(label, predicate, action)
 }
 

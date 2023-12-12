@@ -66,6 +66,20 @@ public interface TelegramApi :
         replyMarkup: ReplyKeyboard? = null
     ): Message
 
+    public fun sendAsyncMessage(
+        chatId: ChatId,
+        text: String,
+        messageThreadId: Long? = null,
+        parseMode: ParseMode? = null,
+        entities: List<MessageEntity>? = null,
+        disableWebPagePreview: Boolean? = null,
+        disableNotification: Boolean? = null,
+        protectContent: Boolean? = null,
+        replyToMessageId: Long? = null,
+        allowSendingWithoutReply: Boolean? = null,
+        replyMarkup: ReplyKeyboard? = null
+    )
+
     public suspend fun forwardMessage(
         chatId: ChatId,
         fromChatId: ChatId,
