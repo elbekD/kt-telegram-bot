@@ -82,32 +82,21 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     override suspend fun close(): Boolean = client.close()
 
     override suspend fun getUpdates(
-        offset: Int?,
-        limit: Int?,
-        timeout: Int?,
-        allowedUpdates: List<AllowedUpdate>?
-    ): List<Update> =
-        client.getUpdates(
-            offset,
-            limit,
-            timeout,
-            allowedUpdates
-        )
+        offset: Int?, limit: Int?, timeout: Int?, allowedUpdates: List<AllowedUpdate>?
+    ): List<Update> = client.getUpdates(
+        offset, limit, timeout, allowedUpdates
+    )
 
     override suspend fun getMyCommands(
-        scope: BotCommandScope?,
-        languageCode: String?
+        scope: BotCommandScope?, languageCode: String?
     ): List<BotCommand> = client.getMyCommands(scope, languageCode)
 
     override suspend fun setMyCommands(
-        commands: List<BotCommand>,
-        scope: BotCommandScope?,
-        languageCode: String?
+        commands: List<BotCommand>, scope: BotCommandScope?, languageCode: String?
     ): Boolean = client.setMyCommands(commands, scope, languageCode)
 
     override suspend fun deleteMyCommands(
-        scope: BotCommandScope?,
-        languageCode: String?
+        scope: BotCommandScope?, languageCode: String?
     ): Boolean = client.deleteMyCommands(scope, languageCode)
 
     override suspend fun setWebhook(
@@ -260,7 +249,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         duration: Long?,
         performer: String?,
         title: String?,
-        thumb: File?,
+        thumbnail: File?,
         disableNotification: Boolean?,
         protectContent: Boolean?,
         replyToMessageId: Long?,
@@ -276,7 +265,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         duration = duration,
         performer = performer,
         title = title,
-        thumb = thumb,
+        thumbnail = thumbnail,
         disableNotification = disableNotification,
         protectContent = protectContent,
         replyToMessageId = replyToMessageId,
@@ -288,7 +277,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         chatId: ChatId,
         document: SendingDocument,
         messageThreadId: Long?,
-        thumb: File?,
+        thumbnail: File?,
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
@@ -302,7 +291,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         chatId = chatId,
         document = document,
         messageThreadId = messageThreadId,
-        thumb = thumb,
+        thumbnail = thumbnail,
         caption = caption,
         parseMode = parseMode,
         captionEntities = captionEntities,
@@ -321,7 +310,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         duration: Long?,
         width: Long?,
         height: Long?,
-        thumb: File?,
+        thumbnail: File?,
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
@@ -339,7 +328,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         duration = duration,
         width = width,
         height = height,
-        thumb = thumb,
+        thumbnail = thumbnail,
         caption = caption,
         parseMode = parseMode,
         captionEntities = captionEntities,
@@ -359,7 +348,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         duration: Long?,
         width: Long?,
         height: Long?,
-        thumb: File?,
+        thumbnail: File?,
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
@@ -376,7 +365,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         duration = duration,
         width = width,
         height = height,
-        thumb = thumb,
+        thumbnail = thumbnail,
         caption = caption,
         parseMode = parseMode,
         captionEntities = captionEntities,
@@ -422,7 +411,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         messageThreadId: Long?,
         duration: Long?,
         length: Long?,
-        thumb: File?,
+        thumbnail: File?,
         disableNotification: Boolean?,
         protectContent: Boolean?,
         replyToMessageId: Long?,
@@ -434,7 +423,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         messageThreadId = messageThreadId,
         duration = duration,
         length = length,
-        thumb = thumb,
+        thumbnail = thumbnail,
         disableNotification = disableNotification,
         protectContent = protectContent,
         replyToMessageId = replyToMessageId,
@@ -519,10 +508,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     }
 
     override suspend fun stopMessageLiveLocation(
-        chatId: ChatId?,
-        messageId: Long?,
-        inlineMessageId: String?,
-        replyMarkup: InlineKeyboardMarkup?
+        chatId: ChatId?, messageId: Long?, inlineMessageId: String?, replyMarkup: InlineKeyboardMarkup?
     ): Message {
         validateIds(chatId, messageId, inlineMessageId)
         return client.stopMessageLiveLocation(chatId, messageId, inlineMessageId, replyMarkup)
@@ -593,20 +579,16 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         action: Action,
         messageThreadId: Long?,
     ) = client.sendChatAction(
-        chatId = chatId,
-        action = action,
-        messageThreadId = messageThreadId
+        chatId = chatId, action = action, messageThreadId = messageThreadId
     )
 
     override suspend fun setChatMenuButton(chatId: Long?, menuButton: MenuButton?) =
         client.setChatMenuButton(chatId = chatId, menuButton = menuButton)
 
-    override suspend fun getChatMenuButton(chatId: Long?) =
-        client.getChatMenuButton(chatId = chatId)
+    override suspend fun getChatMenuButton(chatId: Long?) = client.getChatMenuButton(chatId = chatId)
 
     override suspend fun setMyDefaultAdministratorRights(
-        rights: ChatAdministratorRights?,
-        forChannels: Boolean?
+        rights: ChatAdministratorRights?, forChannels: Boolean?
     ) = client.setMyDefaultAdministratorRights(rights = rights, forChannels = forChannels)
 
     override suspend fun getMyDefaultAdministratorRights(
@@ -616,10 +598,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     override suspend fun getForumTopicIconStickers() = client.getForumTopicIconStickers()
 
     override suspend fun createForumTopic(
-        chatId: ChatId,
-        name: String,
-        iconColor: Int?,
-        iconCustomEmojiId: String?
+        chatId: ChatId, name: String, iconColor: Int?, iconCustomEmojiId: String?
     ) = client.createForumTopic(
         chatId = chatId,
         name = name,
@@ -628,10 +607,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     )
 
     override suspend fun editForumTopic(
-        chatId: ChatId,
-        messageThreadId: Long,
-        name: String?,
-        iconCustomEmojiId: String?
+        chatId: ChatId, messageThreadId: Long, name: String?, iconCustomEmojiId: String?
     ) = client.editForumTopic(
         chatId = chatId,
         messageThreadId = messageThreadId,
@@ -640,40 +616,35 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     )
 
     override suspend fun closeForumTopic(
-        chatId: ChatId,
-        messageThreadId: Long
+        chatId: ChatId, messageThreadId: Long
     ) = client.closeForumTopic(
         chatId = chatId,
         messageThreadId = messageThreadId,
     )
 
     override suspend fun reopenForumTopic(
-        chatId: ChatId,
-        messageThreadId: Long
+        chatId: ChatId, messageThreadId: Long
     ) = client.reopenForumTopic(
         chatId = chatId,
         messageThreadId = messageThreadId,
     )
 
     override suspend fun deleteForumTopic(
-        chatId: ChatId,
-        messageThreadId: Long
+        chatId: ChatId, messageThreadId: Long
     ) = client.deleteForumTopic(
         chatId = chatId,
         messageThreadId = messageThreadId,
     )
 
     override suspend fun unpinAllForumTopicMessages(
-        chatId: ChatId,
-        messageThreadId: Long
+        chatId: ChatId, messageThreadId: Long
     ) = client.unpinAllForumTopicMessages(
         chatId = chatId,
         messageThreadId = messageThreadId,
     )
 
     override suspend fun editGeneralForumTopic(
-        chatId: ChatId,
-        name: String
+        chatId: ChatId, name: String
     ) = client.editGeneralForumTopic(
         chatId = chatId,
         name = name,
@@ -704,38 +675,27 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     )
 
     override suspend fun getUserProfilePhotos(
-        userId: Long,
-        offset: Long?,
-        limit: Long?
+        userId: Long, offset: Long?, limit: Long?
     ) = client.getUserProfilePhotos(
-        userId = userId,
-        offset = offset,
-        limit = limit
+        userId = userId, offset = offset, limit = limit
     )
 
     override suspend fun banChatSenderChat(
-        chatId: ChatId,
-        senderChatId: Long
+        chatId: ChatId, senderChatId: Long
     ): Boolean = client.banChatSenderChat(chatId, senderChatId)
 
     override suspend fun unbanChatSenderChat(
-        chatId: ChatId,
-        senderChatId: Long
+        chatId: ChatId, senderChatId: Long
     ): Boolean = client.unbanChatSenderChat(chatId, senderChatId)
 
     override suspend fun getFile(fileId: String) = client.getFile(fileId)
 
     override suspend fun banChatMember(
-        chatId: ChatId,
-        userId: Long,
-        untilDate: Long?,
-        revokeMessages: Boolean?
+        chatId: ChatId, userId: Long, untilDate: Long?, revokeMessages: Boolean?
     ) = client.banChatMember(chatId, userId, untilDate, revokeMessages)
 
     override suspend fun unbanChatMember(
-        chatId: ChatId,
-        userId: Long,
-        onlyIfBanned: Boolean?
+        chatId: ChatId, userId: Long, onlyIfBanned: Boolean?
     ) = client.unbanChatMember(chatId, userId, onlyIfBanned)
 
     override suspend fun restrictChatMember(
@@ -787,31 +747,25 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     override suspend fun exportChatInviteLink(chatId: ChatId) = client.exportChatInviteLink(chatId)
 
     override suspend fun setChatPhoto(
-        chatId: ChatId,
-        photo: Any
+        chatId: ChatId, photo: Any
     ) = client.setChatPhoto(chatId, photo)
 
     override suspend fun deleteChatPhoto(chatId: ChatId) = client.deleteChatPhoto(chatId)
 
     override suspend fun setChatTitle(
-        chatId: ChatId,
-        title: String
+        chatId: ChatId, title: String
     ) = client.setChatTitle(chatId, title)
 
     override suspend fun setChatDescription(
-        chatId: ChatId,
-        description: String
+        chatId: ChatId, description: String
     ) = client.setChatDescription(chatId, description)
 
     override suspend fun pinChatMessage(
-        chatId: ChatId,
-        messageId: Long,
-        disableNotification: Boolean?
+        chatId: ChatId, messageId: Long, disableNotification: Boolean?
     ) = client.pinChatMessage(chatId, messageId, disableNotification)
 
     override suspend fun unpinChatMessage(
-        chatId: ChatId,
-        messageId: Long?
+        chatId: ChatId, messageId: Long?
     ) = client.unpinChatMessage(chatId, messageId)
 
     override suspend fun unpinAllChatMessages(chatId: ChatId): Boolean = client.unpinAllChatMessages(chatId)
@@ -825,29 +779,19 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     override suspend fun getChatMemberCount(chatId: ChatId) = client.getChatMemberCount(chatId)
 
     override suspend fun getChatMember(
-        chatId: ChatId,
-        userId: Long
+        chatId: ChatId, userId: Long
     ) = client.getChatMember(chatId, userId)
 
     override suspend fun setChatStickerSet(
-        chatId: ChatId,
-        stickerSetName: String
+        chatId: ChatId, stickerSetName: String
     ) = client.setChatStickerSet(chatId, stickerSetName)
 
     override suspend fun deleteChatStickerSet(chatId: ChatId) = client.deleteChatStickerSet(chatId)
 
     override suspend fun answerCallbackQuery(
-        callbackQueryId: String,
-        text: String?,
-        showAlert: Boolean?,
-        url: String?,
-        cacheTime: Long?
+        callbackQueryId: String, text: String?, showAlert: Boolean?, url: String?, cacheTime: Long?
     ) = client.answerCallbackQuery(
-        callbackQueryId = callbackQueryId,
-        text = text,
-        showAlert = showAlert,
-        url = url,
-        cacheTime = cacheTime
+        callbackQueryId = callbackQueryId, text = text, showAlert = showAlert, url = url, cacheTime = cacheTime
     )
 
     override suspend fun answerInlineQuery(
@@ -868,11 +812,9 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         switchPmParameter = switchPmParameter
     )
 
-    override suspend fun answerWebAppQuery(webAppQueryId: String, result: InlineQueryResult) =
-        client.answerWebAppQuery(
-            webAppQueryId = webAppQueryId,
-            result = result
-        )
+    override suspend fun answerWebAppQuery(webAppQueryId: String, result: InlineQueryResult) = client.answerWebAppQuery(
+        webAppQueryId = webAppQueryId, result = result
+    )
 
     override suspend fun editMessageText(
         chatId: ChatId?,
@@ -930,10 +872,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     }
 
     override suspend fun editMessageReplyMarkup(
-        chatId: ChatId?,
-        messageId: Long?,
-        inlineMessageId: String?,
-        replyMarkup: InlineKeyboardMarkup?
+        chatId: ChatId?, messageId: Long?, inlineMessageId: String?, replyMarkup: InlineKeyboardMarkup?
     ): Message {
         return client.editMessageReplyMarkup(chatId, messageId, inlineMessageId, replyMarkup)
     }
@@ -967,8 +906,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         client.getCustomEmojiStickers(customEmojiIds)
 
     override suspend fun uploadStickerFile(
-        userId: Long,
-        pngSticker: File
+        userId: Long, pngSticker: File
     ) = client.uploadStickerFile(userId, pngSticker)
 
     override suspend fun createNewStickerSet(
@@ -984,9 +922,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         maskPosition: MaskPosition?
     ): Boolean {
         validateExactlyOneNonNull(
-            pngSticker,
-            tgsSticker,
-            webmSticker
+            pngSticker, tgsSticker, webmSticker
         )
 
         pngSticker?.let { validateInputFileOrString(it) }
@@ -1014,9 +950,7 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         maskPosition: MaskPosition?
     ): Boolean {
         validateExactlyOneNonNull(
-            pngSticker,
-            tgsSticker,
-            webmSticker
+            pngSticker, tgsSticker, webmSticker
         )
 
         pngSticker?.let { validateInputFileOrString(it) }
@@ -1032,18 +966,20 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     }
 
     override suspend fun setStickerPositionInSet(
-        sticker: String,
-        position: Int
+        sticker: String, position: Int
     ) = client.setStickerPositionInSet(sticker, position)
 
     override suspend fun deleteStickerFromSet(sticker: String) = client.deleteStickerFromSet(sticker)
 
-    override suspend fun setStickerSetThumb(name: String, userId: Long, thumb: Any?): Boolean {
-        if (thumb !is File || thumb !is String) {
+    override suspend fun setStickerMaskPosition(sticker: String, maskPosition: MaskPosition): Boolean =
+        client.setStickerMaskPosition(sticker = sticker, maskPosition = maskPosition)
+    override suspend fun setStickerKeywords(sticker: String, keywords: Collection<String>): Boolean = client.setStickerKeywords(sticker = sticker, keywords = keywords)
+    override suspend fun setStickerSetThumbnail(name: String, userId: Long, thumbnail: Any?): Boolean {
+        if (thumbnail !is File || thumbnail !is String) {
             throw IllegalArgumentException("Neither file nor string")
         }
 
-        return client.setStickerSetThumb(name, userId, thumb)
+        return client.setStickerSetThumbnail(name, userId, thumbnail)
     }
 
     override suspend fun sendGame(
@@ -1072,17 +1008,15 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         force: Boolean?,
         disableEditMessage: Boolean?,
         chatId: ChatId.IntegerId?,
-        messageId: Long?, inlineMessageId: String?
+        messageId: Long?,
+        inlineMessageId: String?
     ): Message {
         validateIds(chatId, messageId, inlineMessageId)
         return client.setGameScore(userId, score, force, disableEditMessage, chatId, messageId, inlineMessageId)
     }
 
     override suspend fun getGameHighScores(
-        userId: Long,
-        chatId: ChatId.IntegerId?,
-        messageId: Long?,
-        inlineMessageId: String?
+        userId: Long, chatId: ChatId.IntegerId?, messageId: Long?, inlineMessageId: String?
     ): List<GameHighScore> {
         validateIds(chatId, messageId, inlineMessageId)
         return client.getGameHighScores(userId, chatId, messageId, inlineMessageId)
@@ -1191,21 +1125,15 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     )
 
     override suspend fun answerShippingQuery(
-        shippingQueryId: String,
-        ok: Boolean,
-        shippingOptions: List<ShippingOption>?,
-        errorMessage: String?
+        shippingQueryId: String, ok: Boolean, shippingOptions: List<ShippingOption>?, errorMessage: String?
     ) = client.answerShippingQuery(shippingQueryId, ok, shippingOptions, errorMessage)
 
     override suspend fun answerPreCheckoutQuery(
-        preCheckoutQueryId: String,
-        ok: Boolean,
-        errorMessage: String?
+        preCheckoutQueryId: String, ok: Boolean, errorMessage: String?
     ) = client.answerPreCheckoutQuery(preCheckoutQueryId, ok, errorMessage)
 
     override suspend fun setPassportDataErrors(
-        userId: Long,
-        errors: List<PassportElementError>
+        userId: Long, errors: List<PassportElementError>
     ) = client.setPassportDataErrors(userId, errors)
 
     override suspend fun sendPoll(
@@ -1291,36 +1219,25 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         memberLimit: Long?,
         createsJoinRequest: Boolean?,
     ): ChatInviteLink = client.editChatInviteLink(
-        chatId,
-        inviteLink,
-        name,
-        expireDate,
-        memberLimit,
-        createsJoinRequest
+        chatId, inviteLink, name, expireDate, memberLimit, createsJoinRequest
     )
 
     override suspend fun revokeChatInviteLink(
-        chatId: ChatId,
-        inviteLink: String
+        chatId: ChatId, inviteLink: String
     ): ChatInviteLink = client.revokeChatInviteLink(
-        chatId,
-        inviteLink
+        chatId, inviteLink
     )
 
     override suspend fun approveChatJoinRequest(
-        chatId: ChatId,
-        inviteLink: String
+        chatId: ChatId, inviteLink: String
     ): Boolean = client.approveChatJoinRequest(
-        chatId,
-        inviteLink
+        chatId, inviteLink
     )
 
     override suspend fun declineChatJoinRequest(
-        chatId: ChatId,
-        inviteLink: String
+        chatId: ChatId, inviteLink: String
     ): Boolean = client.declineChatJoinRequest(
-        chatId,
-        inviteLink
+        chatId, inviteLink
     )
 
     override suspend fun setChatAdministratorCustomTitle(chatId: ChatId, userId: Long, customTitle: String) =
@@ -1351,15 +1268,13 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
     // Telegram methods end
 
     private fun validateInputFileOrString(obj: Any) {
-        if (obj !is File && obj !is String)
-            throw IllegalArgumentException("$obj is neither file nor string")
+        if (obj !is File && obj !is String) throw IllegalArgumentException("$obj is neither file nor string")
     }
 
     private fun validateIds(chatId: ChatId?, messageId: Long?, inlineMessageId: String?) {
-        if (
-            inlineMessageId != null && (chatId != null || messageId != null)
-            || inlineMessageId == null && (chatId == null || messageId == null)
-        ) throw IllegalArgumentException("Provide only inlineMessage or chatId and messageId")
+        if (inlineMessageId != null && (chatId != null || messageId != null) || inlineMessageId == null && (chatId == null || messageId == null)) throw IllegalArgumentException(
+            "Provide only inlineMessage or chatId and messageId"
+        )
     }
 
     private fun validateExactlyOneNonNull(vararg objects: Any?) {

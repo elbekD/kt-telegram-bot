@@ -84,7 +84,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         chatId: ChatId,
         file: SendingDocument,
         optionals: Map<String, String>,
-        thumb: File? = null,
+        thumbnail: File? = null,
         method: String = type
     ): Message {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
@@ -98,7 +98,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         }
         form.addFormDataPart(type, file.fileName, content)
 
-        thumb?.let {
+        thumbnail?.let {
             form.addFormDataPart("attach://${it.name}", it.name, it.asRequestBody(null))
         }
 
@@ -347,7 +347,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         duration: Long?,
         performer: String?,
         title: String?,
-        thumb: File?,
+        thumbnail: File?,
         disableNotification: Boolean?,
         protectContent: Boolean?,
         replyToMessageId: Long?,
@@ -362,7 +362,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         duration?.let { optionals += ApiConstants.DURATION to toJson(duration) }
         performer?.let { optionals += ApiConstants.PERFORMER to toJson(performer) }
         title?.let { optionals += ApiConstants.TITLE to toJson(title) }
-        disableNotification?.let { optionals += ApiConstants.DISABLE_NOTIFICATION to toJson(thumb) }
+        disableNotification?.let { optionals += ApiConstants.DISABLE_NOTIFICATION to toJson(thumbnail) }
         protectContent?.let { optionals += ApiConstants.PROTECT_CONTENT to toJson(disableNotification) }
         replyToMessageId?.let { optionals += ApiConstants.REPLY_TO_MESSAGE_ID to toJson(protectContent) }
         allowSendingWithoutReply?.let { optionals += ApiConstants.ALLOW_SENDING_WITHOUT_REPLY to toJson(replyToMessageId) }
@@ -373,7 +373,7 @@ internal class TelegramClient(token: String) : TelegramApi {
             chatId,
             audio,
             optionals,
-            thumb
+            thumbnail
         )
     }
 
@@ -381,7 +381,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         chatId: ChatId,
         document: SendingDocument,
         messageThreadId: Long?,
-        thumb: File?,
+        thumbnail: File?,
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
@@ -409,7 +409,7 @@ internal class TelegramClient(token: String) : TelegramApi {
             chatId,
             document,
             optionals,
-            thumb
+            thumbnail
         )
     }
 
@@ -420,7 +420,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         duration: Long?,
         width: Long?,
         height: Long?,
-        thumb: File?,
+        thumbnail: File?,
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
@@ -453,7 +453,7 @@ internal class TelegramClient(token: String) : TelegramApi {
             chatId,
             video,
             optionals,
-            thumb
+            thumbnail
         )
     }
 
@@ -464,7 +464,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         duration: Long?,
         width: Long?,
         height: Long?,
-        thumb: File?,
+        thumbnail: File?,
         caption: String?,
         parseMode: ParseMode?,
         captionEntities: List<MessageEntity>?,
@@ -495,7 +495,7 @@ internal class TelegramClient(token: String) : TelegramApi {
             chatId,
             animation,
             optionals,
-            thumb
+            thumbnail
         )
     }
 
@@ -539,7 +539,7 @@ internal class TelegramClient(token: String) : TelegramApi {
         messageThreadId: Long?,
         duration: Long?,
         length: Long?,
-        thumb: File?,
+        thumbnail: File?,
         disableNotification: Boolean?,
         protectContent: Boolean?,
         replyToMessageId: Long?,
@@ -560,7 +560,7 @@ internal class TelegramClient(token: String) : TelegramApi {
             chatId,
             note,
             optionals,
-            thumb,
+            thumbnail,
             ApiConstants.METHOD_VIDEO_NOTE
         )
     }
@@ -586,7 +586,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                 )
             }
 
-            inputMedia.thumb?.let {
+            inputMedia.thumbnail?.let {
                 when (it) {
                     is File -> form.addFormDataPart(
                         "attach://${it.name}",
@@ -594,7 +594,7 @@ internal class TelegramClient(token: String) : TelegramApi {
                         it.asRequestBody(MEDIA_TYPE_OCTET_STREAM)
                     )
 
-                    is String -> form.addFormDataPart(ApiConstants.THUMB, it)
+                    is String -> form.addFormDataPart(ApiConstants.THUMBNAIL, it)
                     else -> throw IllegalArgumentException("Neither file nor string")
                 }
             }
@@ -1395,10 +1395,10 @@ internal class TelegramClient(token: String) : TelegramApi {
             form.addFormDataPart(ApiConstants.MESSAGE_ID, requireNotNull(messageId).toString())
         }
 
-        media.thumb?.let {
+        media.thumbnail?.let {
             when (it) {
                 is File -> form.addFormDataPart("attach://${it.name}", it.name, it.asRequestBody(null))
-                is String -> form.addFormDataPart(ApiConstants.THUMB, it)
+                is String -> form.addFormDataPart(ApiConstants.THUMBNAIL, it)
                 else -> throw IllegalArgumentException("Neither file nor string")
             }
         }
@@ -1578,19 +1578,29 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post(ApiConstants.METHOD_SET_STICKER_POSITION_IN_SET, body)
     }
 
+    override suspend fun setStickerMaskPosition(sticker: String, maskPosition: MaskPosition): Boolean {
+        val body = SetStickerMaskPosition(sticker = sticker, maskPosition = maskPosition).body()
+        return post(ApiConstants.METHOD_SET_STICKER_MASK_POSITION, body)
+    }
+
+    override suspend fun setStickerKeywords(sticker: String, keywords: Collection<String>): Boolean {
+        val body = SetStickerKeywords(sticker = sticker, keywords = keywords).body()
+        return post(ApiConstants.METHOD_SET_STICKER_KEYWORDS, body)
+    }
+
     override suspend fun deleteStickerFromSet(sticker: String): Boolean {
         val body = DeleteStickerFromSet(sticker).body()
         return post(ApiConstants.METHOD_DELETE_STICKER_FROM_SET, body)
     }
 
-    override suspend fun setStickerSetThumb(name: String, userId: Long, thumb: Any?): Boolean {
+    override suspend fun setStickerSetThumbnail(name: String, userId: Long, thumbnail: Any?): Boolean {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
         form.addFormDataPart(ApiConstants.NAME, name)
         form.addFormDataPart(ApiConstants.USER_ID, userId.toString())
 
-        when (thumb) {
-            is File -> form.addFormDataPart(ApiConstants.THUMB, thumb.name, thumb.asRequestBody(null))
-            is String -> form.addFormDataPart(ApiConstants.THUMB, thumb)
+        when (thumbnail) {
+            is File -> form.addFormDataPart(ApiConstants.THUMBNAIL, thumbnail.name, thumbnail.asRequestBody(null))
+            is String -> form.addFormDataPart(ApiConstants.THUMBNAIL, thumbnail)
             else -> throw IllegalArgumentException()
         }
 

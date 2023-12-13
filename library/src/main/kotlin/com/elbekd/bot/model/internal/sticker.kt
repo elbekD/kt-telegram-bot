@@ -1,6 +1,7 @@
 package com.elbekd.bot.model.internal
 
 import com.elbekd.bot.internal.ApiConstants
+import com.elbekd.bot.types.MaskPosition
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -18,6 +19,18 @@ internal class GetCustomEmojiStickers(
 internal class SetStickerPositionInSet(
     @SerialName(ApiConstants.STICKER) val sticker: String,
     @SerialName(ApiConstants.POSITION) val position: Int
+)
+
+@Serializable
+internal class SetStickerMaskPosition(
+    @SerialName(ApiConstants.STICKER) val sticker: String,
+    @SerialName(ApiConstants.MASK_POSITION) val maskPosition: MaskPosition
+)
+
+@Serializable
+internal class SetStickerKeywords(
+    @SerialName(ApiConstants.STICKER) val sticker: String,
+    @SerialName(ApiConstants.MASK_POSITION) val keywords: Collection<String>
 )
 
 @Serializable

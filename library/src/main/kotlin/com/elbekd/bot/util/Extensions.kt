@@ -13,5 +13,5 @@ public fun Update.isCommand(username: String?): Boolean {
 }
 
 public fun Message.isCommand(username: String?): Boolean {
-    return text != null && text.split(' ')[0].isCommand(username)
+    return text != null && text!!.split(' ')[0].isCommand(username)
 }

@@ -9,7 +9,7 @@ import java.io.File
 public sealed class InputMedia {
     public abstract val media: String
     public abstract val attachment: File?
-    public abstract val thumb: Any?
+    public abstract val thumbnail: Any?
 }
 
 @Serializable
@@ -23,7 +23,7 @@ public data class InputMediaPhoto(
     @SerialName("has_spoiler") val hasSpoiler: Boolean? = null,
 ) : InputMedia() {
     @Transient
-    override val thumb: Any? = null
+    override val thumbnail: Any? = null
 }
 
 @Serializable
@@ -31,7 +31,7 @@ public data class InputMediaPhoto(
 public data class InputMediaVideo(
     @SerialName("media") override val media: String,
     @Transient override val attachment: File? = null,
-    @Transient override val thumb: Any? = null,
+    @Transient override val thumbnail: Any? = null,
     @SerialName("caption") val caption: String? = null,
     @SerialName("parse_mode") val parseMode: String? = null,
     @SerialName("caption_entities") val captionEntities: List<MessageEntity>? = null,
@@ -47,7 +47,7 @@ public data class InputMediaVideo(
 public data class InputMediaAnimation(
     @SerialName("media") override val media: String,
     @Transient override val attachment: File? = null,
-    @Transient override val thumb: Any? = null,
+    @Transient override val thumbnail: Any? = null,
     @SerialName("caption") val caption: String? = null,
     @SerialName("parse_mode") val parseMode: String? = null,
     @SerialName("caption_entities") val captionEntities: List<MessageEntity>? = null,
@@ -62,7 +62,7 @@ public data class InputMediaAnimation(
 public data class InputMediaAudio(
     @SerialName("media") override val media: String,
     @Transient override val attachment: File? = null,
-    @Transient override val thumb: Any? = null,
+    @Transient override val thumbnail: Any? = null,
     @SerialName("caption") val caption: String? = null,
     @SerialName("parse_mode") val parseMode: String? = null,
     @SerialName("caption_entities") val captionEntities: List<MessageEntity>? = null,
@@ -76,7 +76,7 @@ public data class InputMediaAudio(
 public data class InputMediaDocument(
     @SerialName("media") override val media: String,
     @Transient override val attachment: File? = null,
-    @Transient override val thumb: Any? = null,
+    @Transient override val thumbnail: Any? = null,
     @SerialName("caption") val caption: String? = null,
     @SerialName("parse_mode") val parseMode: String? = null,
     @SerialName("caption_entities") val captionEntities: List<MessageEntity>? = null,

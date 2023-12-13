@@ -1,5 +1,6 @@
 package com.elbekd.bot.internal
 
+import com.elbekd.bot.Bot
 import com.elbekd.bot.feature.chain.ChainController
 import com.elbekd.bot.types.CallbackQuery
 import com.elbekd.bot.types.ChatJoinRequest
@@ -29,6 +30,7 @@ import com.elbekd.bot.types.UpdateResponse
 import com.elbekd.bot.types.UpdateShippingQuery
 import com.elbekd.bot.util.AllowedUpdate
 import com.elbekd.bot.util.isCommand
+import okhttp3.internal.notifyAll
 
 internal class UpdateHandler(private val username: String?) {
     private var onMessageUpdate: (suspend (Message) -> Unit)? = null
@@ -69,6 +71,7 @@ internal class UpdateHandler(private val username: String?) {
             AllowedUpdate.InlineQuery -> onInlineQueryUpdate = action as? (suspend (InlineQuery) -> Unit)
             AllowedUpdate.ChosenInlineQuery -> onChosenInlineQueryUpdate =
                 action as? (suspend (ChosenInlineResult) -> Unit)
+
             AllowedUpdate.CallbackQuery -> onCallbackQueryUpdate = action as? (suspend (CallbackQuery) -> Unit)
             AllowedUpdate.ShippingQuery -> onShippingQueryUpdate = action as? (suspend (ShippingQuery) -> Unit)
             AllowedUpdate.PreCheckoutQuery -> onPreCheckoutQueryUpdate = action as? (suspend (PreCheckoutQuery) -> Unit)
@@ -164,7 +167,9 @@ internal class UpdateHandler(private val username: String?) {
                         val (cmd, args) = extractCommandAndArgument(requireNotNull(update.message.text))
                         val trigger = if (onCommand.containsKey(cmd)) cmd
                         else onCommand.keys.firstOrNull { cmd.matches(it.toRegex()) }
-                        trigger?.let { onCommand[it]?.invoke(update.message to args) }
+                        val changedMessage = update.message
+                        changedMessage.text = cmd
+                        trigger?.let { onCommand[it]?.invoke(changedMessage to args) }
                     }
 
                     else -> onMessageUpdate?.invoke(update.message)

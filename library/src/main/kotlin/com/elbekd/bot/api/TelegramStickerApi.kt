@@ -60,11 +60,14 @@ public interface TelegramStickerApi {
         position: Int
     ): Boolean
 
+    public suspend fun setStickerMaskPosition(sticker: String, maskPosition: MaskPosition): Boolean
+
+    public suspend fun setStickerKeywords(sticker: String, keywords: Collection<String>): Boolean
     public suspend fun deleteStickerFromSet(sticker: String): Boolean
 
-    public suspend fun setStickerSetThumb(
+    public suspend fun setStickerSetThumbnail(
         name: String,
         userId: Long,
-        thumb: Any? = null
+        thumbnail: Any? = null
     ): Boolean
 }

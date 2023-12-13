@@ -31,9 +31,9 @@ public data class InlineQueryResultArticle(
     @SerialName("url") val url: String? = null,
     @SerialName("hide_url") val hideUrl: Boolean? = null,
     @SerialName("description") val description: String? = null,
-    @SerialName("thumb_url") val thumbUrl: String? = null,
-    @SerialName("thumb_width") val thumbWidth: Int? = null,
-    @SerialName("thumb_height") val thumbHeight: Int? = null,
+    @SerialName("thumbnail_url") val thumbnailUrl: String? = null,
+    @SerialName("thumbnail_width") val thumbnailWidth: Int? = null,
+    @SerialName("thumbnail_height") val thumbnailHeight: Int? = null,
 ) : InlineQueryResult() {
     @EncodeDefault
     @SerialName("type")
@@ -44,7 +44,7 @@ public data class InlineQueryResultArticle(
 public data class InlineQueryResultPhoto(
     @SerialName("id") val id: String,
     @SerialName("photo_url") val photoUrl: String,
-    @SerialName("thumb_url") val thumbUrl: String,
+    @SerialName("thumbnail_url") val thumbnailUrl: String,
     @SerialName("photo_width") val photoWidth: Int? = null,
     @SerialName("photo_height") val photoHeight: Int? = null,
     @SerialName("title") val title: String? = null,
@@ -64,11 +64,11 @@ public data class InlineQueryResultPhoto(
 public data class InlineQueryResultGif(
     @SerialName("id") val id: String,
     @SerialName("gif_url") val gifUrl: String,
-    @SerialName("thumb_url") val thumbUrl: String,
+    @SerialName("thumbnail_url") val thumbnailUrl: String,
     @SerialName("gif_width") val gifWidth: Int? = null,
     @SerialName("gif_height") val gifHeight: Int? = null,
     @SerialName("gif_duration") val gifDuration: Int? = null,
-    @SerialName("thumb_mime_type") val thumbMimeType: String? = null,
+    @SerialName("thumbnail_mime_type") val thumbnailMimeType: String? = null,
     @SerialName("title") val title: String? = null,
     @SerialName("caption") val caption: String? = null,
     @SerialName("parse_mode") val parseMode: String? = null,
@@ -85,11 +85,11 @@ public data class InlineQueryResultGif(
 public data class InlineQueryResultMpeg4Gif(
     @SerialName("id") val id: String,
     @SerialName("mpeg4_url") val mpeg4Url: String,
-    @SerialName("thumb_url") val thumbUrl: String,
+    @SerialName("thumb_url") val thumbnailUrl: String,
     @SerialName("mpeg4_width") val mpeg4Width: Int? = null,
     @SerialName("mpeg4_height") val mpeg4Height: Int? = null,
     @SerialName("mpeg4_duration") val mpeg4Duration: Int? = null,
-    @SerialName("thumb_mime_type") val thumbMimeType: String? = null,
+    @SerialName("thumb_mime_type") val thumbnailMimeType: String? = null,
     @SerialName("caption") val caption: String? = null,
     @SerialName("parse_mode") val parseMode: String? = null,
     @SerialName("caption_entities") val captionEntities: List<MessageEntity>? = null,
@@ -106,7 +106,7 @@ public data class InlineQueryResultVideo(
     @SerialName("id") val id: String,
     @SerialName("video_url") val videoUrl: String,
     @SerialName("mime_type") val mimeType: String,
-    @SerialName("thumb_url") val thumbUrl: String,
+    @SerialName("thumbnail_url") val thumbnailUrl: String,
     @SerialName("title") val title: String,
     @SerialName("caption") val caption: String? = null,
     @SerialName("parse_mode") val parseMode: String? = null,
@@ -170,9 +170,9 @@ public data class InlineQueryResultDocument(
     @SerialName("description") val description: String? = null,
     @SerialName("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
     @SerialName("input_message_content") val inputMessageContent: InputMessageContent? = null,
-    @SerialName("thumb_url") val thumbUrl: String? = null,
-    @SerialName("thumb_width") val thumbWidth: Int? = null,
-    @SerialName("thumb_height") val thumbHeight: Int? = null
+    @SerialName("thumbnail_url") val thumbnailUrl: String? = null,
+    @SerialName("thumbnail_width") val thumbnailWidth: Int? = null,
+    @SerialName("thumbnail_height") val thumbnailHeight: Int? = null
 ) : InlineQueryResult() {
     @EncodeDefault
     @SerialName("type")
@@ -191,9 +191,9 @@ public data class InlineQueryResultLocation(
     @SerialName("proximity_alert_radius") val proximityAlertRadius: Int? = null,
     @SerialName("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
     @SerialName("input_message_content") val inputMessageContent: InputMessageContent? = null,
-    @SerialName("thumb_url") val thumbUrl: String? = null,
-    @SerialName("thumb_width") val thumbWidth: Int? = null,
-    @SerialName("thumb_height") val thumbHeight: Int? = null
+    @SerialName("thumbnail_url") val thumbnailUrl: String? = null,
+    @SerialName("thumbnail_width") val thumbnailWidth: Int? = null,
+    @SerialName("thumbnail_height") val thumbnailHeight: Int? = null
 ) : InlineQueryResult() {
     @EncodeDefault
     @SerialName("type")
@@ -213,9 +213,9 @@ public data class InlineQueryResultVenue(
     @SerialName("google_place_type") val googlePlaceType: String? = null,
     @SerialName("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
     @SerialName("input_message_content") val inputMessageContent: InputMessageContent? = null,
-    @SerialName("thumb_url") val thumbUrl: String? = null,
-    @SerialName("thumb_width") val thumbWidth: Int? = null,
-    @SerialName("thumb_height") val thumbHeight: Int? = null
+    @SerialName("thumbnail_url") val thumbnailUrl: String? = null,
+    @SerialName("thumbnail_width") val thumbnailWidth: Int? = null,
+    @SerialName("thumbnail_height") val thumbnailHeight: Int? = null
 ) : InlineQueryResult() {
     @EncodeDefault
     @SerialName("type")
@@ -231,9 +231,9 @@ public data class InlineQueryResultContact(
     @SerialName("vcard") val vcard: String? = null,
     @SerialName("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
     @SerialName("input_message_content") val inputMessageContent: InputMessageContent? = null,
-    @SerialName("thumb_url") val thumbUrl: String? = null,
-    @SerialName("thumb_width") val thumbWidth: Int? = null,
-    @SerialName("thumb_height") val thumbHeight: Int? = null
+    @SerialName("thumbnail_url") val thumbnailUrl: String? = null,
+    @SerialName("thumbnail_width") val thumbnailWidth: Int? = null,
+    @SerialName("thumbnail_height") val thumbnailHeight: Int? = null
 ) : InlineQueryResult() {
     @EncodeDefault
     @SerialName("type")

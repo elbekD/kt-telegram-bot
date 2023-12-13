@@ -57,7 +57,7 @@ public data class Message(
     @SerialName("has_protected_content") val hasProtectedContent: Boolean? = null,
     @SerialName("media_group_id") val mediaGroupId: String? = null,
     @SerialName("author_signature") val authorSignature: String? = null,
-    @SerialName("text") val text: String? = null,
+    @SerialName("text") var text: String? = null,
     @SerialName("entities") val entities: List<MessageEntity> = emptyList(),
     @SerialName("animation") val animation: Animation? = null,
     @SerialName("audio") val audio: Audio? = null,
@@ -211,14 +211,14 @@ public data class Audio(
     @SerialName("file_name") val fileName: String? = null,
     @SerialName("mime_type") val mimeType: String? = null,
     @SerialName("file_size") val fileSize: Long? = null,
-    @SerialName("thumb") val thumb: PhotoSize? = null
+    @SerialName("thumbnail") val thumbnail: PhotoSize? = null
 )
 
 @Serializable
 public data class Document(
     @SerialName("file_id") val fileId: String,
     @SerialName("file_unique_id") val fileUniqueId: String,
-    @SerialName("thumb") val thumb: PhotoSize? = null,
+    @SerialName("thumbnail") val thumbnail: PhotoSize? = null,
     @SerialName("file_name") val fileName: String? = null,
     @SerialName("mime_type") val mimeType: String? = null,
     @SerialName("file_size") val fileSize: Long? = null,
@@ -231,7 +231,7 @@ public data class Video(
     @SerialName("width") val width: Int,
     @SerialName("height") val height: Int,
     @SerialName("duration") val duration: Int,
-    @SerialName("thumb") val thumb: PhotoSize? = null,
+    @SerialName("thumbnail") val thumbnail: PhotoSize? = null,
     @SerialName("file_name") val fileName: String? = null,
     @SerialName("mime_type") val mimeType: String? = null,
     @SerialName("file_size") val fileSize: Long? = null,
@@ -244,7 +244,7 @@ public data class Animation(
     @SerialName("width") val width: Int,
     @SerialName("height") val height: Int,
     @SerialName("duration") val duration: Int,
-    @SerialName("thumb") val thumb: PhotoSize? = null,
+    @SerialName("thumbnail") val thumbnail: PhotoSize? = null,
     @SerialName("file_name") val fileName: String? = null,
     @SerialName("mime_type") val mimeType: String? = null,
     @SerialName("fil_size") val fileSize: Long? = null
@@ -265,7 +265,7 @@ public data class VideoNote(
     @SerialName("file_unique_id") val file_unique_id: String,
     @SerialName("length") val length: Int,
     @SerialName("duration") val duration: Int,
-    @SerialName("thumb") val thumb: PhotoSize? = null,
+    @SerialName("thumbnail") val thumbnail: PhotoSize? = null,
     @SerialName("file_size") val fileSize: Int? = null,
 )
 

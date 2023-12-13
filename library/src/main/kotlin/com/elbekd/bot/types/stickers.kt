@@ -11,7 +11,7 @@ public data class Sticker(
     @SerialName("height") val height: Int,
     @SerialName("is_animated") val isAnimated: Boolean,
     @SerialName("is_video") val isVideo: Boolean,
-    @SerialName("thumb") val thumb: PhotoSize? = null,
+    @SerialName("thumbnail") val thumbnail: PhotoSize? = null,
     @SerialName("emoji") val emoji: String? = null,
     @SerialName("set_name") val setName: String? = null,
     @SerialName("premium_animation") val premiumAnimation: File? = null,
@@ -30,7 +30,7 @@ public data class StickerSet(
     @Deprecated("Use sticker_type instead")
     @SerialName("contains_mask") val containsMask: Boolean,
     @SerialName("stickers") val stickers: List<Sticker>,
-    @SerialName("thumb") val thumb: PhotoSize? = null
+    @SerialName("thumbnail") val thumbnail: PhotoSize? = null
 )
 
 @Serializable

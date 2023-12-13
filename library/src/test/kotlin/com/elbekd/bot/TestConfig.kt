@@ -38,7 +38,7 @@ data class TestConfig(
     val photos: List<String>,
     val video: String,
     val animation: String,
-    val thumb: String,
+    val thumbnail: String,
     val voice: String,
     val msgId: Int,
     val audio: String,
