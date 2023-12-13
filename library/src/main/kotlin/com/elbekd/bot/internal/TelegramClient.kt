@@ -1486,10 +1486,11 @@ internal class TelegramClient(token: String) : TelegramApi {
         return post(ApiConstants.METHOD_GET_CUSTOM_EMOJI_STICKERS, body)
     }
 
-    override suspend fun uploadStickerFile(userId: Long, pngSticker: File): com.elbekd.bot.types.File {
+    override suspend fun uploadStickerFile(userId: Long, sticker: File, stickerFormat: String): com.elbekd.bot.types.File {
         val form = MultipartBody.Builder().also { it.setType(MultipartBody.FORM) }
         form.addFormDataPart(ApiConstants.USER_ID, userId.toString())
-        form.addFormDataPart(ApiConstants.PNG_STICKER, pngSticker.name, pngSticker.asRequestBody(null))
+        form.addFormDataPart(ApiConstants.PNG_STICKER, sticker.name, sticker.asRequestBody(null))
+        form.addFormDataPart(ApiConstants.STICKER_FORMAT, stickerFormat)
         return post(ApiConstants.METHOD_UPLOAD_STICKER_FILE, form.build())
     }
 
@@ -1581,6 +1582,26 @@ internal class TelegramClient(token: String) : TelegramApi {
     override suspend fun setStickerMaskPosition(sticker: String, maskPosition: MaskPosition): Boolean {
         val body = SetStickerMaskPosition(sticker = sticker, maskPosition = maskPosition).body()
         return post(ApiConstants.METHOD_SET_STICKER_MASK_POSITION, body)
+    }
+
+    override suspend fun setStickerSetTitle(name: String, title: String): Boolean {
+        val body = SetStickerSetTitle(name = name, title = title).body()
+        return post(ApiConstants.METHOD_SET_STICKER_SET_TITLE, body)
+    }
+
+    override suspend fun deleteStickerSet(name: String): Boolean {
+        val body = DeleteStickerSet(name = name).body()
+        return post(ApiConstants.METHOD_DELETE_STICKER_SET, body)
+    }
+
+    override suspend fun setCustomEmojiStickerSetThumbnail(name: String, customEmojiId: String?): Boolean {
+        val body = SetCustomEmojiStickerSetThumbnail(name = name, customEmojiId = customEmojiId).body()
+        return post(ApiConstants.METHOD_SET_CUSTOM_EMOJI_STICKER_SET_THUMBNAIL, body)
+    }
+
+    override suspend fun setStickerEmojiList(sticker: String, emojiList: Collection<String>): Boolean {
+        val body = SetStickerEmojiList(sticker = sticker, keywords = emojiList).body()
+        return post(ApiConstants.METHOD_SET_STICKER_EMOJI_LIST, body)
     }
 
     override suspend fun setStickerKeywords(sticker: String, keywords: Collection<String>): Boolean {

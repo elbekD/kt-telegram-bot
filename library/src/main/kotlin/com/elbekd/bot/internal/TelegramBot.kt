@@ -906,8 +906,10 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
         client.getCustomEmojiStickers(customEmojiIds)
 
     override suspend fun uploadStickerFile(
-        userId: Long, pngSticker: File
-    ) = client.uploadStickerFile(userId, pngSticker)
+        userId: Long,
+        sticker: File,
+        stickerFormat: String
+    ): com.elbekd.bot.types.File = client.uploadStickerFile(userId = userId, sticker = sticker, stickerFormat = stickerFormat)
 
     override suspend fun createNewStickerSet(
         userId: Long,
@@ -973,7 +975,21 @@ internal abstract class TelegramBot protected constructor(username: String?, tk:
 
     override suspend fun setStickerMaskPosition(sticker: String, maskPosition: MaskPosition): Boolean =
         client.setStickerMaskPosition(sticker = sticker, maskPosition = maskPosition)
-    override suspend fun setStickerKeywords(sticker: String, keywords: Collection<String>): Boolean = client.setStickerKeywords(sticker = sticker, keywords = keywords)
+
+    override suspend fun deleteStickerSet(name: String): Boolean = client.deleteStickerSet(name)
+
+    override suspend fun setCustomEmojiStickerSetThumbnail(name: String, customEmojiId: String?): Boolean =
+        client.setCustomEmojiStickerSetThumbnail(name = name, customEmojiId = customEmojiId)
+
+    override suspend fun setStickerSetTitle(name: String, title: String): Boolean =
+        client.setStickerSetTitle(name = name, title = title)
+
+    override suspend fun setStickerEmojiList(sticker: String, emojiList: Collection<String>): Boolean =
+        client.setStickerEmojiList(sticker = sticker, emojiList = emojiList)
+
+    override suspend fun setStickerKeywords(sticker: String, keywords: Collection<String>): Boolean =
+        client.setStickerKeywords(sticker = sticker, keywords = keywords)
+
     override suspend fun setStickerSetThumbnail(name: String, userId: Long, thumbnail: Any?): Boolean {
         if (thumbnail !is File || thumbnail !is String) {
             throw IllegalArgumentException("Neither file nor string")

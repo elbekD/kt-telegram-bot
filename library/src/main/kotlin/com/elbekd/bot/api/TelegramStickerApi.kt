@@ -1,12 +1,7 @@
 package com.elbekd.bot.api
 
 import com.elbekd.bot.model.ChatId
-import com.elbekd.bot.types.File
-import com.elbekd.bot.types.MaskPosition
-import com.elbekd.bot.types.Message
-import com.elbekd.bot.types.ReplyKeyboard
-import com.elbekd.bot.types.Sticker
-import com.elbekd.bot.types.StickerSet
+import com.elbekd.bot.types.*
 
 public interface TelegramStickerApi {
     public suspend fun sendSticker(
@@ -25,8 +20,7 @@ public interface TelegramStickerApi {
     public suspend fun getCustomEmojiStickers(customEmojiIds: List<String>): List<Sticker>
 
     public suspend fun uploadStickerFile(
-        userId: Long,
-        pngSticker: java.io.File
+        userId: Long, sticker: java.io.File, stickerFormat: String
     ): File
 
     /**
@@ -56,18 +50,24 @@ public interface TelegramStickerApi {
     ): Boolean
 
     public suspend fun setStickerPositionInSet(
-        sticker: String,
-        position: Int
+        sticker: String, position: Int
     ): Boolean
 
     public suspend fun setStickerMaskPosition(sticker: String, maskPosition: MaskPosition): Boolean
 
+    public suspend fun setCustomEmojiStickerSetThumbnail(name: String, customEmojiId: String? = null): Boolean
+
+    public suspend fun setStickerSetTitle(name: String, title: String): Boolean
+
+    public suspend fun deleteStickerSet(name: String): Boolean
+
+    public suspend fun setStickerEmojiList(sticker: String, emojiList: Collection<String>): Boolean
+
     public suspend fun setStickerKeywords(sticker: String, keywords: Collection<String>): Boolean
+
     public suspend fun deleteStickerFromSet(sticker: String): Boolean
 
     public suspend fun setStickerSetThumbnail(
-        name: String,
-        userId: Long,
-        thumbnail: Any? = null
+        name: String, userId: Long, thumbnail: Any? = null
     ): Boolean
 }
